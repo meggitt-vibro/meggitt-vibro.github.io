@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Components (passive characterisation) – Joshua Meggitt</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../introductions/interfaces.html" rel="next">
+<link href="../introductions/VAVP.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-045f01e90fa491bba6c51fbe92305c42.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Joshua Meggitt</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../introductions/introductions.html" aria-current="page"> 
+<span class="menu-text">A quick introduction to:</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../papers/papers.html"> 
+<span class="menu-text">Papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutorials/tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../book.html"> 
+<span class="menu-text">Book</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teaching" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teaching</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teaching">    
+        <li>
+    <a class="dropdown-item" href="../mlsd.html">
+ <span class="dropdown-text">Microphone and Loudspeaker Design</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../poav.html">
+ <span class="dropdown-text">Principles of Acoustics and Vibration</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../introductions/components.html">Components (passive characterisation)</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/introductions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/VAVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vibro-Acoustic Virtual Prototyping</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/components.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Components (passive characterisation)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/interfaces.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Interface representations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/isolators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vibration isolators</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/substructuring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Substructuring</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/blockedForce.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Blocked forces</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/uncertainty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Uncertainty</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#component-representations" id="toc-component-representations" class="nav-link active" data-scroll-target="#component-representations">Component representations</a></li>
+  <li><a href="#frequency-response-functions" id="toc-frequency-response-functions" class="nav-link" data-scroll-target="#frequency-response-functions">Frequency response functions</a>
+  <ul class="collapse">
+  <li><a href="#types-of-frf" id="toc-types-of-frf" class="nav-link" data-scroll-target="#types-of-frf">Types of FRF</a></li>
+  <li><a href="#multi-dof-frfs" id="toc-multi-dof-frfs" class="nav-link" data-scroll-target="#multi-dof-frfs">Multi-DoF FRFs</a></li>
+  </ul></li>
+  <li><a href="#degrees-of-freedom" id="toc-degrees-of-freedom" class="nav-link" data-scroll-target="#degrees-of-freedom">Degrees of freedom</a>
+  <ul class="collapse">
+  <li><a href="#source-components" id="toc-source-components" class="nav-link" data-scroll-target="#source-components">Source components</a></li>
+  <li><a href="#recevier-components" id="toc-recevier-components" class="nav-link" data-scroll-target="#recevier-components">Recevier components</a></li>
+  <li><a href="#coupling-elements" id="toc-coupling-elements" class="nav-link" data-scroll-target="#coupling-elements">Coupling elements</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul></li>
+  <li><a href="#boundary-conditions" id="toc-boundary-conditions" class="nav-link" data-scroll-target="#boundary-conditions">Boundary conditions</a>
+  <ul class="collapse">
+  <li><a href="#grounded-support" id="toc-grounded-support" class="nav-link" data-scroll-target="#grounded-support">Grounded support</a></li>
+  <li><a href="#free-suspension" id="toc-free-suspension" class="nav-link" data-scroll-target="#free-suspension">Free suspension</a></li>
+  <li><a href="#in-situ" id="toc-in-situ" class="nav-link" data-scroll-target="#in-situ">In situ</a></li>
+  </ul></li>
+  <li><a href="#what-next" id="toc-what-next" class="nav-link" data-scroll-target="#what-next">What next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Components (passive characterisation)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>On this page we describe in greater detail the passive characterisation of components, specifically source and recevier-like components. The passive characterisation of <em>coupling elements</em>, such as vibration isolators, is detailed later in <a href="../introductions/isolators.html">Vibration isolators.</a></p>
+<section id="component-representations" class="level2">
+<h2 class="anchored" data-anchor-id="component-representations">Component representations</h2>
+<p>As discussed on the previous page, centra to the development of a VAVP is the <em>independent</em> characteristion of a component’s passive properties. Independence is the key word here, it is what enables components to be assembled, and interchanged within the VAVP framework.</p>
+<p>The independent properties of a passive component can be described in various ‘domains’, each providing a different perspective on essentially the same dynamic behaviour. The Physical, State-space, Modal, Time, and Frequency domains are the most commonly encountered in vibro-acoustics and will be briefly reviewed below before we adopt the Frequency domain as the default for our VAVP.</p>
+<p>In the <em>physical domain</em>, a component’s inertial and elastic properties are discretised (<span class="math inline">\(N\)</span> DoFs, for example by the Finite Element Method) and represented by the mass and stiffness matrices, <span class="math inline">\(\mathbf{M}\in \mathbb{R}^{N\times N}\)</span> and <span class="math inline">\(\mathbf{K}\in \mathbb{R}^{N\times N}\)</span>, respectively. Together with an appropriate matrix representation of its damping, <span class="math inline">\(\mathbf{C}\in \mathbb{R}^{N\times N}\)</span>, these matrices characterise the passive properties of a component. They can be used to formulate a second order equation of motion that relates the external force <span class="math inline">\(\mathbf{f}(t)\)</span> applied to the component, to its resulting kinematics, <span id="eq-physicalDomain"><span class="math display">\[
+        \mathbf{M}\mathbf{\ddot{x}}(t)+\mathbf{C}\mathbf{\dot{x}}(t)+\mathbf{K}\mathbf{x}(t) = \mathbf{f}(t)
+\tag{1}\]</span></span> where <span class="math inline">\(\mathbf{x}(t)\)</span>, <span class="math inline">\(\mathbf{\dot{x}}(t)\)</span> and <span class="math inline">\(\mathbf{\ddot{x}}(t)\)</span> are vectors of displacement, velocity and acceleration, respectively at a each of the <span class="math inline">\(n\)</span> discretised degrees of freedom.</p>
+<p>In the <em>state-space domain</em>, a component is represented by a set of first order differential equations that relate the state vector <span class="math inline">\(\mathbf{y}(t) = [\mathbf{x}^{\rm T}(t) \quad \mathbf{\dot{x}}^{\rm T}(t)]^{\rm T}\)</span> to its temporal derivative, <span class="math inline">\(\mathbf{\dot{y}}(t) = [\mathbf{\dot{x}}^{\rm T}(t) \quad \mathbf{\ddot{x}}^{\rm T}(t)]^{\rm T}\)</span>. With reference to <a href="#eq-physicalDomain" class="quarto-xref">Equation&nbsp;1</a>, we have, <span class="math display">\[\begin{equation}
+     \mathbf{\dot{y}}(t) = \left[\begin{array}{c}\mathbf{\dot{x}}(t) \\ \mathbf{\ddot{x}}(t)\end{array}\right] = \left[\begin{array}{cc} \mathbf{0} &amp; \mathbf{I} \\ -\mathbf{M}^{-1}\mathbf{K} &amp; -\mathbf{M}^{-1}\mathbf{C}
+     \end{array} \right] \left[\begin{array}{c}\mathbf{{x}}(t) \\ \mathbf{\dot{x}}(t)\end{array}\right] + \left[\begin{array}{c} \mathbf{0} \\ \mathbf{M}^{-1} \end{array} \right]\mathbf{f}(t)
+\end{equation}\]</span> or equivalently, <span class="math display">\[\begin{equation}
+    \mathbf{\dot{y}}(t) = \mathbf{A}\mathbf{y}(t)+\mathbf{B}\mathbf{f}(t)
+\end{equation}\]</span> where <span class="math inline">\(\mathbf{A}\)</span> is the so-called state matrix, and <span class="math inline">\(\mathbf{B}\)</span> is the input matrix. Together, <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span> characterise the passive properties of a component in state-space.</p>
+<p>In the <em>modal domain</em> a component is represented by a set of mode shapes <span class="math inline">\(\boldsymbol{\Phi} = [\mathbf{\phi}_1 \quad \mathbf{\phi}_2 \quad \cdots \quad \mathbf{\phi}_N]\)</span> and natural frequencies <span class="math inline">\(\boldsymbol{\Lambda}=\mbox{diag}[\omega^2_1 \quad \omega^2_2 \quad \cdots \quad \omega^2_N]\)</span> which individually satisfy the homogenous undamped equation of motion, <span class="math display">\[\begin{equation}
+    \mathbf{K}\mathbf{x}-\omega^2\mathbf{M}\mathbf{{x}} = \mathbf{0}\quad \rightarrow \quad
+    \left[\mathbf{K}-\omega^2_i\mathbf{M}\right]\mathbf{\phi}_i = 0.
+\end{equation}\]</span> Together <span class="math inline">\(\boldsymbol{\Phi}\)</span> and <span class="math inline">\(\boldsymbol{\Lambda}\)</span>, with an appropriate representation of damping (e.g.&nbsp;modal loss factor), characterise the passive properties of the component.</p>
+<p>In the <em>time domain</em> a component’s kinematic response <span class="math inline">\(\mathbf{x}(t)\)</span>, <span class="math inline">\(\mathbf{\dot{x}}(t)\)</span> or <span class="math inline">\(\mathbf{\ddot{x}}(t)\)</span> to a time varying force <span class="math inline">\(\mathbf{f}(t)\)</span> satisfies the convolution integral (shown only for displacement), <span class="math display">\[\begin{equation}
+        \mathbf{x}(t) = \int_0^{\rm T} \mathbf{G}(t-\tau)\mathbf{f}(\tau) d\tau
+    \end{equation}\]</span> where <span class="math inline">\(\mathbf{G}(t)\)</span> is a matrix of displacement impulse response functions (IRFs) that describe the component response to a unit (dirac) force impulse. The IRF matrix <span class="math inline">\(\mathbf{G}(t)\)</span> characterises the passive properties of a component.</p>
+<p>In the <em>FRF domain</em> a component is characterised by its frequency response function (FRF) matrix, which can take several forms. Assuming time harmonic motion, <a href="#eq-physicalDomain" class="quarto-xref">Equation&nbsp;1</a> can be Fourier transformed into the frequency domain, <span class="math display">\[\begin{equation} \label{impedance}
+    \left(i\omega\mathbf{M}+\mathbf{C}+\frac{1}{i\omega}\mathbf{K}\right)\dot{\mathbf{x}}(\omega) = \mathbf{Z}(\omega)\mathbf{v}(\omega) = \mathbf{f}(\omega)
+\end{equation}\]</span> where <span class="math inline">\(\mathbf{Z}(\omega)\)</span> is the component impedance FRF matrix. Equivalently we can write, <span id="eq-FRF"><span class="math display">\[
+    \mathbf{v}(\omega) = \mathbf{Y}(\omega)\mathbf{f}(\omega)
+\tag{2}\]</span></span> where <span class="math inline">\(\mathbf{Y}(\omega)=\mathbf{Z}^{-1}(\omega)\)</span> is the component mobility FRF matrix. Both <span class="math inline">\(\mathbf{Y}(\omega)\)</span> and <span class="math inline">\(\mathbf{Z}(\omega)\)</span> characterise the passive properties of a component. Similar FRF definitions exist for displacement and acceleration, as discussed below.</p>
+<p>The choice of domain depends, amongst other things, on whether a physical structure is available for test. If no experimental characterisation is possible, the conventional starting point is a finite element model, i.e.&nbsp;in the physical domain. In this case, reliable estimates of the mass, stiffness and damping properties of the structure are required (not always easily found) for input to <a href="#eq-physicalDomain" class="quarto-xref">Equation&nbsp;1</a>. From here, state-space, modal, IRF, or FRF representations can be determined. If a physical component available for testing, then representation by measured FRFs is often preferred. These do not require estimates of the component’s physical properties because the FRF is directly obtained from measured forces and velocities (<a href="#eq-FRF" class="quarto-xref">Equation&nbsp;2</a>). From measured FRFs, IRF and modal representations can be determined with relative ease. However, physical and state-space domains are typically limited to numerical models; identifying system matrices (e.g.&nbsp;mass, stiffness, state, etc) from experimental data is a difficult problem requiring advanced system identification methods. Being able to represent both experimentally and numerically sourced components, the frequency domain is the obvious choice for VAVPs.</p>
+</section>
+<section id="frequency-response-functions" class="level2">
+<h2 class="anchored" data-anchor-id="frequency-response-functions">Frequency response functions</h2>
+<p>Frequency response functions (FRFs) are a clearly central concept in the development of VAVPs, and so it is only fair that we devote sometime to their definition and interpretation.</p>
+<section id="types-of-frf" class="level3">
+<h3 class="anchored" data-anchor-id="types-of-frf">Types of FRF</h3>
+<p>Having chosen the FRF as our preferred representation, it still remains to choose the dynamic quantities involved: generally speaking, FRFs describe input-output relations and it is to be decided whether the inputs and outputs are forces, kinematic or acoustic quantities. If a kinematic quantity, is this in the form of acceleration, velocity or displacement? In addition, are rotational quantities such as moments or angular velocities involved?</p>
+<p>Our first choice will be to consider excitation in terms of applied force and response in terms of resultant velocity giving a force-velocity type of FRF known as ‘mobility’, typically denoted by <span class="math inline">\(Y(\omega)\in \mathbb{C}\)</span>. For a single input-output system, it is a complex frequency dependent scalar quantity that describes the velocity response to a unit force excitation at a point, defined mathematically as, <span id="eq-mobDef1"><span class="math display">\[
+    v(\omega) = Y(\omega)f(\omega), \quad \quad Y(\omega) = \frac{v(\omega)}{f(\omega)}
+\tag{3}\]</span></span> where <span class="math inline">\(v(\omega)\)</span> and <span class="math inline">\(f(\omega)\)</span> are the complex frequency domain spectra of the velocity and force, respectively.</p>
+<p>Being complex, the mobility has a real and imaginary part. Physically, the real part is typically associated with damping mechanisms and losses, whilst the imaginary part is related to energy storage. When visualising or plotting a mobility FRF is it rare that we look directly at its real or imaginary parts. Rather, we consider its polar representation in terms of magnitude <span class="math inline">\(|Y|\)</span> and phase <span class="math inline">\(\angle Y\)</span>, <span class="math display">\[\begin{align}
+        v_0(\omega,t )e^{i(\omega t + \angle Y)} &amp;= \left[\mbox{Re}(Y(\omega)) + i\mbox{Im}(Y(\omega))\right]f_0(\omega)e^{i \omega t} \\
+            &amp;=|Y(\omega)|e^{i\angle Y}f_0(\omega)e^{i \omega t}
+    \end{align}\]</span> where the magnitude of the mobility (or any FRF) describes the change in amplitude between a harmonic input (in the case of mobility, force) and output signal (velocity), whilst the phase describes the time difference between the input and output introduced by the system at a particular frequency.</p>
+<p>FRFs in terms of displacement and acceleration, rather than velocity, are frequently found in the literature. It is straightforward to convert between the various kinematic quanties. By integration and differentiation with respect to time (assuming harmonic motion <span class="math inline">\(v=v_0e^{i\omega t}\)</span>), <a href="#eq-mobDef1" class="quarto-xref">Equation&nbsp;3</a> can be transformed into a pair of force-displacement and force-acceleration relations, respectively, <span class="math display">\[\begin{equation}
+v = \frac{dx}{dt} = i\omega x = Yf, \quad \quad v = \int a dt = \frac{a}{i\omega} = Y f
+\end{equation}\]</span> where for simplicity we have omitted explicit frequency dependence <span class="math inline">\((\omega)\)</span>. From the above we have the FRF relations, <span class="math display">\[\begin{equation}
+    x = \frac{Y}{i\omega} f = R f,\quad \quad a = i\omega Y f = Af
+\end{equation}\]</span> where <span class="math inline">\(R\in \mathbb{C}\)</span> is called the (dynamic) compliance and <span class="math inline">\(A\in \mathbb{C}\)</span> the accelerance. Thus in the frequency domain, multiplication or division by <span class="math inline">\(i\omega\)</span> is all that is required to convert one from one form to another.</p>
+<p>Accompanying each of the FRFs above is an <em>inverse</em> FRF in which the excitation is an imposed motion and the response a reaction force, <span class="math display">\[\begin{equation}
+    f = D x,\quad \quad f = Z v, \quad \quad f = \hat{M} a.
+\end{equation}\]</span> where, <span class="math display">\[\begin{equation}
+    D = \frac{1}{R},\quad \quad Z = \frac{1}{Y}, \quad \quad \hat{M} = \frac{1}{A}.
+\end{equation}\]</span> The FRFs <span class="math inline">\(D\in \mathbb{C}\)</span>, <span class="math inline">\(Z\in \mathbb{C}\)</span> and <span class="math inline">\(\hat{M}\in \mathbb{C}\)</span> are called, respectively, the dynamic stiffness, impedance, and apparent mass.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These days, most of the literature related to VAVP and TPA use acceleration, rather than velocity, as their base kineamtic quantity. This is because acceleraion is super easy to measure (thank you accelerometers!). That said, in the vast majority of cases the choice of kinematic variable is completely arbitrary; the same underlying equations can be applied to displacement, velocity and acceleration-based FRFs. In fact, we will rarely refer to a specific type of FRF (i.e.&nbsp;compliance, mobility, accelerance), adopting instead the agnostic term <em>FRF</em>. Similarly, when taking about the kinematic quantity directly (i.e.&nbsp;displacement, velocity, acceleration) we will use the term generic term <em>response</em>. Note, when reffering to the inverse FRF (i.e.&nbsp;dynamic stiffness, impedance and apparent mass) we will use <em>impedance</em> as a general term without specific reference to velocity.</p>
+<p>An important exption to the above is when dealing with <em>power</em>-based methods, since power is defined specifically in terms of velocity and force. If using displacement or acceleration-based FRFs, approaiate frequency scaling must be included to yield correct power estimates.</p>
+</div>
+</div>
+<p>Importantly, the above definitions concern single-input single-output systems in which all FRFs are (complex) quantities. When dealing with multi-input multi-output systems, as is necessary for virtual prototyping, a more general FRF definition is required that allows for simultaneous excitation and response at multiple points.</p>
+</section>
+<section id="multi-dof-frfs" class="level3">
+<h3 class="anchored" data-anchor-id="multi-dof-frfs">Multi-DoF FRFs</h3>
+<p>Very rarely are structural components excited at, or connected through, a single point. In almost all scenarios, the FRFs needed for component-level simulation are <em>multi-point</em>. In the following we will specifically consider multi-point FRF and impedance FRFs, though the definitions apply equally to other types of FRF. As is common practice, we will also omit specific reference to frequency dependence from now on. All formulations throughout the remainder of this book are assumed to be in the frequency domain unless stated otherwise.</p>
+<p>For a component with <span class="math inline">\(N\)</span> inputs and outputs, its FRF is defined by the vector-matrix equation, <span id="eq-MobilityMatrixDef"><span class="math display">\[
+\mathbf{v} = \mathbf{Y}\mathbf{f}
+\tag{4}\]</span></span> where <span class="math inline">\(\mathbf{v} \in \mathbb{C}^N\)</span> is an <span class="math inline">\(N\)</span> dimensional vector of responses, <span class="math inline">\(\mathbf{f} \in \mathbb{C}^N\)</span> is an <span class="math inline">\(N\)</span> dimensional vector of applied forces, and <span class="math inline">\(\mathbf{Y} \in \mathbb{C}^{N\times N}\)</span> is the <span class="math inline">\(N\times N\)</span> dimensional FRF matrix that relates the two. Written out in full <a href="#eq-MobilityMatrixDef" class="quarto-xref">Equation&nbsp;4</a> reads, <span id="eq-MobilityMatrixDefFull"><span class="math display">\[
+    \left(\begin{array}{c} v_1 \\ v_2 \\ \vdots \\ v_N
+    \end{array}\right) = \left[\begin{array}{cccc}
+        Y_{11} &amp; Y_{12} &amp; \cdots &amp; Y_{1N} \\
+        Y_{21} &amp; Y_{22} &amp; \cdots &amp; Y_{2N} \\
+        \vdots &amp; \vdots &amp; \cdots &amp; \ddots \\
+        Y_{N1} &amp; Y_{N2} &amp; \cdots &amp; Y_{NN} \\
+    \end{array}\right]\left(\begin{array}{c} f_1 \\ f_2 \\ \vdots \\ f_N
+    \end{array}\right)
+\tag{5}\]</span></span> where the first sub-scripted index <span class="math inline">\(i\)</span> denotes the response position (the rows of <span class="math inline">\(\mathbf{Y}\)</span>), and the second index <span class="math inline">\(j\)</span> the force excitation position (the columns of <span class="math inline">\(\mathbf{Y}\)</span>).</p>
+<p>With reference to <a href="#eq-MobilityMatrixDefFull" class="quarto-xref">Equation&nbsp;5</a>, we can distinguish two <em>types</em> of FRF; point and transfer. Point FRFs describe the response at a point when the force excitation is at the same position, i.e.&nbsp;co-located, <span class="math inline">\(v_i = Y_{ii}f_i\)</span>. Transfer FRFs describe the velocity at a point when the excitation force is located elsewhere, <span class="math inline">\(v_i=Y_{ij}f_j, j\neq i\)</span>.</p>
+<p>When excitations and responses are considered across the same set of positions, <span class="math inline">\(\mathbf{Y}\in \mathbb{C}^{N\times N}\)</span>$ is a square <em>symmetric</em> matrix (<span class="math inline">\(Y_{ij} = Y_{ji}\)</span> or <span class="math inline">\(\mathbf{Y} = \mathbf{Y}^{\rm T}\)</span>). Its diagonal elements contain the point FRFs at each position, whilst the off-diagonal elements contain the transfer FRFs between each pair of positions. The symmetry of <span class="math inline">\(\mathbf{Y}\)</span> arises due to an important feature of FRFs; they are <em>reciprocal</em>, meaning that when the input and output positions are interchanged the FRF remains the same, i.e.&nbsp;<span class="math inline">\(Y_{ij} = Y_{ji}\)</span>. The same is true for all FRFs described above.</p>
+<p><a href="#eq-MobilityMatrixDefFull" class="quarto-xref">Equation&nbsp;5</a> provides a component-level definition of a multi-DoF FRF. To obtain an element wise definition for <span class="math inline">\(Y_{ij}\)</span>, we must isolate a single element of the FRF matrix. We do this by considering the response at an arbitrary position <span class="math inline">\(i\)</span>, due to <em>a single applied force</em> at position <span class="math inline">\(j\)</span>; that is, we set all forces other than that at <span class="math inline">\(j\)</span> to zero, <span class="math inline">\(f_{k\neq j}=0\)</span>. <a href="#eq-MobilityMatrixDefFull" class="quarto-xref">Equation&nbsp;5</a> then reduces to the element wise FRF definition, <span id="eq-mobDef2"><span class="math display">\[
+Y_{ij} = {v_i \over f_j}  \Big|_{f_{k \neq j} = 0}.
+\tag{6}\]</span></span></p>
+<p>Based on <a href="#eq-mobDef2" class="quarto-xref">Equation&nbsp;6</a>, the measurement of an FRF matrix should be done in such a way that:</p>
+<ol type="1">
+<li>forces are applied one at a time to each point of interest;</li>
+<li>external forces at all other points are zero (the structure is allowed to respond freely);</li>
+<li>the individual elements of the matrix are then measured as the complex ratio of the response at <span class="math inline">\(i\)</span> to the single excitation force at <span class="math inline">\(j\)</span>, as per <a href="#eq-mobDef2" class="quarto-xref">Equation&nbsp;6</a>.</li>
+</ol>
+<div id="fig-VAVP" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-VAVP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mobilityDiag.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Mobility FRF constraints.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="impedanceDiag.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Impedance FRF constraints.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-VAVP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Illustration of the element-wise constraints on the definition of mobility and impedance FRFs.
+</figcaption>
+</figure>
+</div>
+<p>Considering the same component with <span class="math inline">\(N\)</span> co-located inputs and outputs, its <em>impedance</em> is defined by the vector-matrix equation, <span class="math display">\[
+\mathbf{f} = \mathbf{Z}\mathbf{v}
+\]</span> where <span class="math inline">\(\mathbf{f} \in \mathbb{C}^N\)</span> is an <span class="math inline">\(N\)</span> dimensional vector of resultant forces, <span class="math inline">\(\mathbf{v}\in \mathbb{C}^N\)</span> is an <span class="math inline">\(N\)</span> dimensional vector of applied velocities and <span class="math inline">\(\mathbf{Z} \in \mathbb{C}^{N\times N}\)</span> is the <span class="math inline">\(N \times N\)</span> dimensional impedance matrix that relates the two. Written out in full, <span class="math display">\[
+    \left(\begin{array}{c} f_1 \\ f_2 \\ \vdots \\ f_N
+    \end{array}\right) = \left[\begin{array}{cccc}
+        Z_{11} &amp; Z_{12} &amp; \cdots &amp; Z_{1N} \\
+        Z_{21} &amp; Z_{22} &amp; \cdots &amp; Z_{2N} \\
+        \vdots &amp; \vdots &amp; \cdots &amp; \ddots \\
+        Z_{N1} &amp; Z_{N2} &amp; \cdots &amp; Z_{NN} \\
+    \end{array}\right]\left(\begin{array}{c} v_1 \\ v_2 \\ \vdots \\ v_N
+    \end{array}\right).
+\]</span> As above for the FRF, the first sub-scripted index denotes the response position (now a resultant force), and the second index the excitation position (now an applied motion).</p>
+<p>Like the FRF matrix, when excitations and responses are considered across the same set of <span class="math inline">\(N\)</span> positions, <span class="math inline">\(\mathbf{Z}\in\mathbb{C}^{N\times N}\)</span> is a square <em>symmetric</em> (i.e.&nbsp;reciprocal) matrix (<span class="math inline">\(Z_{ij} = Z_{ji}\)</span> or <span class="math inline">\(\mathbf{Z} = \mathbf{Z}^{\rm T}\)</span>), with the so-called point impedances along the diagonal, and transfer impedances elsewhere.</p>
+<p>To obtain an element-wise definition of the impedance <span class="math inline">\(Z_{ij}\)</span>, we must isolate a single element of the matrix <span class="math inline">\(\mathbf{Z}\)</span>. Following the same procedure as before, we consider an arbitrary force location <span class="math inline">\(i\)</span> and set all motions, bar that applied to position <span class="math inline">\(j\)</span>, to zero, <span class="math inline">\(v_{k\neq j} = 0\)</span>. We are then left with the element-wise definition, <span id="eq-impDef2"><span class="math display">\[
+Z_{ij} = {\bar{f}_i \over v_j} \Big|_{v_{k \neq j} = 0}
+\tag{7}\]</span></span> where it is noted that in order to satisfy the constraint <span class="math inline">\(v_{k \neq j} = 0\)</span>, an external <em>blocking force</em> <span class="math inline">\(\bar{f}\)</span> is required at all positions <span class="math inline">\({k \neq j}\)</span>.</p>
+<p>Based on <a href="#eq-impDef2" class="quarto-xref">Equation&nbsp;7</a>, an impedance matrix would be measured in such a way that:</p>
+<ol type="1">
+<li>prescribed motions are applied one at a time to each point of interest;</li>
+<li>the motion of all other points is constrained to zero (the structure is <em>not</em> allowed to move);</li>
+<li>the individual elements of the matrix are then measured as the complex ratio of the force response to the prescirbed motion, as per <a href="#eq-impDef2" class="quarto-xref">Equation&nbsp;7</a>.</li>
+</ol>
+<p>In contrast to FRF, the measurement of impedance required all points other than the excited point to be completely constrained, in other words they must be <em>fixed</em>. These different constraints for FRF and impedance have major practical implications for measurement. In short; impedance cannot be directly measured (at least not in a practical or reliable way), whilst mobility can (and with no great difficulty, usually…).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An important consequence of the element wise constraint in <a href="#eq-impDef2" class="quarto-xref">Equation&nbsp;7</a> is that the elements of the impedance matrix depend on the <em>position and number</em> of DoFs being considered. If a DoF is moved, so is the constaint that accompanies it. Clearly, this will lead to a different ‘boundary condition’ on the component, and so all elements of the impedance matrix will be modified. Similarly, if a new DoF is added, a new constraint is introduced and again, all elements of the impedance matrix will be modified. The same is not true, however, for the mobility FRF; moving or adding a DoF only alters the external force constraint, which has no effect on the component’s boundary conditions. Hence, the elements of the FRF matrix are unchanged.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="degrees-of-freedom" class="level2">
+<h2 class="anchored" data-anchor-id="degrees-of-freedom">Degrees of freedom</h2>
+<p>Having introduced the general concept of a multi-DoF FRF matrix, the building block of a VAVP, we are now ready to discus <em>what FRFs are required</em> to characterise completely the passive properties of a component. There are two main talking points here: the first conearns the nature of the FRF’s excitation and response; the second concearns where on a component should FRFs be measured.</p>
+<p>In the preceeding discussion we made no specific mention of the type of forces or responses (their direction or whether they are translational or rotational) in our defintion of the FRF. These are important considerations when representing a component by an FRF matrix. Failure to caputure a correct set of FRFs will lead to a poorly characterised component, and put the entire VAVP at risk.</p>
+<div id="fig-sourceRecDoFs" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sourceRecDoFs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="sourceRecDoFs.png" class="img-fluid figure-img" width="500">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sourceRecDoFs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Illustration of the DoFs for source and receiver components; the interface DoFs <span class="math inline">\(c\)</span> (for source and receiver) and the target DoFs <span class="math inline">\(r\)</span> (receiver only).
+</figcaption>
+</figure>
+</div>
+<p>The FRFs required to characterise a component depend firstly on the type of component, whether it is a vibration source, a coupling element, or a recevier-like structure. Following the black-box approach described earlier, a component can be characterised entirely by a set of input-output (FRF) relations at and between its structural connections (interfaces), in addition to any extra remote positions that are of interest. For a vibration source, there is typically no interest in the remote response away from the interface; the source FRFs include only the interface DoFs <span class="math inline">\(c\)</span>. Coupling elements are designed to <em>couple</em> two (or more) components, and so they have least two distinct interfaces, e.g.&nbsp;above and below a vibration isolator. There is generally no interest in the element’s response inbetween these interfaces and so, like the vibration source, the coupling element FRFs include only the interface DoFs <span class="math inline">\(c_1, \, c_2\)</span>. Recevier-like components differ from the above. In addition to the interface <span class="math inline">\(c\)</span>, there are typically a series of additional <em>target</em> locations <span class="math inline">\(r\)</span> that are of interest; these are the usually the locations at which we would like to make a response prediction using the VAVP. They might be structural or acoustic.</p>
+<section id="source-components" class="level3">
+<h3 class="anchored" data-anchor-id="source-components">Source components</h3>
+<p>Lets begin by considering the source FRF matrix in the case of <span class="math inline">\(N\)</span> discrete connections points. The motion of any `point’ on a structural component is in general described by 6 DoFs - 3 translations in the <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> coordinates, and a rotation about each of these axes, respectively, <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span>. We term these DoFs ‘rigid body’ or ‘point-like’ DoFs. Of course, the notion of a <em>point</em> is an idealisation describing an infinesimally small area, which a structural connection point is clearly not. Nevertheless, if the structural wavelength (which depends on frequnecy) is large compared to the size of the connection, then locally the dynamics behave point-like and can be described entirely by the rigid body DoFs. It is imperitive when building a VAVP that all point-like DoFs are considered (at least initially); very rarely does structual forcing or coupling occur in a single translational direction with no rotations.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that as frequency increases, and structural wave length decreases, local deformations will begin to occur over the connection. At this point the interface dynamics are longer behaving <em>point-like</em> and an alternative ‘flexible’ or ‘continuous’ representation is required. This topic will be discussed later in the context of the Virtual Point transformation in <a href="../introductions/interfaces.html">Interfaces.</a></p>
+</div>
+</div>
+<p>So, a source with <span class="math inline">\(N\)</span> interface connections is characterised by <span class="math inline">\(6N\)</span> point-like DoFs such that its complete FRF matrix <span class="math inline">\(\mathbf{Y}_S\in\mathbb{C}^{6N\times6N}\)</span>, is given by, <span id="eq-sourceMob"><span class="math display">\[
+            \mathbf{Y}_{Scc} = \left[\begin{array}{c c c c}\mathbf{Y}_{Sc_1c_1} &amp; \mathbf{Y}_{Sc_1c_2} &amp; \cdots &amp; \mathbf{Y}_{Sc_1c_N}\\
+        \mathbf{Y}_{Sc_2c_1} &amp; \mathbf{Y}_{Sc_2c_2} &amp; \cdots &amp; \mathbf{Y}_{Sc_2c_N}\\
+        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+        \mathbf{Y}_{Sc_Nc_1} &amp; \mathbf{Y}_{Sc_Nc_2} &amp; \cdots &amp; \mathbf{Y}_{Sc_Nc_N}
+    \end{array}\right]
+\tag{8}\]</span></span> where the capitalised sub-script <span class="math inline">\(S\)</span> clarifies that the FRF belongs to the source in isolation, and the lower case sub-scripts <span class="math inline">\(cc\)</span> that the excitation and reponse positions are co-located at the interface DoFs <span class="math inline">\(c\)</span>. In general, <span class="math inline">\(\mathbf{Y}_{Sc_ic_j}\in\mathbb{C}^{6\times 6}\)</span> is a FRF sub-matrix relating the translational and rotational forces at the <span class="math inline">\(j\)</span>th interface connection to the corresponding response at the <span class="math inline">\(i\)</span>th. Explicitly, <span id="eq-rotMob"><span class="math display">\[
+    \left(\begin{array}{c}
+        v_{x_i} \\ v_{y_i} \\ v_{z_i} \\ v_{\alpha_i}\\ v_{\beta_i}\\ v_{\gamma_i}
+    \end{array}\right)=\left[\begin{array}{cccccc} Y_{{x_ix_j}} &amp; Y_{{x_iy_j}} &amp; Y_{{x_iz_j}} &amp; Y_{{x_i\alpha_j}} &amp; Y_{{x_i\beta_j}} &amp; Y_{{x_i\gamma_j}} \\
+        Y_{{y_ix_j}} &amp; Y_{{y_iy_j}} &amp; Y_{{y_iz_j}} &amp; Y_{{y_i\alpha_j}} &amp; Y_{{y_i\beta_j}} &amp; Y_{{y_i\gamma_j}} \\
+        Y_{{z_ix_j}} &amp; Y_{{z_iy_j}} &amp; Y_{{z_iz_j}} &amp; Y_{{z_i\alpha_j}} &amp; Y_{{z_i\beta_j}} &amp; Y_{{z_i\gamma_j}} \\
+        Y_{{\alpha_i x_j}} &amp; Y_{{\alpha_i y_j}} &amp; Y_{{\alpha_i z_j}} &amp; Y_{{\alpha_i\alpha_j}} &amp; Y_{{\alpha_i\beta_j}} &amp; Y_{{\alpha_i\gamma_j}} \\
+        Y_{{\beta_i x_j}} &amp; Y_{{\beta_i y_j}} &amp; Y_{{\beta_i z_j}} &amp; Y_{{\beta_i\alpha_j}} &amp; Y_{{\beta_i\beta_j}} &amp; Y_{{\beta_i\gamma_j}}\\
+        Y_{{\gamma_i x_j}} &amp; Y_{{\gamma_i y_j}} &amp; Y_{{\gamma_i z_j}} &amp; Y_{{\gamma_i\alpha_j}} &amp; Y_{{\gamma_i\beta_j}} &amp; Y_{{\gamma_i\gamma_j}}
+    \end{array}\right]\left(\begin{array}{c}
+        f_{x_j} \\ f_{y_j} \\ f_{z_j} \\ f_{\alpha_j}\\ f_{\beta_j}\\ f_{\gamma_j}
+    \end{array}\right)
+\tag{9}\]</span></span> where, for example, <span class="math inline">\(Y_{{\alpha_i y_j}}\)</span> is the FRF relating a translational force in the <span class="math inline">\(y\)</span> direction at position <span class="math inline">\(j\)</span> to a rotational response about the <span class="math inline">\(x\)</span>-axis at position <span class="math inline">\(i\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In practice, not all DoFs are necessary at all points. In fact, in some scenarios including a DoF that does not contirbute significantly to forcing or coupling can actually worsen the performance of a VAVP. For this reason, perhaps the greatest challenge when building a VAVP is correctly identifying which DoFs are required (which depends on frequency by the way!) to characterise a component sufficiently without introducing unecessary error and uncertainty.</p>
+</div>
+</div>
+<p>At this point it is important to recognise that whilst the full <span class="math inline">\(6N\)</span> DoF matrix described above is <em>theoretically</em> important, FRF matrices are rarely measured in this form. The <span class="math inline">\(6N\)</span> DoFs above describe a component’s motion in terms of the translations and rotations about a series of idealised point-like connections. In practice, it is not usually possible to directly measure translational and rotational motions for co-located excitation and response positions, nor is it straightforward to measure rotational motions directly. Rather, we measure a set of translational FRFs between <span class="math inline">\(N\)</span> excitation positions surrounding point <span class="math inline">\(j\)</span>, and <span class="math inline">\(M\)</span> response positions surrounding point <span class="math inline">\(i\)</span>, in the form, <span id="eq-measMob"><span class="math display">\[
+    \left(\begin{array}{c}
+        v_{1} \\ v_{2} \\ \vdots \\ v_{M}
+    \end{array}\right)_i = \left[\begin{array}{c c c c}Y_{11} &amp; Y_{12} &amp; \cdots &amp; Y_{1N}\\
+        Y_{11} &amp; Y_{22} &amp; \cdots &amp; Y_{2N}\\
+        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+        Y_{M1} &amp; Y_{M2} &amp; \cdots &amp; Y_{MN}\\
+    \end{array}\right]_{ij} \left(\begin{array}{c}
+        f_{1} \\ f_{2} \\ \vdots \\ f_{N}
+    \end{array}\right)_j.
+\tag{10}\]</span></span> An example illustrated in <a href="#fig-measMob" class="quarto-xref">Figure&nbsp;3</a>, where for clarity we consider collocated points, <span class="math inline">\(i=j\)</span>.</p>
+<p>Whilst directly measured FRF matrices in the form of <a href="#eq-measMob" class="quarto-xref">Equation&nbsp;10</a> can be used for some forms of analysis, due to their non-co-located excitation and response positions and lack of rotations, they are limited in terms of VAVP development.</p>
+<p>From <a href="#eq-measMob" class="quarto-xref">Equation&nbsp;10</a>, provided the measured FRF matrix spans the vector space of the full point-like <span class="math inline">\(6\)</span> DoF matrix (<a href="#eq-rotMob" class="quarto-xref">Equation&nbsp;9</a>), the latter can be determined by applying an appropriate <em>rigid body transformation</em>, <span class="math display">\[\begin{equation}\label{rotMobmeasMob}
+    \left[\begin{array}{cccccc} Y_{{x_ix_j}} &amp; Y_{{x_iy_j}} &amp; Y_{{x_iz_j}} &amp; Y_{{x_i\alpha_j}} &amp; Y_{{x_i\beta_j}} &amp; Y_{{x_i\gamma_j}} \\
+        Y_{{y_ix_j}} &amp; Y_{{y_iy_j}} &amp; Y_{{y_iz_j}} &amp; Y_{{y_i\alpha_j}} &amp; Y_{{y_i\beta_j}} &amp; Y_{{y_i\gamma_j}} \\
+        Y_{{z_ix_j}} &amp; Y_{{z_iy_j}} &amp; Y_{{z_iz_j}} &amp; Y_{{z_i\alpha_j}} &amp; Y_{{z_i\beta_j}} &amp; Y_{{z_i\gamma_j}} \\
+        Y_{{\alpha_i x_j}} &amp; Y_{{\alpha_i y_j}} &amp; Y_{{\alpha_i z_j}} &amp; Y_{{\alpha_i\alpha_j}} &amp; Y_{{\alpha_i\beta_j}} &amp; Y_{{\alpha_i\gamma_j}} \\
+        Y_{{\beta_i x_j}} &amp; Y_{{\beta_i y_j}} &amp; Y_{{\beta_i z_j}} &amp; Y_{{\beta_i\alpha_j}} &amp; Y_{{\beta_i\beta_j}} &amp; Y_{{\beta_i\gamma_j}}\\
+        Y_{{\gamma_i x_j}} &amp; Y_{{\gamma_i y_j}} &amp; Y_{{\gamma_i z_j}} &amp; Y_{{\gamma_i\alpha_j}} &amp; Y_{{\gamma_i\beta_j}} &amp; Y_{{\gamma_i\gamma_j}}
+    \end{array}\right]= \mathbf{T}_r\left[\begin{array}{c c c c}Y_{11} &amp; Y_{12} &amp; \cdots &amp; Y_{1N}\\
+        Y_{11} &amp; Y_{22} &amp; \cdots &amp; Y_{2N}\\
+        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+        Y_{M1} &amp; Y_{M2} &amp; \cdots &amp; Y_{MN}\\
+    \end{array}\right]_{ij} \mathbf{T}_f^{\rm T}
+\end{equation}\]</span> where <span class="math inline">\(\mathbf{T}_{r,f}\)</span> are the transformation matrices for response and force positions, respectively. Further details on the construction of <span class="math inline">\(\mathbf{T}_{r,f}\)</span> are given in <a href="../introductions/interfaces.html">Interfaces</a>. Hereafter, we will assume (unless otherwise stated) that any FRF matrices introduced have been transformed in such a way that they relate translational/rotational DoFs, as described above.</p>
+<div id="fig-measMob" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-measMob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="measMob.png" class="img-fluid figure-img" width="500">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-measMob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Illustration of ‘transformed’ (left) vs.&nbsp;‘measured’ (right) FRFs. Measured FRFs related a set of discrete non-co-located forces and responses surrounding a connection point. Transformed FRFs relate the co-located forces and moments to the translational and rotational responses at a particular point.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="recevier-components" class="level3">
+<h3 class="anchored" data-anchor-id="recevier-components">Recevier components</h3>
+<p>Let us now consider the DoFs of a matching reciever structure (as in <a href="#fig-sourceRecDoFs" class="quarto-xref">Figure&nbsp;2</a>). As a matching component, we have the same number of interface connections but now with an aditional set of remote <span class="math inline">\(r\)</span> DoFs. Consequently, the recevier FRF takes the form, <span class="math display">\[
+    \mathbf{Y}_{R} = \left[\begin{array}{c c}\mathbf{Y}_{Rcc} &amp; \mathbf{Y}_{Rcr}\\
+        \mathbf{Y}_{Rrc} &amp; \mathbf{Y}_{Rrr}
+    \end{array}\right]
+\]</span> where: the FRF submatrix <span class="math inline">\(\mathbf{Y}_{Rcc}\)</span> is identical in form to that of <a href="#eq-sourceMob" class="quarto-xref">Equation&nbsp;8</a> (i.e.&nbsp;including <span class="math inline">\(N\)</span> sub-FRF matrices, one for each connection point); <span class="math inline">\(\mathbf{Y}_{Rrc}\)</span> and <span class="math inline">\(\mathbf{Y}_{Rcr}\)</span> are the transfer FRFs between the interface and remote DoFs; and <span class="math inline">\(\mathbf{Y}_{Rrr}\)</span> is the point FRF matrix for the remote DoFs. If the remote points are acoustic in nature (say if we wish to predict the sound pressure level within a vehicle cabin), we use instead <em>vibro-acoustic</em> FRF matrices as, <span class="math display">\[
+    \mathbf{Y}_{R} = \left[\begin{array}{c c}\mathbf{Y}_{Rcc} &amp; \mathbf{H}_{Rcr}\\
+        \mathbf{H}_{Rrc} &amp; \mathbf{H}_{Rrr}
+    \end{array}\right]
+\]</span> In this case <span class="math inline">\(\mathbf{Y}_{R}\)</span> isnt strictly speaking a structural FRF matrix anymore, rather its a mixed vibro-acoustic FRF matrix. Nevertheless we use the same notation.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The vibro-acoustic FRF matrix <span class="math inline">\(\mathbf{H}_{Rcr}\)</span> relates a <em>volume velocity</em> excitation at <span class="math inline">\(r\)</span> to the structura response at <span class="math inline">\(c\)</span>. Similary, <span class="math inline">\(\mathbf{H}_{Rrc}\)</span> relates a structural force excitation at <span class="math inline">\(c\)</span> to an acoustic pressure response at <span class="math inline">\(r\)</span>. Finally, <span class="math inline">\(\mathbf{H}_{Rrr}\)</span> is a purely acoustic FRF matrix that relates a volume velocity excitation at <span class="math inline">\(r\)</span> to its co-located pressure response.</p>
+</div>
+</div>
+<p>Unlike the interface connections, which generaly need to include all 6 point-like DoFs (translations and rotations about each axis), the remote points <span class="math inline">\(r\)</span> need only include the DoFs for which prediction is sought. Most often this is just the outward normal response and some set of locations, or perhaps a sound pressure level at some listener position. Moreover, if these remote points are soley for prediction, i.e.&nbsp;no external forcing or coupling is to be applied there, then only one of the transfer FRFs is required, and the remote point FRF can be discarded entirely. This reduces the recevier FRF to, <span class="math display">\[
+    \mathbf{Y}_{R} = \left[\begin{array}{c c}\mathbf{Y}_{Rcc} \\
+        \mathbf{Y}_{Rrc}
+    \end{array}\right] \qquad \mbox{or} \qquad  \left[\begin{array}{c c}\mathbf{Y}_{Rcc} \\
+        \mathbf{H}_{Rrc}
+    \end{array}\right]
+\]</span> This reduction can drastically simplify the measurement of <span class="math inline">\(\mathbf{Y}_{R}\)</span>, especialy for the vibro-acoustic case.</p>
+</section>
+<section id="coupling-elements" class="level3">
+<h3 class="anchored" data-anchor-id="coupling-elements">Coupling elements</h3>
+<p>For a coupling elements, such as a vibration isolator, we typically have two sets of interface DoFs; those above the element (<span class="math inline">\(c_1\)</span>) and those below (<span class="math inline">\(c_2\)</span>). As above, at each of these interfaces all point-like DoFs should be accounted for. This leads to an FRF matric <span class="math inline">\(\mathbf{Y}_I\in\mathbb{C}^{12\times 12}\)</span> of the form, <span class="math display">\[
+    \mathbf{Y}_{I} = \left[\begin{array}{c c}\mathbf{Y}_{Ic_1c_1} &amp; \mathbf{Y}_{Ic_1c_2}\\
+        \mathbf{Y}_{Ic_2c_1} &amp; \mathbf{Y}_{Ic_2c_2}
+    \end{array}\right]
+\]</span> where <span class="math inline">\(\mathbf{Y}_{Ic_1c_1}\)</span> and <span class="math inline">\(\mathbf{Y}_{Ic_1c_1}\)</span> are the point FRFs above and below the element, respectively, and <span class="math inline">\(\mathbf{Y}_{Ic_1c_2}=\mathbf{Y}_{Ic_2c_1}^{\rm T}\)</span> are the transfer FRFs from one side to the other.</p>
+</section>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>In summary of this section, the passive characterisation of source, recevier and coupling components is acheived by the following FRF matrices, <span class="math display">\[
+    \mathbf{Y}_{S} = \mathbf{Y}_{Scc}\qquad \mathbf{Y}_{R} = \left[\begin{array}{c c}\mathbf{Y}_{Rcc} \\
+        \mathbf{Y}_{Rrc}
+    \end{array}\right] \qquad \mbox{and} \qquad \mathbf{Y}_{I} = \left[\begin{array}{c c}\mathbf{Y}_{Ic_1c_1} &amp; \mathbf{Y}_{Ic_1c_2}\\
+        \mathbf{Y}_{Ic_2c_1} &amp; \mathbf{Y}_{Ic_2c_2}
+    \end{array}\right]
+\]</span> where <span class="math inline">\(c\)</span> is set to include all point-like DoFs across the interface, <span class="math inline">\(r\)</span> is a specific subset of DoFs that we wish to make predictions for, and <span class="math inline">\(c_1\)</span> and <span class="math inline">\(c_2\)</span> include all point-like DoFs above and below the coupling element, respectively.</p>
+</section>
+</section>
+<section id="boundary-conditions" class="level2">
+<h2 class="anchored" data-anchor-id="boundary-conditions">Boundary conditions</h2>
+<p>Central to the VAVP framework is notion of an <em>independent</em> characteristion of each component by its (multi-DoF) FRF matrix. In the above we introduced general concept of multi-DoF FRFs, discussed what DoFs are required for each component type, but as yet we have made no comment on how to ensure that these FRF matrices are <em>independent</em>, in partiuclar when obtained by experiment. This a comes down to boundary conditions.</p>
+<p>To ensure that a measured FRF matrix is an invariant property it should be obtained with the component in ‘isolation’. To achieve this, the preferred test arrangement is with a ‘free-interface’ condition under either a grounded support or a free boundary condition, as discussed below and illustrated in. For this latter case, we are particularly interested in the design of an appropriate resilient support system and, where necessary, a method for removing its effect from measured FRFs.</p>
+<div id="fig-VAVP" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-VAVP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="freeVsGrounded_2.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Grounded support.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="freeVsGrounded_1.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Free interface.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-VAVP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Illustration of the free and grounded supports for independent characterisation of source and recevier-like components
+</figcaption>
+</figure>
+</div>
+<section id="grounded-support" class="level3">
+<h3 class="anchored" data-anchor-id="grounded-support">Grounded support</h3>
+<p>Receiver-like components are often such that they will naturally be supported by the ground, for example the body of a vehicle or the fabric of a building. In this case, to obtain an independent FRF, it is sufficient to ensure that the component is supported in a manner representative of its intended application, and that the interface to which any components will be attached is left free. In a sense, we are simply considering the grounded support to be part of the component.</p>
+</section>
+<section id="free-suspension" class="level3">
+<h3 class="anchored" data-anchor-id="free-suspension">Free suspension</h3>
+<p>For components that are to be entirely supported by other components (for example, most vibration sources), a ‘<em>free</em>’ boundary condition is required to obtain an indeopendent FRF. This clearly presents some practical issues and only an approximately free boundary can be achieved in practice. This is typically done by suspending the component from resilient cabling (e.g.&nbsp;elastic bungees) or by mounting it on a sufficiently resilient support. This support system should be designed such that its impedance is as small as possible (while providing adequate structural support for the component) so that the measured coupled FRF approximates that of the free component.</p>
+<p>The added support will ultimately lead to low frequency mass-spring-like resonances where the enitre component bounces around as a rigid body. A suitable support scheme should see these resonant frequencies positioned well below the lowest frequency of interest. Some practical guidence on acheiving this is given in ISO 9611 and ISO 7626.</p>
+</section>
+<section id="in-situ" class="level3">
+<h3 class="anchored" data-anchor-id="in-situ">In situ</h3>
+<p>In some cases, a resilient support is simply not possible as the component must be mounted to a more supportive structure to operate, such as a test bench. In this scenario one must resort to a more advanced <em>indirect</em> method of obtaining the component’s free-interface FRF; this involves mathematically decoupling the component from a known test bench. This sort of decoupling procedure is fraught with difficulty, and should generally be avoided if possible. A similar problem arrises when considering the characterisation of coupling element’s, as described below.</p>
+<p>To measure the free-interface FRF matrix of a coupling element one would have to freely suspend the element (say from elastic bungees), instrument its two interfaces and then apply the necessary force excitations… There are a number of practical issues with this:</p>
+<ol type="1">
+<li>coupling elements are generally quite light weight, and so to have a minimal effect on the measured FRFs the suspension used would have to be incredibly compliant;</li>
+<li>there is usually limited space to insturment and subsequently excite either end; even if this were possible, the compliant suspension would lead to very large rigid body motions;</li>
+<li>coupling elements are often sensitive to pre-load and installation effects, which are not caputured when freely suspended.</li>
+</ol>
+<p>Clearly, we are unable to characterise coupling elements by the same methods as source and recevier components, i.e.&nbsp;by their free interface FRF matrices. Instead, measurements must be made with the element <em>in situ</em>, i.e.&nbsp;installed in some assembely. This installation provides not only a means on instrumenting and exciting the element, but also necessayr pre-load. The challange then becomes, how to extract <em>independent component data from measurements made on an assembly</em>. For coupling elements, this issue will be dealt with in detail in <a href="../introductions/isolators.html">Vibration isolators.</a>.</p>
+</section>
+</section>
+<section id="what-next" class="level2">
+<h2 class="anchored" data-anchor-id="what-next">What next?</h2>
+<p>Having introduced multi-DoF FRFs and discussed which DoFs are necessary for a component’s characterisation, we now have the means to independently characterise the passive properties of source and recevier-like structures. Coupling elements like vibration isolators require an alternative approach, which will be described shortly in <a href="../introductions/isolators.html">Vibration isolators.</a>. Once we have dealt with coupling elements, we will have everything we need to build a coupled assembly model by means of substructuring.</p>
+<p>However, before we get onto isolators we need to take a very important detour to discuss <a href="../introductions/interfaces.html">Interface representations</a>. How we describe an interfaces in terms of a finite number of DoFs (e.g.&nbsp;point-like translations and rotations), and how we obtain these DoF from measurement, is central to any component-level characterisation, both passive and active. On the next page we will introduce the general notion of interface transformations, and the special case of the Virtual Point transformation.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../introductions/VAVP.html" class="pagination-link" aria-label="Vibro-Acoustic Virtual Prototyping">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Vibro-Acoustic Virtual Prototyping</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../introductions/interfaces.html" class="pagination-link" aria-label="Interface representations">
+        <span class="nav-page-text">Interface representations</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Vibro-Acoustic Virtual Prototyping – Joshua Meggitt</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../introductions/components.html" rel="next">
+<link href="../introductions/introductions.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-045f01e90fa491bba6c51fbe92305c42.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Joshua Meggitt</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../introductions/introductions.html" aria-current="page"> 
+<span class="menu-text">A quick introduction to:</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../papers/papers.html"> 
+<span class="menu-text">Papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutorials/tutorials.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../book.html"> 
+<span class="menu-text">Book</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teaching" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teaching</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teaching">    
+        <li>
+    <a class="dropdown-item" href="../mlsd.html">
+ <span class="dropdown-text">Microphone and Loudspeaker Design</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../poav.html">
+ <span class="dropdown-text">Principles of Acoustics and Vibration</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../introductions/VAVP.html">Vibro-Acoustic Virtual Prototyping</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/introductions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/VAVP.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Vibro-Acoustic Virtual Prototyping</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/components.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Components (passive characterisation)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/interfaces.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Interface representations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/isolators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vibration isolators</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/substructuring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Substructuring</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/blockedForce.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Blocked forces</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../introductions/uncertainty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Uncertainty</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-a-vavp" id="toc-what-is-a-vavp" class="nav-link active" data-scroll-target="#what-is-a-vavp">What is a VAVP?</a></li>
+  <li><a href="#why-use-a-vavp" id="toc-why-use-a-vavp" class="nav-link" data-scroll-target="#why-use-a-vavp">Why use a VAVP?</a></li>
+  <li><a href="#how-to-build-a-vavp" id="toc-how-to-build-a-vavp" class="nav-link" data-scroll-target="#how-to-build-a-vavp">How to build a VAVP</a>
+  <ul class="collapse">
+  <li><a href="#component-based-approach" id="toc-component-based-approach" class="nav-link" data-scroll-target="#component-based-approach">Component-based approach</a></li>
+  <li><a href="#black-box-models" id="toc-black-box-models" class="nav-link" data-scroll-target="#black-box-models">Black-box models</a></li>
+  <li><a href="#components" id="toc-components" class="nav-link" data-scroll-target="#components">Components</a></li>
+  <li><a href="#interfaces" id="toc-interfaces" class="nav-link" data-scroll-target="#interfaces">Interfaces</a></li>
+  <li><a href="#vavp-framework-and-key-equations" id="toc-vavp-framework-and-key-equations" class="nav-link" data-scroll-target="#vavp-framework-and-key-equations">VAVP framework and key equations</a></li>
+  </ul></li>
+  <li><a href="#what-next" id="toc-what-next" class="nav-link" data-scroll-target="#what-next">What next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Vibro-Acoustic Virtual Prototyping</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>On this page we introduce the concept of a Vibro-Acoustic Virtual Prototype (VAVP), provide some context regarding their use and applications, and begin to formulise their constuction.</p>
+<section id="what-is-a-vavp" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-vavp">What is a VAVP?</h2>
+<p>Virtual prototyping is obviously not a new idea. For visual design and general engineering well developed tools have been around for many decades (for example, see the plethor of CAD and FE packages) and their use is standard practice within industry, allowing engineers to inspect designs and even evaluate their funcational performance prior to manufacturing. Extending the virtual prototype concept to the realms of vibro-acoustics one arrives at the aptly named Vibro-Acoustic Virtual Prototype (VAVP). An early definition of a VAVP is given by Moorhouse as ‘<em>a computer representation of a machine, e.g.&nbsp;a washing machine, fridge, lawnmower etc., such that its sound can be heard without it necessarily having to exist as a physical machine</em>’. Outlined more a little more explicitly, a VAVP is a virtual assembly that is built from the properties of its constituent components in such a way that best represents the physical workings and/or vibro-acoustic ‘appearance’ of the real machine and, furthermore, can be used to produce operational response preidctions, including auralisations, of said machine. Here, the term ‘auralisation’ may be defined as the creation and subsequent presentation of audible sound  files generated from numerical (simulated, measured, or synthesized) data.</p>
+<p><strong>In short, a Vibro-Acoustic Virtual Prototype is a digital representation of an assembly that is able reproduce its operational vibro-acoustic response with a sufficient degree of accuracy to be used as a design tool.</strong></p>
+</section>
+<section id="why-use-a-vavp" class="level2">
+<h2 class="anchored" data-anchor-id="why-use-a-vavp">Why use a VAVP?</h2>
+<p>Before we describe the key components of Vibro-Acoustic Virtual Prototype, it is worth taking a brief aside to discus the importance of Vibro-Acoustic design and, in doing so, justify the not insignificant effort required to actually build a VAVP!</p>
+<p>Vibro-acoustic design was once something of an afterthought. In recent decades it hss steadily been increasing in importance. Nowhere is this trend more evident than in the automotive industry where vehicle attributes relating to Noise Vibration and Harshness (NVH) are nowadays often given the highest priority. There are complex reasons for this growth in status but in general it all comes back to two major drivers: legislation and customer perception.</p>
+<p>Regarding <em>legislation</em>, manufacturers of many products, vehicles, industrial, domestic and outdoor products for example, are typically subject to mandatory limits on noise or vibration emission. In the European Union for example certain types of equipment may not be sold unless they meet limits for sound power.</p>
+<p><em>Customer perception</em>, on the other hand, is typically a more complex issue that may take several forms, the most important of which is ‘brand image’. The iconic ‘<em>potato-potato-potato</em>’ sound of the Harley Davidson engine and the satisfying ‘<em>clunk</em>’ of the VW car door are classic examples where sounds have augmented brand value by making a product more desirable. Product sounds may also attract negative associations though which can be damaging to the brand, for example if a product sounds ‘cheap’ or ‘nasty’.</p>
+<p>To satisfy legislation or customer preference, manufacturers have adopted a range of specific vibro-acoustic design targets. Those derived from legislation are for the most part single number limits designed for simplicity and clarity. Targets for customer perception on the other hand, are a far more nuanced and complex matter. What makes a product sound ‘cool’ or ‘tinny’ or ‘wrong’? To understand how positive or negative associations are triggered by combinations of features in the sound it is necessary to dive into the field psycho-acoustics. Even with an understanding of what makes a product sound ‘cool’, engineers are set the daunting task of <em>designing</em> the product to acheive the <em>cool sound</em>. How engineering modifications map to specific features in the sound and then to perception is a complex question, making the `sound design’ of engineered products far more difficult and advanced problem than traditional noise control typically used for meeting legislative requirements.</p>
+<p>It is clear that manufacturers cannot afford to get the vibro-acoustic design wrong and furthermore that getting it right may demand a sophisticated, possibly multidisciplinary approach. The task is made all the more difficult by constant pressure to reduce mass and cost.</p>
+<p>The need for ‘<em>vibro-acoustic virtual prototypes</em>’ has emerged from the desire to evaluate and/or listen to designs or design modifications before the machines physically exist. Traditionally, this task would involve extensive phyiscal prototyping and testing, iterating towards a final design. Clearly, this is a slow and expensive process. With their ability to reduce cost, accelerate time to market, and optimize products to higher levels of performance and reliability, virtual prototyping methods are considered the most suitable alternative, particularly with regards to the assessment of vibro-acoustic performance and the drive towards net-zero.</p>
+<p>To provide the above benifits, a VAVP should be able to: a) predict the total vibro-acoustic response of an assembly (as a spectra or auralisation) with sufficient accuracy to be of practical use within a product development context, and b) evaluate the effect of modifying or replacing components for the purposes of design optimisation. This implies that our VAVP is built from <em>components</em>, and defined in such a way that they can be removed and replaced independently of the assembly and other connected components.</p>
+<p>The above should seem like a pretty attractive and obvious approach to product design… Then why is Vibro-Acoustic Virtual Prototyping so far behind its visual and mechanical counterparts? The need for VAVP to produce realistic sounds raises immense scientific and technical challenges. In part, these are due to the complexity of the machines being represented and in part because, in striving for realism, we are up against a formidable opponent - the extraordinary sophistication of human hearing!</p>
+<p>Consider a comparatively simple vibro-acoustic assembly as an example - a music box attached to a sounding board. From the sound of the assembled unit the average person is able to discern fine detail in the active mechanism itself and also certain properties of the (passive) sounding board, whether it is wood or metal for example. To produce a VAVP of this relatively simple system then, we need not only to model the active mechanism in significant detail but also the passive support structure. Neither component can be omitted. When we scale up this example to a complex machine like a vehicle there may be multiple active components and hundereds of passive components involved in the transmission path to the ear of the listener, none of which can necessarily be neglected <em>a priori</em>.</p>
+<p>Human ability to discern fine detail in sound as mentioned above is related to the impressive frequency range over which our hearing system operates. Adults are normally able to hear up to at least 10 kHz and nowadays specifications for electric vehicles often extend to the very top of this range. At the other end of the scale, most people can hear down to 20 Hz and if we include tactile vibration in our VAVP then we may need to model down to 1 Hz. Thus, the full working range of a VAVP could span four whole orders of magnitude (a factor of 10000!).</p>
+<p>The range of structural and acoustic wavelengths corresponding to this frequency range is also very wide, usually extending from larger than the whole machine to smaller than individual components. As a consequence, no one method of modelling is capable of spanning the whole frequency range. As such the VAVP should be able to mix-and-match different measurement and modelling schemes to best represent the assembled system (so-called hybrid modelling).</p>
+<p>Another major challenge is the modeling of <em>vibration-generating mechanisms</em> found inside every active component - fluctuating forces brought about by various mechanisms including aero- and fluid-dynamic forces, magnetic forces, impacts, friction forces, gear transmission error, forces at joints etc. These mechanisms tend to be highly complex, the inputs are often difficult to determine and the mechanisms themselves are often nonlinear, all of which makes modeling challenging. Perhaps for these reasons, while enormous effort has been devoted to vibro-acoustic modeling over the last few decades, only a tiny fraction of this effort has been directed towards source mechanisms. As a result the vast majority of models tell us how a structure responds to unit force input but do not attempt to ‘switch on’ the machine with realistic input. Today then, reliable models of vibro-acoustic sources must be considered beyond state-of-the-art.</p>
+<p><strong>So then, the potential benifits of VAVPs are quite evident, as are the challenges we face in their construction. How then do we go about building one?</strong></p>
+</section>
+<section id="how-to-build-a-vavp" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-build-a-vavp">How to build a VAVP</h2>
+<p>When considering the role of VAVPs, it is worthwhile to consider the steps in the process of using <em>physical</em> prototypes for vibro-acoustic design. Broadly speaking: 1) the (physical) <em>components</em> are constructed, then 2) connected together to form the <em>assembly</em>. 3) any active elements or <em>sources</em> are then switched on and 4) the vibro-acoustic <em>outputs</em> are monitored and compared with targets (potentially including perceptual targets). If design optimisation is required then 5) components are <em>modified</em> or <em>replaced</em> and we then repeat steps 3) and 4).</p>
+<p>The same basic elements will be required for a <em>virtual</em> prototype except that all physical aspects are replaced by digital representations. Thus, the VAVP is expected to include the following elements:</p>
+<ul>
+<li>passive and active components</li>
+<li>means of assembly</li>
+<li>prediction of output including by auralisation</li>
+<li>means of replacing components.</li>
+</ul>
+<p>In what follows we will lay out the basic conceptual scheme together with the main assumptions to be used in the component-based approach for VAVPs. The general principles are illustrated in <a href="#fig-VAVP" class="quarto-xref">Figure&nbsp;1</a>, though before we can discuss this in more detail it will be useful to describe more generally: the component-based approach to VAVPs, black box modelling, and the types of components encounted in most VAVPs.</p>
+<div id="fig-VAVP" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-VAVP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VAVP_2.png" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>Physical assembly.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="VAVP_3.png" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>VAVP representation.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-VAVP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Illustration of the VAVP framework. The physical assembly is excited by internal mechanisms within the source; the resulting vibration propagates through the coupled assembly, passing through the interface DoFs <span class="math inline">\(c\)</span>. The VAVP representation couples together the source and recevier components by substructuring, before representing the internal forcing by an equivalent blocked force applied to the coupling interface.
+</figcaption>
+</figure>
+</div>
+<section id="component-based-approach" class="level3">
+<h3 class="anchored" data-anchor-id="component-based-approach">Component-based approach</h3>
+<p>An important aspect of <em>physical</em> prototypes is the ability to remove, replace and transfer components from one assembly to another. Provided the fixing locations are compatible between the components and the rest of the assembly (i.e.&nbsp;the bolt holes line up) then we expect to be able to interchange (physical) components with complete freedom.</p>
+<p>Interchangeability is equally important in the <em>virtual</em> domain with a VAVP and the term ‘component-based’ has been coined to indicate just this: the component-based approach then can be defined as one in which all (virtual) components are <em>separable, interchangeable, transferable</em> or <em>independent</em> (of the assembly) - all these terms will be considered as equivalent in this context. We might also talk of component <em>properties</em> or <em>intrinsic</em> properties, meaning that they belong to the component alone and are free from any influence of the rest of the assembly. The terms <em>component-based</em> simulation and <em>VAVP</em> will similarly be assumed equivalent.</p>
+<p>When representing components with <em>measured</em> data however we cannot take for granted that this all-important interchangeability will be achieved, in fact, in general this will not be the case unless specific measures are adopted. In essence in the component-based approach, components must be characterised in a state with the interfaces either free or rigidly fixed. The precise form of characterisation will depend on the type of component considered, but will typically consitute a so-called <em>black box</em> representation.</p>
+</section>
+<section id="black-box-models" class="level3">
+<h3 class="anchored" data-anchor-id="black-box-models">Black-box models</h3>
+<p>In a typical VAVP, each individual component is represented by a <em>black box</em> model. The concept of a black box model is incredibly general, though its origins come from electric network analysis where it states that an electrical system is fully described by the behaviour at its terminals; the particulars of what goes on inside the box are unknown and of no great importance. In other words in a black box, the inputs and outputs are related in a known and defined way but the workings in between are unknown.</p>
+<p>In the case of vibro-acoustics, the ‘systems’ to be described by black boxes are the components of the VAVP. But what constitutes the ‘terminals’ of these black boxes? Generally, we need to consider ‘interfaces’ and ‘remote’, specifically ‘target’, points. Clearly, we need to capture all inputs (normally forces) and outputs (normally vibration or acoustic responses) to and from the component. <em>Interfaces</em>, as the regions where a component connects to another component, are where this transmission takes place and so all interface points must be included in our black box description. Additionally, we may be interested in the response at <em>target</em> locations; for example, the acoustic response at a driver’s ear position might be needed even if no external forces are applied there.</p>
+<p>Note that this is quite different to what we are used to when <em>modelling</em> components, for example using the Finite Element method. In this case,the structural dynamic properties at every point of the structure are determined, only limited by the resolution of the mesh employed. A description based on measurements on the other hand will typically only include the properties at the interfaces and target locations; no information is available regarding what goes on in between the inputs and outputs unless we specifically define a response location there.</p>
+<p>In electrical networks, black boxes are defined so that they can be <em>connected</em> to form larger networks by applying coupling rules. The same is true of the black box components defined for a VAVP which can be connected to form larger assemblies using <em>substructuring</em> techniques.</p>
+</section>
+<section id="components" class="level3">
+<h3 class="anchored" data-anchor-id="components">Components</h3>
+<p>Components are any parts of the assembly that one may need to separate from the whole, for example to allow components from different manufacturers to be modified or replaced. It should be clear from the above that a component is the fundamental unit of the VAVP that is not further divisible without taking further measurements (in which case the components would be redefined).</p>
+<p>Usually, a component of a VAVP coincides with a physically separable component, but this is not necessarily the case. In fact, in the virtual world there is considerable flexibility in defining the boundaries.</p>
+<p>The first step in constructing a VAVP then is to define the components. In effect, since a black box is fully defined by the way it responds with the outside world, this means defining their , and in particular their , i.e.&nbsp;the regions of the boundary where they connect to neighbouring components in the VAVP. We also need to include any other points where the response needs to be known such as target locations. The component is therefore defined solely at the interfaces and target points. But what properties are needed to define the component at these points? This depends on whether the component is <em>active</em> or <em>passive</em>.</p>
+<p><strong>Passive components</strong> are ones that transmit and/or radiate energy, but do not contain any vibration generating mechanisms. Passive components include vibration isolators, frames, body pannels, cavities, etc. To characterise a passive component we require a measure of its ability to accept and transmit vibrational energy. This can be acehvied in a variety of ways, though not all are appropriate for building a VAVP. The characterisation of passive components will be discussed in more detail in <a href="../introductions/components.html">Components</a> and <a href="../introductions/isolators.html">Vibration Isolators</a> but for now it is enough to say that they can be characterised by a set of frequency response functions (FRFs, frequency dependent filters) defined at and between all interface connections and target locations. These FRFs are stored as in matrix form. The choice of FRFs as our component representation will be justified later. As described above, the notion of indeopendence and transferability is central to the VAVP approach. Hence, these <u>FRFs must be obtained with the component held under appropriate boundary conditions, specifically we require the components <em>free</em> or <em>fixed</em> interface FRFs matrices.</u></p>
+<p><strong>Active components</strong> are ones that contain vibration generating mechanisms. Obvious examples include motors, pumps, gear boxes, engines, etc. For some problems the source definition is perhaps not so obvious. For example, considering the problem of ground induced building vibration, the active component would be the earth..! Like passive components, active components are characterised by their ability to accept and transmit vibrational energy, i.e.&nbsp;their free or fixed interface FRFs. Though, these passive properties are not enough. A secondary quantity is required to describe the component’s operational activity, i.e.&nbsp;the vibration generated by the internal mechanisms. <u>Like the required FRFs, an active descriptor should also be an independent and transferable property. It has become standard practice to use the so-called</u> <a href="../introductions/blockedForce.html">Blocked force</a>.</p>
+</section>
+<section id="interfaces" class="level3">
+<h3 class="anchored" data-anchor-id="interfaces">Interfaces</h3>
+<p>Before a component can be characterised (whether active or passive) it is necessary choose an <em>interface representation</em>. That is, means of describing the phyical interface by a finite set of FRFs. In fact, this perhaps the most cruical step in the development of a VAVP; it is often said that *everything goes right or wrong at the interface!</p>
+<p>Interfaces can be defined as those regions of the boundary where a component connects to other components. Determining where there is contact between two components is normally relatively straightforward, but defining the <em>interface representation</em> requires that all dynamic forces are properly accounted for. This a significantly more difficult task that it sounds for two main reasons.</p>
+<p>First, dynamic forces do not only act perpendicular to the boundary but may occur simultaneously in different directions or degrees of freedom (DoF). In general, at a single point up to six DoF are required for a full description, three perpendicular forces and three moments (rotational forces) about perpendicular axes. Thus, even a single point interface may require up to six DoF and a 6x6 matrix of FRFs. Failure to include the important DoF can amount to a disastrous misrepresentation. However, successful characterisation is not simply a question of ‘playing safe’ and including all six DoF every time since not all DoFs are important on every occasion; includion of inactive DoFs can can to increase experimental error and uncertainty. Defining an interface therefore requires a thorough understanding of the dynamics of the specific interface in question and often requires preliminary testing of some form.</p>
+<p>Secondly, there is the question of how to represent a contact patch by discreet points. Real connections are extended in the sense that contact is made over a surface area. However, the FRFs used to characterise components are point-to-point quantities… How then do we describe continuous contact? The conventional approach is to assume a point like connection; this is a valid assumption when the structural wavelength is much greater than the nominal dimensions of the interface connection. A point-like connection is described by 6 ‘rigid body’ DoFs; 3 translations in <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span>, and a rotational about each axis <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span>. The challange is then how to take a set of measured FRFs and transform these into the 6 rigid body DoFs… Moreover, when this point-like assumption breaks down (i.e.&nbsp;when the structural wavelength becomes comparable in size to the interface) some other form of discretisation is required that captures the ‘flexible dynamics’ over an extended interface. In <a href="../introductions/interfaces.html">Interfaces</a> we will introduce some common methods used to represent point-like and flexible interfaces in the context of VAVPs.</p>
+</section>
+<section id="vavp-framework-and-key-equations" class="level3">
+<h3 class="anchored" data-anchor-id="vavp-framework-and-key-equations">VAVP framework and key equations</h3>
+<p>To summarise so far, a VAVP is a digital representation of a machine whose components can be interchanged and modified and which sounds and feels just like the real thing. To achieve this we have seen we will need to include model representations of both active components, which generate the initial disturbance, and passive components which transmit vibration and/or radiate the sound. All components must be represented independently so that they can be built into an assembly and interchanged at will.</p>
+<p>The VAVP scheme is a highly flexible and general framework that applies to a very broad range of assemblies including machines, vehicles, ships, buildings, any system effectively that is approximately linear and time-invariant. Moreover, provided the requirements for the component-based approach are met, both modelled and measured data can in theory be combined within the same framework. Given that modelling alone is not yet able to deliver the virtual prototypes that industry demands, the ability to <em>hybridise</em> data in this way within a single self-consistent framework is potentially highly significant.</p>
+<p>Shown on the lefthand side of <a href="#fig-VAVP" class="quarto-xref">Figure&nbsp;1</a> is a simple arrangement with two components, an active source and a passive receiver. The <em>source</em> <span class="math inline">\(S\)</span> is excited by some internal dynamic forces which are assumed not to be accessible for direct measurement. The <em>receiver</em> <span class="math inline">\(R\)</span> contains no such forces but is excited through the interface <span class="math inline">\(c\)</span>, causing a response at <span class="math inline">\(r\)</span>. On the righthand side of <a href="#fig-VAVP" class="quarto-xref">Figure&nbsp;1</a> is the corresponding VAVP representation. In the VAVP representation the assembly is built by coupling together the source and receiver component FRFs using a technique termed substructuring. Once couples, the internal forces within the source are represented equivalentl using the previously mentioned blocked forces applied to the coupling interface. In theory, this combination should give an identical response as obtained from the physical assembly. Of course, this is never quite the case in reality..!</p>
+<p>To summarise the process of building a VAVP, we have the following key steps:</p>
+<ol type="1">
+<li>Characterise passive properties</li>
+<li>Characterise active properties</li>
+<li>Couple components</li>
+<li>Make response prediction and auralise.</li>
+</ol>
+<p>To provide some context for coming sections, we provide a brief description of each of the above steps. More detail will be provided though the comming sections.</p>
+<section id="step-1.-characterise-passive-properties" class="level4">
+<h4 class="anchored" data-anchor-id="step-1.-characterise-passive-properties">Step 1. Characterise passive properties</h4>
+<p>As discussed above, passive properties of each component are represented by FRF matrices, e.g.&nbsp; <span class="math display">\[\begin{equation}
+    \mathbf{Y}_{S}(\omega), \quad \mathbf{Y}_{R}(\omega)
+\end{equation}\]</span> where, <span class="math inline">\(\textbf{Y}\)</span> indicates a matrix of structural (mobility) FRFs, the upper case subscript denoting the component to which the quantity belongs.</p>
+</section>
+<section id="step-2.-characterise-active-components" class="level4">
+<h4 class="anchored" data-anchor-id="step-2.-characterise-active-components">Step 2. Characterise active components</h4>
+<p>For sources we require a measure of their <em>activity</em> in addition to their passive properties (<span class="math inline">\(\mathbf{Y}_S\)</span>). Here we quantify activity in terms of <em>blocked forces</em>, which are obtained by solving a so-called inverse problem. The main equation for obtaining blocked forces is, <span id="eq-forwardBlkF"><span class="math display">\[
+    \mathbf{v}_c = \mathbf{Y}_{Ccc} \mathbf{\bar{f}}_{c}    
+\tag{1}\]</span></span> where <span class="math inline">\(\mathbf{\bar{f}}_{c}\)</span> is a vector of blocked forces with one entry for every DoF on the interface: the subscript <span class="math inline">\(c\)</span> indicates that it applies on the interface labeled <span class="math inline">\(c\)</span>. <span class="math inline">\(\mathbf{Y}_{Ccc}\)</span> is the matrix of FRFs for the <em>coupled</em> (<span class="math inline">\(C\)</span>) source and receiver assembly. The first lower case <span class="math inline">\(c\)</span> indicates the set of response (output) points and the second the set of excitation points which in this formulation are co-located on interface <span class="math inline">\(c\)</span>. <span class="math inline">\(\mathbf{v}_c\)</span> represents the vector of operational responses, again with one entry for every point on interface <span class="math inline">\(c\)</span>.</p>
+<p>Solving <a href="#eq-forwardBlkF" class="quarto-xref">Equation&nbsp;1</a> requires separate tests, a passive system identification test to obtain the FRF matrix <span class="math inline">\(\mathbf{Y}_{Ccc}\)</span> and an operational test with the machine running to obtain <span class="math inline">\(\mathbf{v}_c\)</span>. Having obtained the data for <span class="math inline">\(\mathbf{Y}_{Ccc}\)</span> and <span class="math inline">\(\mathbf{v}_c\)</span>, one then solves <a href="#eq-forwardBlkF" class="quarto-xref">Equation&nbsp;1</a> to obtain the unknown blocked forces. This step is known as solving the inverse problem. It is not intuitively obvious why these forces are termed ‘blocked forces’; this will be addressed later in <a href="../introductions/blockedForce.html">Blocked forces</a>. Obtaining blocked forces, including solving the inverse problem, is one of the most critical stages in building a VAVP.</p>
+</section>
+<section id="step-3.-couple-components" class="level4">
+<h4 class="anchored" data-anchor-id="step-3.-couple-components">Step 3. Couple components</h4>
+<p>Having obtained FRF data describing each component in Step 1, they need to be coupled together to build a model of the virtual assembly. The rules for coupling are well known; one simply needs to satisfy continuity and equilibrium conditions across the connecting interfaces, a process which has become known as frequency-domain substructuring. There are numerous formulations of substructuring, some of which we describe in <a href="../introductions/substructuring.html">Substructuring</a>. For now, without making a preference at this stage, we will simply indicate the coupling step as: <span id="eq-DS1"><span class="math display">\[
+    \left[ \begin{array}{c} \mathbf{Y}_{X} \\ \mathbf{H}_{X} \end{array} \right] = DS(\mathbf{Y}_{S},\mathbf{Y}_{R},\mathbf{H}_R),
+\tag{2}\]</span></span> in which <span class="math inline">\(DS(\square)\)</span> indicates any formulation of dynamic substructuring, that is combining the properties of the sources <span class="math inline">\(S\)</span> and receivers <span class="math inline">\(R\)</span> on the right hand side to form the FRFs of the virtual assembly <span class="math inline">\(X\)</span>. In the above <span class="math inline">\(\mathbf{H}_R\)</span> and <span class="math inline">\(\mathbf{H}_X\)</span> are vibro-acoustic FRF matrices fo the receiver and coupled assembly respectively. They enable the prediction of a acoutic responses (sound pressures) within the receiver component.</p>
+</section>
+<section id="step-4.-forward-prediction-and-auralisation" class="level4">
+<h4 class="anchored" data-anchor-id="step-4.-forward-prediction-and-auralisation">Step 4. Forward prediction and auralisation</h4>
+<p>Having built the assembly (<span class="math inline">\(\mathbf{Y}_X\)</span>) in Step 3, the machine must then be ‘switched on’ so that the resulting sound and vibration can be simulated. The switching on is done by applying the blocked forces (<span class="math inline">\(\mathbf{\bar{f}}\)</span>) obtained in Step 2 to the assembly built in Step 3. The acoustic or vibration response at target locations is then given by, <span id="eq-VAPeq"><span class="math display">\[
+    \left(\begin{array}{cc}
+        \mathbf{v}_{r} \\
+        \mathbf{p}_{r}
+    \end{array}\right) = \left[ \begin{array}{cc} \mathbf{Y}_{Xrc} \\ \mathbf{H}_{Xrc} \end{array} \right]  \mathbf{\bar{f}}_{c}
+\tag{3}\]</span></span> where <span class="math inline">\(\mathbf{v}_{r}\)</span> and <span class="math inline">\(\mathbf{p}_{r_2}\)</span> are the structural and acoustic responses at the target DoFs <span class="math inline">\(r\)</span>, <span class="math inline">\(\mathbf{Y}_{Crc}\)</span> is the structural FRF matrix for excitation at locations on interface <span class="math inline">\(c\)</span> and structural response at <span class="math inline">\(r\)</span> and <span class="math inline">\(\mathbf{H}_{Cr_2c}\)</span> is the vibro-acoustic FRF connecting acoustic responses at <span class="math inline">\(r\)</span> to force excitation at interface <span class="math inline">\(c\)</span>. <span class="math inline">\(\mathbf{\bar{f}}_{c}\)</span> is the blocked force vector at interface <span class="math inline">\(c\)</span> as obtained in Step 2.</p>
+</section>
+</section>
+</section>
+<section id="what-next" class="level2">
+<h2 class="anchored" data-anchor-id="what-next">What next?</h2>
+<p>Having now introduced the general concept of a Vibro-Ac oustic Virtual Prototyping, including its component requirements and main calculation steps, in what follows we will describe in greater detail the characterisation of active and passive components, the substructuring of components to form assemblies, and the representation of interfaces. Some supplementry material discussing uncertainty in VAVPs will also be provided at the end.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../introductions/introductions.html" class="pagination-link" aria-label="Summary">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Summary</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../introductions/components.html" class="pagination-link" aria-label="Components (passive characterisation)">
+        <span class="nav-page-text">Components (passive characterisation)</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
