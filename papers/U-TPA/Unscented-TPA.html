@@ -728,7 +728,7 @@ Table&nbsp;1: Mass, stiffness and damping values used in numerical example. Stru
         &amp; &amp; &amp; &amp; &amp; \sigma_{c_3}
         \end{array}\right].
 \end{equation}\]</span> In the examples presented, we set <span class="math inline">\(\sigma_{k_1}=\sigma_{k_2}=\sigma_{k_3}= \sigma_{k}\)</span> and <span class="math inline">\(\sigma_{c_1}=\sigma_{c_2}=\sigma_{c_3}=\sigma_{c}\)</span> and consider two scenarios chosen to illustrate: a) low level uncertainty where LPU and UT are in agreement with MC (<span class="math inline">\(\sigma_k = 2\times 10^1\)</span>, <span class="math inline">\(\sigma_c = 2\times 10^{-1}\)</span>) and b) mid range uncertainty where UT out performs the LPU (<span class="math inline">\(\sigma_k = 2\times 10^2\)</span>, <span class="math inline">\(\sigma_c = 2\times 10^0\)</span>). It is noted that for the mid level uncertainty, it is possible that some MC samples yield negative stiffness of damping. Though non-physical, this is not considered an issue here, as we are simply assessing the analytical validity of the LPU and UT compared to MC.</p>
-<div id="2d76fbd6" class="cell" data-execution_count="1">
+<div id="c480963d" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
