@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Interface representations – Joshua Meggitt</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../introductions/VAVPs/isolators/isolators.html" rel="next">
+<link href="../../../introductions/VAVPs/components/components.html" rel="prev">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-045f01e90fa491bba6c51fbe92305c42.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Joshua Meggitt</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../../introductions/summary.html" aria-current="page"> 
+<span class="menu-text">A quick introduction to:</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../book/book.html"> 
+<span class="menu-text">Book</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teaching" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teaching</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teaching">    
+        <li>
+    <a class="dropdown-item" href="../../../teaching/mlsd/mlsd.html">
+ <span class="dropdown-text">Microphone and Loudspeaker Design</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../introductions/VAVPs/summary/summary.html">VAVPs</a></li><li class="breadcrumb-item"><a href="../../../introductions/VAVPs/interfaces/interfaces.html">Interface representations</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A quick introduction to:</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../introductions/VAVPs/summary/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">VAVPs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/vavps/VAVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vibro-Acoustic Virtual Prototyping</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/components/components.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Components (passive characterisation)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/interfaces/interfaces.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Interface representations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/isolators/isolators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vibration isolators</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/substructuring/substructuring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Substructuring</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/blockedForce/blockedForce.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Blocked forces (active characterisation)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/uncertainty/uncertainty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Uncertainty</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#single-point-interfaces" id="toc-single-point-interfaces" class="nav-link active" data-scroll-target="#single-point-interfaces">Single point interfaces</a>
+  <ul class="collapse">
+  <li><a href="#transformation-of-measured-frfs" id="toc-transformation-of-measured-frfs" class="nav-link" data-scroll-target="#transformation-of-measured-frfs">Transformation of measured FRFs</a></li>
+  </ul></li>
+  <li><a href="#virtual-point-transormation" id="toc-virtual-point-transormation" class="nav-link" data-scroll-target="#virtual-point-transormation">Virtual point transormation</a>
+  <ul class="collapse">
+  <li><a href="#performance-indicators" id="toc-performance-indicators" class="nav-link" data-scroll-target="#performance-indicators">Performance indicators</a></li>
+  </ul></li>
+  <li><a href="#multi-point-interfaces" id="toc-multi-point-interfaces" class="nav-link" data-scroll-target="#multi-point-interfaces">Multi-point interfaces</a></li>
+  <li><a href="#flexible-interfaces" id="toc-flexible-interfaces" class="nav-link" data-scroll-target="#flexible-interfaces">Flexible interfaces</a></li>
+  <li><a href="#equivalent-multi-point-connection" id="toc-equivalent-multi-point-connection" class="nav-link" data-scroll-target="#equivalent-multi-point-connection">Equivalent multi-point connection</a></li>
+  <li><a href="#a-short-comment-on-interface-completeness" id="toc-a-short-comment-on-interface-completeness" class="nav-link" data-scroll-target="#a-short-comment-on-interface-completeness">A short comment on interface completeness</a></li>
+  <li><a href="#what-next" id="toc-what-next" class="nav-link" data-scroll-target="#what-next">What next</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../introductions/VAVPs/summary/summary.html">VAVPs</a></li><li class="breadcrumb-item"><a href="../../../introductions/VAVPs/interfaces/interfaces.html">Interface representations</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Interface representations</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In the preceding discussion of components, it was described how both passive and active components are characterised almost exclusively at their <em>interfaces</em>. The need for an accurate description of the interface dynamics has been emphasised but, so far, we have not discussed how this might be achieved. The subject is in fact so important that we now devote an entire page to it: in component characterisation and substructuring it is said that <em>everything goes right or wrong at the interface</em>!</p>
+<section id="single-point-interfaces" class="level2">
+<h2 class="anchored" data-anchor-id="single-point-interfaces">Single point interfaces</h2>
+<p>In physical assemblies, a range of contact types occur, often comprising bolted connections, spot welds, among other fixings. When modeling connections, we encounter the problem that the real contact always occurs over a finite area; this ‘continuous’ form must be reduced to a ‘discrete’ form to be compatible with our FRF-based VAVP framework. When the contact is physically small compared with the structural wavelength we can treat the connection simply as a discreet <em>point</em>. The point-like* connection is the most commonly adopted model when building a VAVP (or at least the most common starting point). It is described entirely by the 6 rigid interface DoFs; translations in <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span>, and rotations about each of these axes; <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span>. For interfaces that extend over more than a fraction of a wavelength, this point-like model is no longer sufficient and some form of higher order model is required.</p>
+<p>Representing contact geometry is only part of the story however – the overarching aim of an interface model is to capture <em>all</em> important dynamics occuring at the interface. Whilst 6 DoFs might be sufficient for a point-like connection, it is often not known if the physical connection satisfies the point-like requirements aprior. Indeed, higher order ‘flexible’ DoFs might be required to sufficiently caputre the interface dynamics. This raises the important questions of a) how many DoFs are necessary to describe the interface and b) which ones they are. Later we will introduce the concept of interface completeness as a means of addressing these questions.</p>
+<p>Having chosen a suitable representation of the contact, we must somehow populate it with data obtained from measurement. The VAVP framework requires that the interface representations of connected components must be <em>compatible</em>; component FRFs (and blocked forces) at an interface must share a matching set of DoFs to be coupled successfully. Unfortunately, practical limitations such as lack of access, mean that the required DoFs cannot usually be measured directly. Therefore, the measured data must be <em>transformed</em> from measurement coordinates to those of the interface model. An important concept then is is that of interface <em>transformations</em>.</p>
+<section id="transformation-of-measured-frfs" class="level3">
+<h3 class="anchored" data-anchor-id="transformation-of-measured-frfs">Transformation of measured FRFs</h3>
+<p>The idea of an interface transformation is quite general and by no means limited to the point-like representation. In short, it is the process of populating an interface model (a chosen set of co-located DoFs that are thought to best describe the physical interface) with data obtained from a set of translational-only FRF measurements that surround the connection point. We will use the point-like interface as a means of introducing the concept; generalistion to more complex representations will become obvious later.</p>
+<p>A single point-like interface is characterised by 6 DoFs; the translational <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> DoFs, and their respective rotations <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(\gamma\)</span>. The equation governing the 6 DoF motion of a single point interface (left of <a href="#fig-measMob" class="quarto-xref">Figure&nbsp;1</a>) is then, <span class="math display">\[
+    \left(\begin{array}{c}
+        v_{x} \\ v_{y} \\ v_{z} \\ v_{\alpha}\\ v_{\beta}\\ v_{\gamma}
+    \end{array}\right)=\left[\begin{array}{cccccc} Y_{{xx}} &amp; Y_{{xy}} &amp; Y_{{xz}} &amp; Y_{{x\alpha}} &amp; Y_{{x\beta}} &amp; Y_{{x\gamma}} \\
+        Y_{{yx}} &amp; Y_{{yy}} &amp; Y_{{yz}} &amp; Y_{{y\alpha}} &amp; Y_{{y\beta}} &amp; Y_{{y\gamma}} \\
+        Y_{{zx}} &amp; Y_{{zy}} &amp; Y_{{zz}} &amp; Y_{{z\alpha}} &amp; Y_{{z\beta}} &amp; Y_{{z\gamma}} \\
+        Y_{{\alpha x}} &amp; Y_{{\alpha y}} &amp; Y_{{\alpha z}} &amp; Y_{{\alpha\alpha}} &amp; Y_{{\alpha\beta}} &amp; Y_{{\alpha\gamma}} \\
+        Y_{{\beta x}} &amp; Y_{{\beta y}} &amp; Y_{{\beta z}} &amp; Y_{{\beta\alpha}} &amp; Y_{{\beta\beta}} &amp; Y_{{\beta\gamma}}\\
+        Y_{{\gamma x}} &amp; Y_{{\gamma y}} &amp; Y_{{\gamma z}} &amp; Y_{{\gamma\alpha}} &amp; Y_{{\gamma\beta}} &amp; Y_{{\gamma\gamma}}
+    \end{array}\right]\left(\begin{array}{c}
+        f_{x} \\ f_{y} \\ f_{z} \\ f_{\alpha}\\ f_{\beta}\\ f_{\gamma}
+    \end{array}\right)
+\]</span> where for example <span class="math inline">\(v_\alpha\)</span> is the rotational response (say velocity) about the <span class="math inline">\(x\)</span> axis, <span class="math inline">\(f_\gamma\)</span> is the moment force about the <span class="math inline">\(z\)</span> axis, and <span class="math inline">\(Y_{\alpha\gamma}\)</span> is the transfer FRF relating the two.</p>
+<p>Rotational DoFs are generally not available by direct measurement (though rotational response sensors are available, their use is not very common). Even the direct measurement of a translational point FRF (e.g.&nbsp;<span class="math inline">\(Y_{xx}\)</span>) is challenging; requiring an exact co-location of the applied force and measured response. In practice, to overcome these challenges it is typical to measure a series of translational FRFs surrounding the interface connection and through an appropriate transformation, use these to estimate the translational and rotational DoFs of interest.</p>
+<p>The matrix of measured FRFs (right of <a href="#fig-measMob" class="quarto-xref">Figure&nbsp;1</a>) satisfies the equation, <span class="math display">\[
+    \left(\begin{array}{c}
+        v_{1} \\ v_{2} \\ \vdots \\ v_{N_v}
+    \end{array}\right) = \left[\begin{array}{c c c c}Y_{11} &amp; Y_{12} &amp; \cdots &amp; Y_{1N_f}\\
+        Y_{11} &amp; Y_{22} &amp; \cdots &amp; Y_{2N_f}\\
+        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+        Y_{N_v1} &amp; Y_{N_v2} &amp; \cdots &amp; Y_{N_vN_f}\\
+    \end{array}\right]  \left(\begin{array}{c}
+        f_{1} \\ f_{2} \\ \vdots \\ f_{N_f}
+    \end{array}\right)
+\]</span> or <span id="eq-measMobIntMatform"><span class="math display">\[
+\mathbf{\hat{v}} = \mathbf{\hat{Y}}\mathbf{\hat{f}}
+\tag{1}\]</span></span> where: <span class="math inline">\(v_n\)</span> and <span class="math inline">\(f_n\)</span> are, respectively, the response and applied force at the <span class="math inline">\(n\)</span>th ; <span class="math inline">\(N_v\)</span> and <span class="math inline">\(N_f\)</span> denote the number of measured responses and applied forces, respectively; and the <span class="math inline">\(\hat{\square}\)</span> accent is used to denote a <em>measured</em> quantity, as opposed to a transformed one.</p>
+<div id="fig-measMob" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-measMob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="measMob.png" class="img-fluid figure-img" width="500">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-measMob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Illustration of ‘transformed’ (left) vs.&nbsp;‘measured’ (right) FRFs. Measured FRFs related a set of discrete non-co-located forces and responses surrounding a connection point. Transformed FRFs relate the co-located forces and moments to the translational and rotational responses at a particular point.
+</figcaption>
+</figure>
+</div>
+<p>Assuming an entirely rigid interface, such that only translational and rotational motions are permitted, the set of measured translational responses <span class="math inline">\(\mathbf{\hat{v}}\in\mathbb{C}^{N_v}\)</span> can be related to a set of mixed translational/rotational responses <span class="math inline">\(\mathbf{v}\in\mathbb{C}^{6}\)</span> (provided <span class="math inline">\(N_v\geq 6\)</span>) defined at some other location according to the linear transformation, <span id="eq-responseTransformation"><span class="math display">\[
+        \mathbf{{v}} = \mathbf{T}_v \mathbf{\hat{v}}
+\tag{2}\]</span></span> where <span class="math inline">\(\mathbf{T}_v\in\mathbb{C}^{6 \times N_v}\)</span> is the so-called response transformation matrix.</p>
+<p>Similarly, the set of applied (translational) forces <span class="math inline">\(\mathbf{\hat{f}}\in\mathbb{C}^{N_f}\)</span> can be thought to generate a mixed set of translational and rotational forces <span class="math inline">\(\mathbf{{f}}\in\mathbb{C}^{6}\)</span> at some other location, again according to a linear transformation, <span id="eq-forceTransformation"><span class="math display">\[
+        \mathbf{f} = \mathbf{R}_f^{\rm T} \mathbf{\hat{f}} \quad \mbox{or} \quad  \mathbf{\hat{f}} = \mathbf{T}_f^{\rm T} \mathbf{f}
+\tag{3}\]</span></span> with <span class="math inline">\(\mathbf{T}_f^{} = \mathbf{R}_f^{\rm+} \in\mathbb{C}^{N_f \times 6}\)</span> as the so-called force transformation matrix.</p>
+<p>Substituting <a href="#eq-responseTransformation" class="quarto-xref">Equation&nbsp;2</a> and <a href="#eq-forceTransformation" class="quarto-xref">Equation&nbsp;3</a> into <a href="#eq-measMobIntMatform" class="quarto-xref">Equation&nbsp;1</a> we obtain, <span id="eq-transformedEoM"><span class="math display">\[
+        \mathbf{{v}} = \mathbf{T}_v \mathbf{\hat{Y}}\mathbf{\hat{f}} = \overbrace{\mathbf{T}_v \mathbf{\hat{Y}} \mathbf{T}_f^{\rm T} }^{\mathbf{Y}}\mathbf{f}
+\tag{4}\]</span></span> which is a relation between the transformed force and response vectors. The matrix product <span class="math inline">\(\mathbf{Y}=\mathbf{T}_v \mathbf{\hat{Y}} \mathbf{T}_f^{\rm T}\in\mathbb{C}^{6\times 6}\)</span> thus describes the transformed FRF matrix or equivalently, the FRF matrix projected onto the chosen interface model. <span id="eq-rotMobmeasMobEq"><span class="math display">\[
+    \left[\begin{array}{cccccc} Y_{{x_ix_j}} &amp; Y_{{x_iy_j}} &amp; Y_{{x_iz_j}} &amp; Y_{{x_i\alpha_j}} &amp; Y_{{x_i\beta_j}} &amp; Y_{{x_i\gamma_j}} \\
+        Y_{{y_ix_j}} &amp; Y_{{y_iy_j}} &amp; Y_{{y_iz_j}} &amp; Y_{{y_i\alpha_j}} &amp; Y_{{y_i\beta_j}} &amp; Y_{{y_i\gamma_j}} \\
+        Y_{{z_ix_j}} &amp; Y_{{z_iy_j}} &amp; Y_{{z_iz_j}} &amp; Y_{{z_i\alpha_j}} &amp; Y_{{z_i\beta_j}} &amp; Y_{{z_i\gamma_j}} \\
+        Y_{{\alpha_i x_j}} &amp; Y_{{\alpha_i y_j}} &amp; Y_{{\alpha_i z_j}} &amp; Y_{{\alpha_i\alpha_j}} &amp; Y_{{\alpha_i\beta_j}} &amp; Y_{{\alpha_i\gamma_j}} \\
+        Y_{{\beta_i x_j}} &amp; Y_{{\beta_i y_j}} &amp; Y_{{\beta_i z_j}} &amp; Y_{{\beta_i\alpha_j}} &amp; Y_{{\beta_i\beta_j}} &amp; Y_{{\beta_i\gamma_j}}\\
+        Y_{{\gamma_i x_j}} &amp; Y_{{\gamma_i y_j}} &amp; Y_{{\gamma_i z_j}} &amp; Y_{{\gamma_i\alpha_j}} &amp; Y_{{\gamma_i\beta_j}} &amp; Y_{{\gamma_i\gamma_j}}
+    \end{array}\right]= \mathbf{T}_v\left[\begin{array}{c c c c}Y_{11} &amp; Y_{12} &amp; \cdots &amp; Y_{1N}\\
+        Y_{11} &amp; Y_{22} &amp; \cdots &amp; Y_{2N}\\
+        \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+        Y_{M1} &amp; Y_{M2} &amp; \cdots &amp; Y_{MN}\\
+    \end{array}\right] \mathbf{T}_f^{\rm T}
+\tag{5}\]</span></span></p>
+<p>Construction of the transformation matrices <span class="math inline">\(\mathbf{T}_{v,f}\)</span> depends on the chosen interface representation. Examples include the finite different approxiamtion, discrete Fourier transform (for continuous interfaces), among others. In what follows we will consider the particular case of the Virtual Point transformation, which has become the most widely used representation in the contet of source characterisation, substrucutring and VAVP development.</p>
+<p>Regardless of the approach taken, the interpretation of <a href="#eq-rotMobmeasMobEq" class="quarto-xref">Equation&nbsp;5</a> remains the same. Pre-multiplication by <span class="math inline">\(\mathbf{T}_v\)</span> is an operation that acts on the measured response DoFs (i.e.&nbsp;the rows of the FRF matrix), projecting them onto the DoFs of the interface model. Similarly, post-multiplication by <span class="math inline">\(\mathbf{T}_f\)</span> acts to project the applied force DoFs (i.e.&nbsp;columns of the FRF matrix) onto the DoFs of interface model. They take the general form shown in <a href="#fig-interfaceTransEq" class="quarto-xref">Figure&nbsp;2</a>,</p>
+<div id="fig-interfaceTransEq" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-interfaceTransEq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="interfaceTransEq.png" class="img-fluid figure-img" width="500">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-interfaceTransEq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: General form of interface transformation matrix. Rows correspond to DoFs of the chosen interface model. Columns correspond to the measurement DoFs (applied forces or measured responses).
+</figcaption>
+</figure>
+</div>
+<p>where, for example, <span class="math inline">\(T_{xn}\)</span> describes the projection/contribution of the <span class="math inline">\(n\)</span>th measurement DoF (representing an applied force or measured response) onto the <span class="math inline">\(x\)</span> DoF of the interface model.</p>
+</section>
+</section>
+<section id="virtual-point-transormation" class="level2">
+<h2 class="anchored" data-anchor-id="virtual-point-transormation">Virtual point transormation</h2>
+<p>The Virtual Point (VP) transformation is a rigid body kinematic projection that relates a set of arbitrarily positioned (translational) response sensors and excitation forces, to the translational and rotational dynamics of a user defined <em>Virtual Point</em> (VP).</p>
+<div id="fig-VPexample" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-VPexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="VPexample.png" class="img-fluid figure-img" width="500">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-VPexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Example relative coordinates for virtual point transformations. Left - response transformation. Right - force transformation.
+</figcaption>
+</figure>
+</div>
+<p>If we assume that, locally, an interface connection behaves rigidly (i.e.&nbsp;behaves point-like), the translational response of an arbitrary sensor <span class="math inline">\(\hat{v}_n\in\mathbb{C}\)</span> can be expressed in terms of the combined translational and rotational motion of a virtual point <span class="math inline">\(\mathbf{v}\in\mathbb{C}^{6}\)</span> as, <span id="eq-VP1"><span class="math display">\[
+    \hat{v}_n = \overbrace{\left[\begin{array}{c c c} e_x &amp; e_y &amp; e_z \end{array} \right]}^{\mathbf{e}_m}
+    \overbrace{\left[\begin{array}{c c c c c c} 1 &amp; 0 &amp; 0 &amp; 0 &amp; r_z &amp; -r_y \\
+    0 &amp; 1 &amp; 0 &amp; -r_z &amp; 0 &amp; r_x\\
+0 &amp; 0 &amp; 1 &amp; r_y &amp; -r_x &amp; 0\end{array} \right]}^{\mathbf{r}_m}\left(\begin{array}{c} v_x \\ v_y \\ v_z \\ v_{\alpha} \\ v_{\beta} \\ v_{\gamma}  \end{array} \right) +\epsilon = \mathbf{R}_{v_m}\mathbf{v}+\epsilon
+\tag{6}\]</span></span></p>
+<div style="float: right; margin: 10px;">
+<div id="fig-sphericalCoords" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sphericalCoords-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="sphericalCoords.png" class="img-fluid figure-img" width="250">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sphericalCoords-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Orientation vector <span class="math inline">\(\mathbf{e}\)</span> from spherical coordinates.
+</figcaption>
+</figure>
+</div>
+<div id="fig-crossProduct" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-crossProduct-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="crossProduct.png" class="img-fluid figure-img" width="200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-crossProduct-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Orientation vector <span class="math inline">\(\mathbf{e}\)</span> from cross-product.
+</figcaption>
+</figure>
+</div>
+</div>
+<p>In the above, <span class="math inline">\(\mathbf{R}_{v_n}\)</span> represents a pair of linear transformations that account for the position and orientation of the sensor relative to the virtual point, or more precisely its coordinate system. The rightmost matrix <span class="math inline">\(\mathbf{r}_n\)</span> is the so-called Interface Deformation Mode (IDM) matrix that projects the motion of the VP onto the position of the sensor. The first three columns, which together form an identity matrix, simply state that an <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, or <span class="math inline">\(z\)</span> translation of the VP will yield identical translation of the measurement position. The remaining three columns describe how a rotational about each axis of the VP will induce a translation in the <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> coordinates of the measurement position. The magnitude of the resulting translation clearly depend on the relative distance (in meters) between the VP and measurement position, described in the <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> directions as <span class="math inline">\(r_x\)</span>, <span class="math inline">\(r_y\)</span> and <span class="math inline">\(r_z\)</span>. The further away the VP and measurement position, the greater the translation will be from a given rotation.</p>
+<p>The vector <span class="math inline">\(\mathbf{e}_n\)</span> then accounts for the orientation of the sensor, which may or may not be inline with the coordinate system used by the VP. Suppose for example the sensor is pointing vertically upwards in the <span class="math inline">\(z\)</span> direction of the VP. The orientation vector would then be, <span class="math display">\[
+    \mathbf{e}_z = \left[\begin{array}{ccc}
+    0&amp;0&amp;1
+    \end{array}\right].
+\]</span> More generally, the orientation vector can be determined from the sensor’s inclination and azimuthial angles as in <a href="#fig-sphericalCoords" class="quarto-xref">Figure&nbsp;4</a>, <span class="math display">\[
+    \left[\begin{array}{ccc} e_x &amp; e_y &amp; e_z \end{array} \right] = \left[\begin{array}{ccc
+    } \sin\theta \cos \phi  &amp; \sin \theta \sin \phi &amp; \cos \theta \end{array} \right]
+\]</span> or obtained from a CAD model using the normalised cross-product between two vectors <span class="math inline">\(\mathbf{a}\)</span> and <span class="math inline">\(\mathbf{b}\)</span> that define the orientation of the surface to which the sensor is attached, <span class="math display">\[
+    \mathbf{e} = \frac{\mathbf{a}\times \mathbf{b}}{||\mathbf{a}|| \cdot ||\mathbf{b}||}
+\]</span> as in <a href="#fig-crossProduct" class="quarto-xref">Figure&nbsp;5</a>.</p>
+<p>The final term in <a href="#eq-VP1" class="quarto-xref">Equation&nbsp;6</a>, <span class="math inline">\(\epsilon\)</span>, represents the component of the response <span class="math inline">\(\hat{v}_n\)</span> that can not be reproduced by the virtual point with its underlying rigid assumption. This can be considered a <em>residual flexibility</em>.</p>
+<p><a href="#eq-VP1" class="quarto-xref">Equation&nbsp;6</a> can be written for each sensor, leading to the system of equations, <span id="eq-VP2eq"><span class="math display">\[
+\left(\begin{array}{c}
+  \hat{v}_1 \\
+  \hat{v}_2 \\
+  \vdots \\
+  \hat{v}_{N_v}
+\end{array}\right) = \left[\begin{array}{c c c c}
+\mathbf{e}_1 &amp; &amp; &amp;\\ &amp; \mathbf{e}_2 &amp; &amp;\\
+&amp; &amp; \ddots &amp; \\
+&amp; &amp; &amp; \mathbf{e}_{N_v}
+\end{array} \right] \left[\begin{array}{c} \mathbf{r}_1 \\ \mathbf{r}_2 \\ \vdots \\ \mathbf{r}_M \end{array}\right]\left(\begin{array}{c} v_x \\ v_y \\ v_z \\ v_{\alpha} \\ v_{\beta} \\ v_{\gamma}  \end{array} \right) +  \left(\begin{array}{c}
+\epsilon_1 \\
+\epsilon_2 \\
+\vdots \\
+\epsilon_{N_v}
+\end{array}\right)
+\tag{7}\]</span></span> or simply <span id="eq-VP2_2"><span class="math display">\[
+    \mathbf{\hat{v}} = \mathbf{R}_v\mathbf{v}+ \mathbf{\epsilon}
+\tag{8}\]</span></span> where <span class="math inline">\(\mathbf{\hat{v}}\)</span> is a vector of measured (translation) responses, and <span class="math inline">\(\mathbf{v}\)</span> is the vector of translational and rotational responses at the virtual point.</p>
+<p>When using the VP transformation, it is particularly convenient to use tri-axial accelerometers, as in this case, the accelerometer responses recorded in <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> are done so at (approx.) the same location, and so they share <span class="math inline">\(r_x\)</span>, <span class="math inline">\(r_y\)</span> and <span class="math inline">\(r_z\)</span>. For a single tri-axial sensor, <a href="#eq-VP1" class="quarto-xref">Equation&nbsp;6</a> then becomes, <span id="eq-VP1_tri"><span class="math display">\[
+    \left(\begin{array}{c}\hat{v}_{x,n}\\
+\hat{v}_{y,n}\\
+\hat{v}_{z,n}
+\end{array}\right) = \overbrace{\left[\begin{array}{c c c} e_{x,x} &amp; e_{x,y} &amp; e_{x,z} \\
+e_{y,x} &amp; e_{y,y} &amp; e_{y,z}\\
+e_{z,x} &amp; e_{z,y} &amp; e_{z,z}\end{array} \right]}^{\mathbf{E}_n}
+    \left[\begin{array}{c c c c c c} 1 &amp; 0 &amp; 0 &amp; 0 &amp; r_z &amp; -r_y \\
+    0 &amp; 1 &amp; 0 &amp; -r_z &amp; 0 &amp; r_x\\
+0 &amp; 0 &amp; 1 &amp; r_y &amp; -r_x &amp; 0\end{array} \right]\left(\begin{array}{c} v_x \\ v_y \\ v_z \\ v_{\alpha} \\ v_{\beta} \\ v_{\gamma}  \end{array} \right) +
+\left(\begin{array}{c}\epsilon_{x,n}\\
+\epsilon_{y,n}\\
+\epsilon_{z,n}
+\end{array}\right)
+\tag{9}\]</span></span> where <span class="math inline">\(\mathbf{E}_n\)</span> is now a matrix describing the orientation of the <span class="math inline">\(n\)</span>th tri-axial sensor’s coordinate axes relative to that of the VP. For three tri-axial sensors (the minimum required to capture all 6 DoFs), <a href="#eq-VP2eq" class="quarto-xref">Equation&nbsp;7</a> becomes, <span class="math display">\[
+\left(\begin{array}{c}
+  \mathbf{\hat{v}}_1 \\
+  \mathbf{\hat{v}}_2 \\
+  \mathbf{\hat{v}}_3
+\end{array}\right) = \left[\begin{array}{c c c}
+\mathbf{E}_1 &amp; &amp;\\
+&amp; \mathbf{E}_2 &amp;\\
+&amp; &amp; \mathbf{E}_3
+\end{array} \right] \left[\begin{array}{c} \mathbf{r}_1 \\ \mathbf{r}_2 \\ \mathbf{r}_3 \end{array}\right]\left(\begin{array}{c} v_x \\ v_y \\ v_z \\ v_{\alpha} \\ v_{\beta} \\ v_{\gamma}  \end{array} \right) +  \left(\begin{array}{c}
+\mathbf{\epsilon}_1 \\
+\mathbf{\epsilon}_2 \\
+\mathbf{\epsilon}_3
+\end{array}\right)
+\]</span> where <span class="math inline">\(\mathbf{\hat{v}}_n\in\mathbb{C}^3\)</span> is the vector of tri-axial responses for sensor <span class="math inline">\(n\)</span>.</p>
+<p>We can now apply a similar idea to the external forces. Application of an arbitrary external force <span class="math inline">\(f_n\)</span> (at coordinates <span class="math inline">\(r_x\)</span>, <span class="math inline">\(r_y\)</span>, <span class="math inline">\(r_z\)</span> relative to the VP) generates a set of translational and rotational forces at the VP. These forces are related by the equation, <span class="math display">\[
+    \left(\begin{array}{c} f_x \\ f_y \\ f_z \\ f_{\alpha} \\ f_{\beta} \\ f_{\gamma}  \end{array} \right) =
+    \overbrace{\left[\begin{array}{c c c c c c} 1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 \\
+        0 &amp; 0&amp; 1\\
+        0 &amp; -r_z &amp; r_y\\
+        r_z&amp;0&amp;-r_x\\
+        -r_y&amp; r_x&amp; 0\end{array} \right]}^{\mathbf{r}_n^{\rm T}} \overbrace{\left[\begin{array}{c} e_x \\ e_y \\ e_z \end{array} \right]}^{\mathbf{e}_n^{\rm T}}  \hat{f}_n =\mathbf{R}^{\rm T}_{f_n} \hat{f}_n.
+\]</span> where <span class="math inline">\(\mathbf{R}^{\rm T}_{f_n}\)</span> again represents a pair of linear transformations that account for the position and orientation of the applied force. An equation of this form can be written for each excitation, leading to, <span class="math display">\[
+    \left(\begin{array}{c} f_x \\ f_y \\ f_z \\ f_{\alpha} \\ f_{\beta} \\ f_{\gamma}  \end{array} \right) =
+    \left[\begin{array}{c c c c c c} \mathbf{r}_1^{\rm T} &amp; \mathbf{r}_2^{\rm T}  &amp; \cdots &amp; \mathbf{r}_{N_f}^{\rm T} \end{array} \right]\left[\begin{array}{cccc} \mathbf{e}_1^{\rm T} &amp; &amp; &amp; \\ &amp; \mathbf{e}_2^{\rm T}  &amp; &amp;\\
+&amp; &amp; \ddots &amp; \\ &amp; &amp; &amp; \mathbf{e}_{N_f}^{\rm T} \end{array} \right]   \left(\begin{array}{c}
+  \hat{f}_1 \\
+  \hat{f}_2 \\
+  \vdots \\
+  \hat{f}_{N_f}
+\end{array}\right)
+\]</span> or simply <span class="math display">\[
+    \mathbf{f} = \mathbf{R}^{\rm T}_f\mathbf{\hat{f}}
+\]</span> where <span class="math inline">\(\mathbf{\hat{f}}\)</span> is a vector of applied/measured translation forces, and <span class="math inline">\(\mathbf{f}\)</span> is the vector of resulting translational and moment forces at the VP. Note that whilst tri-axial accelerometers can be used to simplify the VP response measurement, no equivalent is available for excitations. These must be applied individually.</p>
+<p>Through a least squares pseudo-inverse, the above equations yield a pair of transformation matrices <span class="math inline">\(\mathbf{T}_v\)</span> and <span class="math inline">\(\mathbf{T}_f\)</span>, <span id="eq-VPTv"><span class="math display">\[
+    \mathbf{v} = \left(\mathbf{R}_v\right)^+\mathbf{\hat{v}} = \mathbf{T}_v\mathbf{\hat{v}}
+\tag{10}\]</span></span> <span id="eq-VPTf"><span class="math display">\[
+    \mathbf{\hat{f}} = \left(\mathbf{R}^{\rm T}_f\right)^+\mathbf{f} = \mathbf{T}_f^{\rm T}\mathbf{f}.  
+\tag{11}\]</span></span></p>
+<p>To apply the VP transformation to a measured FRF matrix, <span class="math display">\[
+    \mathbf{\hat{v}} = \mathbf{\hat{Y}} \mathbf{\hat{f}}
+\]</span> we first substitute <span class="math inline">\(\mathbf{\hat{f}}\)</span> from <a href="#eq-VPTf" class="quarto-xref">Equation&nbsp;11</a>, <span id="eq-VPeq2"><span class="math display">\[
+    \mathbf{\hat{v}} = \mathbf{\hat{Y}} \mathbf{T}_f^{\rm T}\mathbf{f}
+\tag{12}\]</span></span> before pre-multiplying both sides of <a href="#eq-VPeq2" class="quarto-xref">Equation&nbsp;12</a> by <span class="math inline">\(\mathbf{T}_v\)</span> to obtain, <span id="eq-VPeq"><span class="math display">\[
+    \mathbf{v} = \mathbf{T}_v\mathbf{\hat{Y}} \mathbf{T}_f^{\rm T}\mathbf{f}.
+\tag{13}\]</span></span> <a href="#eq-VPeq" class="quarto-xref">Equation&nbsp;13</a> takes the same form as <a href="#eq-transformedEoM" class="quarto-xref">Equation&nbsp;4</a>; it relates the VP transformed force <span class="math inline">\(\mathbf{f}\)</span> to the VP transformed response <span class="math inline">\(\mathbf{v}\)</span>. As such, the matrix product must describe the VP transformed FRF matrix <span class="math inline">\(\mathbf{Y}\)</span>, <span class="math display">\[
+    \mathbf{Y} = \mathbf{T}_v\mathbf{\hat{Y}}\mathbf{T}_f^{\rm T}.
+\]</span> As described earlier, pre and post-multiplying by <span class="math inline">\(\mathbf{T}_{v}\)</span> and <span class="math inline">\(\mathbf{T}_f^{\rm T}\)</span> acts to project the measured FRF matrix <span class="math inline">\(\mathbf{\hat{Y}}\)</span> onto the (VP) interface model. The projected FRF matrix <span class="math inline">\(\mathbf{Y}\)</span> can now be used as part of any substructuring or source characterisation calculations.</p>
+<p>The VP transformation has several advantages over the equivalent multi-point connection and finite difference approximation. Firstly, the translational and rotational DoFs of the VP are estimated based on the response of all sensors. This enables the over-determination of the problem, which can provide a more accurate estimate. A second advantage is that the resulting DoFs are exactly collocated at the VP. This is particularly useful when trying to combine measurements made on different components where all DoFs must be correctly aligned. This is also useful for combining measurements with models. The VP transformation has been extended further to include flexible interface modes (describe below), and rotational sensors.</p>
+<p>Whilst a powerful tool, the VP transformation has a notable disadvantage. It requires accurate information on both the position and orientation of each sensor and applied force (so to construct the transformation matrices <span class="math inline">\(\mathbf{T}_v\)</span> and <span class="math inline">\(\mathbf{T}_f\)</span>). If a CAD model of the interface is available this information may be readily obtained; without, the VP transformation might be subject to large uncertainties or simply not applicable.</p>
+<section id="performance-indicators" class="level3">
+<h3 class="anchored" data-anchor-id="performance-indicators">Performance indicators</h3>
+<p>The VP transformations described above are based on the assumption that the interface can be described entirely by its rigid body dynamics. This is typically a valid assumption in the low/mid frequency range, where the structural wavelength is much larger than the size of the interface connection. However, as frequency increases so does the deformation of the interface and at higher frequencies there may be a need to assess the validity of the rigid body assumption.</p>
+<p>Transforming from a set of measured DoFs involves projecting <span class="math inline">\(N_{v,f}\geq 6\)</span> dimensional space representing the measurement DoFs (applied forces and measured responses), on to an <span class="math inline">\(N=6\)</span> dimensional space representing the transformed rigid body DoFs (the interface model). In most cases, <span class="math inline">\(N_{v,f}&gt; 6\)</span> and so this projection potentially involves the loss of information.</p>
+<p>If the interface does in fact behave rigidly, then the rank of its measured FRF matrix <span class="math inline">\(\mathbf{\hat{Y}}_{cc}\in\mathbb{C}^{N_v\times N_f}\)</span> must be limited to 6. In this case, the interface transformations can be applied in reverse to reconstruct the original measured FRF matrix from the transformed matrix, <span class="math display">\[
+    \mathbf{\hat{Y}}' = \mathbf{T}_v^{+}\,\mathbf{{Y}}\,\mathbf{T}_f^{\rm +T} = \mathbf{T}_v^{+}\, \left(\mathbf{T}_v\mathbf{\hat{Y}}\mathbf{T}_f^{\rm T}\right)\,\mathbf{T}_f^{\rm +T} = \mathbf{\hat{Y}} \quad \quad \mbox{if} \quad \mbox{rank}\left(\mathbf{\hat{Y}}\right) \leq 6
+\]</span> where we use the <span class="math inline">\(\square'\)</span> accent to denote a reconstruction of the original FRF matrix.</p>
+<p>If however, the interface possesses some flexibility, the rank of <span class="math inline">\(\mathbf{\hat{Y}}_{cc}\in\mathbb{C}^{N_v\times N_f}\)</span> has the potential to be greater than 6. In this case, the measured FRF matrix can only be reconstructed approximately, <span class="math display">\[
+    \mathbf{\hat{Y}}' = \mathbf{T}_v^{+}\,\mathbf{{Y}}\,\mathbf{T}_f^{\rm +T} = \mathbf{T}_v^{+}\, \left(\mathbf{T}_v\mathbf{\hat{Y}}\mathbf{T}_f^{\rm T}\right)\,\mathbf{T}_f^{\rm +T} \approx \mathbf{\hat{Y}}  \quad \quad \mbox{if} \quad \mbox{rank}\left(\mathbf{\hat{Y}}\right) &gt; 6
+\]</span> Note that the reconstructed FRF matrix <span class="math inline">\(\mathbf{\hat{Y}}'\)</span> includes only the rigid body dynamics; flexible interface dynamics in <span class="math inline">\(\mathbf{\hat{Y}}\)</span> have been filtered out by applying the transformation followed by its inverse.</p>
+<p>It is important to note that this action of ‘filtering out flexible dynamics’ implicitly requires an over-determined transformation with <span class="math inline">\(N_{v,f}&gt;6\)</span>. In the determined case the transformation matrix becomes square (<span class="math inline">\(N_{v,f}=6\)</span>), and assuming its inverse exists, it is exactly reversible. In other words, there are not enough measurement DoFs to <em>observe</em> flexibility; the interface is ‘under sampled’.</p>
+<p>In the over-determined case, the above notion can be used to establish sensor and force consistency criteria that indicate the validity of the rigid interface assumption, as well as the quality of the sensor arrangement and applied forces.</p>
+<section id="sensor-consistency" class="level4">
+<h4 class="anchored" data-anchor-id="sensor-consistency">Sensor consistency</h4>
+<p>To assess the consistency of the sensor arrangement we consider a unit force <span class="math inline">\(f_h = 1\)</span> applied to the component in question at the arbitrary position <span class="math inline">\(h\)</span>. The directly measured velocity response satisfies the equation, <span class="math display">\[
+    \mathbf{\hat{v}} = \mathbf{\hat{Y}}_h f_h = \mathbf{\hat{Y}}_h
+\]</span> where <span class="math inline">\(\mathbf{\hat{Y}}_h\)</span> is a column vector of measured mobilities between force position <span class="math inline">\(h\)</span> and the interface responses. Similarly, the transformed velocity response satisfies, <span class="math display">\[
+    \mathbf{v} = \mathbf{Y}_h f_h = \mathbf{Y}_h = \mathbf{T}_v \mathbf{\hat{Y}}_h.
+\]</span> Applying the inverse transformation to the transformed velocity projects the response back onto the measured DoFs, <span class="math display">\[
+    \mathbf{\hat{Y}}_h' = \mathbf{T}_v^+ \mathbf{T}_v \mathbf{\hat{Y}}_h.
+\]</span> where <span class="math inline">\(\square'\)</span> is used to denote filtering of rigid body dynamics.</p>
+<p>The matrix product <span class="math inline">\(\mathbf{T}_v^+ \mathbf{T}_v\)</span> has the effect of filtering out flexible interface modes, retaining only the rigid body dynamics.</p>
+<p>The <em>sensor consistency</em> can be assessed by simply comparing the directly measured <span class="math inline">\(\mathbf{\hat{v}}\)</span> and reconstructed (rigid body only) <span class="math inline">\(\mathbf{\hat{v}}'\)</span> responses. This comparison can be done in a variety of ways. A popular approach is to use a correlation-based measure of similarity, <span id="eq-correlation"><span class="math display">\[
+    \rho_{v,h} = \mbox{Corr}\left(\mathbf{\hat{Y}}_h,\mathbf{\hat{Y}}_h'\right) \qquad \mbox{with} \qquad
+    \mbox{Corr}\left(\mathbf{a},\mathbf{b}\right) = \frac{ \left|\mathbf{a}^{\rm H}\mathbf{b} \right|^2 }{ \mathbf{a}^{\rm H} \mathbf{a} \cdot \mathbf{b}^{\rm H}\mathbf{b}}
+\tag{14}\]</span></span> The sensor consistency <span class="math inline">\(\rho_{v,h}\)</span> is a frequency dependent scalar quantity that varies between 0 and 1. A value of 1 indicates rigid interface behaviour, i.e.&nbsp;the reconstructed (rigid body filtered) responses are identical to those measured directly. A value less than 1 indicates some degree of interface flexibility, which is lost through the applied transformation.</p>
+<p>Note that <span class="math inline">\(\rho_{v,h}\)</span> is evaluated for the force excitation at position <span class="math inline">\(h\)</span>, and that multiple force locations might be considered. In this case each force could be used to determine an independent <span class="math inline">\(\rho_{v,h}\)</span>. Alternatively, the collection of measured and reconstructed responses can be vectorized (i.e.&nbsp;stacked into a single large column vector, denoted by <span class="math inline">\(\mbox{Vec}({\square})\)</span>) and used to determine an overall sensor consistency, <span class="math display">\[
+\rho_v = \mbox{Corr}\left(\mbox{Vec}({\mathbf{\hat{Y}}}),\mbox{Vec}({\mathbf{\hat{Y}}')}\right).
+\]</span></p>
+<p>Whilst the location of the applied forces is, in theory arbitrary, it is recommended to avoid using the interface so as to ensure that a global response is generated, as opposed to a local response that might be highly sensitive to the impact position.</p>
+</section>
+<section id="force-consistency" class="level4">
+<h4 class="anchored" data-anchor-id="force-consistency">Force consistency</h4>
+<p>Based on the above sensor criterion, it is straightforward to develop an equivalent <em>impact consistency</em> criterion so as to assess the quality of the applied forces.</p>
+<p>In this case consider the response of a single interface sensor to all of the forces applied around the interface, <span class="math display">\[
+    \hat{v}_i = \mathbf{\hat{Y}}_i  \mathbf{\hat{f}}
+\]</span> where $ _i$ is a row vector of directly measured mobilities between the applied forces and sensor <span class="math inline">\(i\)</span>.</p>
+<p>Similarly, the response at sensor <span class="math inline">\(i\)</span> due to the rigid body filtered forces is given by, <span class="math display">\[
+    \hat{v}_i' = \mathbf{\hat{Y}}_i \mathbf{T}_f^{\rm T} \mathbf{f} = \mathbf{\hat{Y}}_i \mathbf{T}_f^{\rm T} \mathbf{T}_f^{\rm +T}\mathbf{\hat{f}} = \mathbf{\hat{Y}}_i' \mathbf{\hat{f}}
+\]</span> where <span class="math inline">\(\square'\)</span> is now used to denote filtering of rigid body forces. The impact consistency is then defined as, <span class="math display">\[
+    \rho_{f,i} = \mbox{Corr}\left(\mathbf{\hat{Y}}_i ,\mathbf{\hat{Y}}_i'\right).
+\]</span> Like the sensor consistency, <span class="math inline">\(\rho_{f,i}\)</span> is bound between 0 and 1, with a value of 1 indicating perfect transmission of force between the applied impacts and the defined forces.</p>
+<p>To obtain a single overall force consistency metric, we can again collect and vectorize the measured and reconstructed responses across all interface sensors, <span class="math display">\[
+\rho_f = \mbox{Corr}\left(\mbox{Vec}({\mathbf{\hat{Y}}}),\mbox{Vec}({\mathbf{\hat{Y}}'})\right).
+\]</span></p>
+</section>
+<section id="combined-interface-consistency" class="level4">
+<h4 class="anchored" data-anchor-id="combined-interface-consistency">Combined interface consistency</h4>
+<p>Having introduced the sensor and force consistency metrics above, it is perhaps obvious that one could formulate in the same manner a single overall consistency that combines the two. Indeed, applying both force and response transformations, alongside their respective inverses, one obtains the filtered FRF matrix, <span class="math display">\[
+\mathbf{\hat{Y}}' = \mathbf{T}_v^{+}\, \left(\mathbf{T}_v\mathbf{\hat{Y}}\mathbf{T}_f^{\rm T}\right)\,\mathbf{T}_f^{\rm +T}
+\]</span> which, by comparison against the original FRF matrix, forms an overall interface consistency metric, <span class="math display">\[
+\rho = \mbox{Corr}\left(\mbox{Vec}({\mathbf{\hat{Y}}}),\mbox{Vec}({\mathbf{\hat{Y}}'})\right).
+\]</span></p>
+</section>
+</section>
+</section>
+<section id="multi-point-interfaces" class="level2">
+<h2 class="anchored" data-anchor-id="multi-point-interfaces">Multi-point interfaces</h2>
+<p>In the above we considered a single point interface, and introduced the Virtual Point transformation as an interface representation for point-like dynamics. In practice, it is rare that a structural component couples to another via a single connection point. Hence, it is necessary to extend this single-point treatment to the general multi-point case.</p>
+<p>For the single-point interface, the full 6 DoF FRF matrix (see <a href="#eq-rotMobmeasMobEq" class="quarto-xref">Equation&nbsp;5</a>) is obtained by, <span id="eq-MPtrans"><span class="math display">\[
+\mathbf{Y}=\mathbf{T}_v\mathbf{\hat{Y}}\mathbf{T}_f^{\rm T}
+\tag{15}\]</span></span> where <span class="math inline">\(\mathbf{\hat{Y}}\)</span> is a matrix of measured translational mobilities, and <span class="math inline">\(\mathbf{T}_{v,f}\)</span> are a pair of transformation matrices. To extend this treatment to a multi-point case we simply note that a local interface model (i.e.&nbsp;a model pertaining to a single connection) depends only on the local measurement DoFs, i.e.&nbsp;those that surround the connection. Consequently, the transformed response and force DoFs of a multi-point interface are related to the measured response and force DoFs by, <span class="math display">\[
+    \left(\begin{array}{c} \mathbf{{v}}_{c_1} \\ \vdots \\ \mathbf{{v}}_{c_N}\end{array}\right) = \left[\begin{array}{ccc}\mathbf{T}_{v,c_1} &amp;  &amp;   \\
+         &amp;  \ddots &amp;  \\
+        &amp;   &amp; \mathbf{T}_{v,c_N}  \\
+        \end{array}\right]\left(\begin{array}{c} \hat{\mathbf{v}}_{c_1} \\ \vdots \\ \hat{\mathbf{v}}_{c_N}\end{array}\right)
+\]</span> and <span class="math display">\[        \left(\begin{array}{c} \hat{\mathbf{f}}_{c_1} \\ \vdots \\ \hat{\mathbf{f}}_{c_N}\end{array}\right)
+         = \left[\begin{array}{ccc}
+        \mathbf{T}^{\rm T}_{f,c_1} &amp;  &amp;   \\
+         &amp;  \ddots &amp;  \\
+        &amp;   &amp; \mathbf{T}^{\rm T}_{f,c_N}  \\
+        \end{array}\right]\left(\begin{array}{c} \mathbf{{f}}_{c_1} \\ \vdots \\ \mathbf{{f}}_{c_N}\end{array}\right)
+\]</span>where <span class="math inline">\(\hat{\square}\)</span> denotes the measured DoFs, and <span class="math inline">\(\mathbf{T}_{v,c_n}\)</span> and <span class="math inline">\(\mathbf{T}_{f,c_n}\)</span> are the response and force transformation matrices for the <span class="math inline">\(n\)</span>th connection point. For the full multi-point interface mobility we then have, <span id="eq-multipointInt"><span class="math display">\[
+    \mathbf{Y}_{cc} =  
+        \left[\begin{array}{ccc}
+        \mathbf{T}_{v,c_1} &amp;  &amp;   \\
+         &amp;  \ddots &amp;  \\
+        &amp;   &amp; \mathbf{T}_{v,c_N}  \\
+        \end{array}\right]
+        \left[\begin{array}{ccc}
+        \mathbf{\hat{Y}}_{c_1c_1} &amp; \cdots &amp; \mathbf{\hat{Y}}_{c_1c_N}  \\
+        \vdots &amp; \ddots &amp; \vdots \\
+        \mathbf{\hat{Y}}_{c_Nc_1} &amp; \cdots &amp; \mathbf{\hat{Y}}_{c_Nc_N}
+        \end{array}\right]
+        \left[\begin{array}{ccc}
+        \mathbf{T}_{f,c_1} &amp;   &amp;   \\
+         &amp;  \ddots &amp; \\
+        &amp;  &amp;  \mathbf{T}_{f,c_N}
+        \end{array}\right]^{\rm T}
+\tag{16}\]</span></span> where it is noted that each transformation matrix can be constructed using the most appropriate method for that connection point (not necessarily the VPT).</p>
+<p>Finally, to include a set of additional remote DoFs <span class="math inline">\(r\)</span> where no interface transformations are required, #eq-multipointInt can be extended simply as, <span id="eq-multipointInt2"><span class="math display">\[
+    \left[\begin{array}{cc}
+        \mathbf{Y}_{cc} &amp; \mathbf{Y}_{cr}  \\
+        \mathbf{Y}_{rc}  &amp; \mathbf{Y}_{rr}
+        \end{array}\right] =  
+        \left[\begin{array}{cc}
+        \mathbf{T}_{v,c} &amp;    \\
+        &amp;  \mathbf{I}
+        \end{array}\right]
+        \left[\begin{array}{cc}
+        \mathbf{\hat{Y}}_{cc} &amp;  \mathbf{\hat{Y}}_{cr}  \\
+        \mathbf{\hat{Y}}_{rc} &amp; \mathbf{\hat{Y}}_{rr}
+        \end{array}\right]
+        \left[\begin{array}{cc}
+        \mathbf{T}_{f,c} &amp;    \\
+        &amp; \mathbf{I}
+        \end{array}\right]^{\rm T}
+\tag{17}\]</span></span> where <span class="math inline">\(c = \{c_1, c_2, \cdots, c_N\}\)</span>.</p>
+</section>
+<section id="flexible-interfaces" class="level2">
+<h2 class="anchored" data-anchor-id="flexible-interfaces">Flexible interfaces</h2>
+<p>The notion of a point interface is typically valid in the low-mid frequency range. Fortunately, this is the range where most structural vibration problems are concerned, and so the point interface assumption has served the community well over the decades. However, new technologies (such as vehicle electrification) are ever extending the frequency of interest. With the corresponding wavelength decreasing, structural connections that might once have appeared `point-like’ are becoming comparable in size to wavelength. As a consequence, the assumption of locally rigid dynamics breaks down as local deformations occur. To deal with this, more complex representations of interface dynamics are required. Below we briefly detail a flexible extension of the virtual point transformation.</p>
+<p>The virtual point transformation, as described above, relies on the construction of the so-called Interface Deformation Mode (IDM) matrices, <span class="math inline">\(\mathbf{R}_m\)</span> that describe how the measured DoF would respond to the motion of a virtual point, assuming rigid body motion. The rows of <span class="math inline">\(\mathbf{R}_m\)</span> correspond to the <span class="math inline">\(x, y\)</span> and <span class="math inline">\(z\)</span> coordinates of the measurement DoF, whilst the columns relate to the permissible motions of the virtual point (the translations, and three rotations), <span class="math display">\[
+\mathbf{R}_m =  \left[\rule{0cm}{1.4cm}\right.\overbrace{\begin{array}{ccc} 0 &amp; 0 &amp; 0  \\
+    0 &amp; 1 &amp; 0  \\
+0 &amp; 0 &amp; 1 \end{array}}^{\mbox{Translation}}
+\left|\rule{0cm}{1.4cm}\right.\,\,\,
+\overbrace{\begin{array}{ccc  }  0 &amp; r_z &amp; -r_y \\
+    -r_z &amp; 0 &amp; r_x \\
+    r_y &amp; -r_x &amp; 0 \end{array}}^{\mbox{Rotation}}  \,\,\,\left.\rule{0cm}{1.4cm}\right].
+\]</span> Importantly, any residual motion (i.e.&nbsp;flexibility) not captured by the 6 VP DoFs is discarded and not included in the interface representation. To accommodate for flexibility of the interface, additional modes must be added to the IDM matrix. A `bottom-up’ definition of flexible interface behaviour is recommended, which avoids the need for a priori knowledge of the interface dynamics, and is therefore more generally applicable.</p>
+<p>The following example is given of an extended virtual point IDM that is capable of capturing an additional three extension (i.e.&nbsp;‘strain’) and torsion deformations, alongside the standard rigid modes, <span class="math display">\[
+        \mathbf{R}_m^{ext} = \left[\rule{0cm}{1.4cm}\right.\overbrace{\begin{array}{ccc} 0 &amp; 0 &amp; 0  \\
+    0 &amp; 1 &amp; 0  \\
+0 &amp; 0 &amp; 1 \end{array}}^{\mbox{Translation}}
+\left|\rule{0cm}{1.4cm}\right.
+\,\,\,
+\overbrace{\begin{array}{ccc  }  0 &amp; r_z &amp; -r_y \\
+    -r_z &amp; 0 &amp; r_x \\
+    r_y &amp; -r_x &amp; 0 \end{array}}^{\mbox{Rotation}}
+\left|\rule{0cm}{1.4cm}\right.
+\,\,\,
+\overbrace{\begin{array}{ccc  }  r_x &amp; 0 &amp; 0 \\
+    0 &amp; r_y &amp; 0 \\
+    0 &amp; 0 &amp; r_z \end{array}}^{\mbox{Extension}}  
+\left|\rule{0cm}{1.4cm}\right.
+\,\,\,
+\overbrace{\begin{array}{ccc  }  0 &amp; r_y r_z &amp; -r_zr_y \\
+    -r_xr_z &amp; 0 &amp; r_zr_x\\
+     r_x r_y &amp; -r_y r_x &amp; 0 \end{array}}^{\mbox{Torsion}}
+    \,\,\,\left.\rule{0cm}{1.4cm}\right]
+\]</span> Based on this extended IDM matrix, a measured response is represented as, <span id="eq-extVP"><span class="math display">\[
+    \hat{v}_n = \left[\begin{array}{c} e_x \\ e_y \\ e_z \end{array} \right]^{\rm T} \mathbf{R}_n^{ext}
+\left[\begin{array}{c} \mathbf{v}_{tr.} \\ \mathbf{v}_{rot.} \\ \mathbf{v}_{ext.} \\ \mathbf{v}_{tor.}\end{array} \right]
+\tag{18}\]</span></span> where the flexible virtual point DoFs <span class="math inline">\(\mathbf{v}_{ext.} = [v_{ext.,x}, v_{ext.,y}, v_{ext.,z}]^{\rm T}\)</span> and <span class="math inline">\(\mathbf{v}_{tor.} = [v_{tor.,x}, v_{tor.,y}, v_{tor.,z}]^{\rm T}\)</span> have been added to the virtual point response vector <span class="math inline">\(\mathbf{v}\)</span>. Note that a similar procedure can be applied to the excitation IDM matrix.</p>
+<p>Higher order flexible IDMs can be defined with similar ease, requiring only the product of measurement DoF coordinates. When including flexible IDMs, it is important to always ensure that the resultant matrix <span class="math inline">\(\mathbf{R}\)</span> is full-rank, i.e.&nbsp;to capture say 6 flexible modes, a minimum ov total of 12 independent measurement DoFs are required; 6 for the rigid IDMs, and 6 force the flexible IDMs.</p>
+<p>In practice, it is necessary to ‘cherry-pick’ the correct set of IDM modes for the problem at hand, whilst avoiding any unnecessary IDMs in the interface representation.</p>
+</section>
+<section id="equivalent-multi-point-connection" class="level2">
+<h2 class="anchored" data-anchor-id="equivalent-multi-point-connection">Equivalent multi-point connection</h2>
+<p>Often when conducting a diagnostic test, such as in-situ TPA, interest does not lie with the contribution of the translational and rotational DoFs themselves, but rather with the contribution of the different connection points as a whole. In this case, there is no need to explicitly calculate the rotational DoFs, though their contribution must still be captured. This leads to the so-called (EMP) connection.</p>
+<p>The equivalent multi-point connection is the most straightforward approach to capture rotational DoFs. The interface is instrumented/excited by 6 or more sensors/forces which, like the FD approximation, are attached/applied in spaced pairs. Each pair is orientated to point in a particular direction (<span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> or <span class="math inline">\(z\)</span>). By measuring 6+ translational DoFs, all 6 DoFs (translations and rotations) are implicitly captured. Translational DoFs are encoded by the pair-wise average, whilst the rotational DoFs are encoded by the pair-wise difference, much like the FD approximation. Importantly however, the averaged translational and rotational components are not calculated explicitly; their influence is encoded within the 6+ individual translations. Hence we treat the connection as 6+ equivalent translational DoFs. Take for example the interface configuration in Figure <span class="math inline">\(\ref{FDexample2}\)</span> (right). Seven translational sensors are positioned around the interface. These are accompanied by 7 translational force excitations. According to the equivalent multi-point connection the mobility matrix <span class="math inline">\(\mathbf{Y}_{cc}\)</span> for this contact point would be of dimensions <span class="math inline">\(7\times 7\)</span>. Rotational information about the <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span> axes are encoded by the sensors spaced about their respective axes.</p>
+<p>More generally, the sensors/applied forces do not have to be included as spaced pairs. So long as no two sensors/forces are co-located, and those that are included sufficiently span <span class="math inline">\(x\)</span> <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span>, all translational and rotational interface motions will be captured.</p>
+<p>The main advantages of the equivalent multi-point connection approach are its straight forward implementation and ability to capture rotational DoFs. Furthermore, in the case that $&gt;$6 measurement points are used, it has the ability to capture flexible interface dynamics. Its main disadvantage is that the true translational and rotational motions are not explicitly calculated. This can cause some issues when trying to combine data sets, for example measured blocked forces with transfer functions obtained from numerical models or other experimental set-ups.</p>
+<p>Though straight forward to implement, it is important to note that if more than 6 translations are used in the EMP representation, some regularisation may be required to avoid a rank deficient mobility matrix; if there are more sensors/forces present than DoFs to capture (i.e.&nbsp;more parameters than can be justified by the data) and the connection point indeed behaves rigidly, the inversion of <span class="math inline">\(\mathbf{Y}_{cc}\)</span> can become ill-conditioned and large errors returned. A simple solution is to perform a Singular Value Decomposition to invert the matrix, and retain only the first 6 singular values.</p>
+</section>
+<section id="a-short-comment-on-interface-completeness" class="level2">
+<h2 class="anchored" data-anchor-id="a-short-comment-on-interface-completeness">A short comment on interface completeness</h2>
+<p>The importance of accurately representing all the important interactions taking place at the interface has been emphasised in the above. For components with discrete point-like interfaces, these interactions are represented by the translational and rotational DoFs at each coupling point, all of which have the potential to contribute towards the dynamics of the assembled VAVP. At mid-to-high frequencies, where interface deformations become significant, higher order ‘flexible’ DoFs are required to provide an adequete description. An interface rpresentation description that is missing important DoFs can be said to be <em>incomplete</em>.</p>
+<p>The incomplete representation of an interface is perhaps one of the main sources of error when building a VAVP. Not only does it effect the substructuring of components (if DoFs are not included in the interface model, then will not be coupled by the substructuring) but it can have a serve impact on the active characterisation of vibration sources (by neglecting DoFs large bias errors can be introduced onto the characterisation). It is therefore adventageous to develop tests for completeness, i.e.&nbsp;methods to identify whether the chosen interface representation has enough DoFs (also that these DoFs are the ‘right ones’). This topic is closely related to that of <a href="uncertainty.qmd">Uncertainty</a>, and so it will be addressed in more detail there.</p>
+</section>
+<section id="what-next" class="level2">
+<h2 class="anchored" data-anchor-id="what-next">What next</h2>
+<p>Now that we have introduced the concept of an interface representation, and how to populate it with data from measurement, we can continue with our coverage of component characterisation. Having dealt with the passive characterisation of source and receiver-like components, next on our to-do list is <a href="isolators.qmd">Vibration isolators</a>, i.e.&nbsp;the squidgy bits of rubber that we use to reduce vibration transmission from active vibrations sources (which we will cover shortly afterward in <a href="blockedForce.qmd">Blocked forces</a>) to receiver structures.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../introductions/VAVPs/components/components.html" class="pagination-link" aria-label="Components (passive characterisation)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Components (passive characterisation)</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../introductions/VAVPs/isolators/isolators.html" class="pagination-link" aria-label="Vibration isolators">
+        <span class="nav-page-text">Vibration isolators</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
