@@ -1,8 +1,0 @@
----
-title: "A series of *quick* introductions"
----
-On this page you will find a series of *Introduction to* pages covering a range of topics. These pages are intended to give the reader a gentle and relatively informal introduction to the topics presented. The content presented here is pretty well established stuff. More on the nose *researchy* stuff will be elsewhere once i get around to setting it up. 
-
-Again, the resources provided on this website are for educational and informational purposes only. While every effort has been made to ensure accuracy, the content may contain errors or omissions. The materials reflect the my own personal views and experience and do not necessarily represent the views of any affiliated institutions or collaborators. Use of the information is at your own risk.
-
-![A classic meme, advocating the use of the blocked force over the contact force. See [Blocked forces](../introductions/VAVPs/.qmd) for details.](distractedForce.jpg){width=600 #fig-meme}

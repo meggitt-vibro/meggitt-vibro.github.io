@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Synthesising FRFs from mass, stiffness and damping – Joshua Meggitt</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../tutorials/blockedForce/blockedForce_1.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Joshua Meggitt</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../introductions/summary.html"> 
+<span class="menu-text">A quick introduction to:</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../book/book.html"> 
+<span class="menu-text">Book</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../tutorials/summary.html" aria-current="page"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research/summary.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teaching" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teaching</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teaching">    
+        <li>
+    <a class="dropdown-item" href="../../teaching/mlsd/mlsd.html">
+ <span class="dropdown-text">Microphone and Loudspeaker Design</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../tutorials/synthFRF/synthFRF_1.html">Synthesising FRFs</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Summary of tutorials</strong></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/substructuring/substructuring_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Substructuring (mass-spring example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/blockedForce/blockedForce_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">In situ blocked force (mass-spring example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/synthFRF/synthFRF_1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Synthesising FRFs</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-little-bit-of-theory" id="toc-a-little-bit-of-theory" class="nav-link active" data-scroll-target="#a-little-bit-of-theory">A little bit of theory</a>
+  <ul class="collapse">
+  <li><a href="#direct-method" id="toc-direct-method" class="nav-link" data-scroll-target="#direct-method">Direct method</a></li>
+  <li><a href="#modal-synthesis" id="toc-modal-synthesis" class="nav-link" data-scroll-target="#modal-synthesis">Modal synthesis</a></li>
+  </ul></li>
+  <li><a href="#mass-spring-system" id="toc-mass-spring-system" class="nav-link" data-scroll-target="#mass-spring-system">Mass-spring system</a>
+  <ul class="collapse">
+  <li><a href="#proportional-damping-1" id="toc-proportional-damping-1" class="nav-link" data-scroll-target="#proportional-damping-1">Proportional damping</a></li>
+  <li><a href="#non-proportional-damping" id="toc-non-proportional-damping" class="nav-link" data-scroll-target="#non-proportional-damping">Non-proportional damping</a></li>
+  <li><a href="#structural-damping-1" id="toc-structural-damping-1" class="nav-link" data-scroll-target="#structural-damping-1">Structural damping</a></li>
+  </ul></li>
+  <li><a href="#finite-element-beam" id="toc-finite-element-beam" class="nav-link" data-scroll-target="#finite-element-beam">Finite element beam</a>
+  <ul class="collapse">
+  <li><a href="#fe-mass-and-stiffness-matrices" id="toc-fe-mass-and-stiffness-matrices" class="nav-link" data-scroll-target="#fe-mass-and-stiffness-matrices">FE mass and stiffness matrices</a></li>
+  <li><a href="#frf-functions" id="toc-frf-functions" class="nav-link" data-scroll-target="#frf-functions">FRF functions</a></li>
+  <li><a href="#proportional-damping-2" id="toc-proportional-damping-2" class="nav-link" data-scroll-target="#proportional-damping-2">Proportional damping</a></li>
+  <li><a href="#structural-damping-2" id="toc-structural-damping-2" class="nav-link" data-scroll-target="#structural-damping-2">Structural damping</a></li>
+  <li><a href="#truncation-error" id="toc-truncation-error" class="nav-link" data-scroll-target="#truncation-error">Truncation error</a></li>
+  <li><a href="#mode-shapes" id="toc-mode-shapes" class="nav-link" data-scroll-target="#mode-shapes">Mode shapes</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Synthesising FRFs from mass, stiffness and damping</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this tutorial we introduce the key equations for synthesising FRFs from pre-existing numerical models, specifically physical domain representations where mass and stiffness matrices are known (e.g.&nbsp;by the Finite Element method). The reader is referred to the many text books in the field for further detail on the modelling itself, see for example <span class="citation" data-cites="petyt2010introduction">Petyt (<a href="#ref-petyt2010introduction" role="doc-biblioref">2010</a>)</span>.</p>
+<section id="a-little-bit-of-theory" class="level2">
+<h2 class="anchored" data-anchor-id="a-little-bit-of-theory">A little bit of theory</h2>
+<p>In the physical domain, a component is characterised by its mass, stiffness and damping characteristics, which together form the following equation of motion, <span id="eq-EoM1"><span class="math display">\[
+    \mathbf{M}\mathbf{\ddot{x}}(t) + \mathbf{C}\mathbf{\dot{x}}(t) + \mathbf{K}\mathbf{x}(t) = \mathbf{f}(t).
+\tag{1}\]</span></span> To obtain a component FRF matrix from <a href="#eq-EoM1" class="quarto-xref">Equation&nbsp;1</a>, two approaches will be discussed; the direct (matrix inversion) method and modal synthesis.</p>
+<p>In either case, we begin by assuming a harmonic forcing such that <span class="math inline">\(\mathbf{f}(t) = \mathbf{f} e^{i\omega t}\)</span>. Owing to linearity, the displacement, velocity and acceleration response will also be periodic with the same frequency. <a href="#eq-EoM1" class="quarto-xref">Equation&nbsp;1</a> can thus be transformed into the frequency domain, and expressed in terms of displacement <span class="math inline">\(\mathbf{x}(\omega)\)</span> as, <span id="eq-EoMfreq"><span class="math display">\[
+    \left[-\omega^2\mathbf{M} + i\omega\mathbf{C} + \mathbf{K}\right]\mathbf{x}(\omega) = \mathbf{D}(\omega)  \mathbf{x}(\omega) =  \mathbf{f}(\omega).
+\tag{2}\]</span></span> where <span class="math inline">\(\mathbf{D}(\omega)\)</span> represents the dynamic stiffness of the component.</p>
+<section id="direct-method" class="level3">
+<h3 class="anchored" data-anchor-id="direct-method">Direct method</h3>
+<p>The direct determination of the mobility involves computing the matrix inverse of <span class="math inline">\(\mathbf{D}\)</span> and pre-multiplying both sides of <a href="#eq-EoMfreq" class="quarto-xref">Equation&nbsp;2</a> by it, giving, <span class="math display">\[
+    \mathbf{x}(\omega) = \mathbf{R}(\omega)\mathbf{f}(\omega)
+\]</span> where, <span id="eq-directfrf0"><span class="math display">\[
+    \mathbf{R}(\omega) =\mathbf{D}^{-1}(\omega) = \left[-\omega^2\mathbf{M} + i\omega\mathbf{C} + \mathbf{K}\right]^{-1}
+\tag{3}\]</span></span> is the dynamic compliance of the component. The mobility is then obtained by differentiation, i.e.&nbsp;scaling by <span class="math inline">\(i\omega\)</span>, <span id="eq-directfrf"><span class="math display">\[
+    \mathbf{Y}(\omega) = i\omega\mathbf{R}(\omega).
+\tag{4}\]</span></span></p>
+<p>This direct method is appropriate when working with small models containing not too many DoFs. However, as the matrix inversion has to be performed at each frequency, for large systems this becomes computationally expensive and is not recommended. Furthermore, this direct approach provides the full mobility matrix that includes every DoF within the component model. For virtual prototyping applications, this is usually not necessary since the black box models adopted for components only require interface DoFs to be described in full.</p>
+<p>A reduced mobility matrix can be obtained by considering <a href="#eq-EoMfreq" class="quarto-xref">Equation&nbsp;2</a> in a partitioned form (omitting frequency dependence for clarity), <span id="eq-EoMpart"><span class="math display">\[
+    \left(\begin{array}{c}
+    \mathbf{f}_r \\ \mathbf{f}_d
+    \end{array}\right) = \left[\begin{array}{cc}
+         \mathbf{D}_{rr} &amp; \mathbf{D}_{rd}  \\
+         \mathbf{D}_{dr} &amp; \mathbf{D}_{dd}  
+    \end{array}\right] \left(\begin{array}{c}
+    \mathbf{x}_r \\ \mathbf{x}_d
+    \end{array}\right)
+\tag{5}\]</span></span> where <span class="math inline">\(r\)</span> denotes the set of DoFs we wish to retain, and <span class="math inline">\(d\)</span> those that are required for computation but are not needed in the dynamic description of the component. Assuming no external forces are applied to the any of the <span class="math inline">\(d\)</span> DoFs, <span class="math inline">\(\mathbf{f}_d = \mathbf{0}\)</span>, <a href="#eq-EoMpart" class="quarto-xref">Equation&nbsp;5</a> can be rearranged to yield, <span id="eq-EoMred"><span class="math display">\[
+    \mathbf{f}_r = \left(\mathbf{D}_{rr} - \mathbf{D}_{rd}\mathbf{D}_{dd}^{-1} \mathbf{D}_{dr}\right)\mathbf{x}_r = \mathbf{\hat{D}}_{rr} \mathbf{x}_r
+\tag{6}\]</span></span> where <span class="math inline">\(\mathbf{\hat{D}}_{rr}\)</span> is the reduced dynamic stiffness matrix, from which the reduced mobility matrix is obtained by inversion and scaling, <span class="math display">\[
+\mathbf{\hat{Y}}_{rr} = i\omega \mathbf{\hat{D}}_{rr}^{-1}.
+\]</span> Note that although reduced in size to include only the retained DoFs <span class="math inline">\(r\)</span>, <a href="#eq-EoMred" class="quarto-xref">Equation&nbsp;6</a> still involves the inversion of the stiffness sub-matrix <span class="math inline">\(\mathbf{D}_{dd}^{-1}\)</span>, which for large systems is still computationally demanding. More efficient reduction schemes are available at the cost of introducing some approximation in the estimation of the component dynamics.</p>
+</section>
+<section id="modal-synthesis" class="level3">
+<h3 class="anchored" data-anchor-id="modal-synthesis">Modal synthesis</h3>
+<p>The modal synthesis approach involves determining the mode shapes and natural frequencies of a component, and expressing its FRF as a truncated summation of modes.</p>
+<p>To formulate the modal synthesis of a mobility matrix, we begin by considering the case of an undamped and unforced system, whose equation of motion reads, <span id="eq-EoMfreq_2"><span class="math display">\[
+    \mathbf{K}\mathbf{x}(\omega) = \omega^2\mathbf{M}\mathbf{x}(\omega).
+\tag{7}\]</span></span> Physically, we are interested in a special type of solution to <a href="#eq-EoMfreq_2" class="quarto-xref">Equation&nbsp;7</a>, where all coordinates execute synchronous motion, i.e.&nbsp;they have the same time dependence so that the ratio between the motion of any two points remains constant. For an <span class="math inline">\(N\)</span> dimensional system, there exist <span class="math inline">\(N\)</span> such solutions to <span class="citation" data-cites="EoMfreq_2">(<a href="#ref-EoMfreq_2" role="doc-biblioref"><strong>EoMfreq_2?</strong></a>)</span> in the form, <span id="eq-EoMfreq_3"><span class="math display">\[
+    \mathbf{K}\mathbf{\tilde{\phi}}_i = \lambda_i\mathbf{M}\mathbf{\tilde{\phi}}_i.
+\tag{8}\]</span></span> where <span class="math inline">\(\lambda_i = \omega_i^2\)</span> are the so-called system eigenvalues (representing the squared natural frequencies of the component), and <span class="math inline">\(\mathbf{\tilde{\phi}}_i\)</span> are the corresponding eigenvectors (representing the relative deformations of the component at frequency <span class="math inline">\(\omega_i\)</span> that satisfy <span class="citation" data-cites="EoMfreq_2">(<a href="#ref-EoMfreq_2" role="doc-biblioref"><strong>EoMfreq_2?</strong></a>)</span>). The eigenvectors <span class="math inline">\(\mathbf{\phi}_i\)</span> are unique only in the sense that the ratio between the motion at any two points is constant. In other words, it is only the shape of the component’s deflection that is well defined, not its amplitude. To render the eigenvectors unique a normalisation process is required. The most common normalisation scheme is that of mass normalisation, whereby the normalised eigenvectors are obtained as <span class="math inline">\(\phi_i = {\tilde{\phi}_i}\left(\tilde{\phi}_i^{\rm T}\sqrt{\mathbf{M}}\tilde{\phi}_i\right)^{-1}\)</span>, or in matrix form <span class="math inline">\(\boldsymbol{\Phi} = \boldsymbol{\tilde{\Phi}}\left(\boldsymbol{\tilde{\Phi}}^{\rm T}\sqrt{\mathbf{M}}\boldsymbol{\tilde{\Phi}}\right)^{-1}\)</span>. With this mass normalisation we have that, <span id="eq-massNorm"><span class="math display">\[
+    \mathbf{\phi}_i^{\rm T}\mathbf{M}\mathbf{\phi}_i=1
+\tag{9}\]</span></span> and <span class="math display">\[
+    \mathbf{\phi}_i^{\rm T}\mathbf{K}\mathbf{\phi}_i=\omega_i^2.
+\]</span> This latter relation can be easily proven by pre-multiplying both sides of <a href="#eq-EoMfreq_3" class="quarto-xref">Equation&nbsp;8</a> by <span class="math inline">\(\mathbf{\phi}_i^{\rm T}\)</span>. Similarly, from <a href="#eq-EoMfreq_3" class="quarto-xref">Equation&nbsp;8</a> and the uniqueness of eigenvalues, it is straightforward to show that the component eigenvectors/mode shapes are orthogonal, such that, <span class="math display">\[
+    \mathbf{\phi}^{\rm T}_r\mathbf{M}\mathbf{\phi}_s = 0
+\]</span> and <span id="eq-orthog2"><span class="math display">\[
+    \mathbf{\phi}^{\rm T}_r\mathbf{K}\mathbf{\phi}_s = 0,   r\neq s.
+\tag{10}\]</span></span> The normalised eigenvectors described above are referred to as the component’s normal modes, or simply its modes.</p>
+<p>Noting that any <span class="math inline">\(N\)</span> dimensional vector can be represented as a linear combination of <span class="math inline">\(N\)</span> linearly independent vectors, and that normal modes are themselves orthogonal and linearly independent, the displacement <span class="math inline">\(\mathbf{x}\)</span> can be expressed in the form, <span id="eq-modalSum"><span class="math display">\[
+    \mathbf{x} = \Sigma_i^N \mathbf{\phi}_i q_i = \boldsymbol{\Phi}\mathbf{q}
+\tag{11}\]</span></span> where <span class="math inline">\(\boldsymbol{\Phi} = \left[ \mathbf{\phi}_1, \mathbf{\phi}_2, \cdots, \mathbf{\phi}_N\right]\)</span> is a modal matrix whose columns represent the normal modes and <span class="math inline">\(\mathbf{q}=\mathbf{q}_0e^{i\omega t}\)</span> is a vector of modal amplitudes describing the contribution of the each mode to the response <span class="math inline">\(\mathbf{x}\)</span>. With the modal matrix <span class="math inline">\(\boldsymbol{\Phi}\)</span> being constant, we have also that <span class="math inline">\(\mathbf{\dot{x}} = \boldsymbol{\Phi}\mathbf{\dot{q}}\)</span> and <span class="math inline">\(\mathbf{\ddot{x}} = \boldsymbol{\Phi}\mathbf{\ddot{q}}\)</span>.</p>
+<p>Returning now to the damped and forced equation of motion, <span id="eq-EoMfreq_4"><span class="math display">\[
+    \mathbf{M}\mathbf{\ddot{x}}(t) + \mathbf{C}\mathbf{\dot{x}}(t) + \mathbf{K}\mathbf{x}(t) = \mathbf{f}(t)
+\tag{12}\]</span></span> substituting the displacement, velocity and acceleration by their modal representations from <a href="#eq-modalSum" class="quarto-xref">Equation&nbsp;11</a> and its time derivatives, whilst pre-multiplying <a href="#eq-EoMfreq_4" class="quarto-xref">Equation&nbsp;12</a> by the transposed mode shape matrix <span class="math inline">\(\boldsymbol{\Phi}^{\rm T}\)</span> yields, <span id="eq-EoMmodal"><span class="math display">\[
+    \mathbf{\bar{M}}\mathbf{\ddot{q}}(t) + \mathbf{\bar{C}}\mathbf{\dot{q}}(t) + \mathbf{\bar{K}}\mathbf{q}(t) = \mathbf{Q}(t)
+\tag{13}\]</span></span> with, <span class="math display">\[
+    \mathbf{\bar{M}} =  \boldsymbol{\Phi}^{\rm T}\mathbf{{M}}\boldsymbol{\Phi}, \quad \mathbf{\bar{C}} =    \boldsymbol{\Phi}^{\rm T}\mathbf{{C}}\boldsymbol{\Phi}, \quad \mathbf{\bar{K}} =    \boldsymbol{\Phi}^{\rm T}\mathbf{{K}}\boldsymbol{\Phi}, \quad\mathbf{Q} = \boldsymbol{\Phi}^{\rm T}\mathbf{{f}}.
+\]</span> <span class="math inline">\(\mathbf{\bar{M}}\)</span>, <span class="math inline">\(\mathbf{\bar{K}}\)</span> and <span class="math inline">\(\mathbf{\bar{C}}\)</span> are called the modal mass, stiffness and damping matrices, and <span class="math inline">\(\mathbf{{Q}}\)</span> the modal force vector. Recalling the mass normalised and orthogonality conditions in <a href="#eq-massNorm" class="quarto-xref">Equation&nbsp;9</a> and <a href="#eq-orthog2" class="quarto-xref">Equation&nbsp;10</a>, <span class="math display">\[
+    \mathbf{\bar{M}} = \mathbf{I}, \quad \mathbf{\bar{K}}=\mbox{diag}\left[\omega^2_1, \omega^2_2, \cdots, \omega^2_N\right]=\boldsymbol{\Lambda}
+\]</span> <a href="#eq-EoMmodal" class="quarto-xref">Equation&nbsp;13</a> becomes, <span class="math display">\[
+    \left[-\omega^2\mathbf{I} + i\omega\mathbf{\bar{C}} + \boldsymbol{\Lambda}\right]\mathbf{q} = \mathbf{Q}(t).
+\]</span> Inversion and pre-multiplication of both sides by the bracketed term yields a solution for the modal amplitudes, <span class="math display">\[
+    \mathbf{q} =    \left[-\omega^2\mathbf{I} + i\omega\mathbf{\bar{C}} + \boldsymbol{\Lambda}\right]^{-1}\mathbf{Q}(t).
+\]</span> Substituting the modal amplitudes into <a href="#eq-modalSum" class="quarto-xref">Equation&nbsp;11</a>, whilst recalling <span class="math inline">\(\mathbf{Q} = \boldsymbol{\Phi}^{\rm T}\mathbf{{f}}\)</span>, <span class="math display">\[
+    \mathbf{x} = \boldsymbol{\Phi}  \left[-\omega^2\mathbf{I} + i\omega\mathbf{\bar{C}} + \boldsymbol{\Lambda}\right]^{-1}\boldsymbol{\Phi}^{\rm T}\mathbf{{f}}
+\]</span> from which we can identify the displacement FRF as, <span id="eq-mobModal"><span class="math display">\[
+    \mathbf{Y}(\omega) = \boldsymbol{\Phi}\left[\boldsymbol{\Lambda}-\omega^2\mathbf{I} + i\omega \mathbf{\bar{C}}\right]^{-1}\boldsymbol{\Phi}^{\rm T}.
+\tag{14}\]</span></span> <a href="#eq-mobModal" class="quarto-xref">Equation&nbsp;14</a> provides a means of synthesising the FRF matrix of a component based on its natural frequencies, mode shapes and modal damping characteristics. To provide an efficient synthesis, there are two important considerations.</p>
+<p>First, the number of modes used. Whilst an <span class="math inline">\(N\)</span> DoF system will have <span class="math inline">\(N\)</span> natural frequencies and associated mode shapes, often only a reduced subset of these are required to provide a good estimate of the mobility matrix. This is achieved by truncating the modal matrix <span class="math inline">\(\boldsymbol{\Phi}\)</span> to include only the first <span class="math inline">\(n\)</span> columns <span class="math inline">\(\boldsymbol{\Phi} = \left[ \mathbf{\phi}_1, \mathbf{\phi}_2, \cdots, \mathbf{\phi}_n\right]\)</span> (i.e.&nbsp;the mode shapes of the first <span class="math inline">\(n\)</span> natural frequencies). The matrix <span class="math inline">\(\boldsymbol{\Lambda}\)</span> should similarly be truncated. It is generally suggested to include modes up to twice the highest frequency (<span class="math inline">\(f_{max}\)</span>) of interest, however this general guidance may not be sufficient for VAVP applications. Going back to the modal matrix, the rows of <span class="math inline">\(\boldsymbol{\Phi}\)</span> correspond to the component’s DoFs and unwanted rows can readily be discarded to obtain a reduced mobility matrix including only the DoFs of interest.</p>
+<p>Second, we require the square bracketed term to be diagonal, such that its matrix inversion becomes computationally trivial. Whilst the <span class="math inline">\(-\omega^2\mathbf{I}\)</span> and <span class="math inline">\(\boldsymbol{\Lambda}\)</span> terms satisfy this requirement, <span class="math inline">\(\mathbf{\bar{C}}\)</span> is generally fully populated. Hence, we are interested in simplified models of damping that yield diagonal modal damping matrices. Here we will discus two popular representations of damping that yield a diagonal system of equations; proportional damping, and structural damping.</p>
+<section id="proportional-damping" class="level4">
+<h4 class="anchored" data-anchor-id="proportional-damping">Proportional damping</h4>
+<p><em>Proportional damping</em> is based on the notion that if the mass and stiffness matrices are both diagonalised by the modal matrix, then too so must their linear combination. Hence, a proportional damping matrix is defined as, <span id="eq-propDamping"><span class="math display">\[
+\mathbf{C}_p = \alpha\mathbf{K}+\beta\mathbf{M}
+\tag{15}\]</span></span> where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are a pair of constants which can be determined based on experimental measurement. Based on <a href="#eq-propDamping" class="quarto-xref">Equation&nbsp;15</a>, the modal damping matrix becomes, <span class="math display">\[
+\mathbf{\bar{C}} = \mathbf{\Phi}^{\rm T}\mathbf{C}_p\mathbf{\Phi} = \left[\begin{array}{ccc}\bar{C}_{11} &amp; &amp; \\
+&amp; \ddots &amp; \\
+&amp; &amp; \bar{C}_{NN}
+\end{array}\right]
+\]</span> where <span class="math inline">\(C_nn\)</span> is the modal damping of the <span class="math inline">\(n\)</span>th mode.</p>
+</section>
+<section id="structural-damping" class="level4">
+<h4 class="anchored" data-anchor-id="structural-damping">Structural damping</h4>
+<p>Another appropriate (i.e.&nbsp;diagonalisable) model of damping is <em>structural damping</em> (also known as hysteric damping) which is represented in the component equation of motion as, <span id="eq-mobModalStrucD"><span class="math display">\[
+    \left[-\omega^2\mathbf{M} + \left(\mathbf{K}+i\mathbf{H}\right)\right]\mathbf{x}(\omega) = \mathbf{f}(\omega).
+\tag{16}\]</span></span> The complex stiffness matrix <span class="math inline">\(\left(\mathbf{K}+i\mathbf{H}\right)\)</span> is most easily obtained by replacing Young’s modulus <span class="math inline">\(E\)</span> by a complex one of the form <span class="math inline">\(E(1+i\eta)\)</span> when deriving the component’s stiffness matrix, where <span class="math inline">\(\eta\)</span> is the loss factor. Equivalently, <a href="#eq-mobModal" class="quarto-xref">Equation&nbsp;14</a> can be written as, <span class="math display">\[
+    \mathbf{Y}(\omega) = \boldsymbol{\Phi}\left[\boldsymbol{\Lambda}(1+i\eta)-\omega^2\mathbf{I}\right]^{-1}\boldsymbol{\Phi}^{\rm T}.
+\]</span> The loss factor <span class="math inline">\(\eta\)</span> takes into account all losses, including material and coupling losses. Typical values are between 1% and 5% and tend to be higher where there are connections which allow sliding such as bolted rather than welded joints. In the absence of a physical component to determine damping characteristics, structural damping with an estimated loss factor is the simplest option.</p>
+</section>
+</section>
+</section>
+<section id="mass-spring-system" class="level2">
+<h2 class="anchored" data-anchor-id="mass-spring-system">Mass-spring system</h2>
+<p>In this section we apply both the direct inversion and modal summation approaches to synthesis the FRFs of the mass-spring system depicted in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a>. Given the discrete nature of the mass-spring system, as will only consider the case whereby all modes are included in the modal summation. In the next example we consider a simple FE model of a continuous beam; here we will address the notion of modal truncation.</p>
+<div id="fig-massSpring_coupled" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-massSpring_coupled-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="massSpring_coupled.png" class="img-fluid figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-massSpring_coupled-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Numerical mass-spring assembly used for FRF synthesis example.
+</figcaption>
+</figure>
+</div>
+<p>We begin by defining the mass and stiffness matrices <span class="math inline">\(\mathbf{M}\)</span> and <span class="math inline">\(\mathbf{K}\)</span> for the system in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div id="31db6689" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(linewidth<span class="op">=</span><span class="dv">250</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys <span class="im">as</span> sys</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">1000</span>) <span class="co"># Generate frequency array</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f <span class="co"># Convert to radians</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Define component masses and build matrices</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>m1, m2, m3, m4, m5 <span class="op">=</span> <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="fl">0.5</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>m6, m7, m8, m9, m10, m11 <span class="op">=</span> <span class="fl">0.5</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>,<span class="fl">0.5</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>M_C <span class="op">=</span> np.diag(np.array([m1,m2,m3<span class="op">+</span>m6,m4<span class="op">+</span>m7,m5<span class="op">+</span>m8,m9,m10,m11])) <span class="co"># Coupled AB</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Define component stiffnesses and build matrices (complex stiffness -&gt; structural damping)</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>η <span class="op">=</span> <span class="fl">0.05</span> <span class="co"># Structural loss factor</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>k1, k2, k3, k4, k5 <span class="op">=</span> <span class="dv">1</span>, <span class="fl">1.5</span>, <span class="fl">0.7</span>, <span class="dv">1</span>, <span class="fl">0.5</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>k6, k7, k8, k9, k10, k11 <span class="op">=</span> <span class="fl">0.5</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="fl">0.2</span>, <span class="dv">1</span>, <span class="fl">0.5</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>K_C <span class="op">=</span> np.array([[k1<span class="op">+</span>k2<span class="op">+</span>k5, <span class="op">-</span>k2,        <span class="dv">0</span>,     <span class="dv">0</span>,    <span class="op">-</span>k5,     <span class="dv">0</span>,     <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                [<span class="op">-</span>k2,       k2<span class="op">+</span>k3<span class="op">+</span>k4, <span class="op">-</span>k3,   <span class="op">-</span>k4,    <span class="dv">0</span>,      <span class="dv">0</span>,     <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,        <span class="op">-</span>k3,        k3<span class="op">+</span>k6, <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="op">-</span>k6,    <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,        <span class="op">-</span>k4,        <span class="dv">0</span>,     k4<span class="op">+</span>k7, <span class="dv">0</span>,      <span class="dv">0</span>,    <span class="op">-</span>k7,         <span class="dv">0</span>],</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                [<span class="op">-</span>k5,       <span class="dv">0</span>,         <span class="dv">0</span>,     <span class="dv">0</span>,     k5<span class="op">+</span>k8,  <span class="dv">0</span>,    <span class="op">-</span>k8,         <span class="dv">0</span>],</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,        <span class="op">-</span>k6,    <span class="dv">0</span>,     <span class="dv">0</span>,      k6<span class="op">+</span>k9, <span class="dv">0</span>,         <span class="op">-</span>k9],</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,         <span class="dv">0</span>,    <span class="op">-</span>k7,   <span class="op">-</span>k8,     <span class="dv">0</span>,     k7<span class="op">+</span>k8<span class="op">+</span>k10, <span class="op">-</span>k10],</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,         <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="op">-</span>k9,   <span class="op">-</span>k10,        k9<span class="op">+</span>k10<span class="op">+</span>k11]])<span class="op">*</span><span class="fl">1e5</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Mass matrix of assembly (kg):</span><span class="ch">\n</span><span class="st">'</span> <span class="op">+</span> <span class="bu">str</span>(M_C))</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Stiffness matrix of assembly (m/N):</span><span class="ch">\n</span><span class="st">'</span> <span class="op">+</span> <span class="bu">str</span>(K_C))</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mass matrix of assembly (kg):
+[[1.  0.  0.  0.  0.  0.  0.  0. ]
+ [0.  2.  0.  0.  0.  0.  0.  0. ]
+ [0.  0.  2.5 0.  0.  0.  0.  0. ]
+ [0.  0.  0.  3.  0.  0.  0.  0. ]
+ [0.  0.  0.  0.  1.5 0.  0.  0. ]
+ [0.  0.  0.  0.  0.  3.  0.  0. ]
+ [0.  0.  0.  0.  0.  0.  5.  0. ]
+ [0.  0.  0.  0.  0.  0.  0.  0.5]]
+
+Stiffness matrix of assembly (m/N):
+[[ 300000. -150000.       0.       0.  -50000.       0.       0.       0.]
+ [-150000.  320000.  -70000. -100000.       0.       0.       0.       0.]
+ [      0.  -70000.  120000.       0.       0.  -50000.       0.       0.]
+ [      0. -100000.       0.  300000.       0.       0. -200000.       0.]
+ [ -50000.       0.       0.       0.  150000.       0. -100000.       0.]
+ [      0.       0.  -50000.       0.       0.   70000.       0.  -20000.]
+ [      0.       0.       0. -200000. -100000.       0.  400000. -100000.]
+ [      0.       0.       0.       0.       0.  -20000. -100000.  170000.]]
+</code></pre>
+</div>
+</div>
+<p>Next, we define the system’s damping matrix <span class="math inline">\(\mathbf{C}\)</span>. We will consider three cases in this example; proportional damping, non-proportional damping and structural damping. We start with proportional damping.</p>
+<section id="proportional-damping-1" class="level3">
+<h3 class="anchored" data-anchor-id="proportional-damping-1">Proportional damping</h3>
+<p>With proportional damping, the damping matrix is defined as a linear combination of the stiffness and mass matrices, <span class="math display">\[
+\mathbf{C}_p = \alpha\mathbf{K}+\beta\mathbf{M}
+\]</span> The damping matrix <span class="math inline">\(\mathbf{C}_p\)</span> can be used directly in <a href="#eq-directfrf0" class="quarto-xref">Equation&nbsp;3</a> to compute the FRF by matrix inversion. Alternatively, since the mode shape matrix <span class="math inline">\(\mathbf{\Phi}\)</span> diagonalise both the stiffness and mass matrices, we have that, <span class="math display">\[
+\mathbf{\bar{C}}_p = \mathbf{\Phi}^{\rm T}\mathbf{C}_p\mathbf{\Phi} = \left[\begin{array}{ccc}\bar{C}_{11} &amp; &amp; \\
+&amp; \ddots &amp; \\
+&amp; &amp; \bar{C}_{NN}
+\end{array}\right]
+\]</span> is also a diagonal matrix. This allows us to use the more efficient modal summation to compute the FRF. In the code below we implement both these approaches.</p>
+<p>Note that to implement the modal solution we first solve the eigenproblem to obtain mode shapes and natural frequencies. We then mass normalise the mode shapes. To check everything this is as it should be, plot the modal mass, stiffness and damping matrices to make sure they are diagonal - we see from <a href="#fig-checkdiag1" class="quarto-xref">Figure&nbsp;2</a> they are.</p>
+<div id="cell-fig-checkdiag1" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportional damping</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>C_C_prop <span class="op">=</span> <span class="fl">0.0001</span><span class="op">*</span>K_C <span class="op">+</span> <span class="dv">1</span><span class="op">*</span>M_C <span class="co"># Proportional damping matrix</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Damping matrix (proportional αK+βM) of assembly (m/Ns):</span><span class="ch">\n</span><span class="st">'</span> <span class="op">+</span> <span class="bu">str</span>(C_C_prop))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>λ, Φ_ <span class="op">=</span> sp.linalg.eig(K_C, M_C) <span class="co"># Get mode shapes Φ_ and natural frequencies λ=ω_n**2</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>Φ <span class="op">=</span> Φ_<span class="op">@</span>np.diag(<span class="dv">1</span><span class="op">/</span>np.sqrt(np.diag((Φ_.T<span class="op">@</span>M_C<span class="op">@</span>Φ_)))) <span class="co"># Mass normalise mode shapes</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>ΦCΦ <span class="op">=</span> Φ.T <span class="op">@</span> C_C_prop <span class="op">@</span> Φ <span class="co"># Check modal damping matrix is diagonal</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>figs, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>,figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">30</span>))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].matshow(np.log(np.<span class="bu">abs</span>(Φ.T <span class="op">@</span> M_C <span class="op">@</span> Φ)))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Mass matrix'</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].matshow(np.log(np.<span class="bu">abs</span>(Φ.T <span class="op">@</span> K_C <span class="op">@</span> Φ)))</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Stiffness matrix'</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].matshow(np.log(np.<span class="bu">abs</span>(ΦCΦ)))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlabel(<span class="st">'Prop. damping matrix'</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Damping matrix (proportional αK+βM) of assembly (m/Ns):
+[[ 31.  -15.    0.    0.   -5.    0.    0.    0. ]
+ [-15.   34.   -7.  -10.    0.    0.    0.    0. ]
+ [  0.   -7.   14.5   0.    0.   -5.    0.    0. ]
+ [  0.  -10.    0.   33.    0.    0.  -20.    0. ]
+ [ -5.    0.    0.    0.   16.5   0.  -10.    0. ]
+ [  0.    0.   -5.    0.    0.   10.    0.   -2. ]
+ [  0.    0.    0.  -20.  -10.    0.   45.  -10. ]
+ [  0.    0.    0.    0.    0.   -2.  -10.   17.5]]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-checkdiag1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-checkdiag1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-checkdiag1-output-2.png" width="781" height="283" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-checkdiag1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Plots of modal mass, stiffness and prop. damping matrices. Off-diagonals are of the order of machine precision.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Having confirmed we have diagonal modal matrices, we compute the FRF matrix using <a href="#eq-mobModal" class="quarto-xref">Equation&nbsp;14</a>. Note that the modal summation avoids having to compute a matrix inverse. The inverse of a diagonal matrix is just the inverse of its diagonal elements. We also compute the FRF directly, which does require a matrix inversion. <a href="#fig-propdampfrf" class="quarto-xref">Figure&nbsp;3</a> below compares the two FRFs. As expected, they’re identical.</p>
+<div id="cell-fig-propdampfrf" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution cont.:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Y_C_modal_prop <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>], <span class="dv">8</span>, <span class="dv">8</span>), dtype<span class="op">=</span><span class="bu">complex</span>) <span class="co"># Allocate space</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Loop over frequency and compute FRF using modal summation</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    Y_C_modal_prop[fi, :, :] <span class="op">=</span> Φ <span class="op">@</span> np.linalg.inv((np.diag(λ) <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span><span class="op">*</span>np.eye(M_C.shape[<span class="dv">0</span>]) <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span>ω[fi]<span class="op">*</span>ΦCΦ)) <span class="op">@</span> Φ.T</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Matrix inverse term is diagonal (up to machine precision), can be replaced with scalar inversion of the diagonal:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    Y_C_modal_prop[fi, :, :] <span class="op">=</span> Φ <span class="op">@</span> np.diag(<span class="dv">1</span><span class="op">/</span>(λ <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span>ω[fi]<span class="op">*</span>np.diag(ΦCΦ))) <span class="op">@</span> Φ.T</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct solution:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>Y_C_dir_prop <span class="op">=</span> np.linalg.inv(K_C <span class="op">+</span><span class="ot">1j</span><span class="op">*</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω, C_C_prop) <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M_C))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>ax.semilogy(f, np.<span class="bu">abs</span>(Y_C_dir_prop[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>]),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>ax.semilogy(f, np.<span class="bu">abs</span>(Y_C_modal_prop[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>]),linestyle<span class="op">=</span><span class="st">'dashed'</span>,label<span class="op">=</span><span class="st">'Modal'</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-propdampfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-propdampfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-propdampfrf-output-1.png" width="599" height="429" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-propdampfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Displacement FRF obtained by modal summation with proportional damping and directly by matrix inversion.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>As well as being more computationally efficient, another advantage of the modal summation approach is that we can choose to inspect the mode shapes directly to visuallise the deformation of the structure at each of the resonant frequencies. This can be quite useful, for example when choosing where to place a structural connection or modification. In <a href="#fig-propdampmodeshapes" class="quarto-xref">Figure&nbsp;4</a> below we plot each mode shape of the mass spring system as a row of quivers. From this we can see for example, that at the first mode at 11 Hz, ass the masses are moving in same direction. Whereas for the second mode at 20 Hz, DoFs 3 and 6 are moving out of phase with the remaining masses. We can also see that mode 7 at 94 Hz is localised to DoF 8.</p>
+<div id="cell-fig-propdampmodeshapes" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise mode shapes</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sort_index <span class="op">=</span> np.argsort(λ) <span class="co"># Get ordered index</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>λ_sort <span class="op">=</span> λ[sort_index] <span class="co"># Sort natural freqs</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>Φ_sort <span class="op">=</span> Φ[:,sort_index] <span class="co"># Sort mode shapes</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>X,Y <span class="op">=</span> np.meshgrid(<span class="bu">range</span>(<span class="dv">8</span>),<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>plt.quiver(Y,X,np.zeros_like(Φ_sort[:,:]), Φ_sort[:,:], Φ_sort[:,:]<span class="op">/</span>np.<span class="bu">abs</span>(Φ_sort[:,:]) ,scale<span class="op">=</span><span class="dv">10</span>, width<span class="op">=</span><span class="fl">0.003</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'DoF index'</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Mode frequency'</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>plt.yticks(<span class="bu">range</span>(<span class="dv">8</span>),np.<span class="bu">round</span>(np.sqrt(np.real(λ_sort))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi),<span class="dv">2</span>))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="fl">0.5</span>, <span class="dv">8</span>])</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-propdampmodeshapes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-propdampmodeshapes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-propdampmodeshapes-output-1.png" width="606" height="429" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-propdampmodeshapes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Mode shape visualisation for mass spring system in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a>. The x-axis denotes the DoF index, whist y-axis indicates the mode number. The arrows show the relative motion of the masses.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="non-proportional-damping" class="level3">
+<h3 class="anchored" data-anchor-id="non-proportional-damping">Non-proportional damping</h3>
+<p>Now lets move onto non-proportional damping. For this case we simply define an arbitary damping matrix, though with the same connectivity as the stiffness matrix. The corresponding FRF matrix can be obtained directly by matrix inversion as before. The modal summation approach, however, falters. We see in the modal damping plot in <a href="#fig-checkdiag2" class="quarto-xref">Figure&nbsp;5</a>, that the result is non-diagonal; there is coupling between the modes due to the non-proportional damping.</p>
+<div id="cell-fig-checkdiag2" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Non-proportional damping</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>c1, c2, c3, c4, c5 <span class="op">=</span> <span class="dv">2</span>, <span class="fl">3.1</span>, <span class="fl">1.7</span>, <span class="fl">0.5</span>, <span class="fl">1.5</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>c6, c7, c8, c9, c10, c11 <span class="op">=</span> <span class="fl">3.5</span>, <span class="fl">5.2</span>, <span class="dv">2</span>, <span class="fl">2.2</span>, <span class="dv">2</span>, <span class="fl">1.5</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>C_C <span class="op">=</span> np.array([[c1<span class="op">+</span>c2<span class="op">+</span>c5, <span class="op">-</span>c2,        <span class="dv">0</span>,     <span class="dv">0</span>,    <span class="op">-</span>c5,     <span class="dv">0</span>,     <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                [<span class="op">-</span>c2,       c2<span class="op">+</span>c3<span class="op">+</span>c4, <span class="op">-</span>c3,   <span class="op">-</span>c4,    <span class="dv">0</span>,      <span class="dv">0</span>,     <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,        <span class="op">-</span>c3,        c3<span class="op">+</span>c6, <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="op">-</span>c6,    <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,        <span class="op">-</span>c4,        <span class="dv">0</span>,     c4<span class="op">+</span>c7, <span class="dv">0</span>,      <span class="dv">0</span>,    <span class="op">-</span>c7,         <span class="dv">0</span>],</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                [<span class="op">-</span>c5,       <span class="dv">0</span>,         <span class="dv">0</span>,     <span class="dv">0</span>,     c5<span class="op">+</span>c8,  <span class="dv">0</span>,    <span class="op">-</span>c8,         <span class="dv">0</span>],</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,        <span class="op">-</span>c6,    <span class="dv">0</span>,     <span class="dv">0</span>,      c6<span class="op">+</span>c9, <span class="dv">0</span>,         <span class="op">-</span>c9],</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,         <span class="dv">0</span>,    <span class="op">-</span>c7,   <span class="op">-</span>c8,     <span class="dv">0</span>,     c7<span class="op">+</span>c8<span class="op">+</span>c10, <span class="op">-</span>c10],</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,         <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="op">-</span>c9,   <span class="op">-</span>c10,        c9<span class="op">+</span>c10<span class="op">+</span>c11]])<span class="op">*</span><span class="fl">1e1</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution:</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>λ, Φ_ <span class="op">=</span> sp.linalg.eig(K_C, M_C) <span class="co"># Get mode shapes Φ_ and natural frequencies λ=ω_n**2</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>Φ <span class="op">=</span> Φ_<span class="op">@</span>np.diag(<span class="dv">1</span><span class="op">/</span>np.sqrt(np.diag((Φ_.T<span class="op">@</span>M_C<span class="op">@</span>Φ_)))) <span class="co"># Mass normalise mode shapes</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>ΦCΦ <span class="op">=</span> Φ.T <span class="op">@</span> C_C <span class="op">@</span> Φ <span class="co"># Check modal damping matrix is diagonal</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>figs, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">3</span>,figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">30</span>))</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].matshow(np.log(np.<span class="bu">abs</span>(Φ.T <span class="op">@</span> M_C <span class="op">@</span> Φ)))</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Mass matrix'</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].matshow(np.log(np.<span class="bu">abs</span>(Φ.T <span class="op">@</span> K_C <span class="op">@</span> Φ)))</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Stiffness matrix'</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].matshow(np.log(np.<span class="bu">abs</span>(ΦCΦ)))</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlabel(<span class="st">'Prop. damping matrix'</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-checkdiag2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-checkdiag2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-checkdiag2-output-1.png" width="781" height="283" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-checkdiag2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Plots of modal mass, stiffness and non-prop. damping matrices. Off-diagonal mass and stiffness terms the same as before. The off-diagonal damping terms are no longer close to zero.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>If we consdier the diagonal elements of the damping matrix alone, and compute the FRF by modal summation as before, we see in <a href="#fig-nonpropdampfrf" class="quarto-xref">Figure&nbsp;6</a> a noticeable deviation from that of the direct FRF.</p>
+<div id="cell-fig-nonpropdampfrf" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution cont.:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Y_C_modal_nonprop <span class="op">=</span> np.zeros_like(Y_C_modal_prop) <span class="co"># Allocate space</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Loop over frequency and compute FRF using modal summation</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    Y_C_modal_nonprop[fi, :, :] <span class="op">=</span> Φ <span class="op">@</span> np.diag(<span class="dv">1</span><span class="op">/</span>(λ <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span>ω[fi]<span class="op">*</span>np.diag(ΦCΦ))) <span class="op">@</span> Φ.T</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The above solution give an incorrect FRF - ΦCΦ is not diagonal and so off-diagonals are missing. </span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The following solution gives the exact solution, </span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Y_C_modal_prop[fi, :, :] = Φ @ np.linalg.inv((np.diag(λ) - ω[fi]**2*np.eye(M_C.shape[0]) + 1j*ω[fi]*ΦCΦ)) @ Φ.T</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># but requires matrix inverse, so no benifit over direct solution.</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct solution:</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>Y_C_dir_prop <span class="op">=</span> np.linalg.inv(K_C <span class="op">+</span><span class="ot">1j</span><span class="op">*</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω, C_C) <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M_C))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>ax.semilogy(f, np.<span class="bu">abs</span>(Y_C_dir_prop[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>]),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>ax.semilogy(f, np.<span class="bu">abs</span>(Y_C_modal_nonprop[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>]),linestyle<span class="op">=</span><span class="st">'dashed'</span>,label<span class="op">=</span><span class="st">'Modal'</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-nonpropdampfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nonpropdampfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-nonpropdampfrf-output-1.png" width="599" height="429" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nonpropdampfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Displacement FRF obtained by modal summation with non-proportional damping and directly by matrix inversion.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that if we replaced the diagonal inverse with a full matrix inverse and retain the full damping matrix, we obtain the exact same result as the direct method, as we have included the cross coupling in the modal damping matrix. Though of course we loose the efficiency we get by avoiding a full matrix inverse.</p>
+</section>
+<section id="structural-damping-1" class="level3">
+<h3 class="anchored" data-anchor-id="structural-damping-1">Structural damping</h3>
+<p>Lets now consider structural damping. For structural damping we define the so-called *structural loss factor$ <span class="math inline">\(\eta\)</span> (typically <span class="math inline">\(0.01\leq \eta \leq 0.1\)</span>). For the direct method, we use the structural loss factor to compute a complex stiffness matrix, before proceeding as normal. Note that we no longer have a damping matrix to deal with, just mass and (complex) stiffness. For the modal approach we compute the mode shapes and natural frequencies using the mass and initial stiffness matrices. Then, in the modal summation we apply the structural damping directly to the squared natural frequencies, <span class="math inline">\(\mathbf{\Lambda} \rightarrow \mathbf{\Lambda} (1+ i\eta)\)</span>. Alternatively, we could compute the natural frequencies and mode shapes using the complex stiffness matrix. In this case the resulting natural frequencies will be complex, already having the loss factor term included.</p>
+<div id="cell-fig-structdampfrf" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Structural damping</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>K_Cη<span class="op">=</span> K_C<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η) <span class="co"># Complex stiffness matrix including structural damping</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution using real stiffness (i.e. undamped):</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>λ, Φ_ <span class="op">=</span> sp.linalg.eig(K_C, M_C) <span class="co"># Get mode shapes Φ_ and natural frequencies λ=ω_n**2</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>Φ <span class="op">=</span> Φ_<span class="op">@</span>np.diag(<span class="dv">1</span><span class="op">/</span>np.sqrt(np.diag((Φ_.T<span class="op">@</span>M_C<span class="op">@</span>Φ_)))) <span class="co"># Mass normalise mode shapes</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>Y_C_modal_struct <span class="op">=</span> np.zeros_like(Y_C_modal_prop) <span class="co"># Allocate space</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Loop over frequency and compute FRF using modal summation</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    Y_C_modal_struct[fi, :, :] <span class="op">=</span> Φ <span class="op">@</span> np.diag(<span class="dv">1</span><span class="op">/</span>(λ<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η) <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span>)) <span class="op">@</span> Φ.T</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># We would get the same result if the complex stiffness K_Cη was used to solve for complex eigenvalues, λη:</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Y_C_modal_struct[fi, :, :] = Φ @ np.diag(1/(λη - ω[fi]**2)) @ Φ.T</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct solution:</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>Y_C_dir_struct <span class="op">=</span> np.linalg.inv(K_Cη <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M_C))</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>ax.semilogy(f, np.<span class="bu">abs</span>(Y_C_dir_prop[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>]),color<span class="op">=</span><span class="st">'gray'</span>,label<span class="op">=</span><span class="st">'Prop. damping'</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>ax.semilogy(f, np.<span class="bu">abs</span>(Y_C_dir_struct[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>]),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>ax.semilogy(f, np.<span class="bu">abs</span>(Y_C_modal_struct[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>]),linestyle<span class="op">=</span><span class="st">'dashed'</span>,label<span class="op">=</span><span class="st">'Modal'</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-structdampfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-structdampfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-structdampfrf-output-1.png" width="599" height="429" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-structdampfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Displacement FRF obtained by modal summation with structural damping and directly by matrix inversion.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>As seen in <a href="#fig-structdampfrf" class="quarto-xref">Figure&nbsp;7</a> below, the direct and modal solutions yield identical FRFs. Also shown in the figure, is the FRF obtained using the proportional damping, as in <a href="#fig-propdampfrf" class="quarto-xref">Figure&nbsp;3</a>. The difference observed between the structural and proportional damping is due to the factor of <span class="math inline">\(i\omega\)</span> that accompanies the proportional damping, leading to great levels of damping as frequency increases. Structural damping, beging proportional to stiffness, is constant with frequency.</p>
+</section>
+</section>
+<section id="finite-element-beam" class="level2">
+<h2 class="anchored" data-anchor-id="finite-element-beam">Finite element beam</h2>
+<p>In this section we consider the FRFs of a ‘continuous’ system, in particular a beam. We again compare the FRFs obtained direct matrix inversion, and those by modal summation. We do this for both proportional and structural damping. In addition to this, we investigate the effect of <em>modal truncation</em>, i.e.&nbsp;discarding the contribution of modes occuring above the maximum frequency of interest (here taken to be 1 kHz).</p>
+<div id="fig-beamFE" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beamFE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="beamFE.png" class="img-fluid figure-img" width="600">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beamFE-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Finite element beam model, including translational and rotational DoFs.
+</figcaption>
+</figure>
+</div>
+<section id="fe-mass-and-stiffness-matrices" class="level3">
+<h3 class="anchored" data-anchor-id="fe-mass-and-stiffness-matrices">FE mass and stiffness matrices</h3>
+<p>To model our continuous beam, we use the Finite Element method. A beam of length <span class="math inline">\(L\)</span> is discretised into <span class="math inline">\(N_e\)</span> short sections (termed <em>finite elements</em>), each of which is characterised by four DoFs, a translation and rotation at each end. These individual finite elements are described by a pair of matrices that describe, respectively, their discretised inertial and elastic properties, <span class="math display">\[
+m_e = \frac{\rho A L}{420}\left[\begin{array}{cccc}
+156 &amp; 22L &amp; 54 &amp; -13L\\
+22L &amp; 4L^2 &amp; 13L &amp; -3L^2\\
+54 &amp; 13L&amp;156 &amp; -22L \\
+-13L &amp; -3L^2 &amp; -22L &amp; 4L^2
+\end{array}\right] \quad \quad
+k_e = \frac{EI}{L^3}\left[\begin{array}{cccc}
+12 &amp; 6L &amp; -12 &amp; 6L \\
+6L &amp; 4L^2 &amp; -6L &amp; 2L^2 \\
+-12 &amp; -6L &amp; 12 &amp; -6L \\
+6L &amp; 2L^2 &amp; -6L &amp; 4L^2
+\end{array}\right]
+\]</span> To model the complete beam (of length <span class="math inline">\(L\)</span>), <span class="math inline">\(N_e\)</span> element matrices are assembled by summing together the overlapping DoFs of neighbouring elements (e.g.&nbsp;the translational stiffness on the right hand side to element <span class="math inline">\(n\)</span> is added to the translational stiffness on the left hand side of element <span class="math inline">\(n+1\)</span>, etc.). For berevity, we ommit further technical details here; the interested reader is referred to the excellent introductory book by <span class="citation" data-cites="petyt2010introduction">Petyt (<a href="#ref-petyt2010introduction" role="doc-biblioref">2010</a>)</span>, from which I have based the FE code below.</p>
+<div id="cell-fig-beammk" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> beamMK(dim, matProp, numE<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This function takes as input the dimensions and materials properties of the beam, </span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># and outputs the global mass and stiffness matrices. </span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    E <span class="op">=</span> matProp[<span class="dv">1</span>] <span class="co"># Young's modulus</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    ρ <span class="op">=</span> matProp[<span class="dv">0</span>] <span class="co"># Density</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> dim[<span class="dv">0</span>]<span class="op">/</span>(numE) <span class="co"># Beam length</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> dim[<span class="dv">2</span>]<span class="op">*</span>dim[<span class="dv">1</span>]  <span class="co"># Cross-sectional area</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    I_ <span class="op">=</span> dim[<span class="dv">1</span>] <span class="op">*</span> dim[<span class="dv">2</span>]<span class="op">**</span><span class="dv">3</span><span class="op">/</span><span class="dv">12</span>  <span class="co"># Moment of inertia</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Allocate space:</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    M <span class="op">=</span> np.zeros((<span class="dv">2</span><span class="op">*</span>numE<span class="op">+</span><span class="dv">2</span>, <span class="dv">2</span><span class="op">*</span>numE<span class="op">+</span><span class="dv">2</span>))</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> np.zeros((<span class="dv">2</span><span class="op">*</span>numE<span class="op">+</span><span class="dv">2</span>, <span class="dv">2</span><span class="op">*</span>numE<span class="op">+</span><span class="dv">2</span>))</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Element mass matrix:</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    m_e <span class="op">=</span> ρ<span class="op">*</span>A<span class="op">*</span>L<span class="op">/</span><span class="dv">420</span> <span class="op">*</span> np.array([[<span class="dv">156</span>,    <span class="dv">22</span><span class="op">*</span>L,    <span class="dv">54</span>,   <span class="op">-</span><span class="dv">13</span><span class="op">*</span>L],</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                                         [<span class="dv">22</span><span class="op">*</span>L,   <span class="dv">4</span><span class="op">*</span>L<span class="op">**</span><span class="dv">2</span>,  <span class="dv">13</span><span class="op">*</span>L, <span class="op">-</span><span class="dv">3</span><span class="op">*</span>L<span class="op">**</span><span class="dv">2</span>],</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                                         [<span class="dv">54</span>,     <span class="dv">13</span><span class="op">*</span>L,    <span class="dv">156</span>,  <span class="op">-</span><span class="dv">22</span><span class="op">*</span>L],</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                                         [<span class="op">-</span><span class="dv">13</span><span class="op">*</span>L, <span class="op">-</span><span class="dv">3</span><span class="op">*</span>L<span class="op">**</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">22</span><span class="op">*</span>L,  <span class="dv">4</span><span class="op">*</span>L<span class="op">**</span><span class="dv">2</span>]])</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Element stiffness matrix:</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    k_e <span class="op">=</span> E<span class="op">*</span>I_<span class="op">/</span>(L<span class="op">**</span><span class="dv">3</span>) <span class="op">*</span> np.array([[<span class="dv">12</span>,   <span class="dv">6</span><span class="op">*</span>L,     <span class="op">-</span><span class="dv">12</span>,  <span class="dv">6</span><span class="op">*</span>L],</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>                                  [<span class="dv">6</span><span class="op">*</span>L,  <span class="dv">4</span><span class="op">*</span>L<span class="op">**</span><span class="dv">2</span>,  <span class="op">-</span><span class="dv">6</span><span class="op">*</span>L, <span class="dv">2</span><span class="op">*</span>L<span class="op">**</span><span class="dv">2</span>],</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>                                  [<span class="op">-</span><span class="dv">12</span>, <span class="op">-</span><span class="dv">6</span><span class="op">*</span>L,      <span class="dv">12</span>, <span class="op">-</span><span class="dv">6</span><span class="op">*</span>L],</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>                                  [<span class="dv">6</span><span class="op">*</span>L,  <span class="dv">2</span><span class="op">*</span>L<span class="op">**</span><span class="dv">2</span>,  <span class="op">-</span><span class="dv">6</span><span class="op">*</span>L, <span class="dv">4</span><span class="op">*</span>L<span class="op">**</span><span class="dv">2</span>]])</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Assemble global mass and stiffness matrices</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> elm <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, numE<span class="op">*</span><span class="dv">2</span><span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>):</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        M[elm:elm<span class="op">+</span><span class="dv">4</span>, elm:elm<span class="op">+</span><span class="dv">4</span>] <span class="op">=</span> M[elm:elm<span class="op">+</span><span class="dv">4</span>, elm:elm<span class="op">+</span><span class="dv">4</span>] <span class="op">+</span> m_e</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        K[elm:elm<span class="op">+</span><span class="dv">4</span>, elm:elm<span class="op">+</span><span class="dv">4</span>] <span class="op">=</span> K[elm:elm<span class="op">+</span><span class="dv">4</span>, elm:elm<span class="op">+</span><span class="dv">4</span>] <span class="op">+</span> k_e</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define clamped left boundary by removing left most translational and rotational DoFs:</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    M <span class="op">=</span> np.delete(M, (<span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">0</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    M <span class="op">=</span> np.delete(M, (<span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">1</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> np.delete(K, (<span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">0</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> np.delete(K, (<span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">1</span>)</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> M, K</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Define beam properties</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> <span class="dv">1</span> <span class="co"># Length</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> <span class="fl">0.05</span> <span class="co"># Width</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> <span class="fl">0.01</span> <span class="co"># Height</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>E <span class="op">=</span> <span class="fl">200e9</span> <span class="co"># Young's modulus</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>ρ <span class="op">=</span> <span class="dv">7000</span> <span class="co"># Density</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Get mass and stiffness matrices for beam with 50 elements:</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>M, K <span class="op">=</span> beamMK([L, W, H], [ρ, E], numE<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot structure of global mass and stiffness matrices</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>figs, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>,figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">20</span>))</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].matshow(np.log(np.<span class="bu">abs</span>(M)))</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Mass matrix'</span>)</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].matshow(np.log(np.<span class="bu">abs</span>(K)))</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Stiffness matrix'</span>)</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-beammk" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beammk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-beammk-output-1.png" width="789" height="403" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beammk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Structure of the global mass and stiffness matrices for a beam. Both matrices are sparse since only neighbouring elements are coupled to one another.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In <a href="#fig-beammk" class="quarto-xref">Figure&nbsp;9</a> we plot the structure of the global mass and stiffness matrices. We see that these matrices are largely sparse. This is typical of a finite element mass/stiffness matrix, as only neightbouring elements are coupled to one another.</p>
+</section>
+<section id="frf-functions" class="level3">
+<h3 class="anchored" data-anchor-id="frf-functions">FRF functions</h3>
+<p>Now that we have a means of building its mass and stiffness matrices, we are able to compute the beams FRF matrix. In the code below we define two FRF functions; one using the direct matrix inversion method, and the other a modal summation.</p>
+<div id="aa2ccc8b" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> directFRF(M,K,C,f):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This function computes the FRF matrix directly by matrix inversion over the frequency range of f.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f <span class="co"># Radian frequency</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.linalg.inv(K <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>, ω, C) <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> modalFRF(M,K,C,f, nm<span class="op">=-</span><span class="dv">1</span>):</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This function computes the FRF by modal summation (with nm modes) over the frequency range of f.</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f <span class="co"># Radian frequency</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    λ, Φ_ <span class="op">=</span> sp.linalg.eig(K, M) <span class="co"># Get mode shapes Φ_ and natural frequencies λ=ω_n**2</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    sort_index <span class="op">=</span> np.argsort(np.real(λ)) <span class="co"># Get ordered index</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    λ <span class="op">=</span> λ[sort_index] <span class="co"># Sort natural freqs</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    Φ_ <span class="op">=</span> Φ_[:,sort_index] <span class="co"># Sort mode shapes</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    Φ <span class="op">=</span> Φ_<span class="op">@</span>np.diag(<span class="dv">1</span><span class="op">/</span>np.sqrt(np.diag((Φ_.T <span class="op">@</span> M <span class="op">@</span> Φ_)))) <span class="co"># Mass normalise mode shapes</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    ΦCΦ <span class="op">=</span> Φ.T <span class="op">@</span> C <span class="op">@</span> Φ <span class="co"># Check modal damping matrix is diagonal</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    Y <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>],M.shape[<span class="dv">0</span>],M.shape[<span class="dv">0</span>]),dtype<span class="op">=</span><span class="bu">complex</span>) <span class="co"># Allocate space</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Loop over frequency and compute FRF using modal summation</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        Y[fi, :, :] <span class="op">=</span> Φ[:,<span class="dv">0</span>:nm] <span class="op">@</span> np.diag(<span class="dv">1</span><span class="op">/</span>(λ[<span class="dv">0</span>:nm] <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span>ω[fi]<span class="op">*</span>np.diag(ΦCΦ[<span class="dv">0</span>:nm,<span class="dv">0</span>:nm]))) <span class="op">@</span> Φ[:,<span class="dv">0</span>:nm].T</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Y, λ, Φ </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="proportional-damping-2" class="level3">
+<h3 class="anchored" data-anchor-id="proportional-damping-2">Proportional damping</h3>
+<p>We first consider the case of proportional damping. The FRFs are computed using both direct and modal approaches over the frequdncy range 1-1000 Hz. For the modal summation, we include <em>all</em> 98 modes (based on the 98 DoFs that define the clamped beam), 91 of which are above our max frequency of interest (1 kHz); the maximum modal frequency included is 36.7 kHz. Shown in <a href="#fig-modalcount" class="quarto-xref">Figure&nbsp;10</a> is the relation between the modal number and corresponding frequency.</p>
+<div id="cell-fig-modalcount" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> <span class="fl">0.00001</span><span class="op">*</span>K <span class="op">+</span> <span class="dv">1</span><span class="op">*</span>M <span class="co"># Proportional damping matrix</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">1</span>,<span class="dv">1000</span>,<span class="dv">1000</span>) <span class="co"># Frequency vector</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>Y_direct <span class="op">=</span> directFRF(M,K,C,f) <span class="co"># FRF by direct method</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>Y_modal, λ, Φ <span class="op">=</span> modalFRF(M,K,C,f) <span class="co"># FRF by modal summation</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Number of DoFs: '</span> <span class="op">+</span> <span class="bu">str</span>(M.shape[<span class="dv">0</span>]))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Max resonant frequency: '</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">round</span>(np.sqrt(np.real(λ[<span class="op">-</span><span class="dv">1</span>]))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi))))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots()</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>axs.semilogy(<span class="bu">range</span>(<span class="dv">0</span>,λ.shape[<span class="dv">0</span>]), np.sqrt(np.real(λ))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>axs.set_xlabel(<span class="st">'Mode number'</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>axs.set_ylabel(<span class="st">'Modal frequency (Hz)'</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of DoFs: 100
+Max resonant frequency: 367621</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-modalcount" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modalcount-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-modalcount-output-2.png" width="591" height="429" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modalcount-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Relation betwee the modal number and corresponding frequency for the finite element beam.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Shown in <a href="#fig-propfrf" class="quarto-xref">Figure&nbsp;11</a> are the translational and rotational point FRFs for the tip of the clamped beam (DoFs <span class="math inline">\(N-1\)</span> and <span class="math inline">\(N\)</span>) obtained by direct and modal methods.</p>
+<div id="cell-fig-propfrf" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'Modal'</span>,linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogy(f, np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]),linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Admittance (1/Nm)'</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].legend()</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-propfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-propfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-propfrf-output-1.png" width="661" height="470" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-propfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Translational (left) and rotational (right) point FRFs at the end of the clamped beam obtained using direct and modal summation approaches with proportional damping.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We see from <a href="#fig-propfrf" class="quarto-xref">Figure&nbsp;11</a> that the direct and modal methods give near identical FRFs.</p>
+</section>
+<section id="structural-damping-2" class="level3">
+<h3 class="anchored" data-anchor-id="structural-damping-2">Structural damping</h3>
+<p>We now consider structural damping. We adopt the same configuration as above, execpt the the proportional damping matrix is now set to zero, and a complex stiffness matrix defined using the structural loss factor <span class="math inline">\(\eta\)</span>.</p>
+<div id="cell-fig-structfrf" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>η <span class="op">=</span> <span class="fl">0.02</span> <span class="co"># Structural loss factor</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> np.zeros_like(K) <span class="co"># Proportional damping matrix</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Kη <span class="op">=</span> K<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η) <span class="co"># Complex stiffness matrix</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>Y_direct <span class="op">=</span> directFRF(M,Kη,C,f) <span class="co"># FRF by direct method</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>Y_modal, λ, Φ <span class="op">=</span> modalFRF(M,Kη,C,f) <span class="co"># FRF by modal summation</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'Modal'</span>,linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogy(f, np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]),linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Admittance (1/Nm)'</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].legend()</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-structfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-structfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-structfrf-output-1.png" width="661" height="470" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-structfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Translational (left) and rotational (right) point FRFs at the end of the clamped beam obtained using direct and modal summation approaches with structural damping.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Again, we see from <a href="#fig-structfrf" class="quarto-xref">Figure&nbsp;12</a> that the direct and modal approaches yield the same FRFs.</p>
+</section>
+<section id="truncation-error" class="level3">
+<h3 class="anchored" data-anchor-id="truncation-error">Truncation error</h3>
+<p>We have seen from the above sections, that the modal summation approach is able to provide an FRF in excellent agreement with the direct matrix inversion. So far, our modal summation has been ‘complete’, i.e.&nbsp;we have included <em>all</em> modes in our summation. It is often convenient (for computaitonal efficiency) to reduce the number of mode required to be esimtated when solving the eigenproblem, i.e.&nbsp;truncating the modal summation to some reduced order <span class="math inline">\(N_t &lt; N\)</span>. The argument is that the modes occuring outside of the bandwidth of interest likely contribute a negiigable amount to the FRF within the bandwidth. A typical rule of thumb is to include modes up to twice the highest frequency of interest (for our example this would correspond to around 2 kHz).</p>
+<p>Shown in <a href="#fig-truncfrf" class="quarto-xref">Figure&nbsp;13</a> are the translational and rotational FRFs obtained by modal summation with a truncation of 7, 14 and 28 modes, compared against the direct FRF. These modal truncations correspond to maximum modal frequencies of 1 kHz, 4.4 kHz, and 18.4 kHz, respectively. We see that with only 7 modes, both translational and rotational FRFs provide poor FRF esimtates, particularly around anti-resonances (where out of band modes contribute the most). With 14 modes, the translatonal FRFs fall into agreement, whilst the rotational FRF esitmates remain poor even with 28 modes included.</p>
+<div id="cell-fig-truncfrf" class="cell" data-execution_count="13">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Y_modal_7 <span class="op">=</span> modalFRF(M,Kη,C,f,<span class="dv">7</span>)[<span class="dv">0</span>]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>Y_modal_14 <span class="op">=</span> modalFRF(M,Kη,C,f,<span class="dv">14</span>)[<span class="dv">0</span>]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>Y_modal_28 <span class="op">=</span> modalFRF(M,Kη,C,f,<span class="dv">28</span>)[<span class="dv">0</span>]</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal_7[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'N=7: f_max='</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">round</span>(np.sqrt(np.real(λ[<span class="dv">6</span>]))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi),<span class="dv">1</span>)),linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal_14[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'N=14: f_max='</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">round</span>(np.sqrt(np.real(λ[<span class="dv">13</span>]))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi),<span class="dv">1</span>)),linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal_28[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'N=28: f_max='</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">round</span>(np.sqrt(np.real(λ[<span class="dv">27</span>]))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi),<span class="dv">1</span>)),linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogy(f, np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal_7[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]),linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal_14[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]),linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal_28[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]),linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Admittance (1/Nm)'</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].legend()</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-truncfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-truncfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-truncfrf-output-1.png" width="661" height="470" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-truncfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: Effect of modal truncation (7, 14 and 28 modes) on the estimation of translational (left) and rotational (right) FRFs.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>To more clearly illustrate the error/convergence of the modal FRF, we compute an error for each level of truncation. For simplicity we compute the error considering the tip FRFs only. The total error is obtained considering both translational and rotational FRFs, i.e.&nbsp;using the FRF matrix, <span class="math display">\[
+\mathbf{Y} = \left[\begin{array}{cc} Y_{zz} &amp; Y_{z\alpha} \\ Y_{\alpha z} &amp; Y_{\alpha \alpha}
+\end{array}\right]
+\]</span> We also compute the errors based on translational <span class="math inline">\(Y_{zz}\)</span> and rotational <span class="math inline">\(Y_{\alpha \alpha}\)</span> FRFs indivudally. The results are presented in left of <a href="#fig-truncfrf2" class="quarto-xref">Figure&nbsp;14</a>. We se that the translational FRF converges quickly, and the total error is dominated by the rotational components.</p>
+<div id="cell-fig-truncfrf2" class="cell" data-execution_count="14">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>errorY <span class="op">=</span> []</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>errorY_z <span class="op">=</span> []</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>errorY_α <span class="op">=</span> []</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>errorZ <span class="op">=</span> []</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>errorZ_z <span class="op">=</span> []</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>errorZ_α <span class="op">=</span> []</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>truncRange <span class="op">=</span> <span class="bu">range</span>(<span class="dv">7</span>,<span class="dv">100</span>,<span class="dv">1</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>Y_modal, λ, Φ <span class="op">=</span> modalFRF(M,Kη,C,f)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>Z_direct <span class="op">=</span> np.linalg.inv(Y_direct[:,<span class="op">-</span><span class="dv">2</span>:,<span class="op">-</span><span class="dv">2</span>:])</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nm <span class="kw">in</span> truncRange:</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    Y_modal_tunc <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>],M.shape[<span class="dv">0</span>],M.shape[<span class="dv">0</span>]),dtype<span class="op">=</span><span class="bu">complex</span>) <span class="co"># Allocate space</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    Z_modal_tunc <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>],<span class="dv">2</span>,<span class="dv">2</span>),dtype<span class="op">=</span><span class="bu">complex</span>) <span class="co"># Allocate space</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Loop over frequency and compute FRF using modal summation</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        Y_modal_tunc[fi, :, :] <span class="op">=</span> Φ[:,<span class="dv">0</span>:nm] <span class="op">@</span> np.diag(<span class="dv">1</span><span class="op">/</span>(λ[<span class="dv">0</span>:nm] <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span>)) <span class="op">@</span> Φ[:,<span class="dv">0</span>:nm].T</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        Z_modal_tunc[fi,:,:] <span class="op">=</span> np.linalg.inv(Y_modal_tunc[fi, <span class="op">-</span><span class="dv">2</span>:, <span class="op">-</span><span class="dv">2</span>:])</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    errorY.append((np.<span class="bu">sum</span>((np.<span class="bu">abs</span>(Y_modal_tunc[:,<span class="op">-</span><span class="dv">2</span>:,<span class="op">-</span><span class="dv">2</span>:]<span class="op">-</span>Y_direct[:,<span class="op">-</span><span class="dv">2</span>:,<span class="op">-</span><span class="dv">2</span>:])<span class="op">/</span>np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">2</span>:,<span class="op">-</span><span class="dv">2</span>:])))))</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    errorY_z.append((np.<span class="bu">sum</span>((np.<span class="bu">abs</span>(Y_modal_tunc[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]<span class="op">-</span>Y_direct[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]))<span class="op">/</span>np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]))))</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    errorY_α.append((np.<span class="bu">sum</span>((np.<span class="bu">abs</span>(Y_modal_tunc[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span>Y_direct[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]))<span class="op">/</span>np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]))))</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    errorZ.append((np.<span class="bu">sum</span>((np.<span class="bu">abs</span>(Z_modal_tunc<span class="op">-</span>Z_direct)<span class="op">/</span>np.<span class="bu">abs</span>(Z_direct)))))</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    errorZ_z.append((np.<span class="bu">sum</span>((np.<span class="bu">abs</span>(Z_modal_tunc[:,<span class="dv">0</span>,<span class="dv">0</span>]<span class="op">-</span>Z_direct[:,<span class="dv">0</span>,<span class="dv">0</span>]))<span class="op">/</span>np.<span class="bu">abs</span>(Z_direct[:,<span class="dv">0</span>,<span class="dv">0</span>]))))</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    errorZ_α.append((np.<span class="bu">sum</span>((np.<span class="bu">abs</span>(Z_modal_tunc[:,<span class="dv">1</span>,<span class="dv">1</span>]<span class="op">-</span>Z_direct[:,<span class="dv">1</span>,<span class="dv">1</span>]))<span class="op">/</span>np.<span class="bu">abs</span>(Z_direct[:,<span class="dv">1</span>,<span class="dv">1</span>]))))</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogx(np.sqrt(λ[truncRange])<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi), errorY, label<span class="op">=</span><span class="st">'Total error'</span>)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogx(np.sqrt(λ[truncRange])<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi), errorY_z, label<span class="op">=</span><span class="st">'Trans. error'</span>)</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogx(np.sqrt(λ[truncRange])<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi), errorY_α, label <span class="op">=</span> <span class="st">'Rot. error'</span>)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Max f_N in modal summation (Hz)'</span>)</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Total error in Y'</span>)</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].legend()</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogx(np.sqrt(λ[truncRange])<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi), errorZ, label<span class="op">=</span><span class="st">'Total error'</span>)</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogx(np.sqrt(λ[truncRange])<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi), errorZ_z, label<span class="op">=</span><span class="st">'Trans. error'</span>)</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].semilogx(np.sqrt(λ[truncRange])<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi), errorZ_α, label <span class="op">=</span> <span class="st">'Rot. error'</span>)</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Total error in Z'</span>)</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Max f_N in modal summation (Hz)'</span>)</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a><span class="co"># axs[1].legend()</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-truncfrf2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-truncfrf2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-truncfrf2-output-1.png" width="662" height="468" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-truncfrf2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: Effect of modal truncation (7, 14 and 28 modes) on the estimation of translational (left) and rotational (right) FRFs.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Recall that we are often interested in the inverse of the FRF matrix, for example when substructuring two or more components together. On the right of <a href="#fig-truncfrf2" class="quarto-xref">Figure&nbsp;14</a> we show the total, translational and rotational errors for the inverse of the tip FRF matrix <span class="math inline">\(\mathbf{Z}=\mathbf{Y}^{-1}\)</span>. We see that the truncation error has increased by around an order of magnitude, and that now the translational and rotational components have a relatively similar levels of error. This result is to be expected, as the each element of the impedance matrix depends on <em>all</em> elements of the FRF matrix, i.e.&nbsp;the truncation error on the rotational FRFs contributes to the translational errors of the impedance. This result highlights the importance of checking the convergence of any modal-based FRF matrices, especially if their inverse is to be computed, e.g.&nbsp;for substructuring.</p>
+</section>
+<section id="mode-shapes" class="level3">
+<h3 class="anchored" data-anchor-id="mode-shapes">Mode shapes</h3>
+<p>Finally, in <a href="#fig-beammodes" class="quarto-xref">Figure&nbsp;15</a> we plot the first 5 mode shapes of our clamped beam. No particular reason why, its just nice to see some mode shapes!</p>
+<div id="cell-fig-beammodes" class="cell" data-execution_count="15">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">49</span><span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>), <span class="dv">1</span><span class="op">+</span>Φ[<span class="dv">0</span>:<span class="op">-</span><span class="dv">2</span>:<span class="dv">2</span>,<span class="dv">0</span>]<span class="op">*</span><span class="fl">0.5</span> ,label<span class="op">=</span><span class="st">'1'</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">49</span><span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>), <span class="dv">2</span><span class="op">+</span>Φ[<span class="dv">0</span>:<span class="op">-</span><span class="dv">2</span>:<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">*</span><span class="fl">0.5</span> ,label<span class="op">=</span><span class="st">'2'</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">49</span><span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>), <span class="dv">3</span><span class="op">+</span>Φ[<span class="dv">0</span>:<span class="op">-</span><span class="dv">2</span>:<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">*</span><span class="fl">0.5</span> ,label<span class="op">=</span><span class="st">'3'</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">49</span><span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>), <span class="dv">4</span><span class="op">+</span>Φ[<span class="dv">0</span>:<span class="op">-</span><span class="dv">2</span>:<span class="dv">2</span>,<span class="dv">3</span>]<span class="op">*</span><span class="fl">0.5</span> ,label<span class="op">=</span><span class="st">'4'</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">49</span><span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>), <span class="dv">5</span><span class="op">+</span>Φ[<span class="dv">0</span>:<span class="op">-</span><span class="dv">2</span>:<span class="dv">2</span>,<span class="dv">4</span>]<span class="op">*</span><span class="fl">0.5</span> ,label<span class="op">=</span><span class="st">'5'</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.grid(True)</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'DoF number'</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Mode number'</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-beammodes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-beammodes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthFRF_1_files/figure-html/fig-beammodes-output-1.png" width="585" height="429" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-beammodes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15: Illustration of the first 5 modes for the clamped FE beam.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this tutorial we introduced the direct (matrix inverse) and modal summation approaches for computing the FRFs of a system that is described by its mass and stiffness matrices.</p>
+<p>The modal summation approach has the advantage of reduced computation cost; it avoids the need to explicity compute a matrix inverse and can be truncated to capture the modes within a particular bandwidth. Furthermore, it can provide additonal physical insight into the system behvaviour, for example by inspecting the system’s modes shapes.</p>
+<p>Key to the modal approach is the notion that the natural modes of a system diagonalise its equations of motion. Whilst this is generally the case for the mass and stiffness matrices, it is not so for the damping matrices. Therefore to adopt the modal approach, an appropriate (diagonalisable) form of damping must be adopted. We considered two common representations, proportional and structural.</p>
+<p>We presented two numerical examples. The first, a discrete mass-spring system, and the second a continuous beam discretised by the Finite Element method. In both cases we compared the FRFs obtained by direct and modal approaches, showing that they yield identical FRFs. For the beam case, we further investigated the effect of modal truncation on the error in an FRF estimate.</p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-petyt2010introduction" class="csl-entry" role="listitem">
+Petyt, Maurice. 2010. <em>Introduction to Finite Element Vibration Analysis</em>. Cambridge university press.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../tutorials/blockedForce/blockedForce_1.html" class="pagination-link" aria-label="In situ blocked force (mass-spring example)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">In situ blocked force (mass-spring example)</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
