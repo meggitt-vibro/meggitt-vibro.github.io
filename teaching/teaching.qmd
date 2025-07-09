@@ -1,0 +1,10 @@
+---
+title: "Microphone and Loudspeaker Design"
+---
+
+::: {#fig-elephant}
+
+<iframe style="width:100%; height:615px;"src="LectureNotesMLSD.pdf"></iframe>
+
+Elephant
+:::

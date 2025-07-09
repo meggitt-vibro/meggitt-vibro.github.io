@@ -1,0 +1,21 @@
+\documentclass[crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
+\usepackage{tikz,calc,pgfplots,blkarray,amsmath}
+\usetikzlibrary{calc}
+
+\begin{document}
+	\begin{tikzpicture}
+		\node [] {
+			$$
+			\textbf{L}$^{\rm T}$ = \begin{blockarray}{c@{} cccccc c@{} c}
+				&  {\footnotesize \mbox{$a$}} & {\footnotesize \mbox{$1$}} & {\footnotesize \mbox{$2$}} & {\footnotesize \mbox{$3$}} & {\footnotesize \mbox{$4$}} & {\footnotesize \mbox{$r$}} & &  \\
+				\begin{block}{[c@{\hspace{5pt}} ccc|ccc @{\hspace{5pt}}c]c}
+					&1 & 0 & 0 & 0 & 0 & 0 & &{\footnotesize \mbox{$a$}}\\
+					&0 & 1 & 0 & 1 & 0 & 0 & &{\footnotesize \mbox{$c_1$}}\\
+					&0 & 0 & 1 & 0 & 1 & 0 & &{\footnotesize \mbox{$c_2$}} \\
+					&0 & 0 & 0 & 0 & 0 & 1 & &{\footnotesize \mbox{$r$}}\\
+				\end{block}
+			\end{blockarray}
+			$$
+		};
+	\end{tikzpicture}
+\end{document}

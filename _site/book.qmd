@@ -1,0 +1,5 @@
+---
+title: "Experimental Vibro-Acoustics: In-situ and blocked force methods for component-based simulation and virtual prototyping"
+---
+
+Something here...

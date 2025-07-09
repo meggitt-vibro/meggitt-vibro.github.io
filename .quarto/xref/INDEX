@@ -1,0 +1,179 @@
+{
+  "about.qmd": {
+    "about.html": "88dfe78b"
+  },
+  "index.qmd": {
+    "index.html": "657faadc"
+  },
+  "talks.qmd": {
+    "talks.html": "528f781d"
+  },
+  "tutorials-1.qmd": {
+    "tutorials-1.html": "0ae42ae7"
+  },
+  "tutorials-2.qmd": {
+    "tutorials-2.html": "c4667ad5"
+  },
+  "tutorials.qmd": {
+    "tutorials.html": "4d35477d"
+  },
+  "tutorial-1.qmd": {
+    "tutorial-1.html": "f1b9964a"
+  },
+  "tutorial-2.qmd": {
+    "tutorial-2.html": "4c7e1964"
+  },
+  "papers.qmd": {
+    "papers.html": "f866fe48"
+  },
+  "book.qmd": {
+    "book.html": "fd0b982e"
+  },
+  "tutorials/tutorials.qmd": {
+    "tutorials.html": "863a433f"
+  },
+  "tutorials/tutorial-1.qmd": {
+    "tutorial-1.html": "61a55492"
+  },
+  "tutorials/tutorial-2.qmd": {
+    "tutorial-2.html": "00c3c1ca"
+  },
+  "papers/papers.qmd": {
+    "papers.html": "361fae7b"
+  },
+  "papers/paper 1.qmd": {
+    "paper 1.html": "abcfb2df"
+  },
+  "papers/Unscented-TPA.qmd": {
+    "Unscented-TPA.html": "0071ab87"
+  },
+  "papers/U-TPA/Unscented-TPA.qmd": {
+    "Unscented-TPA.html": "adbaa320"
+  },
+  "projects.qmd": {
+    "projects.html": "ee5fe4df"
+  },
+  "poav.qmd": {
+    "poav.html": "93d6440e"
+  },
+  "mlsd.qmd": {
+    "mlsd.html": "6937b512"
+  },
+  "introductions/VAVP.qmd": {
+    "VAVP.html": "4b162a0f"
+  },
+  "introductions/blockedForce.qmd": {
+    "blockedForce.html": "24ad334d"
+  },
+  "introductions/introductions.qmd": {
+    "introductions.html": "6fb383f3"
+  },
+  "introductions/interfaces.qmd": {
+    "interfaces.html": "236dc42e"
+  },
+  "introductions/substructuring.qmd": {
+    "substructuring.html": "6e6dcddd"
+  },
+  "introductions/summary.qmd": {
+    "summary.html": "bf976f19"
+  },
+  "introductions/isolators.qmd": {
+    "isolators.html": "24c7ef07"
+  },
+  "introductions/components.qmd": {
+    "components.html": "ff6279e9"
+  },
+  "introductions/uncertainty.qmd": {
+    "uncertainty.html": "0e288c0e"
+  },
+  "introductions/VAVPs/summary.qmd": {
+    "summary.html": "e1963422"
+  },
+  "introductions/VAVPs/summary/summary.qmd": {
+    "summary.html": "cf79be05"
+  },
+  "introductions/VAVPs/vavps/VAVP.qmd": {
+    "VAVP.html": "d819b838"
+  },
+  "book/book.qmd": {
+    "book.html": "190ab6dc"
+  },
+  "teaching/mlsd/mlsd.qmd": {
+    "mlsd.html": "87876f58"
+  },
+  "teaching/teaching.qmd": {
+    "teaching.html": "5ef940bd"
+  },
+  "teaching/mlsd/mlsd_1.qmd": {
+    "mlsd_1.html": "5c5cd059"
+  },
+  "teaching/mlsd/mlsd_2.qmd": {
+    "mlsd_2.html": "9d3eaa83"
+  },
+  "teaching/mlsd/mlsd_3.qmd": {
+    "mlsd_3.html": "b416a180"
+  },
+  "teaching/mlsd/mlsd_7.qmd": {
+    "mlsd_7.html": "ff466526"
+  },
+  "teaching/mlsd/mlsd_6.qmd": {
+    "mlsd_6.html": "8c9cf4a5"
+  },
+  "teaching/mlsd/mlsd_4.qmd": {
+    "mlsd_4.html": "d6783167"
+  },
+  "teaching/mlsd/mlsd_5.qmd": {
+    "mlsd_5.html": "589a8233"
+  },
+  "teaching/mlsd/mlsd_8.qmd": {
+    "mlsd_8.html": "295fc62b"
+  },
+  "teaching/mlsd/mlsd_9.qmd": {
+    "mlsd_9.html": "34f16d5c"
+  },
+  "teaching/mlsd/mlsd_12.qmd": {
+    "mlsd_12.html": "2a5e7346"
+  },
+  "teaching/mlsd/mlsd_11.qmd": {
+    "mlsd_11.html": "9095654c"
+  },
+  "teaching/mlsd/mlsd_10.qmd": {
+    "mlsd_10.html": "447c5b2a"
+  },
+  "introductions/VAVPs/components/components.qmd": {
+    "components.html": "3bb04f84"
+  },
+  "introductions/VAVPs/interfaces/interfaces.qmd": {
+    "interfaces.html": "ceaf2d82"
+  },
+  "introductions/VAVPs/isolators/isolators.qmd": {
+    "isolators.html": "2c693fb7"
+  },
+  "introductions/VAVPs/substructuring/substructuring.qmd": {
+    "substructuring.html": "b543673f"
+  },
+  "introductions/VAVPs/blockedForce/blockedForce.qmd": {
+    "blockedForce.html": "0a985947"
+  },
+  "introductions/VAVPs/uncertainty/uncertainty.qmd": {
+    "uncertainty.html": "47e32bd5"
+  },
+  "research/summary.qmd": {
+    "summary.html": "315ac267"
+  },
+  "introductions/VAVPs/conclusions/summary.qmd": {
+    "summary.html": "0aac6f6b"
+  },
+  "tutorials/summary.qmd": {
+    "summary.html": "ae306136"
+  },
+  "tutorials/substructuring/substructuring_1.qmd": {
+    "substructuring_1.html": "52ee3a55"
+  },
+  "tutorials/blockedForce/blockedForce_1.qmd": {
+    "blockedForce_1.html": "f2610efd"
+  },
+  "tutorials/synthFRF/synthFRF_1.qmd": {
+    "synthFRF_1.html": "be9a3b48"
+  }
+}
