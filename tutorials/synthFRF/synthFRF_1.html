@@ -414,7 +414,7 @@ Figure&nbsp;1: Numerical mass-spring assembly used for FRF synthesis example.
 </figure>
 </div>
 <p>We begin by defining the mass and stiffness matrices <span class="math inline">\(\mathbf{M}\)</span> and <span class="math inline">\(\mathbf{K}\)</span> for the system in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a>.</p>
-<div id="31db6689" class="cell" data-execution_count="1">
+<div id="b3a8b07d" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -833,7 +833,7 @@ Figure&nbsp;9: Structure of the global mass and stiffness matrices for a beam. B
 <section id="frf-functions" class="level3">
 <h3 class="anchored" data-anchor-id="frf-functions">FRF functions</h3>
 <p>Now that we have a means of building its mass and stiffness matrices, we are able to compute the beams FRF matrix. In the code below we define two FRF functions; one using the direct matrix inversion method, and the other a modal summation.</p>
-<div id="aa2ccc8b" class="cell" data-execution_count="9">
+<div id="7aeaf21e" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> directFRF(M,K,C,f):</span>
