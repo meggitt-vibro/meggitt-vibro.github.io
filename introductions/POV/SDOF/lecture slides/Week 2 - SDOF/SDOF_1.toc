@@ -1,5 +1,0 @@
-\beamer@sectionintoc {3}{Equation of motion}{5}{0}{1}
-\beamer@sectionintoc {4}{Coordinates}{16}{0}{2}
-\beamer@sectionintoc {5}{Undamped homogenous solution}{19}{0}{3}
-\beamer@sectionintoc {6}{Damped homogenous solution}{31}{0}{4}
-\beamer@sectionintoc {7}{Estimating damping}{40}{0}{5}

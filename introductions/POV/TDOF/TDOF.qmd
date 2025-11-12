@@ -1,4 +1,0 @@
----
-title: "Two degree of freedom systems"
----
-On this page we ...
