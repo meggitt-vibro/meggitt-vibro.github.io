@@ -1,0 +1,5 @@
+---
+title: "Tutorials"
+---
+On this page you will find a growing collection of miscellaneous 'tutorials' related to vibro-acoustics, structural dynamics, TPA, etc. The level of background theory included each tutorial might vary, but in all cases I provide some python code so that you can reproduce the results yourself and perhaps have a little play around with variables, etc. 
+

@@ -1,0 +1,50 @@
+\documentclass[crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
+\usepackage{tikz,calc,pgfplots}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{calc}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings}
+\usetikzlibrary{shapes.geometric}
+\begin{document}
+
+\begin{tikzpicture}[every node/.style={outer sep=0pt,thick}]
+	
+	
+	\tikzstyle{spring}=[thick,decorate,decoration={zigzag,pre length=0.3cm,post length=0.3cm,segment length=6}]
+	
+	\tikzstyle{damper}=[thick,decoration={markings,  
+		mark connection node=dmp,
+		mark=at position 0.5 with 
+		{
+			\node (dmp) [thick,inner sep=0pt,transform shape,rotate=-90,minimum width=15pt,minimum height=3pt,draw=none] {};
+			\draw [thick] ($(dmp.north east)+(2pt,0)$) -- (dmp.south east) -- (dmp.south west) -- ($(dmp.north west)+(2pt,0)$);
+			\draw [thick] ($(dmp.north)+(0,-5pt)$) -- ($(dmp.north)+(0,5pt)$);
+		}
+	}, decorate]
+	
+	\tikzstyle{ground}=[fill,pattern=north east lines,draw=none,minimum width=2.5cm,minimum height=0.3cm]
+	
+	\node (M) [draw,minimum width=3.5cm,minimum height=2cm] {$m$ [kg]};
+	%\node (Mtext) at (M) [minimum width=3.5cm,minimum height=2cm,xshift=-3.75cm,text width=3.5cm] {(Cone, dustcap, voice-coil, suspension)};
+	
+	\node (ground1) at (M.south) [ground,yshift=-1.5cm,xshift=-1.25cm,anchor=north] {};
+	\node (ground2) at (M.south) [ground,yshift=-1.5cm,xshift=1.25cm,anchor=north] {};
+	\draw (ground1.north west) -- (ground2.north east);
+	
+	\draw [spring] (ground1.north) -- ($(M.south east)!(ground1.north)!(M.south west)$) node[midway,left,xshift=-0.3cm] { $k$ [N/m]};
+	\draw [damper] (ground2.north) -- ($(M.south east)!(ground2.north)!(M.south west)$) node[midway,right,xshift=0.3cm] {$c$ [Ns/m]};
+	
+	%\draw [spring] (ground1.north) -- ($(M.south east)!(ground1.north)!(M.south west)$) node[pos=.5,left,text width=3.5cm] {Stiffness $k$ [N/m] or compliance $C$ [m/N]};
+	%\draw [damper] (ground2.north) -- ($(M.south east)!(ground2.north)!(M.south west)$) node[pos=.5,right,xshift=0.25cm,text width=3.5cm] {Damping $R$ [Ns/m]};
+	
+	\draw [latex-, thick] (M.north) +(0,1cm) --  ++(0,0.1cm) node[pos=.0,right,xshift=0cm,text width=2.15cm] {$F_{e}$};
+	
+	\draw [-latex,|->] (M) +(2.2cm,0cm) --  ++(2.2cm,0.75cm) node[pos=.5,right,xshift=0.25cm] {$x$};
+	
+	\draw [-latex] (M.south) +(0cm,-1.5cm) -- ++(0cm,-0.75cm) node[pos=.5,yshift=0.55cm] {$x = 0$};
+	
+	%\node (floorText) at (M.south) [minimum width=3.5cm,mintimum height=2cm,yshift=-2.2cm] {};
+	
+\end{tikzpicture}
+
+
+\end{document}

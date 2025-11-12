@@ -1,0 +1,71 @@
+\begin{tikzpicture}[every node/.style={outer sep=0pt,thick}]
+			\tikzstyle{spring}=[thick,decorate,decoration={zigzag,pre length=0.3cm,post length=0.3cm,segment length=6}]
+	
+	\tikzstyle{spring2}=[thick,decorate,decoration={zigzag,pre length=0.2cm,post length=0.2cm,segment length=4}]
+				
+	\tikzstyle{damper2}=[thick,decoration={markings,  
+		mark connection node=dmp,
+		mark=at position 0.5 with 
+		{
+			\node (dmp) [thick,inner sep=0pt,transform shape,rotate=-90,minimum width=15pt,minimum height=3pt,draw=none] {};
+			\draw [thick,gray!20!white] ($(dmp.north east)+(2pt,0)$) -- (dmp.south east) -- (dmp.south west) -- ($(dmp.north west)+(2pt,0)$);
+			\draw [thick,gray!20!white] ($(dmp.north)+(0,-5pt)$) -- ($(dmp.north)+(0,5pt)$);
+		}
+	}, decorate]
+
+	\tikzstyle{damper}=[thick,decoration={markings,  
+	mark connection node=dmp,
+	mark=at position 0.5 with 
+	{
+		\node (dmp) [thick,inner sep=0pt,transform shape,rotate=-90,minimum width=15pt,minimum height=3pt,draw=none] {};
+		\draw [thick,] ($(dmp.north east)+(2pt,0)$) -- (dmp.south east) -- (dmp.south west) -- ($(dmp.north west)+(2pt,0)$);
+		\draw [thick,] ($(dmp.north)+(0,-5pt)$) -- ($(dmp.north)+(0,5pt)$);
+	}
+}, decorate]
+	
+	\tikzstyle{ground}=[fill,pattern=north east lines,draw=none,minimum width=1.5cm,minimum height=0.3cm]
+	
+	\begin{scope}
+		
+		\node (M) [draw,minimum width=1.5cm,minimum height=2cm] {$m$};
+
+		\node (ground1) at (M.south) [ground,yshift=-1.5cm,xshift=-0.5cm,anchor=north] {};
+		\node (ground2) at (M.south) [ground,yshift=-1.5cm,xshift=.5cm,anchor=north] {};
+		\draw (ground1.north west) -- (ground2.north east);
+		
+		\draw [spring] (ground1.north) -- ($(M.south east)!(ground1.north)!(M.south west)$) node[midway,left,xshift=-0.3cm] { $k$};
+		\draw [damper] (ground2.north) -- ($(M.south east)!(ground2.north)!(M.south west)$) node[midway,right,xshift=0.3cm] {$c$};
+
+		\draw [latex-, thick] (M.north) +(0,1cm) --  ++(0,0.1cm) node[pos=.0,right,xshift=0cm,] {$F_{e}$};
+		
+		\draw [|->] (M)+(1cm,0cm)  --  ++(1cm,0.75cm) node[pos=0,right] {$y_0$} node[pos=1,right] {$y$};
+		
+		\draw [latex-, thick,red] (M.south) +(0,-0.8cm) --  ++(0,-0.1cm) node[pos=.0,below,yshift=0.0cm] {$mg$};
+
+	\end{scope}
+
+	\begin{scope}[xshift=3cm]
+		
+		\node (M) [draw,minimum width=1.5cm,minimum height=2cm, gray!20!white] {};
+
+		
+		\node (ground1) at (M.south) [ground,yshift=-1.5cm,xshift=-0.5cm,anchor=north] {};
+		\node (ground2) at (M.south) [ground,yshift=-1.5cm,xshift=.5cm,anchor=north] {};
+		\draw (ground1.north west) -- (ground2.north east);
+		
+		\draw [spring,gray!20!white] (ground1.north) -- ($(M.south east)!(ground1.north)!(M.south west)$) node[midway,left,xshift=-0.3cm] { };
+		\draw [damper2,gray!20!white] (ground2.north) -- ($(M.south east)!(ground2.north)!(M.south west)$) node[midway,right,xshift=0.3cm] {};
+		
+		\node (M2) [draw,yshift=-0.5cm,minimum width=1.5cm,minimum height=2cm, ] {$m$};
+		\draw [spring2,] (ground1.north) -- ($(M2.south east)!(ground1.north)!(M2.south west)$) node[midway,left,xshift=-0.3cm] { $k$};
+		\draw [damper,] (ground2.north) -- ($(M2.south east)!(ground2.north)!(M2.south west)$) node[midway,right,xshift=0.3cm] {$c$};
+		
+		\draw [latex-, thick] (M2.north) +(0,1cm) --  ++(0,0.1cm) node[pos=.0,right,xshift=0cm] {$F_{e}$};
+
+%		\draw [latex-, thick,red] (M2.south) +(0,-0.6cm) --  ++(0,-0.1cm) node[pos=.0,below,yshift=0.0cm] {$mg$};
+		
+		\draw [|->] (M2)+(1cm,0cm)  --  ++(1cm,1.25cm) node[pos=0,right,xshift=0.cm] {$x_0$} node[pos=1,right,xshift=0.cm] {$x$};
+		
+		\draw [|-|] (M2)+(-1cm,0cm)  --  ++(-1cm,0.5cm) node[pos=0.0,left,xshift=0.cm] {$x_{st}$};
+	\end{scope}
+\end{tikzpicture}

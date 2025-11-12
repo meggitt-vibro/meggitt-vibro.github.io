@@ -1,0 +1,87 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Joshua Meggitt"
+  page-navigation: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: introductions/summary.qmd
+        text: "A quick introduction to:"
+      - href: book/book.qmd  
+        text: Book
+      - href: tutorials/summary.qmd  
+        text: Tutorials
+      - href: research/summary.qmd  
+        text: Research
+      - text: "Teaching"
+        menu:
+          - teaching/mlsd/mlsd.qmd
+  sidebar:
+    - title: "Introductions"
+      style: "docked"
+      background: light
+      contents: 
+        - href: introductions/summary.qmd
+          text: "A quick introduction to:"
+        - section: "Some Basic Vibration Stuff"
+          href: introductions/POV/summary/summary.qmd
+          text: Summary of POV introductions
+          contents:
+           - href: introductions/POV/SDOF/SDOF.qmd
+             text: Single degree of freedom
+          #  - href: introductions/POV/TDOF/TDOF.qmd
+          #    text: Two degrees of freedom
+          #  - href: introductions/POV/MDOF/MDOF.qmd
+          #    text: Multi-degree of freedom
+        - section: "Vibro-Acoustic Virtual Prototyping"
+          href: introductions/VAVPs/summary/summary.qmd
+          text: Summary of VAVP introductions
+          contents:
+           - href: introductions/VAVPs/vavps/VAVP.qmd
+           - href: introductions/VAVPs/components/components.qmd
+           - href: introductions/VAVPs/interfaces/interfaces.qmd
+           - href: introductions/VAVPs/isolators/isolators.qmd
+           - href: introductions/VAVPs/substructuring/substructuring.qmd
+           - href: introductions/VAVPs/blockedForce/blockedForce.qmd
+           - href: introductions/VAVPs/uncertainty/uncertainty.qmd
+           - href: introductions/VAVPs/conclusions/summary.qmd
+        
+    - title: "Tutorials"
+      style: "docked"
+      background: light
+      contents: 
+        - href: tutorials/summary.qmd
+          text: "**Summary of tutorials**"
+        - text: "Substructuring (mass-spring example)"
+          href: tutorials/substructuring/substructuring_1.qmd
+        - text: "In situ blocked force (mass-spring example)"
+          href: tutorials/blockedForce/blockedForce_1.qmd
+        - text: "Synthesising FRFs"
+          href: tutorials/synthFRF/synthFRF_1.qmd
+    - title: "Research"
+      style: "docked"
+      background: light
+      contents: 
+        - href: research/summary.qmd
+          text: "**Summary of research**"
+        - href: research/frf_tmm_substruct/frf_tmm_substruct.qmd
+          text: "A mixed admittance/transfer matrix substructuring approach"
+      
+
+
+
+
+format:
+  html:
+    theme:
+      - theme.scss
+      - journal
+    # css: styles.css
+    toc: true
+
+
+

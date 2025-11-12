@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Uncertainty – Joshua Meggitt</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../introductions/VAVPs/conclusions/summary.html" rel="next">
+<link href="../../../introductions/VAVPs/blockedForce/blockedForce.html" rel="prev">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Joshua Meggitt</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../../introductions/summary.html" aria-current="page"> 
+<span class="menu-text">A quick introduction to:</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../book/book.html"> 
+<span class="menu-text">Book</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../tutorials/summary.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../research/summary.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teaching" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Teaching</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-teaching">    
+        <li>
+    <a class="dropdown-item" href="../../../teaching/mlsd/mlsd.html">
+ <span class="dropdown-text">Microphone and Loudspeaker Design</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../introductions/VAVPs/summary/summary.html">Vibro-Acoustic Virtual Prototyping</a></li><li class="breadcrumb-item"><a href="../../../introductions/VAVPs/uncertainty/uncertainty.html">Uncertainty</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A quick introduction to:</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../introductions/POV/summary/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Some Basic Vibration Stuff</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/POV/SDOF/SDOF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Single degree of freedom</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../introductions/VAVPs/summary/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vibro-Acoustic Virtual Prototyping</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/vavps/VAVP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">What? Why? How?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/components/components.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Components (passive characterisation)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/interfaces/interfaces.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Interface representations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/isolators/isolators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vibration isolators</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/substructuring/substructuring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Substructuring</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/blockedForce/blockedForce.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Blocked forces (active characterisation)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/uncertainty/uncertainty.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Uncertainty</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/VAVPs/conclusions/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Summary</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#categorisation-of-uncertainty-in-vavp" id="toc-categorisation-of-uncertainty-in-vavp" class="nav-link active" data-scroll-target="#categorisation-of-uncertainty-in-vavp">Categorisation of uncertainty in VAVP</a>
+  <ul class="collapse">
+  <li><a href="#model-uncertainty" id="toc-model-uncertainty" class="nav-link" data-scroll-target="#model-uncertainty">Model uncertainty</a></li>
+  <li><a href="#source-uncertainty" id="toc-source-uncertainty" class="nav-link" data-scroll-target="#source-uncertainty">Source uncertainty</a></li>
+  <li><a href="#experimental-uncertainty" id="toc-experimental-uncertainty" class="nav-link" data-scroll-target="#experimental-uncertainty">Experimental uncertainty</a></li>
+  </ul></li>
+  <li><a href="#model-uncertainty-interface-completeness" id="toc-model-uncertainty-interface-completeness" class="nav-link" data-scroll-target="#model-uncertainty-interface-completeness">Model uncertainty (interface completeness)</a>
+  <ul class="collapse">
+  <li><a href="#interface-completeness-criterion-icc" id="toc-interface-completeness-criterion-icc" class="nav-link" data-scroll-target="#interface-completeness-criterion-icc">Interface Completeness Criterion (ICC)</a></li>
+  </ul></li>
+  <li><a href="#random-uncertainty" id="toc-random-uncertainty" class="nav-link" data-scroll-target="#random-uncertainty">Random uncertainty</a>
+  <ul class="collapse">
+  <li><a href="#quick-stats.-recap" id="toc-quick-stats.-recap" class="nav-link" data-scroll-target="#quick-stats.-recap">Quick stats. recap</a></li>
+  <li><a href="#law-of-propagation-of-uncertainty-lpu" id="toc-law-of-propagation-of-uncertainty-lpu" class="nav-link" data-scroll-target="#law-of-propagation-of-uncertainty-lpu">Law of propagation of uncertainty (LPU)</a></li>
+  <li><a href="#lpu-for-vavp-calculations" id="toc-lpu-for-vavp-calculations" class="nav-link" data-scroll-target="#lpu-for-vavp-calculations">LPU for VAVP calculations</a></li>
+  <li><a href="#monte-carlo-simulations-for-large-uncertainty" id="toc-monte-carlo-simulations-for-large-uncertainty" class="nav-link" data-scroll-target="#monte-carlo-simulations-for-large-uncertainty">Monte-Carlo simulations (for large uncertainty)</a></li>
+  </ul></li>
+  <li><a href="#what-next" id="toc-what-next" class="nav-link" data-scroll-target="#what-next">What next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../introductions/VAVPs/summary/summary.html">Vibro-Acoustic Virtual Prototyping</a></li><li class="breadcrumb-item"><a href="../../../introductions/VAVPs/uncertainty/uncertainty.html">Uncertainty</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Uncertainty</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Over the previous pages we have covered pretty much everything we need to build a working VAVP. Of course some more advanced/specific topics have been omitted for brevity (for example, we havn’t really discussed the particulars of how we go about solving the inverse problem for the blocked forces, including the use of regularisation). These topics are covered in much greater detail in the book <a href="../../../book/book.html">Experimental Vibro-acoustics</a>.</p>
+<p>The last thing to consider is an evaluation of the uncertainties of our VAVP. Though we have left our treatment of uncertainty to last, this is not to say that uncertainty should be treated as an after thought! The importance of appropriate uncertainty analysis cannot be understated; it is fair to argue that the output of any model is meaningless, unless it is accompanied by a measure of its reliability. And so on this page, we introduce the main tools required to furnish our VAVP output with a measure of confidence, specifically in the form of a response prediction confidence bound.</p>
+<section id="categorisation-of-uncertainty-in-vavp" class="level2">
+<h2 class="anchored" data-anchor-id="categorisation-of-uncertainty-in-vavp">Categorisation of uncertainty in VAVP</h2>
+<p>In order to minimise the unwanted effects of uncertainty, it is necessary to understand their underlying cause. In development of a VAVP (or the application of blocked force and/or sub-structuring methods) the uncertainties encountered may be categorized as originating from the ‘Model’, the ‘Source’, or the ‘Experiment’.</p>
+<section id="model-uncertainty" class="level3">
+<h3 class="anchored" data-anchor-id="model-uncertainty">Model uncertainty</h3>
+<p>Model uncertainties arise when an approximate model is used to describe the physical problem. Obvious examples include the assumption of linearity and time invariance. Other important examples include the assumptions that:</p>
+<ol type="1">
+<li>the interface of a structure can be treated as a series of point-like DoFs,</li>
+<li>that an interface description includes a sufficient number of DoFs,</li>
+<li>the passive properties of an assembly do not change whilst under operation, among others.</li>
+</ol>
+<p>Strictly speaking, this form of ‘model uncertainty’ introduces a systematic/bias error as opposed to random uncertainty. In what follows we will introduce what we believe is the main source of model uncertainty, <em>interface completeness</em>.</p>
+<div id="tbl-uncertTypes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-uncertTypes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Types of uncertainties encountered in VAVPs.
+</figcaption>
+<div aria-describedby="tbl-uncertTypes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 55%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+<th>Category</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1) Model</td>
+<td style="text-align: left;">Uncertainty resulting from an approximate model being used to describe the physical problem.</td>
+<td>Systematic</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2) Source</td>
+<td style="text-align: left;">Uncertainty inherent to the operational behaviour of the source.</td>
+<td>Random</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3) Experimental:</td>
+<td style="text-align: left;">Uncertainty due to experimentation.</td>
+<td></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><em>3a) Measurement</em></td>
+<td style="text-align: left;"><em>Due to the cumulative effect of noise sources in the measurement signal path and computation post processing.</em></td>
+<td><em>Random</em></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><em>3b) Operator</em></td>
+<td style="text-align: left;"><em>Due to human error in the measurement procedure.</em></td>
+<td><em>Random</em></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="source-uncertainty" class="level3">
+<h3 class="anchored" data-anchor-id="source-uncertainty">Source uncertainty</h3>
+<p>Source uncertainty arises due to the inherent variation in the activity of any vibration source. This variation may be considered the temporal variation (i.e.&nbsp;fluctuating activity) exhibited by a single vibration source, or the variation in activity between a series of nominally identical vibration sources. Source uncertainty is typically random in nature.</p>
+</section>
+<section id="experimental-uncertainty" class="level3">
+<h3 class="anchored" data-anchor-id="experimental-uncertainty">Experimental uncertainty</h3>
+<p>Experimental uncertainty can be further subdivided into ‘<em>Measurement</em>’ and ‘<em>Operator</em>’ uncertainty. Measurement uncertainty describes the cumulative effect of noise sources within the measurement signal path and beyond. Typical examples include, external disturbances, thermo-electrical noise, sampling error, finite precision, etc. Measurement uncertainty is typically random in nature. Operator uncertainty describes the effect of human error in the measurement procedure. An important example is the inconsistent location and/ orientation of applied forces during the measurement of FRFs. Operator uncertainty is typically random in nature, although bias errors can be introduced if excitations are not be applied at the desired location. The presence of a bias error can often be absorbed by, or reinterpreted as, model uncertainty, e.g.&nbsp;a bias error in excitation position is often equivalent to redefining the position of a model DoF.</p>
+</section>
+</section>
+<section id="model-uncertainty-interface-completeness" class="level2">
+<h2 class="anchored" data-anchor-id="model-uncertainty-interface-completeness">Model uncertainty (interface completeness)</h2>
+<p>As described above, model uncertainty emanates from the use of an approximate model to describe a physical problem. Its effect is to introduce a systematic error. Whilst its underlying cause may vary from application to application, there exist two notable sources worth discussing here. These are related to the notions of <em>completeness</em> and <em>consistency</em>, the former of which we consider here.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>Completeness</em> describes the degree to which the interface between two components has been correctly represented, for example, whether enough DoFs have been included. The completeness of an interface model is essential if independent blocked forces are to be obtained. The completeness of an interface description is also an essential requirement in the coupling and decoupling of substructures.</p>
+</div>
+</div>
+<p>Interface completeness is a general issue encountered whenever measurements are performed at the interface of one or more sub-structures. This includes not only the characterisation of blocked forces, but also the coupling and decoupling of substructures. To demonstrate the importance of completeness we will consider it from the perspective of a blocked force characterisation, though similar notions apply in other situations.</p>
+<div id="fig-assemblies" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-assemblies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SR_cicj.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Unconstrained assembly.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SR_cicj_const.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Partially constrained assembly</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-assemblies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Unconstrained and partially constrained assemblies for use in deriving interface completeness criteria.
+</figcaption>
+</figure>
+</div>
+<p>Shown in <a href="#fig-assemblies" class="quarto-xref">Figure&nbsp;2</a> (left) is a vibration source <span class="math inline">\(S\)</span> coupled via two sets of DoFs <span class="math inline">\(c_i\)</span> and <span class="math inline">\(c_j\)</span>, to a receiver structure <span class="math inline">\(R\)</span>. Completeness may be described as follows: suppose all of the interface DoFs (<span class="math inline">\(c_i\)</span> and <span class="math inline">\(c_j\)</span>) are constrained such that their responses (displacement, velocity and acceleration) are zero, and an arbitrary internal or external force is applied to the source. If the interface has been described <em>completely</em> (i.e all DoFs are being constrained), then the resultant receiver response will be zero everywhere, since no vibration will be able to cross the blocked interface. We call this an <em>complete</em> interface representation (or interface model). Had only a portion of the interface been constrained, say the <span class="math inline">\(c_i\)</span> DoFs, then <em>some</em> vibration will find a way through the interface and into the receiver; its response will no longer be zero. We call this an <em>incomplete</em> interface representation. In what follows we will show that an incomplete interface representation is generally bad news… We will then introduce the <em>Interface Completeness Criterion</em> as a means of quantifying the degree of incompleteness as a tool to minimise it.</p>
+<p>Considering first a <em>complete</em> interface representation, where all interface DoFs are contained within the set <span class="math inline">\(c\)</span>. We have see in <a href="../../../introductions/VAVPs/blockedForce/blockedForce.html">Blocked forces</a> that the blocked force can be obtained using the in situ relation, <span class="math display">\[
+\mathbf{{\bar{f}}}_{{c}} = \mathbf{Y}_{C{bc}}^{+}\mathbf{{v}}_{{c}}
+\]</span> where <span class="math inline">\(C\)</span> denotes the coupled assembly, and <span class="math inline">\(b\)</span> and <span class="math inline">\(c\)</span> are sets of remote (indicator) and interface DoFs, respectively. Once obtained, the blocked force can be used to identically reproduce the response in some new assembly <span class="math inline">\(X\)</span> at the target DoFs <span class="math inline">\(r\)</span> as, <span class="math display">\[
+\mathbf{{{v}}}_{{r}} = \mathbf{Y}_{X{rc}} \mathbf{{\bar{f}}}_{{c}}.
+\]</span> Let us now consider what happens if the interface model is <em>incomplete</em>. We do this by treating the interface <span class="math inline">\(c\)</span> as two sets of DoFs: those that are known and measurable, <span class="math inline">\(c_i\)</span>; and those that are unknown, or known but unmeasurable, <span class="math inline">\(c_j\)</span>. The in situ relation (in its forward form) can then be rewritten as the sum of their respective contributions, <span id="eq-genProb"><span class="math display">\[
+\mathbf{v}_{{b}}  = \mathbf{Y}_{C{bc_i}}\mathbf{\bar{f}}_{{c_i}} +\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{_{c_j}}.
+\qquad(1)\]</span></span> As discussed in <a href="../../../introductions/VAVPs/blockedForce/blockedForce.html">Blocked forces</a>, the in situ characterisation of the blocked force requires the operational response to be pre-multiplied by the inverse of a measured FRF matrix. Recall that the <span class="math inline">\(c_j\)</span> DoFs are inaccessible for measurement, or perhaps unknown, and only the <span class="math inline">\(\mathbf{Y}_{C{bc_i}}\)</span> FRF is available. The blocked force is then given by, <span id="eq-acquiredBF"><span class="math display">\[
+\mathbf{Y}_{C{bc_i}}^{-1}\mathbf{v}_{{b}}  = \mathbf{\tilde{\bar{f}}}_{{c_i}} = \mathbf{\bar{f}}_{{c_i}} +\mathbf{Y}_{C{bc_i}}^{-1}\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{{c_j}}
+\qquad(2)\]</span></span> where <span class="math inline">\(\mathbf{\tilde{\bar{f}}}_{{c_i}}\)</span> represents the acquired blocked force and <span class="math inline">\(\mathbf{\bar{f}}_{{c_i}}\)</span> its true value. Note that the true blocked force is accompanied by an additional term, <span class="math inline">\(\mathbf{Y}_{C{bc_i}}^{-1}\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{{c_j}}\)</span>. This has arisen due to the neglected DoFs <span class="math inline">\(c_j\)</span>. This term constitutes a <em>bias error</em> on the true blocked force. Also notice that this additional term is dependent upon the dynamics of the coupled assembly. Consequently, the acquired blocked force is no longer an independent property of the source and is no longer transferable between assemblies! This is bad news for a VAVP… After all, one of the principle advantages of the blocked force over other source characterisation methods is that the acquired result may be transferred from one assembly, say a test bench, to another, say a virtual prototype.</p>
+<p>If we consider the transfer of this incomplete blocked force into a secondary assembly denote <span class="math inline">\(X\)</span> (say a VAVP), we obtain a response prediction of the form, <span class="math display">\[
+\mathbf{\tilde{v}}_{X{r}}  =  \mathbf{Y}_{X{rc_i}}  \mathbf{{\bar{f}}}_{{c_i}} +\mathbf{Y}_{X{rc_i}} \mathbf{Y}_{C{bc_i}}^{-1}\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{{c_j}}.
+\]</span> whilst the true response (using the complete blocked force) takes the form, <span class="math display">\[
+\mathbf{v}_{X{r}}  = \mathbf{Y}_{X{rc_i}}\mathbf{\bar{f}}_{{c_i}} +\mathbf{Y}_{X{rc_j}}\mathbf{\bar{f}}_{{c_j}}.
+\]</span></p>
+<p>It is clear from the above that the bias error we see on the blocked force carries through onto any response prediction. Obviously, we want to minimise the influence of this bias term, ideally removing it all together. The first step in doing so is coming up with a meaningful quantification of the severity of this error.</p>
+<section id="interface-completeness-criterion-icc" class="level3">
+<h3 class="anchored" data-anchor-id="interface-completeness-criterion-icc">Interface Completeness Criterion (ICC)</h3>
+<p>When characterising a component, it is of course beneficial to minimise the influence of bias errors due to incompleteness. Knowing this, it may be tempting to ‘play safe’ and ensure that the full 6 DoFs are included at every point. However, this may not be necessary, indeed if some DoFs do not contribute significantly then to include them would be undesirable a) because of the extra experimental effort involved and b) because the unnecessary measurements will add noise into the system without contributing to an accurate description of interface dynamics. For example, with resilient coupling it is often found that some DoFs are significantly softer than others and do not influence the interface dynamics to a great extent; rigid coupling at the interface on the other hand typically requires a greater number of DoFs to achieve a sufficient level of completeness. On the otherhand, in the mid-high frequency range, the point-like DoFs might not fully capture the interface dynamics, and a more robust interface model required (i.e.&nbsp;including some flexible interface dynamics). Clearly, there is great potential benefit in being able to <em>quantify</em> the completeness of an interface model prior to embarking on a full measurement campaign.</p>
+<p>To quantify completeness, we are interested in obtaining a measure of the bias error in <a href="#eq-acquiredBF" class="quarto-xref">Equation&nbsp;2</a> relative to the true blocked force. However, this bias error, defined in terms of the unknown <span class="math inline">\(c_j\)</span> DoFs, cannot be measured directly. We need an indirect method to quantify it.</p>
+<p>Comparison of a predicted response (using an estimated blocked force) with the measured response should provide a measure of incompleteness. However, this is not a particularly robust approach for two reasons:</p>
+<ol type="1">
+<li>The operational forces within the source are not guaranteed to excite all of the interface DoFs, which is required for a true assessment of the interface completeness.</li>
+<li>An operational blocked force might also be subject to inconsistency, i.e.&nbsp;discrepancies might not be due to incompleteness alone.</li>
+</ol>
+<p>A solution is to replace the operational blocked force with those obtained using <em>artificial excitations</em>, i.e.&nbsp;external forces applied to the housing of the source, usually by an instrumented force hammer. Artificial excitations can be applied in any number, and in such a way to ensure that all interface DoFs are excited, overcoming issue 1. Also, with the source remaining inactive, inconsistencies between active and passive quantities (issue 2) are also avoided.</p>
+<p>So, the response produced by an artificial excitation at some remote location <span class="math inline">\(a\)</span> on the source, can be reproduced identically by the corresponding (artificial) blocked force according to, <span id="eq-blockFComplete2"><span class="math display">\[
+        \mathbf{v}_{{c_i}}  = \mathbf{Y}_{C{c_ic_i}}\mathbf{\bar{f}}_{{c_i}} = \mathbf{Y}_{C{c_ia}}\mathbf{{f}}_{a}.
+\qquad(3)\]</span></span> From the above we obtain a transmissibility-based relation between the artificial excitation force and the resulting blocked force, <span class="math display">\[
+    \mathbf{\bar{f}}_{{c_i}} = \mathbf{Y}_{C{c_ic_i}}^{-1}\mathbf{Y}_{C{c_ia}}\mathbf{\bar{f}}_{a}.
+\]</span> Using the blocked force, we are able to predict the response at the remote receiver DoFs <span class="math inline">\(b\)</span>, <span id="eq-ICC_eq"><span class="math display">\[
+        \mathbf{v}_{{b}}  = \overbrace{\mathbf{Y}_{C{bc_i}}\mathbf{Y}_{C{c_ic_i}}^{-1}\mathbf{Y}_{C{c_ia}}}^{\mathbf{Y}_{C{ba}}^{(c_i)}}\mathbf{{f}}_{a}.
+\qquad(4)\]</span></span> Noting that <a href="#eq-ICC_eq" class="quarto-xref">Equation&nbsp;4</a> simply relates the external force at <span class="math inline">\(a\)</span> to the response at <span class="math inline">\(b\)</span>, its FRF product must be the transfer FRF from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)}\)</span>. Here we use the superscript <span class="math inline">\(\square^{(c_i)}\)</span> to denote that the FRF reconstruction is done only through the interface DoFs <span class="math inline">\(c_i\)</span>.</p>
+<p>With a complete interface (<span class="math inline">\(c=c_i\)</span>), the reconstructed FRF <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)} = \mathbf{Y}_{C{bc_i}}\mathbf{Y}_{C{c_ic_i}}^{-1}\mathbf{Y}_{C{c_ia}}\)</span> is identically equal to the direct FRF <span class="math inline">\(\mathbf{Y}_{C{ba}}\)</span> (in practice small discrepancies due to experimental error will be present). However, with an <em>incomplete</em> interface, the contribution of the neglected <span class="math inline">\(c_j\)</span> DoFs will not be accounted for by <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)}\)</span>, though will be present in <span class="math inline">\(\mathbf{Y}_{C{ba}}\)</span>. As a result an approximation is introduced. The level of agreement between the reconstructed and direct FRFs is proportional to the bias error in <a href="#eq-acquiredBF" class="quarto-xref">Equation&nbsp;2</a>. Therefore, to quantify completeness it is sufficient to assess the similarity of the direct and reconstructed FRFs, <span class="math inline">\(\mathbf{Y}_{C{ba}}\)</span> and <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)}\)</span>. To this end, a correlation-based measure of similarity yields the so-called <em>Interface Completeness Criterion</em> (ICC), <span id="eq-ICCeq"><span class="math display">\[
+\begin{align}
+    &amp;\mbox{ICC} = \mbox{Corr}\left(\mbox{Vec}\left({\mathbf{Y}}_{{C}{ba}}^{{(c)}}\right),\mbox{Vec}\left({\mathbf{Y}}_{{C}{ba}}^{{(c_i)}}\right)\right) \\
+    &amp; \mbox{Corr}\left(\mathbf{a},\mathbf{b}\right) = \frac{ \left|\mathbf{a}^{\rm H}\mathbf{b} \right|^2 }{ \mathbf{a}^{\rm H} \mathbf{a} \cdot \mathbf{b}^{\rm H}\mathbf{b}}
+\end{align}
+\qquad(5)\]</span></span> where <span class="math inline">\(\mbox{Vec}\left({\square}\right)\)</span> denotes matrix column-wise vectorisation and <span class="math inline">\(\square^{\rm H}\)</span> represents a conjugate transpose. Note that to form the necessary vectors, multiple excitation and/or response DoFs (<span class="math inline">\(b\)</span> and <span class="math inline">\(a\)</span>) should be considered when measuring the necessary FRFs. Ideally, the excitations <span class="math inline">\(a\)</span> should be sufficient in number, and varied in direction, such that they are able to control all interface motions in the frequency range of interest. This requires the number of <span class="math inline">\(a\)</span> points to be equal to or greater than the number of interface DoFs. Similarly, the responses positions <span class="math inline">\(b\)</span> should be such that they are sufficient in number and orientation to observe all interface motions. This requires the number of <span class="math inline">\(b\)</span> points to also be equal to or greater than the number of interface DoFs.</p>
+<p>If the chosen interface representation is complete, that is, <span class="math inline">\(|c_i| = |c|\)</span>, the ICC will be equal to one. If the interface description is incomplete, <span class="math inline">\(|c_i| &lt; |c|\)</span> the ICC will be less than 1. In practice, it is important to note that the FRFs used in <a href="#eq-ICCeq" class="quarto-xref">Equation&nbsp;5</a> are obtained from measurement and are therefore subject to some degree of uncertainty. Consequently, even in the case of a complete interface representation, an ICC equal to 1 is unlikely to be achieved (though the authors have found it usually straightforward to distinguish noise-induced discrepancies, which tend to be localised in frequency, with those from neglected DoFs which tend to cover a wide frequency range).</p>
+<p>The ICC provides a measure of interface completeness irrespective of the operating nature of the connected components. For example, suppose a vibration source generates forces exclusively in the vertical <span class="math inline">\(z\)</span> DoFs. Whilst a decent blocked force characterisation might be obtained using the <span class="math inline">\(z\)</span> DoFs alone, this would not constitute a complete interface representation according to the ICC if other DoFs are important for the coupling. The ICC considers completeness more generally, specifically with respect to the applied forces at <span class="math inline">\(a\)</span> and observed responses at <span class="math inline">\(b\)</span>.</p>
+<p>The ICC can be used also to assess the completeness of interface representations for structural coupling and decoupling problems. For decoupling, tests are required on the assembled structure (target component coupled to residual test bench), and so the ICC can be applied as standard. For coupling problems, one usually only measures the component in its free-interface configuration, from which the ICC can not be computed. The component must be installed onto some test bench such that ICC can be computed its interface representation be assessed.</p>
+</section>
+</section>
+<section id="random-uncertainty" class="level2">
+<h2 class="anchored" data-anchor-id="random-uncertainty">Random uncertainty</h2>
+<p>In the above we considered role of <em>model uncertainty</em>, specifically <em>completeness</em> and its introduction of a systematic error onto the blocked force. Here, we turn our attention towards the role of <em>random uncertainty</em>.</p>
+<p>Random uncertainties, or random errors, are those which, over a series of repeated measurements, <em>randomly</em> fluctuate about the true value of the measurand. Whilst all measurements are subject to some degree of random uncertainty, it is often not the measurements themselves that we are interested in. Rather, these measurements are used to infer or derive some other quantity. For example, we measure operational responses and FRFs, not for their own sake, but to calculate a blocked force or to perform substructuring. The question is then, how do the random errors in our measurements affect the estimates of derived quantities? That is, how does the uncertainty <em>propagate</em> through our VAVP equations? Answering this question will be the focus of the remainder of this page.</p>
+<section id="quick-stats.-recap" class="level3">
+<h3 class="anchored" data-anchor-id="quick-stats.-recap">Quick stats. recap</h3>
+<section id="mean" class="level4">
+<h4 class="anchored" data-anchor-id="mean">Mean</h4>
+<p>The mean is a measure of central tendency. Given a discrete set of values, for example the repeated measurement of a quantity <span class="math inline">\(x\)</span>, it is calculated as, <span class="math display">\[
+\mathbb{E}[{x}]= \frac{1}{N} \sum_n^N {x_n} = \mu_x
+\]</span> where <span class="math inline">\(x_n\)</span> is the <span class="math inline">\(n\)</span>th sample of the quantity <span class="math inline">\(x\)</span>, and <span class="math inline">\(N\)</span> is the total number of measured samples. For vector or matrix quantities we can similarly calculate the mean value as, <span class="math display">\[
+\mathbb{E}[\mathbf{x}] = \frac{1}{N} \sum_n^N \mathbf{x}_n = \mathbf{\mu_x}
+\]</span> where <span class="math inline">\(\mathbf{x}_n\)</span> is the <span class="math inline">\(n\)</span>th sample of the vector (or matrix) quantity <span class="math inline">\(\mathbf{x}\)</span>.</p>
+<p>If the mean value is calculated from a number of repeated measurements, then it is called the sample mean. This is not to be confused with the true mean. In an experimental context, the true mean corresponds to the value of the measureand, in the absence of any random/and or bias errors. According to the Law of Large Numbers, in the absence of any systematic bias errors the sample mean obtained from a large number of repeated experiments, should be close to the true mean, and tend towards it as the number of experiments increases.</p>
+<p>The true mean, or the population mean, of a quantity is equal to the calculated mean only when every member of the `population’ is included. In an experimental setting the population of experiments is infinite, and so the true mean can only be approximated using the sample mean obtained from a sufficient number of repeated measurements. It is important to note that if an insufficient number of measurements are taken, the sample mean may differ considerably from the true mean.</p>
+</section>
+<section id="variance-and-covariance" class="level4">
+<h4 class="anchored" data-anchor-id="variance-and-covariance">Variance and covariance</h4>
+<p>Variance is a measure of how far a set of values are spread out from the mean. Given a discrete set of values, for example the repeated measurement of a quantity <span class="math inline">\(x\)</span>, the variance is calculated as, <span id="eq-var2"><span class="math display">\[
+\mbox{Var}(x) = \frac{1}{N-1}\sum_{n=1}^N (x_n-{\mu_x})^2=\sigma^2_x.
+\qquad(6)\]</span></span> where <span class="math inline">\(\sigma_x\)</span> is termed the standard deviation. The variance and standard deviation are a strictly positive quantities, which get larger as the data becomes more widely spread.</p>
+<p>Strictly speaking, <a href="#eq-var2" class="quarto-xref">Equation&nbsp;6</a> is called the <em>sample</em> variance, as opposed to the population variance because it is based on the sample mean, which is not necessarily equal to the population mean. The sample <em>vs.</em> population mean can introduce a bias error on the estimate of <span class="math inline">\(\sigma_x^2\)</span>. The use of <span class="math inline">\(N-1\)</span> as opposed to <span class="math inline">\(N\)</span> ensures that the sample variance gives an unbiased estimate of the population variance. Clearly, this only has a noticeable effect when <span class="math inline">\(N\)</span> is quite small.</p>
+<p>Variance describes the variability of a measured quantity, say <span class="math inline">\(x\)</span>. Covariance describes the <em>joint variability</em> between two measured quantities, say <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. The sample covariance is calculated as, <span id="eq-cov"><span class="math display">\[
+\mbox{Cov}(x,y) = \frac{1}{N-1}\sum_{n=1}^N (x_n-\mu_x)(y_n-\mu_y) =\sigma_{xy}^2.
+\qquad(7)\]</span></span> Unlike the variance, covariance can be positive or negative depending on how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> vary relative to one another. For example, suppose we have a set of measurements for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. If the larger values of <span class="math inline">\(x\)</span> correspond mostly with larger values of <span class="math inline">\(y\)</span>, and the same holds for small values - <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have similar behaviour - then their covariance is positive. Conversely, if the larger values of <span class="math inline">\(x\)</span> correspond mostly with smaller values of <span class="math inline">\(y\)</span>, and visa versa - <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have opposite behaviour - then their covariance is negative. The sign of the covariance shows the linear tendency between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p><strong>The notion of covariance is particularly important when dealing with the uncertainty of FRF matrices, the elments of which are often highly correlated with each other.</strong></p>
+<p>For vector quantities, the notion of covariance can be extended to a covariance matrix. Given a set of measurements for the vector quantity <span class="math inline">\(\mathbf{x}\)</span>, its sample covariance matrix is calculated as, <span id="eq-covMateq"><span class="math display">\[
+\boldsymbol{\Sigma}_{\mathbf{x}} = \frac{1}{N-1}\left[\left(\mathbf{\hat{x}} - \mathbf{\mu_x}\mathbf{1}^{\rm T}\right)\left(\mathbf{\hat{x}} -  \mathbf{\mu_x}\mathbf{1}^{\rm T}\right)^{\rm T}\right]
+\qquad(8)\]</span></span> where, to avoid summation notation, the repeated <span class="math inline">\(N\)</span> measurements of the vector <span class="math inline">\(\mathbf{x}\)</span> are arranged into the columns of a measurement matrix <span class="math inline">\(\mathbf{\hat{x}}\)</span>, <span class="math display">\[
+    \mathbf{\hat{x}} = \left[\begin{array}{cccc}
+       \mathbf{x}^{(1)}  &amp; \mathbf{x}^{(2)} &amp; \cdots &amp; \mathbf{x}^{(N)}
+    \end{array}\right]
+\]</span> from which the mean value can be subtracted by column stacking the mean vector <span class="math inline">\(\mathbf{\mu_x}\)</span> using, <span class="math display">\[
+    \mathbf{\mu_x}\mathbf{1}^{\rm T} = \left[\begin{array}{ccc}
+       \mathbf{\mu_x} &amp; \cdots &amp; \mathbf{\mu_x}
+    \end{array}\right]
+\]</span> where <span class="math inline">\(\mathbf{1}\)</span> is simply an <span class="math inline">\(N\)</span> dimensional vector of 1s.</p>
+<p>Note that the diagonal entries of <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{x}}\)</span> correspond to the variances of each element of <span class="math inline">\(\mathbf{x}\)</span>, whilst the off-diagonal entries (covariances) satisfy <span class="math inline">\(\left(\boldsymbol{\Sigma}_{\mathbf{x}}\right)_{ij} = \left(\boldsymbol{\Sigma}_{\mathbf{x}}\right)_{ji}\)</span>, i.e.&nbsp;the covariance matrix is symmetric.</p>
+<p>We can similarly calculate a covariance matrix between two vector quantities <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>, <span id="eq-covMateq2"><span class="math display">\[
+\boldsymbol{\Sigma}_{\mathbf{xy}} = \frac{1}{N-1}\left[\left(\mathbf{\hat{x}} - \mathbf{\mu_x}\mathbf{1}^{\rm T}\right)\left(\mathbf{\hat{y}} - \mathbf{\mu_y}\mathbf{1}^{\rm T}\right)^{T}\right].
+\qquad(9)\]</span></span> Note that the diagonal elements of <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{xy}}\)</span> are not variances in this case, but covariances.</p>
+<p>For matrix quantities <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> we can calculate a covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{XY}}\)</span> in the same way as for the vectors <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>. To do so we have to restructure each matrix into a (tall) vector. This is done by taking each column of the matrix <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{N\times M}\)</span> (starting with the left most column) and stacking them vertically on top of one another such that <span class="math inline">\(\mbox{Vec}(\mathbf{X}) = \mathbf{\vec{X}}\in\mathbb{R}^{NM}\)</span>. We call <span class="math inline">\(\mbox{Vec}(\quad)\)</span> the vectorisation operator. Here is an example, <span class="math display">\[
+\mbox{Vec}\left(\left[\begin{array}{c c c}
+A &amp; B &amp; C \\ D &amp; E &amp; F \\ H &amp; I &amp; J\end{array}\right]\right) = \left(\begin{array}{c } A \\ D \\H \\B \\E\\I\\C\\F\\J \end{array}\right).
+\]</span> Utilising the vectorisation operator, the covariance matrix of <span class="math inline">\(\mathbf{X}\)</span> from <span class="math inline">\(N\)</span> measurements is given by, <span id="eq-covMateq3"><span class="math display">\[
+\boldsymbol{\Sigma}_{\mathbf{X}} = \frac{1}{N-1}\left[\left(\mathbf{\hat{X}} - \mathbf{\mu}_{\vec{\mathbf{X}}}\mathbf{1}^{\rm T}\right)\left(\mathbf{\hat{X}} - {\mathbf{\mu}}_{\vec{\mathbf{X}}}\mathbf{1}^{\rm T}\right)^{\rm T}\right]
+\qquad(10)\]</span></span> where the measurement matrix <span class="math inline">\(\mathbf{\hat{X}}\)</span> is built from the vectorisation of each measured matrix, <span id="eq-covMeasMat"><span class="math display">\[
+    \mathbf{\hat{X}} = \left[\begin{array}{cccc}
+         \vec{\mathbf{X}}^{(1)} &amp; \vec{\mathbf{X}}^{(2)} &amp;\cdots &amp;\vec{\mathbf{X}}^{(N)}
+    \end{array}\right]
+\qquad(11)\]</span></span> and <span class="math inline">\(\mathbf{\mu}_{\vec{\mathbf{X}}}\)</span> is the vectorisation of the matrix mean.</p>
+<p>For the covariance between two matrices, say <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> we have similarly, <span id="eq-covMateq4"><span class="math display">\[
+\boldsymbol{\Sigma}_{\mathbf{XY}} = \frac{1}{N-1}\left[\left(\mathbf{\hat{X}} - \mathbf{\mu}_{\vec{\mathbf{X}}}\mathbf{1}^{\rm T}\right)\left(\mathbf{\hat{Y}} - {\mathbf{\mu}}_{\vec{\mathbf{Y}}}\mathbf{1}^{\rm T}\right)^{\rm T}\right]
+\qquad(12)\]</span></span></p>
+<p>We will use the above formulae for vector and matrix covariance matrices later to characterise the uncertainty in measured operational velocities and FRFs.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recall that all of our VAVP equation are set in the frequency domain… Consequently, all of our variables are complex quantities, they have magnitude and phase (or a real and imaginary part)! We will have to adapt the above definitions of variance and covariance to deal with this. Its an easy fix, but we will save it for later.</p>
+<p>In addition to the above, there are some particulars related to obtaining robust covariance matrices which are beyond the scope of this introduction.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="law-of-propagation-of-uncertainty-lpu" class="level3">
+<h3 class="anchored" data-anchor-id="law-of-propagation-of-uncertainty-lpu">Law of propagation of uncertainty (LPU)</h3>
+<p>Propagation of uncertainty (or error) is the procedure by which the uncertainties in one or more input variables (such as a set of measured quantities) are used to predict the uncertainty on the output of a function that depends on them. For example, in the context of a blocked force characterisation, we may wish to know the uncertainty in our estimate of the blocked force given the uncertainty in a measured FRF matrix.</p>
+<p>Here we will limit our discussion to probabilistic methods, in particular a local expansion-based method known as the Law of Propagation of Uncertainty (LPU). This method has advantages when being used with relatively small levels of uncertainty, or functions that do not express considerable non-linearity. In the presence of large uncertainty or very non-linear functions we will resort to sampling based method using Monte-Carlo simulations.</p>
+<p>The LPU is based on a first order (linear) Taylor series expansion of the function through which uncertainty is propagated. In this sense, we can think of LPU as also meaning Linear Propagation of Uncertainty. As we will see shortly, after some manipulations an expression is obtained that relates the covariance matrix of the measured input variables to that of the output. These covariance matrices are related by a matrix of partial derivatives (termed a Jacobian matrix). An illustrative example of the LPU is shown in ??? for a simple single input single output function. Below we derive the general LPU for multiple inputs and multiple outputs.</p>
+<div id="fig-assemblies" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-assemblies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="linProp.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>LPU applied to linear function.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="nonLinLinProp_2.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>LPU applied to non-linear function.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-assemblies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Illustration of LPU propagation. LPU approximates function by its local derivative. Gives an exact propagation of uncertainty for linear problems (left), and an approximation for non-linear functions (right). For multi-input/output functions the same idea applies, just in a higher dimension (i.e.&nbsp;the function is approximated by a hyper-plane rather than a straight line).
+</figcaption>
+</figure>
+</div>
+<p>We begin by considering <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span>, generally, as the outputs of some multi-variable function, <span class="math display">\[
+y_i = G_i(x_1,x_2,\cdots,x_M) = G_i(\mathbf{x})
+\]</span> <span class="math display">\[
+y_j = G_j(x_1,x_2,\cdots,x_M)= G_j(\mathbf{x}),
+\]</span> where <span class="math inline">\(\mathbf{x}=\left(x_1,\,x_2,\,\cdots,\,x_M\right)\)</span> is a vector of input variables.</p>
+<p>We follow the same steps as before. Suppose that we repeatedly measure each element of the input variable vector <span class="math inline">\(\mathbf{x}\)</span>. Due to experimental error the result is perturbed by <span class="math inline">\(\Delta\mathbf{x}\)</span>. This small change in the value of <span class="math inline">\(\mathbf{x}\)</span> will lead to a small change in the value of the output variables <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span>. Assuming that the input error <span class="math inline">\(\Delta\mathbf{x}\)</span> remains small, the change in output <span class="math inline">\(\Delta y_i\)</span> and <span class="math inline">\(\Delta y_j\)</span> may be approximated by a first order Taylor series expansion, <span id="eq-lawEP1"><span class="math display">\[
+\Delta y_{i} \approx \frac{\partial G_i(\mathbf{x})}{\partial x_1}\Delta x_{1} + \frac{\partial G_i(\mathbf{x})}{\partial x_2} \Delta x_{2} + \cdots+\frac{\partial G_i(\mathbf{x})}{\partial x_M}\Delta x_{M}
+\qquad(13)\]</span></span> <span id="eq-lawEP2"><span class="math display">\[
+\Delta y_{j} \approx \frac{\partial G_j(\mathbf{x})}{\partial x_1}\Delta x_{1} + \frac{\partial G_j(\mathbf{x})}{\partial x_2} \Delta x_{2} + \cdots+\frac{\partial G_j(\mathbf{x})}{\partial x_M}\Delta x_{M}
+\qquad(14)\]</span></span> where <span class="math inline">\(\frac{\partial G_j(\mathbf{x})}{\partial x_M}\)</span> is the partial derivative of the propagation function <span class="math inline">\(G_j(\square)\)</span> with respect to the <span class="math inline">\(M\)</span>th input variable. Using subscript <span class="math inline">\({\square}_n\)</span> to denote the <span class="math inline">\(n\)</span>th measurement, Equation <a href="#eq-lawEP1" class="quarto-xref">Equation&nbsp;13</a> and <a href="#eq-lawEP2" class="quarto-xref">Equation&nbsp;14</a> may be written more conveniently using summation notation, <span id="eq-lawEP3"><span class="math display">\[
+\Delta y_{i_n} \approx \sum_m^M \frac{\partial G_i(\mathbf{x})}{\partial x_m}\Delta x_{m_n}
+\qquad(15)\]</span></span> <span id="eq-lawEP4"><span class="math display">\[
+\Delta y_{j_n} \approx  \sum_m^M \frac{\partial G_j(\mathbf{x})}{\partial x_m}\Delta x_{m_n}.
+\qquad(16)\]</span></span></p>
+<p>Now that we have two output variables, <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span>, we are also interested in determining the covariance between them. To do so, we begin by multiplying together <a href="#eq-lawEP3" class="quarto-xref">Equation&nbsp;15</a> and <a href="#eq-lawEP4" class="quarto-xref">Equation&nbsp;16</a>, <span class="math display">\[
+\Delta y_{i_n}\Delta y_{j_n} \approx \left(\sum_m^M \frac{\partial G_i(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right)\left( \sum_m^M \frac{\partial G_j(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right).
+\]</span> Summing over <span class="math inline">\(N\)</span> measurements and dividing both sides by <span class="math inline">\(N-1\)</span> yields, <span class="math display">\[
+\frac{1}{N-1}\sum_n^N\Delta y_{i_n}\Delta y_{j_n} \approx  \frac{1}{N-1}\sum_n^N \left(\sum_m^M \frac{\partial G_i(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right)\left( \sum_m^M \frac{\partial G_j(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right).
+\]</span> By expanding the brackets, <span class="math display">\[
+\begin{align}
+\frac{1}{N-1}\sum_n^N\Delta y_{i_n}\Delta y_{j_n} \approx \frac{1}{N-1}\sum_n^N \Bigg[ \frac{\partial G_i(\mathbf{x})}{\partial x_1}\Delta x_{1_n}\left( \sum_m^M \frac{\partial G_j(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right) + \frac{\partial G_i(\mathbf{x})}{\partial x_2}\Delta x_{2_n} \\\left( \sum_m^M \frac{\partial G_j(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right)+\cdots+
+\frac{\partial G_i(\mathbf{x})}{\partial x_M}\Delta x_{M_n}\left( \sum_m^M \frac{\partial G_j(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right)\Bigg]
+\end{align}
+\]</span> and regrouping terms we get, <span id="eq-LeP5"><span class="math display">\[
+\begin{align}
+\frac{1}{N-1}\sum_n^N\Delta y_{i_n}\Delta y_{j_n} \approx \sum_m^M  \frac{\partial G_i(\mathbf{x})}{\partial x_m} \frac{\partial G_j(\mathbf{x})}{\partial x_m} \frac{1}{N-1}\sum_n^N\Delta x_{m_n}\Delta x_{m_n} +\\ \sum_{m\neq l}\frac{\partial G_i(\mathbf{x})}{\partial x_l} \frac{\partial G_j(\mathbf{x})}{\partial x_m}\frac{1}{N-1}\sum_n^N\Delta x_{l_n}\Delta x_{m_n}
+\end{align}
+\qquad(17)\]</span></span> Recalling the definitions of variance and covariance from <a href="#eq-var2" class="quarto-xref">Equation&nbsp;6</a> and <a href="#eq-cov" class="quarto-xref">Equation&nbsp;7</a>, <a href="#eq-LeP5" class="quarto-xref">Equation&nbsp;17</a> can be rewritten as, <span id="eq-LeP6"><span class="math display">\[
+\sigma_{y_{i}y_j} \approx \sum_m^M  \frac{\partial G_i(\mathbf{x})}{\partial x_m} \frac{\partial G_j(\mathbf{x})}{\partial x_m}\sigma_{x_m}^2 + \sum_{m\neq l}\frac{\partial G_i(\mathbf{x})}{\partial x_l} \frac{\partial G_j(\mathbf{x})}{\partial x_m}\sigma_{x_lx_m}^2
+\qquad(18)\]</span></span> where <span class="math inline">\(\sigma_{y_{i}y_j}\)</span> is the covariance between the output variables <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span>, <span class="math inline">\(\sigma_{x_m}^2\)</span> is the variance of the input variable <span class="math inline">\(x_m\)</span>, and <span class="math inline">\(\sigma_{x_lx_m}^2\)</span> is the covariance between the input variables <span class="math inline">\(x_l\)</span> and <span class="math inline">\(x_m\)</span>. For the case that <span class="math inline">\(i=j\)</span> <a href="#eq-LeP6" class="quarto-xref">Equation&nbsp;18</a> reduces to, <span id="eq-LeP7"><span class="math display">\[
+\sigma_{y_{i}}^2 \approx \sum_m^M  \left(\frac{\partial G_i(\mathbf{x})}{\partial x_m} \right)^2\sigma_{x_m}^2 + \sum_{m\neq l}\frac{\partial G_i(\mathbf{x})}{\partial x_l} \frac{\partial G_i(\mathbf{x})}{\partial x_m}\sigma_{x_lx_m}
+\qquad(19)\]</span></span> where <span class="math inline">\(\sigma_{y_{i}}^2\)</span> is the variance of the output variable <span class="math inline">\(y_i\)</span>.</p>
+<p>The first summation in <a href="#eq-LeP6" class="quarto-xref">Equation&nbsp;18</a> and <a href="#eq-LeP7" class="quarto-xref">Equation&nbsp;19</a> describes the propagation of input variance onto the output uncertainty. The second summation describes the influence of input covariance (i.e.&nbsp;correlations between the input variables) on the output uncertainty. Often when dealing with uncertainty propagation the simplifying assumption of uncorrelated input variables is made, that is <span class="math inline">\(\sigma_{x_lx_{m\neq l}}=0\)</span>. The output variance then reduces to, <span id="eq-LeP8"><span class="math display">\[
+\sigma_{y_{i}}^2 \approx \sum_m^M  \left(\frac{\partial G_i(\mathbf{x})}{\partial x_m} \right)^2\sigma_{x_m}^2.
+\qquad(20)\]</span></span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Unfortunately, the experimental measurements associated with blocked forces and dynamic substructuring often yield highly correlated input variables. This is especially so for impact-based FRF measurements.</p>
+<p>The impact-based measurement of an FRF matrix involves the operator exciting the component at each DoF of interest using an instrumented force hammer, whilst simultaneously measuring the response at all DoFs. Typically, to improve SNR and/or provide a measure of coherence, multiple impacts are applied at each DoF. Of course, there will always exist some variation in the position and orientation of these repeated impacts (nobody’s perfect!). Naturally, the FRFs for each impact will differ. With all responses measured simultaneously, they clearly share the same underlying <em>operator uncertainty</em> (i.e.&nbsp;varying impact position/orientation) and so they are likely to possess some correlation.</p>
+<p>For this reason, our uncertainty propagation must be conducted using <a href="#eq-LeP6" class="quarto-xref">Equation&nbsp;18</a>. It has been shown that neglecting this <em>inter-FRF</em> uncertainty can lead to large over estimations of uncertainty in VAVP predictions.</p>
+</div>
+</div>
+<section id="matrix-form-of-lpu" class="level4">
+<h4 class="anchored" data-anchor-id="matrix-form-of-lpu">Matrix form of LPU</h4>
+<p>When dealing with large numbers of input and output variables it is far more convenient to express <a href="#eq-LeP6" class="quarto-xref">Equation&nbsp;18</a> in matrix form. This is done by using the equation, <span class="math display">\[
+\sigma_{y_{i}y_j} \approx \mathbf{J}_{i} \boldsymbol{\Sigma}_{\mathbf{x}}\mathbf{J}_{j}^{\rm T}
+\]</span> where, <span class="math display">\[
+\mathbf{J}_i = \left[\begin{array}{c c c c}\frac{\partial G_i(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_i(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_i(\mathbf{x})}{\partial x_M} \end{array}\right]\quad
+\]</span> and <span class="math display">\[
+\mathbf{J}_j= \left[\begin{array}{c c c c}\frac{\partial G_j(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_j(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_j(\mathbf{x})}{\partial x_M} \end{array}\right]
+\]</span> are the Jacobian matrices of the functions <span class="math inline">\(y_i = G_i(\mathbf{x})\)</span> and <span class="math inline">\(y_j = G_j(\mathbf{x})\)</span>, respectively, and <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{x}}\)</span> is the covariance matrix of the input vector <span class="math inline">\(\mathbf{x}\)</span>, <span id="eq-MatLeP3"><span class="math display">\[
+\boldsymbol{\Sigma}_{\mathbf{x}} = \left[\begin{array}{c c c c} \sigma_{x_1}^2 &amp; \sigma_{x_{1}x_{2}}^2 &amp; \cdots &amp; \sigma_{x_{1}x_{M}}^2 \\\sigma_{x_{2}x_{1}}^2 &amp; \sigma_{x_2}^2 &amp; \cdots &amp; \sigma_{x_{2}x_{M}}^2 \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \sigma_{x_{M}x_{1}}^2 &amp; \sigma_{x_{M}x_{2}}^2 &amp; \cdots &amp; \sigma_{x_M}^2\end{array}\right].
+\qquad(21)\]</span></span></p>
+<p>Now that we have a concise expression for <span class="math inline">\(\sigma_{y_{i}y_j}\)</span>, we can go one step further by combing the Jacobian matrices for multiple output variables, <span id="eq-Jacob1"><span class="math display">\[
+\mathbf{J} = \left[\begin{array}{c c c c}\frac{\partial G_1(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_1(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_1(\mathbf{x})}{\partial x_M} \\[0.25cm]
+\frac{\partial G_2(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_2(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_2(\mathbf{x})}{\partial x_M} \\[0.25cm]
+\vdots &amp;\vdots &amp; \ddots &amp; \vdots\\[0.25cm]
+\frac{\partial G_L(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_L(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_L(\mathbf{x})}{\partial x_M}\end{array}\right]\quad.
+\qquad(22)\]</span></span> The uncertainty propagation, <span id="eq-MatLeP4"><span class="math display">\[
+\boldsymbol{\Sigma}_{\mathbf{y}} \approx \mathbf{J} \boldsymbol{\Sigma}_{\mathbf{x}}\mathbf{J}^{\rm T}
+\qquad(23)\]</span></span> then yields a covariance matrix for the output variable vector <span class="math inline">\(\mathbf{y} = \left(y_1,\,y_2,\,\cdots,\,y_L\right)\)</span>, <span id="eq-MatLeP2"><span class="math display">\[
+\boldsymbol{\Sigma}_{\mathbf{y}} = \left[\begin{array}{c c c c} \sigma_{y_1}^2 &amp; \sigma_{y_{1}y_{2}}^2 &amp; \cdots &amp; \sigma_{y_{1}y_{L}}^2 \\\sigma_{y_{2}y_{1}}^2 &amp; \sigma_{y_2}^2 &amp; \cdots &amp; \sigma_{y_{2}y_{L}}^2 \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \sigma_{y_{L}y_{1}}^2 &amp; \sigma_{y_{L}y_{2}}^2 &amp; \cdots &amp; \sigma_{y_L}^2\end{array}\right].
+\qquad(24)\]</span></span></p>
+<p><a href="#eq-MatLeP3" class="quarto-xref">Equation&nbsp;21</a> - <a href="#eq-MatLeP2" class="quarto-xref">Equation&nbsp;24</a> describe, generally, the linear propagation of uncertainty. It is important that the Jacobians are evaluated at the true value of <span class="math inline">\(\mathbf{x}\)</span>, which we approximate by its mean value <span class="math inline">\(\mathbf{\mu_x}\)</span>. These equations will form the basis of the VAVP uncertainty propagation described below.</p>
+</section>
+</section>
+<section id="lpu-for-vavp-calculations" class="level3">
+<h3 class="anchored" data-anchor-id="lpu-for-vavp-calculations">LPU for VAVP calculations</h3>
+<section id="dealing-with-complex-variables" class="level4">
+<h4 class="anchored" data-anchor-id="dealing-with-complex-variables">Dealing with complex variables</h4>
+<p>The LPU, as detailed above, has been formulated to deal with real-valued functions of a real input variables. However, the problems of interest, namely blocked force characterisation, dynamic substructuring and response predictions, are all formulated in the frequency domain. Consequently, all our variables are complex, having both a magnitude and phase. To apply the LPU to a complex-valued function of a complex input variable some minor modification must be made. There are two approaches to do this, differing based on how the complex values are split. One approach is to treat the complex value and its conjugate as independent variables. Alternatively, the real and imaginary parts of the complex number can be treated as separate real variables. The authors find this approach the most intuitive and so the uncertainty framework presented here is done in this way.</p>
+<p>Consider the complex variable <span class="math inline">\(H=a+ib\)</span>. Separating its real and imaginary parts, we can rewrite <span class="math inline">\(H\)</span> instead as the <span class="math inline">\(2\times 1\)</span> column vector, <span class="math display">\[
+H \rightarrow  \left(\begin{array}{c}
+\mathrm{Re}(H)\\
+\mathrm{Im}(H)\end{array}\right).
+\]</span> Supposing <span class="math inline">\(H\)</span> is a measured quantity, its mean value is given by, <span class="math display">\[
+\mu_H= \mu_{a+ib} = \mu_a+i\mu_b \rightarrow  \left(\begin{array}{c}
+\mu_{\mathrm{Re}(H)}\\
+\mu_{\mathrm{Im}(H)}\end{array}\right).
+\]</span> Having separated the real and imaginary parts of <span class="math inline">\(H\)</span>, we can no longer define a single variance term to describe its uncertainty. Rather, we use the covariance matrix, <span class="math display">\[
+{\sigma}^2_H \rightarrow \boldsymbol{\Sigma}_H = \left[\begin{array}{c c}
+\sigma_{\mathrm{Re}(H)}^2 &amp; \sigma_{\mathrm{Re}(H)\mathrm{Im}(H)}^2\\
+\sigma_{\mathrm{Im}(H)\mathrm{Re}(H)}^2 &amp; \sigma_{\mathrm{Im}(H)}^2\end{array}\right]
+\]</span> where <span class="math inline">\(\sigma_{\mathrm{Re}(H)}^2\)</span> is the variance of the real part of <span class="math inline">\(H\)</span>, <span class="math inline">\(\sigma_{\mathrm{Im}(H)}^2\)</span> is the variance of the imaginary part of <span class="math inline">\(H\)</span>, and <span class="math inline">\(\sigma_{\mathrm{Re}(H)\mathrm{Im}(H)}^2\)</span> is the covariance between the two. This <em>bivariate</em> covariance matrix describes the uncertainty in the complex variable <span class="math inline">\(H\)</span>. The same idea can be used to express the covariance between two different complex variables <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>, <span class="math display">\[
+\boldsymbol{\Sigma}_{H_1H_2} = \left[\begin{array}{c c}
+\sigma_{\mathrm{Re}(H_1)\mathrm{Re}{(H_2)}}^2 &amp; \sigma_{\mathrm{Re}(H_1)\mathrm{Im}{(H_2)}}^2 \\ \sigma_{\mathrm{Im}(H_1)\mathrm{Re}{(H_2)}}^2 &amp; \sigma_{\mathrm{Im}(H_1)\mathrm{Im}{(H_2)}}^2
+\end{array}\right].
+\]</span> Hereafter, we will use the term ‘<em>bivariate</em>’ more generally to describe any covariance or Jacobian matrix that has had its complex values separated into real and imaginary parts.</p>
+<p>Further extension to complex <em>vector and matrix</em> variables is straightforward. We can define the operator, <span class="math display">\[
+M_v(H) = \left(\begin{array}{c}
+\mathrm{Re}(H)\\
+\mathrm{Im}(H)\end{array}\right)
+\]</span> which separates and stacks vertically the real and imaginary parts of the complex variable <span class="math inline">\(H\)</span>. By applying <span class="math inline">\(M_v(\quad)\)</span> to each element of <span class="math inline">\(\mathbf{{x}}\)</span>, <span class="math inline">\(\mu_\mathbf{x}\)</span>, <span class="math inline">\(\mathbf{{y}}\)</span>, and <span class="math inline">\(\mu_\mathbf{y}\)</span> <a href="#eq-covMateq" class="quarto-xref">Equation&nbsp;8</a> and <a href="#eq-covMateq2" class="quarto-xref">Equation&nbsp;9</a> will compute bivariate forms of the covariance matrices <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{x}}\)</span> and <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{xy}}\)</span>. For a complex matrix variable, the vectorisation operator <span class="math inline">\(\mbox{Vec}(\quad)\)</span> is applied first, before <span class="math inline">\(M_v(\quad)\)</span> is applied element-wise. As an example, the bivariate form of <a href="#eq-MatLeP3" class="quarto-xref">Equation&nbsp;21</a> is given by, <span class="math display">\[
+\boldsymbol{\Sigma}_{\mathbf{x}} = \left[\begin{array}{c c  c  c }
+\boldsymbol{\Sigma}_{x_1x_1} &amp; \boldsymbol{\Sigma}_{x_1x_2} &amp; \cdots  &amp; \boldsymbol{\Sigma}_{x_1x_M} \\
+\boldsymbol{\Sigma}_{x_2x_1} &amp; \boldsymbol{\Sigma}_{x_2x_2} &amp; \cdots  &amp; \boldsymbol{\Sigma}_{x_2x_M} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\boldsymbol{\Sigma}_{x_Mx_1} &amp; \boldsymbol{\Sigma}_{x_Mx_2} &amp; \cdots  &amp; \boldsymbol{\Sigma}_{x_Mx_M} \\
+\end{array}\right]
+\]</span> where each univaraite element has been replaced by a <span class="math inline">\(2\times 2\)</span> bivariate covariance matrix, <span class="math display">\[
+\sigma_{x_ix_j}^2 \rightarrow \boldsymbol{\Sigma}_{x_ix_j} = \left[\begin{array}{c c}
+\sigma_{\mathrm{Re}(x_i)\mathrm{Re}(x_j)}^2 &amp; \sigma_{\mathrm{Re}(x_i)\mathrm{Im}(x_j)}^2\\
+\sigma_{\mathrm{Im}(x_i)\mathrm{Re}(x_j)}^2 &amp; \sigma_{\mathrm{Im}(x_i)\mathrm{Im}(x_j)}^2\end{array}\right].
+\]</span></p>
+<p>To propagate the bivariate complex uncertainty it is necessary to redefine the Jacobian matrices accordingly. The bivariate form of the Jacobian is given by <span id="eq-bivJacob"><span class="math display">\[
+\mathbf{J} = \left[\begin{array}{c c c c}\frac{\partial \mathbf{G}_1(\mathbf{x})}{\partial {x_1}} &amp; \frac{\partial \mathbf{G}_1(\mathbf{x})}{\partial {x_2}} &amp; \cdots &amp; \frac{\partial \mathbf{G}_1(\mathbf{x})}{\partial {x_M}} \\[0.25cm]
+\frac{\partial \mathbf{G}_2(\mathbf{x})}{\partial{x_1}} &amp; \frac{\partial \mathbf{G}_2(\mathbf{x})}{\partial {x_2}} &amp; \cdots &amp; \frac{\partial \mathbf{G}_2(\mathbf{x})}{\partial {x_M}} \\[0.25cm]
+\vdots &amp;\vdots &amp; \ddots &amp; \vdots\\[0.25cm]
+\frac{\partial \mathbf{G}_L(\mathbf{x})}{\partial {x_1}} &amp; \frac{\partial \mathbf{G}_L(\mathbf{x})}{\partial {x_2}} &amp; \cdots &amp; \frac{\partial \mathbf{G}_L(\mathbf{x})}{\partial {x_M}}\end{array}\right]
+\qquad(25)\]</span></span> where we have simply replaced each partial derivative in <a href="#eq-Jacob1" class="quarto-xref">Equation&nbsp;22</a>, with a <span class="math inline">\(2\times2\)</span> matrix containing the partial derivatives of the real and imaginary parts of the output, with respect to the real and imaginary parts of the input, <span id="eq-bivJacob2"><span class="math display">\[
+\frac{\partial {G_i}(\mathbf{x})}{\partial {x_j}}\rightarrow \frac{\partial \mathbf{G}_i(\mathbf{x})}{\partial {x_j}} = \left[\begin{array}{c c }\frac{\partial \mathrm{Re}(G_i(\mathbf{x}))}{\partial \mathrm{Re}(x_j)} &amp; \frac{\partial \mathrm{Re}(G_i(\mathbf{x}))}{\partial \mathrm{Im}(x_j)}  \\[0.25cm]
+\frac{\partial \mathrm{Im}(G_i(\mathbf{x}))}{\partial \mathrm{Re}(x_j)} &amp; \frac{\partial \mathrm{Im}(G_i(\mathbf{x}))}{\partial \mathrm{Im}(x_j)}  \end{array}\right].
+\qquad(26)\]</span></span></p>
+<p>The bivariate covariance and Jacobian matrices described above are used in place of their univariate counter parts in <a href="#eq-MatLeP4" class="quarto-xref">Equation&nbsp;23</a> to propagate complex uncertainty. The resulting output uncertainty, characterised by the covariance matrix <span class="math inline">\(\boldsymbol{\Sigma_\mathbf{y}}\)</span>, is also bivariate, with its elements describing the variance and covariance between the real and imaginary parts of its elements.</p>
+<p>The theory underlying VAVP construction has been described in detail over the previous pages. In short, there are three equations that govern majority of VAVP excersises. In the following sections we will briefly reintroduce these key equations, before summaring their LPU-based uncertainty propagation.</p>
+</section>
+<section id="inverse-blocked-force-identification" class="level4">
+<h4 class="anchored" data-anchor-id="inverse-blocked-force-identification">Inverse (blocked) force identification</h4>
+<p>The key equation for the inverse identification of blocked forces takes the form, <span id="eq-invForce"><span class="math display">\[
+    \mathbf{\bar{f}} = \mathbf{Y}_C^+\mathbf{v}
+\qquad(27)\]</span></span> where <span class="math inline">\(\mathbf{Y}_C\in\mathbb{C}^{N_r\times N_f}\)</span> is a complex <span class="math inline">\(N_r\times N_f\)</span> matrix of Frequency Response Functions (FRFs) that relate the measured operational responses <span class="math inline">\(\mathbf{v}\in\mathbb{C}^{N_r}\)</span> to the sought after blocked forces <span class="math inline">\(\mathbf{\bar{f}}\in\mathbb{C}^{N_f}\)</span> and <span class="math inline">\(\square^+\)</span> denotes a generalized matrix (pseudo-)inverse.</p>
+<p>Given the above, the input and output (bivariate) covariance required by the LPU are given by, <span class="math display">\[
+    % \mu_{\mathbf{x}} = \left(\begin{array}{c}
+    %   M(\mu_{\mathbf{\vec{Y}}}) \\
+    %   M(\mu_\mathbf{{v}})
+    % \end{array} \right)
+    % \qquad  
+    \Sigma_\mathbf{x} = \left[\begin{array}{ll} \Sigma_\mathbf{Y} &amp;     \mathbf{0} \\
+        \mathbf{0}&amp; \Sigma_\mathbf{v}
+    \end{array}\right] \qquad \mbox{and}\qquad
+    % \mu_{\mathbf{y}} = M(\mu_\mathbf{\bar{f}})
+    \Sigma_\mathbf{y} = \Sigma_\mathbf{\bar{f}}
+\]</span></p>
+<p>The Jacobian of the underlying function (<a href="#eq-invForce" class="quarto-xref">Equation&nbsp;27</a>) is given by, <span class="math display">\[
+    \begin{align}
+        \mathbf{J} &amp;=  \left[ \begin{array}{c c}
+            \mathbf{J}_{\mathbf{Y}} &amp; \mathbf{J}_\mathbf{v}
+        \end{array}\right]\\
+        \mathbf{J}_{\mathbf{Y}} &amp;=\mathcal{M}\left(-(\mathbf{Y^+}\mathbf{v})^{\rm T}\otimes\mathbf{Y^+}, \left[\left(((\mathbf{I}-\mathbf{Y}\mathbf{Y^+})\mathbf{v})^{\rm T}\otimes\mathbf{Y^+}  \mathbf{Y}^{\rm +H}\right)+ \left((\mathbf{Y}^{\rm +H}  \mathbf{Y^{+}}\mathbf{v})^{\rm T}\otimes(\mathbf{I}-\mathbf{Y^+}\mathbf{Y}) \right)\right]\mathbf{K}\right) \\
+        \mathbf{J}_{\mathbf{v}} &amp;= \mathcal{M} \left(\mathbf{Y}^+,\mathbf{0}\right)
+    \end{align}
+\]</span> where <span class="math inline">\(\otimes\)</span> denotes the Kroneker product, <span class="math inline">\(\mathbf{K}\)</span> is the so-called commutation matrix (the matrix relating the vectorisation of a matrix, to that of its transpose), and <span class="math inline">\(\mathcal{M}(A,B)\)</span> is an element-wise function defined as, <span class="math display">\[
+        \mathcal{M}(A,B) = \left[\begin{array}{c c}
+            \mathrm{Re}\left(A+B\right) &amp; \phantom{-}\mathrm{Im}\left(-A+B\right) \\
+            \mathrm{Im}\left(A+B\right)  &amp; -\mathrm{Re}\left(-A+B\right)
+        \end{array}\right].
+\]</span> The function <span class="math inline">\(\mathcal{M}(A,B)\)</span> plays an essential role; it converts the <em>complex derivatives</em> defined with, to the real-imagainary form as shown in <a href="#eq-bivJacob2" class="quarto-xref">Equation&nbsp;26</a>.</p>
+<p>Note that <span class="math inline">\(\mathbf{J}_\mathbf{Y}\)</span> is defined above for the general case of an over or underdetermined problem. In the case of a determined (i.e.&nbsp;same number of responses as forces to be identified) it reduces to the simpler form, <span class="math display">\[
+        \mathbf{J}_{\mathbf{Y}} =\mathcal{M}\left(-(\mathbf{Y}^{-1}\mathbf{v})^{\rm T}\otimes\mathbf{Y}^{-1}, \mathbf{0}\right) \\
+\]</span> Substituting <span class="math inline">\(\mathbf{J}\)</span> and <span class="math inline">\(\Sigma_\mathbf{x}\)</span>, as defined above, into <a href="#eq-MatLeP4" class="quarto-xref">Equation&nbsp;23</a> provides a linear esitmate of the blocked force covariance matrix <span class="math inline">\(\Sigma_\mathbf{\bar{f}}\)</span> based on the operational response and FRF uncertainty.</p>
+</section>
+<section id="substructuring" class="level4">
+<h4 class="anchored" data-anchor-id="substructuring">Substructuring</h4>
+<p>The dual formulation of substructuring is govered by the following equation, <span id="eq-dual"><span class="math display">\[
+            \mathbf{H}_C = \mathbf{Y} - \mathbf{Y}\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{
+            \rm T} + \mathbf{Z}_J^{-1}\right)^{-1} \mathbf{B}\mathbf{Y}
+\qquad(28)\]</span></span> where <span class="math inline">\(\mathbf{H}_C\in\mathbb{C}^{N_C\times N_C}\)</span> is the FRF matrix of the coupled assembly (note that we have used <span class="math inline">\(\mathbf{H}_C\)</span> rather than <span class="math inline">\(\mathbf{Y}_C\)</span> to avoid confusion with the FRF matrix used in <a href="#eq-invForce" class="quarto-xref">Equation&nbsp;27</a>), <span class="math inline">\(\mathbf{Y}\in\mathbb{C}^{(N_S+N_R)\times(N_S+N_R)}\)</span> is a block diagonal matrix containing the uncoupled FRF matrices of the source <span class="math inline">\(S\)</span> and receiver <span class="math inline">\(R\)</span> components, <span class="math inline">\(\mathbf{\Gamma}\in\mathbb{C}^{N_c\times N_c}\)</span> is a matrix of joint flexibilities that describes the dynamics of the connecting DoFs, and <span class="math inline">\(\mathbf{B}\in\mathbb{Z}^{N_c\times(N_S+N_R)}\)</span> is a signed Boolean matrix that controls between which DoFs equilibrium is enforced.</p>
+<p>The input and output covariance are given by, <span class="math display">\[
+\Sigma_\mathbf{x} =  \left[\begin{array}{ll} \Sigma_\mathbf{[{Y}]} &amp;    \mathbf{0} \\
+\mathbf{0}&amp; \Sigma_{{\mathbf{Z}}_j}
+\end{array}\right] \qquad \mbox{and} \qquad \Sigma_{\mathbf{y}} = \Sigma_{{\mathbf{H}}_C}
+\]</span> The Jacobian of the underlying function (<a href="#eq-dual" class="quarto-xref">Equation&nbsp;28</a>) is given by, <span id="eq-ssJ"><span class="math display">\[
+        \mathbf{J} =  \left[ \begin{array}{c c}
+        \mathbf{J}_{[\mathbf{Y}]} &amp; \mathbf{J}_{\mathbf{Z}_j}
+    \end{array}\right]
+\qquad(29)\]</span></span> <span class="math display">\[
+\begin{align}
+    \mathbf{J}_{[\mathbf{Y}]}= \mathcal{M}\,\Bigg(\mathbf{I} - \left[\left(\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{\rm T}\right)^{-1} \mathbf{B}\mathbf{Y}\right)^{\rm T}\otimes \mathbf{I} \right] &amp;+ \left[ \left(\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{\rm T}\right)^{-1} \mathbf{B}\mathbf{Y}\right)^{\rm T}  \otimes \mathbf{Y}\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{\rm T}\right)^{-1}\mathbf{B} \right] \cdots \\ &amp;-
+    \left[ \mathbf{I}   \otimes \mathbf{Y}\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{\rm T}\right)^{-1}\mathbf{B} \right],\, \mathbf{0}\Bigg) \nonumber
+\end{align}
+\]</span> <span id="eq-ssJ2"><span class="math display">\[
+    \mathbf{J}_{\mathbf{Z}_j} = \mathcal{M}\,\Bigg(\left[\left(\left(\mathbf{B}\mathbf{Y}\mathbf{B}^{\rm T} + \mathbf{\Gamma}\right)^{-1}\mathbf{B}\mathbf{Y}\right)^{\rm T} \otimes \mathbf{Y}\mathbf{B}^{\rm T} \left(\mathbf{B}\mathbf{Y}\mathbf{B}^{\rm T} + \mathbf{\Gamma}\right)^{-1}\right]\bigg[-\mathbf{\Gamma}^{\rm T}\otimes \mathbf{\Gamma}\bigg],\, \mathbf{0}\Bigg)
+\qquad(30)\]</span></span></p>
+<p>Substituting <span class="math inline">\(\mathbf{J}\)</span> and <span class="math inline">\(\Sigma_\mathbf{x}\)</span>, as defined above, into <a href="#eq-MatLeP4" class="quarto-xref">Equation&nbsp;23</a> provides a linear esitmate of the coupled FRF covariance matrix <span class="math inline">\(\Sigma_\mathbf{H}\)</span> based on the uncertainty of each individual component, and that of the joint dynamics. Note that if the joint dynamics are not considered uncertain, then we can simply set <span class="math inline">\(\Sigma_{{\mathbf{Z}}_J}=\mathbf{0}\)</span>.</p>
+<p>A similar set of equations are available for the primal formulation of the substructuring equations, though are omitted here for berevity.</p>
+</section>
+<section id="forward-response-prediction" class="level4">
+<h4 class="anchored" data-anchor-id="forward-response-prediction">Forward response prediction</h4>
+<p>Once the blocked force and coupled assembly FRF are known, an operational response prediction can be made using, <span id="eq-forwardPred"><span class="math display">\[
+    \mathbf{p} = \mathbf{H}_C\mathbf{\bar{f}}
+\qquad(31)\]</span></span> where <span class="math inline">\(\mathbf{H}_C\in\mathbb{C}^{N_p\times N_f}\)</span> is a matrix of (forward) FRFs that relate the acquired force <span class="math inline">\(\mathbf{\bar{f}}\in\mathbb{C}^{N_f}\)</span> to the target response variables <span class="math inline">\(\mathbf{p}\in\mathbb{C}^{N_p}\)</span>. We have used the notation <span class="math inline">\(\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{H}_C\)</span> for generality and to avoid confusion with <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{Y}_C\)</span> used in <a href="#eq-invForce" class="quarto-xref">Equation&nbsp;27</a>, though in general the response could be structural and/or acoustic.</p>
+<p>The input and output covariance are given by, <span class="math display">\[
+    \Sigma_\mathbf{x} = \left[\begin{array}{ll} \Sigma_\mathbf{H} &amp;     \mathbf{0}\\
+            \mathbf{0}&amp; \Sigma_\mathbf{f}
+        \end{array}\right] \qquad \mbox{and} \qquad \Sigma_{\mathbf{y}} = \Sigma_{{\mathbf{p}}}
+\]</span> Note that the input covariance matrix is block diagonal. This is becasuse the blocked force and substructured FRF are uncorrelated, asd they are obtained from completely seperate expeirments.</p>
+<p>The Jacobian of the underlying function (<a href="#eq-forwardPred" class="quarto-xref">Equation&nbsp;31</a>) is given by, <span class="math display">\[
+    \begin{align}
+        \mathbf{J} =   \left[ \begin{array}{c c}
+            \mathbf{J}_{\mathbf{H}} &amp; \mathbf{J}_{\mathbf{f}}
+        \end{array}\right] \qquad \qquad \mathbf{J_H} = \, \mathcal{M}\left(\mathbf{\bar{f}^{\rm T}}\otimes \mathbf{I}, \, \mathbf{0}\right) \qquad \qquad
+        \mathbf{J_{f}} = \, \mathcal{M}\left(\mathbf{H}_C, \, \mathbf{0}\right)
+    \end{align}
+\]</span> Substituting <span class="math inline">\(\mathbf{J}\)</span> and <span class="math inline">\(\Sigma_\mathbf{x}\)</span>, as defined above, into <a href="#eq-MatLeP4" class="quarto-xref">Equation&nbsp;23</a> provides a linear estimate of the operational VAVP response <span class="math inline">\(\Sigma_\mathbf{p}\)</span> based on the uncertainty of the blocked force and forward FRF.</p>
+</section>
+<section id="esimtating-confidence-bounds" class="level4">
+<h4 class="anchored" data-anchor-id="esimtating-confidence-bounds">Esimtating confidence bounds</h4>
+</section>
+</section>
+<section id="monte-carlo-simulations-for-large-uncertainty" class="level3">
+<h3 class="anchored" data-anchor-id="monte-carlo-simulations-for-large-uncertainty">Monte-Carlo simulations (for large uncertainty)</h3>
+<p>The LPU described above is able to provide good esimtate of the output uncertainty of a VAVP, provided the input uncertainty is small. In the presence of mid-large levels of uncertainty the LPU can yield large errors, and so an alternative method is required. The simplest approach, capable of handling arbitary levels of uncertainry, is Monte-Carlo simulation.</p>
+<p>Using a Monte-Carlo approach, we estimate the probability density function (PDF) of the output of a function <span class="math inline">\(\mathbf{y} = G(\mathbf{x})\)</span>, by randomly sampling the distribution of the input <span class="math inline">\(\mathbf{x}\)</span>. Failing an analytical solution for the PDF of the output, which is rarely available for problems of realistic complexity, the Monte-Carlo approach is the most robust approach for the propagation of uncertainty; it is frequently used to provide <em>ground truth</em> estimates for the evaluation of alternative methods. By evaluating the function <span class="math inline">\(G(\square)\)</span> directly, we implicitly capture the effects of non-linearity and their influence on the output distribution. The main limitation of a MC simulation is simply the computational effort required, which can be great for high dimensional problems or expensive models. It is worth recalling that all TPA equations are represented in the frequency domain, so whilst <span class="math inline">\(\mathbf{x}\)</span> might not be considered very high dimensional, all calculations must be repeated potentially many thousands of times to cover the frequency range of interest.</p>
+<p>A typical Monte-Carlo procedure is as follows:</p>
+<ol type="1">
+<li>A random sample <span class="math inline">\(\mathbf{x}_i\)</span> is drawn from the input distribution, for example the multi-dimensional Normal with mean <span class="math inline">\(\mu_\mathbf{x}\)</span> and covariance <span class="math inline">\(\Sigma_{\mathbf{x}}\)</span>, <span class="math display">\[
+\mathbf{x}_i\sim \mathcal{N}(\mu_\mathbf{x},\Sigma_\mathbf{x})
+\]</span></li>
+<li>The drawn sample is used to evaluate the function <span class="math inline">\(G(\square)\)</span>, resulting in the output sample <span class="math inline">\(\mathbf{y}_i\)</span>. <span class="math display">\[
+\mathbf{y}_i = G(\mathbf{x}_i)
+\]</span></li>
+<li>Steps 1 and 2 are repeated until <span class="math inline">\(N_{MC}\)</span> output samples have been obtained. Collectively, these samples approximate the PDF of the output <span class="math inline">\(\mathbf{y}\)</span>. They can be used to infer any statistics of interest, for example the mean and covariance, <span class="math display">\[
+\mu_\mathbf{y} = \frac{1}{N_{MC}}\sum_{i=1}^{N_{MC}} \mathbf{y}_i\qquad \qquad
+     \Sigma_\mathbf{y} = \frac{1}{N_{MC}-1}\sum_{i=1}^{N_{MC}} (\mathbf{y}_i - \mu_\mathbf{y})(\mathbf{y}_i - \mu_\mathbf{y})^{\rm T}
+\]</span></li>
+</ol>
+<p>To avoid uneessecary function evaluations, stopping criteria can be incorporated into the above by using a recursive calculation of, for example, the mean and covairance.</p>
+<p>Note that the MC samples <span class="math inline">\(\mathbf{y}_i\)</span> can be used to infer more than just the covariance. Indeed, these samples approximate the actual output distibution and so can be used to infer any statistics of interest, e.g.&nbsp;magnitude confidence bound, etc.</p>
+</section>
+</section>
+<section id="what-next" class="level2">
+<h2 class="anchored" data-anchor-id="what-next">What next?</h2>
+<p>With our discussion of uncertainty now complete, the last thing to do is bring everything together and summarise the key steps of constructing a VAVP.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../introductions/VAVPs/blockedForce/blockedForce.html" class="pagination-link" aria-label="Blocked forces (active characterisation)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Blocked forces (active characterisation)</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../introductions/VAVPs/conclusions/summary.html" class="pagination-link" aria-label="Summary">
+        <span class="nav-page-text">Summary</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

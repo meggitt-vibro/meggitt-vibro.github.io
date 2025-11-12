@@ -1,0 +1,43 @@
+\begin{tikzpicture}[scale=1]
+	
+	\begin{axis}[
+		width=0.8\textwidth,
+		height=0.4\textwidth,
+		xlabel={Time (s)},
+		ylabel = {Amplitude (m)},
+		xmax=5.5,
+		ymax=1.1, 
+		samples=500]
+		
+		\def\wn{1000};
+		\def\xo{1};
+		\def\dxo{0};		
+		\def\zeta{0.001};
+		\def\wdd{sqrt(1-\zeta^2)*\wn};
+		\def\phi{rad(atan(\dxo/(\wdd*\xo)))};
+		
+	
+		\addplot[blue, thick, domain=0:5] (x, {sqrt(\xo^2+(\dxo/\wdd)^2) * cos(\wdd*x- \phi) * exp(-\zeta*\wn*x)});
+		
+		
+		\def\wn{1000};
+		\def\xo{1};
+		\def\dxo{0};		
+		\def\zeta{0.1};
+		\def\wdd{sqrt(1-\zeta^2)*\wn};
+		\def\phi{rad(atan(\dxo/(\wdd*\xo)))};
+		
+		\addplot[red, thick, domain=0:5] (x, {sqrt(\xo^2+(\dxo/\wdd)^2) * cos(\wdd*x- \phi) * exp(-\zeta*\wn*x)});
+		
+				\def\wn{1000};
+		\def\xo{1};
+		\def\dxo{0};		
+		\def\zeta{2};
+		\def\wdd{sqrt(1-\zeta^2)*\wn};
+		\def\phi{rad(atan(\dxo/(\wdd*\xo)))};
+		
+		\addplot[green, thick, domain=0:5] (x, {sqrt(\xo^2+(\dxo/\wdd)^2) * cos(\wdd*x- \phi) * exp(-\zeta*\wn*x)});
+		
+	\end{axis}
+	
+\end{tikzpicture}

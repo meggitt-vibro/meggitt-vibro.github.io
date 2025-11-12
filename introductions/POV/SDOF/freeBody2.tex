@@ -1,0 +1,20 @@
+\documentclass[crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
+\usepackage{tikz,calc,pgfplots}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{calc}
+\begin{document}
+
+\begin{tikzpicture}[every node/.style={outer sep=0pt,thick}]
+	\node (M) [draw,minimum width=3.5cm,minimum height=2cm] {$m$};
+	
+	\node (ground1) at (M.south) [yshift=-1.5cm,xshift=-1.25cm,anchor=north] {};
+	\node (ground2) at (M.south) [yshift=-1.5cm,xshift=1.25cm,anchor=north] {};
+
+	\draw [-latex,red,thick] ($(M.south east)!(ground1.north)!(M.south west)$) ++(0,-0.1cm) -- ++(0,-1.cm) node[midway,left,xshift=-0.3cm] { $-kx$};
+	\draw [-latex,blue,thick] ($(M.south east)!(ground2.north)!(M.south west)$)++(0,-0.1cm) -- ++(0,-1.cm) node[midway,right,xshift=0.3cm] {$-c\dot{x}$};
+
+	\draw [latex-, thick] (M.north) +(0,1cm) --  ++(0,0.1cm) node[pos=.0,right,xshift=0cm,text width=2.15cm] {$F_{e}$};
+	\draw [-latex,|->] (M) +(2.2cm,0cm) --  ++(2.2cm,0.75cm) node[pos=.5,right,xshift=0.25cm] {$x$};
+\end{tikzpicture}
+
+\end{document}

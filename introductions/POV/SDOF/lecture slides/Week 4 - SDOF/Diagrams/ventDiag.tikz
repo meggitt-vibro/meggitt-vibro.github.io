@@ -1,0 +1,21 @@
+\begin{tikzpicture}[scale=0.225]
+
+\draw [line width = 0.05cm] (-3.5,3.5) -- (-1,1)--(-1,-2) -- (-3.5,-4.5);
+\draw [line width = 0.05cm,line cap=round](-3.5,3.5) -- (-3.5,4);
+\draw [line width = 0.05cm,line cap=round](-3.5,-5) -- (-3.5,-4.5);
+
+\draw [fill=black] (-1,1) rectangle (0.5,-2);
+
+\draw [fill=brown,line width = 0.01cm]
+(-3.5,4) -- (-3.5,6.5) -- (11,6.5) -- (11,-17.5) -- (-3.5,-17.5) -- (-3.5,-13.5) -- (3.5,-13.5) -- (3.5,-14)-- (-3,-14)-- (-3,-17) -- (10.5,-17) -- (10.5,6) -- (-3,6) -- (-3,4) -- cycle;
+\draw [fill=brown,line width = 0.01cm] (-3.5,-5) -- (-3.5,-11.5) -- (3.5,-11.5) --(3.5,-11) -- (-3,-11) -- (-3,-5) -- cycle;
+\node at (4,-4.5) {$C_{AB}$, $R_{AB}$};
+\node at (-9,-2.5) {$M_{AD}$, $C_{AD}$, $R_{AD}$};
+\node at (-9,-4.5) {$M_{Af,b}$, $R_{Af,b}$};
+
+\node at (-8.5,-11.5) {$M_{AV}'$, $R_{AV}'$};
+\node at (-9.5,-13.5) {$M_{AVf,b}$, $R_{AVf,b}$};
+\draw [latex-latex] (2.5,-7.5) -- (5.5,-7.5)node [midway,above] {$U_B$} ;
+\draw [latex-latex] (-5,-0.6) -- (-2,-0.6)node [midway,above] {${\color{red}U_D}$} ;
+\draw [latex-latex] (-1,-12.5) node [left] {${\color{red}U_V}$} -- (2,-12.5) ;
+\end{tikzpicture}

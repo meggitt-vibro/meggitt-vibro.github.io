@@ -1,0 +1,11 @@
+---
+title: "My research"
+---
+On this page you will find a growing collection of articles based on peer reviewed journal papers that I have written and/or contributed to post August 2025. Where possible, the articles on this page will include code snippets for any numerical examples presented, allowing you to easily reproduce the results and play around with the variables. 
+
+If you would like to cite any of these articles, at the bottom of each page you will find a reference to the published journal paper (unless the article is still under review, in which case you may wish to cite the online article instead).
+
+Papers published prior to August 2025 are unlikely to be included here but can be found in .pdf form on my [ResearchGate profile](https://www.researchgate.net/profile/Joshua-Meggitt).
+
+If you have any questions, comments or suggestions related to any of the articles presented here, please feel free to get in touch!
+

@@ -1,0 +1,51 @@
+---
+title: "Microphone and Loudspeaker Design"
+---
+
+Microphone and Loudspeaker Design is a second year module on the BEng Acoustics and Audio Engineering degree at the University of Salford.
+
+Loudspeaker (and microphone) design is the perfect example of a multi-physics problem, requiring an understanding and bringing together of many branches of physics and engineering. In the quest to understand and develop suitable design methods this module covers a broad selection of topics, including: electronics and circuit theory, mechanical vibration and dynamics, magnetism, and acoustics.
+
+This page is primarily to offer my current students a convenient way of accessing lecture material (lecture notes and slides) all in one place, but also as a resource for anybody who might find these materials useful. Their use of course comes with the usual caveats...  Whilst I have tried to ensure these notes and slides are free from any errors, I cannot guarantee that this is the case. I can therefore not be held accountable for any poorly designed loudspeakers that have their origins in these notes!
+
+## Course notes
+
+<iframe style="width:100%; height:615px;"src="LectureNotesMLSD.pdf"></iframe>
+
+## Week 1: Module introduction, lumped parameter modelling, AC circuit theory
+<iframe style="width:100%; height:615px;"src="Week 1.pdf"></iframe>
+
+
+## Week 2: Electronic filters, the mechanical domain, and equivalent circuits
+<iframe style="width:100%; height:615px;"src="Week 2.pdf"></iframe>
+
+## Week 3: Impedance vs mobility analogues, Q-factor
+<iframe style="width:100%; height:615px;"src="Week 3.pdf"></iframe>
+
+## Week 4: Mass-spring loudspeaker model, transient analysis, acoustic domain
+<iframe style="width:100%; height:615px;"src="Week 4.pdf"></iframe>
+
+## Week 5: Mass-spring loudspeaker model, acoustic domain, domain coupling
+<iframe style="width:100%; height:615px;"src="Week 5.pdf"></iframe>
+
+
+## Week 6: Domain coupling, removing transformers, Norton’s theorem
+<iframe style="width:100%; height:615px;"src="Week 6.pdf"></iframe>
+
+## Week 7: Sound radiation, acoustic loading, directivity
+<iframe style="width:100%; height:615px;"src="Week 7.pdf"></iframe>
+
+## Week 8: Infinite baffle, electrical impedance, Theile-Small parameters
+<iframe style="width:100%; height:615px;"src="Week 8.pdf"></iframe>
+
+## Week 9: The sealed cabinet loudspeaker
+<iframe style="width:100%; height:615px;"src="Week 9.pdf"></iframe>
+
+## Week 10: The vented cabinet loudspeaker (part 1)
+<iframe style="width:100%; height:615px;"src="Week 10.pdf"></iframe>
+
+## Week 11: The vented cabinet loudspeaker (part 2)
+<iframe style="width:100%; height:615px;"src="Week 11.pdf"></iframe>
+
+## Week 12: Performance parameters and magnet/voice coil design
+<iframe style="width:100%; height:615px;"src="Week 12.pdf"></iframe>

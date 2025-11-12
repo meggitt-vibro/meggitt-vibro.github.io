@@ -1,0 +1,863 @@
+%\documentclass[11pt,aspectratio=169]{beamer} 
+\documentclass[11pt,aspectratio=169,handout]{beamer} 
+
+%%%%%%% FOR HANDOUTS %%%%%%%%%
+%BEGIN_FOLD
+%\usepackage{pgffor}
+%\makeatletter
+%\def\strokeifnotempty{%
+%		\expandafter\ifvoid\csname pgfpages@box@\the\pgf@cpn\endcsname
+%		\let\@next=\relax
+%		\else
+%		\let\@next=\pgfstroke
+%		\fi
+%		\@next%
+%	}
+%\makeatother
+%
+%\mode<handout>{	
+%		\usepackage{pgf}
+%		\usepackage{pgfpages}
+%		\pgfpagesuselayout{8 on 1}[a4paper,border shrink=5mm]
+%		\setbeameroption{show notes}
+%		\setbeamertemplate{note page}{}
+%		\pgfpageslogicalpageoptions{1}{border code=\pgfsetlinewidth{2pt}\strokeifnotempty}
+%		\pgfpageslogicalpageoptions{3}{border code=\pgfsetlinewidth{2pt}\strokeifnotempty}
+%		\pgfpageslogicalpageoptions{5}{border code=\pgfsetlinewidth{2pt}\strokeifnotempty}
+%		\pgfpageslogicalpageoptions{7}{border code=\pgfsetlinewidth{2pt}\strokeifnotempty}
+%		\setbeamercolor{background canvas}{bg = white}
+%	}
+%\makeatletter 
+%\def\beamer@framenotesbegin{%   at beginning of slide   
+%	\gdef\beamer@noteitems{}%   
+%	\gdef\beamer@notes{{}}% used to be totally  empty. 
+%	}
+%\makeatother
+%END_FOLD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%% PREAMBLE %%%%%%%%%%%%%
+%BEGIN_FOLD
+%\usetheme[subsectionpage=progressbar,progressbar=frametitle]{metropolis}
+\usetheme[]{Frankfurt}
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}[page number]
+\makeatletter
+\define@key{beamerframe}{c}[true]{% centered
+	\beamer@frametopskip=0pt plus 1fill\relax%
+	\beamer@framebottomskip=0pt plus 1fill\relax%
+	\beamer@frametopskipautobreak=0pt plus .4\paperheight\relax%
+	\beamer@framebottomskipautobreak=0pt plus .6\paperheight\relax%
+}
+\define@key{beamerframe}{t}[true]{% top
+	\beamer@frametopskip=-10pt\relax%
+	\beamer@framebottomskip=0pt plus 1fill\relax%
+	\beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+	\beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+}
+\renewcommand{\thempfootnote}{\arabic{mpfootnote}}
+
+\usepackage{appendixnumberbeamer}
+\hypersetup{urlcolor=red}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{float,subfig,soul}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usetikzlibrary{calc}
+\usepackage{xspace, xcolor}
+\setbeamercovered{transparent} % for grey itemize bullet points
+\usefonttheme[onlymath]{serif}
+\usepackage{tikz,amsmath,amssymb,pgfplots}
+\usepgfplotslibrary{polar}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows}
+\usepackage{lmodern}
+\usepackage{amsfonts,mathtools,mathrsfs,blkarray,accents}
+
+\tikzset{snake it/.style={decorate, decoration=snake}}
+
+\definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+\definecolor{blue(munsell)}{rgb}{0.0, 0.5, 0.69}
+\definecolor{cadmiumorange}{rgb}{0.93, 0.53, 0.18}
+
+\DeclareRobustCommand\munderbar[1]{\underaccent{\bar}{#1}}
+
+\usepackage{layout}
+\geometry{footskip=1pt}
+
+\newcommand{\vdashrule}[1]{\tikz[remember picture]\draw[dashed,thick,overlay,mDarkTeal!20](-10pt,-200pt)--(-10pt,105pt);}
+
+\AtBeginSection[]{
+	\begin{frame}
+		\vfill
+		\centering
+		\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+			\usebeamerfont{title}\insertsectionhead\par%
+		\end{beamercolorbox}
+		\vfill
+	\end{frame}
+}
+
+\AtBeginSubsection[]{
+	\begin{frame}
+		\vfill
+		\centering
+		\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+			\usebeamerfont{title}\insertsubsectionhead\par%
+		\end{beamercolorbox}
+		\vfill
+	\end{frame}
+}
+
+\setbeamercolor{alerted text}{fg=orange}
+
+\title{Principles of Acoustics and \textbf{Vibration}}
+\subtitle{Single DoF Oscillator - Forced Response}
+\date{}
+\author{Joshua Meggitt}
+\institute{Acoustics Research Centre, University of Salford}
+
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}
+
+%END_FOLD
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+\begin{frame}[c]{Previously on POAV...}
+	\begin{columns}[T]
+		\begin{column}{0.55\textwidth}
+			\begin{itemize}
+				\item<1-> Focus on single DoF mass-spring system. 
+				\begin{itemize}
+					\item[-] Form the building blocks for study of complex systems.
+				\end{itemize}
+				\item<1-> Equation of motion,
+				\begin{equation}\label{EoM2}
+					F = m\ddot{x} + kx + c\dot{x}
+				\end{equation}
+				is a  \textit{second} order linear differential equation with constant coefficients.
+				\item<2-> Homogenous solution (unforced, $F_e=0$)
+				\begin{equation}
+					x(t) = A\cos(\omega_d t - \phi) e^{-\zeta\omega_n t} 
+				\end{equation}
+			\item<2-> Amplitude $A$ and phase $\phi$ depend on IC.
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.45\textwidth}
+			\begin{figure}
+				\input{Diagrams/massSpringLSmod.tikz}
+				\caption{Mass-spring-damper system}
+			\end{figure}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+
+
+\addtocounter{section}{1}
+
+\begin{frame}[c]{Today's plan}
+	\vfill
+	\tableofcontents[]
+\end{frame}
+
+
+\section{Harmonic forcing}
+\begin{frame}[c]{Forced response - no mass}
+	\begin{columns}[T]
+		\begin{column}{0.4\textwidth}
+			\begin{figure}
+				\centering
+				\input{Diagrams/dashSpringDiag.tikz}
+				\caption{Fixed spring-dashpot system.}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.6\textwidth}			
+			\begin{itemize}
+				\item<1-> First order system EoM,
+				\begin{equation}\label{}
+					F_e = kx + c\dot{x}
+				\end{equation}
+				\item<1-> Consider harmonic force with complex amplitude $F_0$ at frequency $\omega$,
+				\begin{equation}
+					F_e(t) = F_0 e^{i\omega t}
+				\end{equation}
+				\item<2-> System is linear, so response will also be harmonic at $\omega$,
+				\begin{equation}
+					x(t) = X_0 e^{i\omega t}
+				\end{equation}
+			\end{itemize}
+		\end{column}
+		\end{columns}
+			\begin{itemize}
+				\item<3->  The complex amplitude $X_0$ accounts for amplitude and phase changes.
+			\end{itemize}
+\end{frame}
+
+
+\begin{frame}[c]{Forced response - spring-dashpot (no mass)}
+			\begin{itemize}
+				\item<1-> Using $x(t) = X_0 e^{i\omega t}$ the EoM becomes, 
+				\begin{equation}\label{}
+					F_0 e^{i\omega t} = k X_0 e^{i\omega t} + i\omega c X_0 e^{i\omega t}
+				\end{equation}
+				\item<2-> Dividing through by $e^{i\omega t}$,
+				\begin{equation}\label{}
+					F_0 = k X_0 + i\omega c X_0 = \underbrace{(k+i\omega c)}_{D(\omega)} X_0
+				\end{equation}
+			\item<2-> $D(\omega)$ is the \textit{dynamic stiffness} of the system (N/m).
+			\item<3-> Alternatively solving for response amplitude $X_0$, 
+			\begin{equation}
+				X_0 = \frac{1}{D(\omega)} F_0= R(\omega) F_0
+			\end{equation}
+			\item<3-> $R(\omega)$ is called the receptance. It is a complex quantity, describes the \textit{frequency response} of the system. 
+			\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Forced response - spring-dashpot (no mass)}
+	\begin{itemize}
+		\item<1-> Receptance can also be written in polar form with magnitude and phase, 
+		\begin{equation}
+			R(\omega) = |R(\omega) | e^{i\phi}
+		\end{equation}
+		\item<2-> Solution obtained by substituting in complex response amplitude,
+		\begin{align}\label{}
+			x(t,\omega) &= R(\omega){F_0 e^{i\omega t}}\\
+			&=|R(\omega)| F_0 e^{i(\omega t+\phi)}
+		\end{align}
+		\item<2-> $|R(\omega)| $ determines the change in amplitude of the response relative to the input force. $\phi$ describes the phase shift that the system imparts. 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Forced response - spring-dashpot (no mass)}
+\begin{itemize}
+	\item<1-> What does the magnitude $|R(\omega)|$ look like? 
+	\begin{equation}
+		|R(\omega)| = \frac{1}{\sqrt{\mbox{Real}[R]^2 + \mbox{Imag}[R]^2}} =  \frac{1}{\sqrt{k^2 + (\omega c)^2}} 
+	\end{equation}
+\vspace{1cm}
+	\item<2-> What does the phase $\phi(\omega)$ look like?
+	\begin{equation}
+		\phi(\omega) = \tan^{-1}\left(\frac{\mbox{Imag}[R]}{\mbox{Real}[R]}\right) = \tan^{-1}\left(\frac{c\omega}{k}\right)
+	\end{equation}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Forced response - spring-dashpot (no mass)}
+	\begin{figure}
+		\input{Diagrams/receptanceSpringDashMag.tikz}
+		\caption{Magnitude and phase response. Fixed stiffness $k=1$ with varying levels of damping $c$.}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}[c]{Forced response - mass-spring-dashpot}
+	\begin{itemize}
+		\item<1-> Lets follow the same procedure including the mass term in EoM. Using $F_e(t) = F_0 e^{i\omega t}$ and $x(t) = X_0 e^{i\omega t}$,
+		\begin{equation}\label{}
+			F_e =  kx + c\dot{x} +  m\ddot{x} \quad \quad F_0 e^{i\omega t} = k X_0 e^{i\omega t} + ci\omega X_0 e^{i\omega t} - m\omega^2 X_0 e^{i\omega t}
+		\end{equation}
+	\item<2-> Dividing through by $e^{i\omega t}$,
+	\begin{equation}
+		 F_0 = \overbrace{(k + i\omega c - \omega^2 m)}^{D(\omega)}X_0 \quad \rightarrow \quad X_0 = R(\omega) F_o
+	\end{equation}
+		\item<3-> What does $R(\omega)$ look like?
+\begin{equation}
+	R(\omega) = \frac{1}{k + i\omega c - \omega^2 m} =  \frac{1}{\underbrace{(k - \omega^2 m)}_{\mbox{Real}}+ \underbrace{i\omega c}_{\mbox{Imag}} } 
+\end{equation}
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}[c]{Forced response - mass-spring-dashpot}
+	\begin{itemize}
+	\item<1-> Magnitude 
+			\begin{equation}
+		|R(\omega)| =  \frac{1}{|k - \omega^2 m+ i\omega c |} =  \frac{1}{\sqrt{(k - \omega^2 m)^2+ (\omega c)^2}} 
+	\end{equation}
+\item<2-> Recall from last time $\omega_n = \sqrt{k/m}$ and $c = \zeta 2 k/ \omega_n$. The receptance magnitude becomes, 
+			\begin{equation}
+	|R(\omega)| =  \frac{1}{\sqrt{k^2\left(1 - \omega^2 \frac{m}{k}\right)^2+ (\omega c)^2}} = \frac{1}{\sqrt{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 k \frac{\omega}{\omega_n}\right)^2}}
+\end{equation}
+\item<3-> Magnitude increases as $\left(1 - \frac{\omega^2}{\omega_n^2}\right)$ goes to zero, its maximum is limited by $  \zeta 2 k \frac{\omega}{\omega_n}$.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}[c]{Forced response - FRF magnitude}
+	\begin{itemize}
+		\item<1-> Peak moves to the left as damping is increased according to $\omega_{peak} = \omega_n\sqrt{1-2\zeta^2}$.
+		\item<2-> If $\zeta>1/\sqrt{2}$ response has no peak. If $\zeta=0$, discontinuity at $\omega/\omega_n = 1$.
+	\end{itemize}
+	\begin{figure}
+	\input{Diagrams/receptanceMag.tikz}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[c]{Forced response - FRF magnitude}
+	\begin{itemize}
+		\item<1-> Often frequency response is plot on a log-log scale. 
+		\item<1-> Above resonance, roll-off at -12 dB/oct. Flat below resonance; stiffness controlled. 
+	\end{itemize}
+	\begin{figure}
+		\input{Diagrams/receptanceMagLog.tikz}
+	\end{figure}
+\end{frame}
+
+\begin{frame}[c]{Forced response - FRF phase}
+	\begin{itemize}
+		\item<1-> To get the phase response we need to separate real and imaginary parts,
+		\begin{align}
+			R(\omega)&=  \frac{1}{k\left(1 - \frac{\omega^2}{\omega_n^2}\right) + i \zeta 2 k \frac{\omega}{\omega_n} } {\color{black!50!green}\times \frac{k\left(1 - \frac{\omega^2}{\omega_n^2}\right) - i \zeta 2 k \frac{\omega}{\omega_n} }{k(1 - \frac{\omega^2}{\omega_n^2}) - i \zeta 2 k \frac{\omega}{\omega_n} }}\\
+			&=\underbrace{\frac{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)}{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2 + \left(\zeta 2 k \frac{\omega}{\omega_n}\right)^2 } }_{\mbox{real part}}- i\underbrace{\frac{ \zeta 2 k \frac{\omega}{\omega_n} }{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2 + \left(\zeta 2 k \frac{\omega}{\omega_n}\right)^2 }}_{\mbox{imag part}}
+		\end{align}
+	\item<2-> Phase response ($\zeta = c\omega_n/2k$),
+	\begin{equation}
+		\angle R(\omega) = \tan^{-1}\left( \frac{\mbox{imag}}{\mbox{real}} \right) =\tan^{-1}\left( \frac{-\zeta 2 k \frac{\omega}{\omega_n} }{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)} \right)= \tan^{-1}\left( \frac{-c \omega }{k - \omega^2 m} \right) 
+	\end{equation}
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}[c]{Forced response - FRF phase}
+	\begin{itemize}
+		\item<1-> Motion of the mass becomes progressively delayed, relative to the excitation force. 
+		\item<2-> In the limit at $\omega\rightarrow \infty$ they are $180^\circ$ out of phase.
+		\item<3-> For all levels of damping, we have phase of $-\pi/2$ at undamped resonance $\omega_n$.
+	\end{itemize}
+	\begin{figure}
+		\input{Diagrams/receptancePhase2.tikz}
+	\end{figure}
+\end{frame}
+
+\begin{frame}[c]{Forced response - phase lead/lag}
+	\begin{figure}
+		\input{Diagrams/phaseLead.tikz}
+		\caption{Relative phase at low (top) and high (bottom) frequencies.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}[c]{Forced response at resonance (undamped)}
+	\begin{itemize}
+		\item<1-> In the case of no damping we have discontinuity at resonance - in reality this never happens, there is \textit{always} some damping to limit response. 
+		\item<2-> Lets look at what would happen anyway... EoM without damping,
+		\begin{equation}
+			m\ddot{x} +k x = F_0 \cos(\omega_n t)		\quad \rightarrow \quad  \ddot{x} +\omega_n^2 x = \frac{F_0}{m} \cos(\omega_n t)	= \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)	
+		\end{equation}
+		\item<3-> How do we solve this? Assume solution of $x(t) =  \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)$ and prove...
+		\item<4-> First get velocity and acceleration by differentiation (using product rule),
+		\begin{align}
+			\dot{x}(t) &=  \frac{\omega_n F_0}{2k} \sin(\omega_n t) +  \frac{\omega_n^2 F_0 t}{2k} \cos(\omega_n t)\\
+			\ddot{x}(t) & = \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) +  \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) -  \frac{\omega_n^3 F_0 t}{2k} \sin(\omega_n t)
+		\end{align}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Forced response at resonance (undamped)}
+	\begin{itemize}
+		\item<1-> Plug everything into EoM and check LHS and RHS are equal...
+		\begin{equation}
+			\ddot{x} +\omega_n^2 x =  \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)	
+		\end{equation}
+	\end{itemize}
+		\begin{align}\nonumber
+		\overbrace{ \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) +  \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) -  \frac{\omega_n^3 F_0 t}{2k} \sin(\omega_n t)}^{	\ddot{x}} +\omega_n^2 \overbrace{ \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)}^{x} \\=  \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)	
+		\end{align}
+\begin{itemize}
+		\item<2-> It all checks out! $x(t) =  \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)$  is a solution at $\omega=\omega_n$. Amplitude grows linearly with time!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Forced response at resonance (undamped)}
+	\begin{itemize}
+		\item<1-> Uncontrolled resonances have the potential to cause structural damage/failure. 
+	\end{itemize}
+	\begin{figure}
+	\input{Diagrams/discoResp.tikz}
+	\caption{Displacement amplitude at resonance.}
+	\end{figure}
+\end{frame}
+
+\section{FRFs}
+\begin{frame}[c]{Frequency response functions - FRFs}
+	\begin{columns}[T]
+		\begin{column}{0.3\textwidth}
+			\begin{figure}[]
+				\vspace{-0.2cm}
+				\input{Diagrams/FRFbox.tikz}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.7\textwidth}			
+			\begin{itemize}
+			\item<1-> Frequency Response Functions (FRFs) are a very general and useful concept.
+			\item<2-> They can be obtained from models but also measurement. 
+			\end{itemize}
+		\end{column}
+	\end{columns}
+	\begin{itemize}
+		\item<3-> In general, an FRF describes the complex (i.e. magnitude and phase) relation between a harmonic input signal, and corresponding output signal on a given system.
+		\begin{equation}
+			G(\omega) = \frac{Y(\omega)}{X(\omega)}	\quad \quad Y(\omega) = G(\omega)X(\omega)
+		\end{equation}
+		\item<4-> We can think of the FRF as a \textit{black box} representation of the system dynamics.
+		\item<5-> We have derived the force-displacement FRFs, dynamic stiffness $D(\omega)$ and recpetance $R(\omega)$. Velocity and acceleration-based FRFs are also common...
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[c]{Displacement, velocity and acceleration-based FRFs}
+	\begin{itemize}
+		\item<1-> For a harmonic response displacement, velocity and acceleration are related by,
+		\begin{equation}
+			\ddot{X}_0 = i\omega \dot{X}_0 = -\omega^2 X_0
+		\end{equation}
+		\item<2-> Velocity-based FRFs using $ \dot{X}_0 = i\omega X_0$ (impedance and mobility)
+	\end{itemize}
+	\uncover<2->{\begin{equation}
+			Z(\omega) = \frac{F_0(\omega)}{\dot{X}_0(\omega)}= \frac{F_0(\omega)}{ i\omega X_0(\omega)}= \frac{1}{i\omega}D(\omega)\quad \quad \quad 	Y(\omega) = \frac{\dot{X}_0(\omega)}{F_0(\omega)} = \frac{i\omega X_0(\omega)}{F_0(\omega)} =i\omega R(\omega)
+		\end{equation}}
+	\begin{itemize}
+	\item<3-> Acceleration-based FRFs using $ \ddot{X}_0 = i\omega \dot{X}_0$ (effective mass and accelerance)
+\end{itemize}
+\uncover<3->{\begin{equation}
+	M(\omega) = \frac{F_0(\omega)}{\ddot{X}_0(\omega)}= \frac{F_0(\omega)}{ i\omega \dot{X}_0(\omega)}= \frac{1}{i\omega}Z(\omega)\quad \quad \quad 	A(\omega) = \frac{\ddot{X}_0(\omega)}{F_0(\omega)} = \frac{i\omega \dot{X}_0(\omega)}{F_0(\omega)} =i\omega Y(\omega)
+\end{equation}}
+\end{frame}
+
+\begin{frame}[c]{Displacement, velocity and acceleration FRF magnitudes}
+	\begin{itemize}
+		\item<1-> Depending on the problem, we might be interested in different response quantity, so need to use different FRF.
+	\end{itemize}
+	\begin{figure}
+		\input{Diagrams/dispVelAccFRF.tikz}
+	\end{figure}
+\end{frame}
+
+
+\section{Arbitrary forcing}
+\begin{frame}[c]{Periodic excitation}
+	\begin{itemize}
+		\item<1-> We have covered harmonic excitation at frequency $\omega$ - periodic over time interval $T=2\pi/\omega$.
+		\item<2-> In vibration we often encounter signals that are periodic, but NOT necessarily harmonic.
+	\end{itemize}
+	\begin{figure}
+	\input{Diagrams/periodicSignal.tikz}
+	\caption{Example of periodic, but not harmonic, signal.}
+\end{figure}
+\end{frame}
+
+\begin{frame}[c]{Periodic excitation}
+	\begin{itemize}
+		\item<1-> Any periodic function can be represented by a convergent series of harmonic functions whose frequencies are integer multiples of a fundamental $\omega_0 =2\pi/T$. 
+		\item<2-> This is the so-called \textit{Fourier series},
+		\begin{equation}
+			F(t) = \frac{1}{2}F_0 + \mbox{Real}\left[ \sum_{n=1}^\infty F_n e^{in\omega_0 t}\right]
+		\end{equation}
+	where $F_n$ are complex coefficients that describe amplitude and phase of each harmonic. 
+	\item<3-> Since EoM is linear, we can treat each harmonic individually and recombine afterwards. 
+	\begin{equation}
+		x(t) =  \frac{1}{2}F_0  R(0) + \mbox{Real}\left[\sum_{n=1}^\infty R(n\omega_0)   F_n e^{in\omega_0 t} \right]
+	\end{equation}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Unit impulse response}
+	\begin{columns}[T]
+		\begin{column}{0.35\textwidth}
+			\begin{figure}
+				\centering
+				\input{Diagrams/diracDelta.tikz}
+				\caption{Dirac delta function.}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.65\textwidth}			
+				\begin{itemize}
+				\item<1-> To consider an arbitrary, non-harmonic, forcing we can no longer assume steady state. The entire response must be regarded as transient. 
+				\item<2-> To deal with this problem, we will require the system's until impulse response.
+				\item<3-> This can be obtained by considering the external forcing $F(t)$ to be that of a \textit{Dirac delta} function, defined mathematically as
+				\begin{align}
+					\delta(t-a) &= 0 \quad \quad \mbox{for } t\neq a\\
+					\int_{-\infty}^\infty \delta(t-a){\rm d}t &=1
+				\end{align}
+			\end{itemize}
+		\end{column}
+	\end{columns}
+	\begin{itemize}
+		\item<4->  Using $F_e = \delta(t)$, the system response is called impulse response $g(t)$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Unit impulse response}
+	\begin{itemize}
+		\item<1->  Inserting $x(t) = g(t)$ and $F_e=\delta(t)$, the EoM becomes, 
+		\begin{equation}\label{}
+			\delta(t) =  kg(t) + c\dot{g}(t) +  m\ddot{g}(t) 
+		\end{equation}
+	\item<2-> Taking $g(0)=\dot{g}(0) = 0$ by definition, integrate EoM over interval $\Delta t=\epsilon$ and take the limit as this goes to $0$,
+	\begin{equation}\label{}
+	\underbrace{	\lim_{\epsilon\rightarrow 0} \int_0^\epsilon \delta(t)  dt }_{=1}=  	\lim_{\epsilon\rightarrow 0} \int_0^\epsilon \left(kg(t) + c\dot{g}(t) +  m\ddot{g}(t) \right)dt
+	\end{equation}\vspace{-0.6cm}
+	\item[]<3->where 
+	\begin{equation}
+		\lim_{\epsilon\rightarrow 0} \int_0^\epsilon m\ddot{g}(t)dt = \lim_{\epsilon\rightarrow 0} m\dot{g}(t)\Big|_0^\epsilon = m \lim_{\epsilon\rightarrow 0} [\dot{g}(\epsilon) - \dot{g}(0)] = m\dot{g}(0+)
+	\end{equation}
+\item<3-> $\dot{g}(0+)$ denotes a change in velocity at the end of the increment $\epsilon$.
+\item<4-> Remaining limits go to 0 - not sufficient time for displacement to develop.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Unit impulse response}
+	\begin{itemize}
+		\item<1-> From previous equations conclude that, 
+		\begin{equation}
+			\dot{g}(0+) = \frac{1}{m}
+		\end{equation}
+	\item<2-> Physically, unit impulse response produces an instantaneous change in velocity.
+	\item<3-> Impulse applied at $t=0$ is equivalent  to the effect of initial velocity $\dot{x}_0=1/m$.
+	\item<4-> The system impulse response is then, 
+	\begin{align}
+		g(t) &= \frac{1}{\omega_d m} \sin(\omega_d t) e^{-\zeta\omega_n t}  \quad  &t>0 \\
+		&=0 &t<0
+	\end{align}
+\item<4-> If excitation happens at $t=\tau$, $F_e = \delta(t-\tau)$, then impulse response $g(t)$ is simply delayed by $\tau$, $g(t-\tau)$.
+%\item<4-> We can use $g(t)$ to predict response of arbitrary forcing signal.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}[c]{Convolution integral - response to arbitrary excitation}
+	\begin{columns}[T]
+		\begin{column}{0.35\textwidth}
+			\begin{figure}
+				\vspace{-0.5cm}
+				\centering
+				\input{Diagrams/arbitaryF.tikz}
+				\vspace{-0.4cm}
+				\caption{Arbitrary forcing.}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.65\textwidth}			
+			\begin{itemize}
+				\item<1-> During small time instant $\Delta \tau$, we can regard $F(t)$ as an impulse $F(\tau)\Delta \tau$,
+				\begin{equation}
+					\Delta F(t,\tau) = F(\tau) \Delta \tau \delta(t-\tau)
+				\end{equation}
+			\item<2-> The complete forcing function can approximated as, 
+			\begin{equation}
+				F(t)\approx \sum F(\tau) \Delta \tau \delta(t-\tau)
+			\end{equation}
+			\item<3-> This becomes exact at $\Delta \tau \rightarrow 0$.
+			\end{itemize}
+				\begin{equation}\nonumber
+			\phantom{x(t) = \int_0^t F(\tau)  g(t-\tau) d\tau}
+		\end{equation}
+		\end{column}
+	\end{columns}
+	\begin{itemize}
+		\item<4->  Because system is linear, we can use the impulse response function $g(t)$ to predict response due to each individual excitation impulse, $\Delta F(t,\tau)$, then combine.
+	\end{itemize}
+\end{frame}
+
+
+%\begin{frame}[c]{Convolution integral - response to arbitrary excitation}
+%	\begin{columns}[T]
+%		\begin{column}{0.35\textwidth}
+%			\begin{figure}
+%				\vspace{-0.4cm}
+%				\centering
+%				\input{Diagrams/convResp.tikz}
+%%				\caption{Arbitrary forcing.}
+%			\end{figure}
+%		\end{column}
+%		\begin{column}{0.65\textwidth}			
+%			\begin{itemize}
+%				\item<1-> Response due to impulse $\Delta F(t,\tau)$,
+%				\begin{equation}
+%					\Delta x(t,\tau) =F(\tau) \Delta \tau g(t-\tau)
+%				\end{equation}
+%			is the impulse response $g(t)$ delayed by $\tau$.
+%			\end{itemize}
+%		\end{column}
+%	\end{columns}
+%\end{frame}
+
+
+\begin{frame}[c]{Convolution integral - response to arbitrary excitation}
+	\begin{columns}[T]
+		\begin{column}{0.35\textwidth}
+			\begin{figure}
+				\centering
+				\begin{overprint}
+				\vspace{-0.4cm}
+				\only<1>{\input{Diagrams/convResp.tikz}}
+				\uncover<2->{\input{Diagrams/convResp2.tikz}}
+				\end{overprint}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.65\textwidth}			
+			\begin{itemize}
+				\item<1-> Response due to impulse $\Delta F(t,\tau)$,
+				\begin{equation}
+					\Delta x(t,\tau) =F(\tau) \Delta \tau g(t-\tau)
+				\end{equation}
+				is just the impulse response $g(t)$ delayed by $\tau$.
+				\item<2-> The response due to full $F(t)$ is the sum of all individual impulses,
+				\begin{equation}
+					x(t) \approx \sum F(\tau) \Delta \tau g(t-\tau)
+				\end{equation}
+				\item<3-> This also becomes exact at $\Delta \tau \rightarrow 0$,
+				\begin{equation}
+					x(t) = \int_0^t F(\tau)  g(t-\tau) d\tau
+				\end{equation}
+			\end{itemize}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+
+\begin{frame}[c]{Convolution integral - response to arbitrary excitation}
+	\begin{columns}[T]
+		\begin{column}{0.35\textwidth}
+			\begin{figure}
+				\vspace{-0.4cm}
+				\centering
+				\input{Diagrams/convResp2.tikz}
+				%				\caption{Arbitrary forcing.}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.65\textwidth}			
+			\begin{itemize}
+				\item<1-> This is called the \textit{convolution integral} - response is expressed as a superposition of impulse responses weighted by the arbitrary forcing function.
+				\begin{equation}
+					x(t) = \int_0^t F(\tau)  g(t-\tau) d\tau
+				\end{equation}
+			\item<1-> Known as Duhamel's integral in vibration analysis.
+			\item<2-> Recall that convolution in the frequency domain is simply a multiplication,
+			\begin{equation}
+				X_0(\omega)=R(\omega) F_0(\omega)
+			\end{equation}
+			\item<3-> The FRF $R(\omega)$ is the IFT of the IRF $g(t)$.
+			\end{itemize}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+
+\section{Damping}
+\begin{frame}[c]{Displacement, velocity and acceleration-based FRFs}
+	\begin{itemize}
+		\item<1-> So far we have been assuming a viscous damping model, i.e. damping force proportional to velocity. Our EoM and FRF,
+		\begin{equation}\label{}
+			F_e =  kx + c\dot{x} +  m\ddot{x} \quad \quad  R(\omega) =  \frac{1}{k + i\omega c - \omega^2 m} 
+		\end{equation}
+	\item<1-> Because of damping, system is \textit{non-conservative} - energy is not conserved, but dissipated with time. 
+	\item<2-> The energy dissipated = work done by the external force. For a single cycle over period $T$ (noting ${\rm d}x = \dot{x}{\rm d}t$),
+	\begin{equation}
+		\Delta E = \int_0^{T} F_e {\rm d}x = \int_0^{2\pi/\omega} F_e\dot{x} {\rm d}t
+	\end{equation}
+	\item<3-> Considering only the real parts of $F_e$ and $\dot{x} = i\omega|R|F_0 e^{i(\omega t+\phi)}$,
+	\begin{align}
+		\mbox{Real}(\dot{x}) &= -|R| F_0 \omega \sin(\omega t + \phi)\\
+		\mbox{Real}(F_e) &= F_0 \cos\omega t
+	\end{align}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Energy dissipation}
+	\begin{itemize}
+		\item<1-> The energy dissipated becomes,
+		\begin{align}
+			\Delta E = \int_0^{2\pi/\omega} F_e\dot{x} {\rm d}t &=  -\int_0^{2\pi/\omega}  F_0 \cos(\omega t)|R| F_0\omega \sin(\omega t +\phi) {\rm d}t\\
+			&=  -F_0^2 \omega |R| \underbrace{\int_0^{2\pi/\omega}   \cos(\omega t) \sin(\omega t + \phi) {\rm d}t}_{\frac{\pi}{\omega} \sin \phi}\\
+				&= - F_0^2  |R| \pi \sin \phi
+		\end{align}
+		\item<2-> Need to determine $\sin\phi$... We know the phase angle is given by,
+
+%		\begin{equation}
+%				\phi = \tan^{-1}\left( \frac{\mbox{imag}}{\mbox{real}} \right) =  \tan^{-1}\left( \frac{\omega c}{k-\omega^2m} \right) = \tan^{-1}\left( \frac{-\zeta 2 k \frac{\omega}{\omega_n} }{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)} \right) = - \tan^{-1}\left( \frac{\zeta 2 k \frac{\omega}{\omega_n} }{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)} \right)
+%		\end{equation}
+	
+	\begin{equation}
+		\phi = \tan^{-1}\left( \frac{\mbox{imag}}{\mbox{real}} \right) = \tan^{-1}\left( \frac{-\zeta 2 k \frac{\omega}{\omega_n} }{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)} \right) =\tan^{-1}\left( \frac{-c \omega }{k - \omega^2 m} \right) 
+	\end{equation}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Energy dissipation}
+	\begin{itemize}
+		\item<1-> Use the trig identity $\sin(\tan^{-1}(x)) = x/\sqrt{1+x^2}$. After a little algebra,
+		\begin{equation}
+			\sin\phi = \frac{-\omega c}{\sqrt{(k-\omega^2m)^2 + (\omega c)^2}} = -\omega c |R|
+		\end{equation} 
+		\item<2-> Energy dissipated per cycle becomes, 
+		\begin{equation}
+			\Delta E = F_0^2  |R| \pi \sin \phi = \underbrace{|R|^2  F_0^2}_{|X_0|^2} \pi \omega c 
+		\end{equation}
+	\item<3-> We see that the energy dissipated per cycle is propertional to: damping coefficient $c$, frequency $\omega$ and amplitude squared $|X_0|^2$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Displacement, velocity and acceleration-based FRFs}
+	\begin{itemize}
+		\item<1-> In real systems, even without damping devices, energy is dissipated over time. 
+		\item<2-> Real springs (i.e. coil springs) dissipate energy as a result of internal friction within the material - as do all real structures.
+		\item<3-> Experiments on wide variety of materials indicate that the energy loss per cycle due to internal friction is roughly proportional to amplitude squared, 
+		\begin{equation}
+			\Delta E = \alpha |X_0|^2
+		\end{equation}
+		where $\alpha$ is a constant \textit{independent of frequency}.
+		\item<4-> We call the above \textit{structural damping} - can be attributed to hysteresis phenomenon associated with cyclic stresses in elastic materials.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Displacement, velocity and acceleration-based FRFs}
+	\begin{itemize}
+		\item<1-> A system with structural damping can be treated as having viscous damping with an equivalent, frequency dependent, damping coefficient,
+		\begin{align}
+			c_{eq} = \frac{\alpha}{\pi\omega} \quad \rightarrow\quad  \Delta E &= c_{eq}\pi\omega |X_0|^2 \\
+			&=\alpha|X_0|^2
+		\end{align}
+	\item<2-> Our EoM becomes, 
+	\begin{align}\label{}
+		F_e =  kx +  \frac{\alpha}{\pi\omega}  \dot{x} +  m\ddot{x} \quad \rightarrow \quad F_0 &=  kX_0 +  \frac{i\omega \alpha}{\pi\omega} X_0 +m\ddot{X}_0\\
+		 &=  {\left(k +  \frac{i\omega \alpha}{\pi\omega} \right)} X_0 +m\ddot{X}_0
+	\end{align}
+	\item<3-> Define a `complex stiffness' $k(1+i\gamma)$, where $\gamma = \alpha/\pi k$ is termed the \textit{loss factor}.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Displacement, velocity and acceleration-based FRFs}
+	\begin{itemize}
+		\item<1-> The harmonic response then becomes, 
+		\begin{equation}
+		x(t) = \mbox{Real}\left(X_0 e^{i\omega t} \right) = |X_0| \cos(\omega t+\angle X_0)  \quad \quad X_0 = \overbrace{\frac{1}{k(1+i\gamma)-\omega^2m}}^{R(\omega)}F_0
+		\end{equation}
+	\item<2-> \textbf{Important:} \textit{structural damping is only valid for harmonic excitation }- we assumed $F_0e^{i\omega t}$ in the foregoing analysis - can't use this for transient analysis!
+	\begin{itemize}
+		\item[-] Structural damping will give a \textit{non-causal} transient response...
+	\end{itemize}
+	\item<3->  Loss factors for typical materials:
+	\begin{itemize}
+		\item[-] Glass - $\sim 1\times10^{-4}$
+		\item[-] Steel - $\sim 1\times10^{-3}$
+		\item[-] Perspex - $\sim 0.1$
+		\item[-] Rubber - $\sim >0.1$
+	\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Forced response - no mass}
+	\begin{itemize}
+		\item<1-> With structural damping, peak amplitude doesn't shift with increased damping and the response is no longer stiffness controlled at low frequency. 
+	\end{itemize}
+\vspace{0.3cm}
+	\begin{figure}
+		\input{Diagrams/structuralDampMag.tikz}
+	\end{figure}
+\end{frame}
+
+\section{Some SDOF examples}
+\begin{frame}[c]{Helmholtz resonator - the acoustic mass-spring-damper}
+	\begin{columns}[T]
+		\begin{column}{0.3\textwidth}
+			\begin{figure}
+				\vspace{-0.4cm}
+				\centering
+				\input{Diagrams/helmHoltz.tikz}
+%				\caption{Helmholtz resonator.}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.7\textwidth}			
+			\begin{itemize}
+				\item<1-> Helmholtz resonator is simply an acoustic mass-spring- damper:
+				\begin{itemize}
+					\item[-] Plug of air in neck behaves like a mass.
+					\item[-] Cavity of air in volume behaves like spring.
+					\item[-] Damping can be added with fine mesh.
+				\end{itemize}
+			\item<2-> Mass in neck depends on cross-sectional area $S$, length $L$ and air density $\rho_0$ (some corrections required),
+			\vspace{-0.3cm}
+			\begin{equation}
+				m = SL\rho_0
+			\end{equation}
+			\end{itemize}
+		\end{column}
+	\end{columns}
+\vspace{-0.5cm}
+\begin{itemize}
+	\item<3-> Stiffness of cavity depends on volume $V$ and speed of sound $c_0$,
+	\begin{equation}
+		k = \frac{\rho_0c_0^2S^2}{V}
+	\end{equation}
+	\item<4-> Damping is more complicated... so just leave as $c$.
+	\item<5-> External force is related to pressure over mouth $F_e = p/S$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Loudspeaker driver - our favourite mass-spring-damper}
+	\begin{figure}
+		\centering
+		\input{Diagrams/LSdiag.tikz}
+	\end{figure}
+\end{frame}
+
+\begin{frame}[c]{Helmholtz resonator - the acoustic mass-spring-damper}
+	\begin{columns}[T]
+		\begin{column}{0.4\textwidth}
+			\begin{figure}
+				\vspace{-0.4cm}
+				\centering
+				\input{Diagrams/LS_FBD.tikz}
+				%				\caption{Helmholtz resonator.}
+			\end{figure}
+		\end{column}
+		\begin{column}{0.6\textwidth}			
+			\begin{itemize}
+				\item<1-> The suspension and spider contribute to the stiffness and damping, described by $k$ and $c$. 
+				\item<2-> The mass of the diaphragm $m$ is its mechanical mass, plus a correction for the air loading. 
+				\item<3-> The external force $F_e = BLi$ is supplied by the voice coil/magnet interaction (Lorentz force) and depends on electrical current.
+			\end{itemize}
+		\end{column}
+	\end{columns}
+\vspace{-0.5cm}
+	\begin{itemize}
+		\item<4-> What if we put a cabinet around the back of the diaphragm? 
+		\begin{itemize}
+			\item[-] We are adding an extra stiffness in parallel with that of the suspension/spider. Total stiffness becomes,
+			\begin{equation}
+				k_t = k_s +  \frac{\rho_0c_0^2S^2}{V} \quad \quad c_t = c_s + c_v
+			\end{equation}
+		\end{itemize}
+		\item<5-> Radiated sound is proportional to acceleration response of surface - so interested in \textit{accelerance FRF}.
+	\end{itemize}
+\end{frame}
+
+
+\section{Summary}
+\begin{frame}[c]{Summary}
+	\begin{itemize}
+	\item<1-> If a system is being excited by a harmonic forcing, we can use the Frequency Response Function (FRF)
+	\item<2-> FRFs can be in terms of displacement, velocity or acceleration - conversion is easy using factor of $i\omega$.
+	\item<3-> To consider a complex periodic forcing, we can use linearity and Fourier series - simply sum up responses using FRFs.
+	\item<4-> For arbitrary (non-period) loading we need to use convolution integral - this requires system impulse response.
+	\item<5-> Real systems rarely possess \textit{viscous type} damping, rather structural damping typically observed. 
+	\item<6->  We can use simple mass spring system to model Helmholtz resonators and sealed cabinet loudspeakers. \\[0.5cm]
+	\item<7-> Next time on POAV...
+	\begin{itemize}
+		\item[-]  Two Degree of Freedom (DoF) system!
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\end{document}
