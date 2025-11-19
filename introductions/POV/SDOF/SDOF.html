@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Single degree of freedom systems – Joshua Meggitt</title>
+<title>Single degree of freedom oscillator – Joshua Meggitt</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../../">
-<link href="../../../introductions/VAVPs/summary/summary.html" rel="next">
+<link href="../../../introductions/POV/TDOF/TDOF.html" rel="next">
 <link href="../../../introductions/POV/summary/summary.html" rel="prev">
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -139,17 +139,6 @@ window.Quarto = {
     <a class="nav-link" href="../../../research/summary.html"> 
 <span class="menu-text">Research</span></a>
   </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teaching" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Teaching</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-teaching">    
-        <li>
-    <a class="dropdown-item" href="../../../teaching/mlsd/mlsd.html">
- <span class="dropdown-text">Microphone and Loudspeaker Design</span></a>
-  </li>  
-    </ul>
-  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -192,6 +181,18 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../../../introductions/POV/SDOF/SDOF.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Single degree of freedom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/POV/TDOF/TDOF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Two degrees of freedom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../introductions/POV/MDOF/MDOF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multi-degrees of freedom</span></a>
   </div>
 </li>
       </ul>
@@ -295,7 +296,7 @@ window.Quarto = {
   <li><a href="#frequency-response-functions-frfs" id="toc-frequency-response-functions-frfs" class="nav-link" data-scroll-target="#frequency-response-functions-frfs">Frequency Response Functions (FRFs)</a></li>
   </ul></li>
   <li><a href="#periodic-forcing" id="toc-periodic-forcing" class="nav-link" data-scroll-target="#periodic-forcing">Periodic forcing</a></li>
-  <li><a href="#arbitary-forcing" id="toc-arbitary-forcing" class="nav-link" data-scroll-target="#arbitary-forcing">Arbitary forcing</a>
+  <li><a href="#arbitrary-forcing" id="toc-arbitrary-forcing" class="nav-link" data-scroll-target="#arbitrary-forcing">Arbitrary forcing</a>
   <ul class="collapse">
   <li><a href="#impulse-response-function" id="toc-impulse-response-function" class="nav-link" data-scroll-target="#impulse-response-function">Impulse response function</a></li>
   <li><a href="#convolution-integral" id="toc-convolution-integral" class="nav-link" data-scroll-target="#convolution-integral">Convolution integral</a></li>
@@ -318,7 +319,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../introductions/POV/summary/summary.html">Some Basic Vibration Stuff</a></li><li class="breadcrumb-item"><a href="../../../introductions/POV/SDOF/SDOF.html">Single degree of freedom</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Single degree of freedom systems</h1>
+<h1 class="title">Single degree of freedom oscillator</h1>
 </div>
 
 
@@ -335,53 +336,55 @@ window.Quarto = {
 </header>
 
 
-<p>The single DoF (mass-spring) oscillator is one of the simplest dynamic systems of genuine interest. Reason being is that … Called <em>single degree of freedom (DoF)</em> system. DoF: number of independent coordinates required to completely describe configuration.</p>
-<div id="fig-VPexample" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-singleDoF" class="quarto-float quarto-figure quarto-figure-center anchored" style="float: right; margin: 10px;">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-VPexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-singleDoF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="massSpringLSmod.png" class="img-fluid figure-img" width="400">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-VPexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-singleDoF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: The Mass-spring-damper system is a single DoF mechanical oscillator.
 </figcaption>
 </figure>
 </div>
+<p>The single Degree of Freedom (DoF) mass-spring oscillator is perhaps one of the simplest, but most important, dynamical systems we can study. The reason being is that (spoiler alert..!) any linear system, regardless of its geometrical complexity, can be represented or modelled as a collection of independent SDoF oscillators. Anyway, thats jumping in the deep-end… Lets take a step back and consider SDoF oscillator from first principles, including the derivation of its equation of motion (EoM), and its unforced (homogenous) and forced solutions.</p>
+<p>(FYI, the term <em>degree of freedom (DoF)</em> is a general term used to denote the number of independent coordinates required to completely describe a system’s configuration. A mass-spring system with a single mass is described by just one coordinate (i.e.&nbsp;that of the mass), hence it is termed ‘single DoF’.)</p>
 <section id="equations-of-motion-of-mass-spring-system" class="level1">
 <h1>Equations of motion of mass-spring system</h1>
-<p>Newton’s second law states that the sum of all forces acting on the mass is equal to its acceleration time its mass, <span class="math display">\[
-            F=ma \quad\quad     \sum_i F_i = m\ddot{x}
-        \]</span> What forces are acting on our mass - <em>free body diagram</em>. <span class="math display">\[
-            \begin{align}
-                m\ddot{x}  &amp; = \sum_i F_i         \\
-                m \ddot{x} &amp; = +F_e + F_k + F_c
-            \end{align}
-        \]</span> where <span class="math inline">\(F_e\)</span> is an external force, defined in the direction of positive travel, and <span class="math inline">\(F_k\)</span> and <span class="math inline">\(F_c\)</span> are forces that oppose motion.</p>
-<div id="fig-VPexample" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-freebodyDiag" class="quarto-float quarto-figure quarto-figure-center anchored" style="float: right; margin: 10px;">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-VPexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="freeBody2.png" class="img-fluid figure-img" width="300">
+<div aria-describedby="fig-freebodyDiag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="freeBody.png" class="img-fluid figure-img" width="300">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-VPexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-freebodyDiag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Free body diagram.
 </figcaption>
 </figure>
 </div>
+<p>Right, lets get started by deriving the EoM of the single DoF mass-spring system depicted in <a href="#fig-singleDoF" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<p>Newton’s second law states that the sum of all forces acting on the mass is equal to its acceleration time its mass, <span class="math display">\[
+    F=ma \quad\quad     \sum_i F_i = m\ddot{x}
+\]</span> To determine what forces are acting on our mass it is often useful to draw a <em>free body diagram</em> of the system, as in <a href="#fig-freebodyDiag" class="quarto-xref">Figure&nbsp;2</a>. <span class="math display">\[
+    \begin{align}
+        m\ddot{x}  &amp; = \sum_i F_i         \\
+        m \ddot{x} &amp; = +F_e + F_k + F_c
+    \end{align}
+\]</span> where <span class="math inline">\(F_e\)</span> is an external force, defined in the direction of positive travel, and <span class="math inline">\(F_k\)</span> and <span class="math inline">\(F_c\)</span> are forces that oppose motion.</p>
 <section id="ideal-springs" class="level2">
 <h2 class="anchored" data-anchor-id="ideal-springs">Ideal springs</h2>
 <p>An ideal spring has no mass and generates a force proportion to its elongation <span class="math inline">\(\Delta x\)</span>. The force generated is always in opposite direction to displacement and linearly related to the elongation of the spring.</p>
 <p>For a single-sided spring we have, <span class="math display">\[
-        F_k = -kx_1
-    \]</span> where <span class="math inline">\(k\)</span> is called the <em>spring stiffness</em> with units (N/m). For a two-sided spring, <span class="math display">\[
-        F_k = k\overbrace{(x_2-x_1)}^{\Delta x}
-    \]</span> where the force at each end is equal and opposite in direction.</p>
+F_k = -kx_1
+\]</span> where <span class="math inline">\(k\)</span> is called the <em>spring stiffness</em> with units (N/m). For a two-sided spring, <span class="math display">\[
+F_k = k\overbrace{(x_2-x_1)}^{\Delta x}
+\]</span> where the force at each end is equal and opposite in direction.</p>
 <p>The spring force always opposes displacement:</p>
 <ul>
 <li>If <span class="math inline">\(\Delta x&lt;0\)</span> then <span class="math inline">\(F_k&gt;0\)</span></li>
 <li>If <span class="math inline">\(\Delta x&gt;0\)</span> then <span class="math inline">\(F_k&lt;0\)</span></li>
 </ul>
-<p>Ideal springs are linear - the spring force and elongation remain linearly related indefinitely. Simply put, doubling the extention doubles the force generated, <span class="math display">\[
-        F_k = -kx_1 \quad \quad 2F_k = -k\, 2x_1
-    \]</span></p>
+<p>Ideal springs are linear - the spring force and elongation remain linearly related indefinitely. Simply put, doubling the extension doubles the force generated, <span class="math display">\[
+F_k = -kx_1 \quad \quad 2F_k = -k\, 2x_1
+\]</span></p>
 <p>Note that real springs are non-linear when subject to large deformations.</p>
 <div id="fig-idealSprings" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
@@ -421,21 +424,21 @@ Figure&nbsp;3: Diagram fo single and two sided spring. Force generate at each en
 <section id="parallel-and-series-springs" class="level3">
 <h3 class="anchored" data-anchor-id="parallel-and-series-springs">Parallel and series springs</h3>
 <p>When two springs are in parallel, they will always have the same displacement at either end. The total force generated divides itself into <span class="math inline">\(F_{k1}\)</span> and <span class="math inline">\(F_{k2}\)</span>, <span class="math display">\[
-        \begin{align}
-            F_{k1} &amp; = k_1(x_2-x_1)  \\
-            F_{k2} &amp; = k_2(x_2-x_1)
-        \end{align}
-    \]</span> The total force is given by the sum of the forces generated by the two springs, <span id="eq-parSpringStiff"><span class="math display">\[
-        \begin{align}
-            F_k &amp; = F_{k1}+F_{k2}                        \\
-                &amp; =\underbrace{(k_1+k_2)}_{k_t}(x_2-x_1)
-        \end{align}
-     \tag{1}\]</span></span></p>
-<p>From <a href="#eq-parSpringStiff" class="quarto-xref">Equation&nbsp;1</a> we see that the total stiffness of the parallel springs is just the sum of individual spring stiffnesses. We can generalise this result to an arbitary number of springs as, <span class="math display">\[
-        \begin{equation}
-                k_t = \sum_i^N k_i
-        \end{equation}
-    \]</span></p>
+\begin{align}
+    F_{k1} &amp; = k_1(x_2-x_1)  \\
+    F_{k2} &amp; = k_2(x_2-x_1)
+\end{align}
+\]</span> The total force is given by the sum of the forces generated by the two springs, <span id="eq-parSpringStiff"><span class="math display">\[
+\begin{align}
+    F_k &amp; = F_{k1}+F_{k2}                        \\
+        &amp; =\underbrace{(k_1+k_2)}_{k_t}(x_2-x_1)
+\end{align}
+\tag{1}\]</span></span></p>
+<p>From <a href="#eq-parSpringStiff" class="quarto-xref">Equation&nbsp;1</a> we see that the total stiffness of the parallel springs is just the sum of individual spring stiffness’s. We can generalise this result to an arbitrary number of springs as, <span class="math display">\[
+\begin{equation}
+        k_t = \sum_i^N k_i
+\end{equation}
+\]</span></p>
 <div id="fig-parSerSprings" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-parSerSprings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -464,31 +467,31 @@ Figure&nbsp;4: Ideal springs arranged in parallel and series.
 </figure>
 </div>
 <p>When two springs are arranged in series they by definition must have the same force through their lengths. <span id="eq-stiffness1"><span class="math display">\[                
-        F_{k} = k_1(x_2-x_1)
-     \tag{2}\]</span></span> <span id="eq-stiffness2"><span class="math display">\[
-        F_{k} = k_2(x_3-x_2)
-     \tag{3}\]</span></span> From <a href="#eq-stiffness1" class="quarto-xref">Equation&nbsp;2</a> we get, <span class="math display">\[                
-        \begin{equation}
-            x_2 = \frac{F_k}{k_1} + x_1
-        \end{equation}
-    \]</span> Substituting this into <a href="#eq-stiffness2" class="quarto-xref">Equation&nbsp;3</a>, <span class="math display">\[
-        F_k = k_2(x_3 -x_1 -\frac{F_k}{k_1})
-    \]</span> A little bit of algebra leads to, <span id="eq-seriesSprings"><span class="math display">\[
-        F_k =\underbrace{ \left(\frac{1}{k_1}+\frac{1}{k_2}\right)^{-1} }_{k}(x_3-x_1)
-     \tag{4}\]</span></span> Note that for a series configuration, the total stiffness is always less than individual stiffnesses. We can generalise <a href="#eq-seriesSprings" class="quarto-xref">Equation&nbsp;4</a> to an arbitary number of springs by, <span class="math display">\[
-        k = \left(\sum_i^N \frac{1}{k_i}\right)^{-1}
-    \]</span></p>
+F_{k} = k_1(x_2-x_1)
+\tag{2}\]</span></span> <span id="eq-stiffness2"><span class="math display">\[
+F_{k} = k_2(x_3-x_2)
+\tag{3}\]</span></span> From <a href="#eq-stiffness1" class="quarto-xref">Equation&nbsp;2</a> we get, <span class="math display">\[                
+\begin{equation}
+    x_2 = \frac{F_k}{k_1} + x_1
+\end{equation}
+\]</span> Substituting this into <a href="#eq-stiffness2" class="quarto-xref">Equation&nbsp;3</a>, <span class="math display">\[
+F_k = k_2(x_3 -x_1 -\frac{F_k}{k_1})
+\]</span> A little bit of algebra leads to, <span id="eq-seriesSprings"><span class="math display">\[
+F_k =\underbrace{ \left(\frac{1}{k_1}+\frac{1}{k_2}\right)^{-1} }_{k}(x_3-x_1)
+\tag{4}\]</span></span> Note that for a series configuration, the total stiffness is always less than individual stiffnesses. We can generalise <a href="#eq-seriesSprings" class="quarto-xref">Equation&nbsp;4</a> to an arbitrary number of springs by, <span class="math display">\[
+k = \left(\sum_i^N \frac{1}{k_i}\right)^{-1}
+\]</span></p>
 </section>
 </section>
 <section id="ideal-viscous-damper" class="level2">
 <h2 class="anchored" data-anchor-id="ideal-viscous-damper">Ideal viscous damper</h2>
 <p>A viscous damper has no mass and generates a force proportion to the relative velocity <span class="math inline">\(\Delta \dot{x}\)</span>. The force generated is always in opposite direction and linearly related to the relative velocity of the dashpot.</p>
 <p>For a single-sided dashpot we have, <span class="math display">\[
-        F_c = -c\dot{x}_1
-    \]</span> where <span class="math inline">\(c\)</span> is the <em>viscous damping coefficient</em> with units (Ns/m).</p>
+F_c = -c\dot{x}_1
+\]</span> where <span class="math inline">\(c\)</span> is the <em>viscous damping coefficient</em> with units (Ns/m).</p>
 <p>For a two-sided dashpot, <span class="math display">\[
-        F_c = c\overbrace{(\dot{x}_2-\dot{x}_1)}^{\Delta \dot{x}}
-    \]</span></p>
+F_c = c\overbrace{(\dot{x}_2-\dot{x}_1)}^{\Delta \dot{x}}
+\]</span></p>
 <p>Note that the same equations apply for series and parallel dashpot arrangements as for springs.</p>
 <div id="fig-idealDash" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
@@ -529,54 +532,54 @@ Figure&nbsp;5: Diagram fo single and two sided dashpot. Force generate at each e
 <section id="equation-of-motion-cont." class="level2">
 <h2 class="anchored" data-anchor-id="equation-of-motion-cont.">Equation of motion (cont.)</h2>
 <p>Substituting in the spring and dashpot forces, Newton’s second law states that, <span class="math display">\[
-        \begin{align}
-            m \ddot{x} &amp; = F_e + F_k + F_c    \\
-                        &amp; =  F_e -kx -c\dot{x}
-        \end{align}
-    \]</span> To obtain the equation of motion we isolate external force, <span id="eq-EoM"><span class="math display">\[
-        F_e = m\ddot{x} + kx + c\dot{x}
-     \tag{5}\]</span></span> This is a <em>second order linear differential equation with constant coefficients</em>.</p>
+\begin{align}
+    m \ddot{x} &amp; = F_e + F_k + F_c    \\
+                &amp; =  F_e -kx -c\dot{x}
+\end{align}
+\]</span> To obtain the equation of motion we isolate external force, <span id="eq-EoM"><span class="math display">\[
+F_e = m\ddot{x} + kx + c\dot{x}
+\tag{5}\]</span></span> This is a <em>second order linear differential equation with constant coefficients</em>.</p>
 </section>
 </section>
 <section id="unforced-solution" class="level1">
 <h1>Unforced solution</h1>
-<p>We begin by considering the homogenous, i.e unforced (<span class="math inline">\(F_e=0\)</span>), solution to <a href="#eq-EoM" class="quarto-xref">Equation&nbsp;5</a>. In doing so, we are interested in the dispalcement response <span class="math inline">\(x(t)\)</span> of the system given some set of initial conditons, specifically an initial displacement <span class="math inline">\(x_0\)</span> and velocity <span class="math inline">\(\dot{x}_0\)</span>.</p>
+<p>We begin by considering the homogenous, i.e unforced (<span class="math inline">\(F_e=0\)</span>), solution to <a href="#eq-EoM" class="quarto-xref">Equation&nbsp;5</a>. In doing so, we are interested in the displacement response <span class="math inline">\(x(t)\)</span> of the system given some set of initial conditions, specifically an initial displacement <span class="math inline">\(x_0\)</span> and velocity <span class="math inline">\(\dot{x}_0\)</span>.</p>
 <section id="undamped" class="level2">
 <h2 class="anchored" data-anchor-id="undamped">Undamped</h2>
 <p>We start with the undamped case, where <span class="math inline">\(c = 0\)</span>. Our EoM takes the form, <span class="math display">\[  
-        0 = m\ddot{x} + kx \quad \quad (F_e = c= 0)
-    \]</span> Dividing both sides by <span class="math inline">\(m\)</span> we get, <span class="math display">\[
-        0 = \ddot{x} + \frac{k}{m}x =  \ddot{x} + \omega_n^2 x
-    \]</span> Next, we consider a solution of the form <span class="math inline">\(x(t) = Ae^{st}\)</span>, <span class="math display">\[
-        0 = s^2 Ae^{st} + \omega_n^2 Ae^{st}
-    \]</span> Dividing through by <span class="math inline">\(Ae^{st}\)</span> we obtain the so-called <em>characteristic equation</em>, <span class="math display">\[
-        0 = s^2 + \omega_n^2  \quad\quad s^2 = -\omega_n^2
-    \]</span> Taking the square root of both sides, recalling that <span class="math inline">\(i = \sqrt{-1}\)</span>, we find <span class="math inline">\(s\)</span> to be, <span class="math display">\[
-        s = \pm \sqrt{-\omega_n^2} = \pm i \omega _n
-    \]</span> Note that there are two roots; the solution is the sum of each, <span id="eq-undampedSol"><span class="math display">\[
-        x(t) = A_1 e^{-i\omega_n t} + A_2 e^{i\omega_n t}
-     \tag{6}\]</span></span> where <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> are constants that depend on initial conditions, <span class="math inline">\(x_0\)</span> and <span class="math inline">\(\dot{x}_0\)</span>.</p>
-<p>Clearly, imaginary roots lead to complex exponentials, i.e.&nbsp;<em>harmonic motion at frequency <span class="math inline">\(\omega_n\)</span>.</em> We call <span class="math inline">\(\omega_n\)</span> the natural frequency of vibration, or the characteristic frequency. From the above we see that a force free undamped mass-spring system will <em>always</em> oscillate at <span class="math inline">\(\omega_n\)</span>, regardless of IC.</p>
+0 = m\ddot{x} + kx \quad \quad (F_e = c= 0)
+\]</span> Dividing both sides by <span class="math inline">\(m\)</span> we get, <span class="math display">\[
+0 = \ddot{x} + \frac{k}{m}x =  \ddot{x} + \omega_n^2 x
+\]</span> Next, we consider a solution of the form <span class="math inline">\(x(t) = Ae^{st}\)</span>, <span class="math display">\[
+0 = s^2 Ae^{st} + \omega_n^2 Ae^{st}
+\]</span> Dividing through by <span class="math inline">\(Ae^{st}\)</span> we obtain the so-called <em>characteristic equation</em>, <span class="math display">\[
+0 = s^2 + \omega_n^2  \quad\quad s^2 = -\omega_n^2
+\]</span> Taking the square root of both sides, recalling that <span class="math inline">\(i = \sqrt{-1}\)</span>, we find <span class="math inline">\(s\)</span> to be, <span class="math display">\[
+s = \pm \sqrt{-\omega_n^2} = \pm i \omega _n
+\]</span> Note that there are two roots; the solution is the sum of each, <span id="eq-undampedSol"><span class="math display">\[
+x(t) = A_1 e^{-i\omega_n t} + A_2 e^{i\omega_n t}
+\tag{6}\]</span></span> where <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> are constants that depend on initial conditions, <span class="math inline">\(x_0\)</span> and <span class="math inline">\(\dot{x}_0\)</span>.</p>
+<p>Clearly, imaginary roots lead to complex exponential, i.e.&nbsp;<em>harmonic motion at frequency <span class="math inline">\(\omega_n\)</span>.</em> We call <span class="math inline">\(\omega_n\)</span> the natural frequency of vibration, or the characteristic frequency. From the above we see that a force free undamped mass-spring system will <em>always</em> oscillate at <span class="math inline">\(\omega_n\)</span>, regardless of IC.</p>
 <section id="initial-conditions" class="level3">
 <h3 class="anchored" data-anchor-id="initial-conditions">Initial conditions</h3>
 <p>We have obtained the general form of the solution in <a href="#eq-undampedSol" class="quarto-xref">Equation&nbsp;6</a>. Next, we need to determine the constants <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> in terms of initial displacement <span class="math inline">\(x_0\)</span> and velocity<span class="math inline">\(\dot{x}_0\)</span>.</p>
-<p>We begin by evaluating <a href="#eq-undampedSol" class="quarto-xref">Equation&nbsp;6</a> at <span class="math inline">\(t=0\)</span>, which yeilds, <span class="math display">\[
-        x(0) = x_0 = A_1 + A_2
-    \]</span> Next, we take the derrivative of <a href="#eq-undampedSol" class="quarto-xref">Equation&nbsp;6</a> to obtain an equation for the velocity, before evaluating it also at <span class="math inline">\(t=0\)</span>. This yields, <span class="math display">\[
-        \dot{x}(0) = \dot{x}_0 = -i\omega_n A_1 +i\omega_n A_2 \quad\rightarrow\quad  \frac{\dot{x}_0}{i\omega_n} = -A_1+A_2
-    \]</span> From the above, after some simple algebra, we obtain, <span class="math display">\[
-        A_1 = \frac{1}{2}\left(x_0 -\frac{\dot{x}_0}{i\omega}\right) \quad \quad A_2 = \frac{1}{2}\left(x_0 +\frac{\dot{x}_0}{i \omega}\right)
-    \]</span> Notice that <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> are complex conjugates… So we only have two independent constants since <span class="math inline">\(A_1 = a+ib\)</span> and <span class="math inline">\(A_2=a-ib\)</span>. This is expected as system is second order.</p>
+<p>We begin by evaluating <a href="#eq-undampedSol" class="quarto-xref">Equation&nbsp;6</a> at <span class="math inline">\(t=0\)</span>, which yields, <span class="math display">\[
+x(0) = x_0 = A_1 + A_2
+\]</span> Next, we take the derivative of <a href="#eq-undampedSol" class="quarto-xref">Equation&nbsp;6</a> to obtain an equation for the velocity, before evaluating it also at <span class="math inline">\(t=0\)</span>. This yields, <span class="math display">\[
+\dot{x}(0) = \dot{x}_0 = -i\omega_n A_1 +i\omega_n A_2 \quad\rightarrow\quad  \frac{\dot{x}_0}{i\omega_n} = -A_1+A_2
+\]</span> From the above, after some simple algebra, we obtain, <span class="math display">\[
+A_1 = \frac{1}{2}\left(x_0 -\frac{\dot{x}_0}{i\omega}\right) \quad \quad A_2 = \frac{1}{2}\left(x_0 +\frac{\dot{x}_0}{i \omega}\right)
+\]</span> Notice that <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> are complex conjugates… So we only have two independent constants since <span class="math inline">\(A_1 = a+ib\)</span> and <span class="math inline">\(A_2=a-ib\)</span>. This is expected as system is second order.</p>
 <p>If we substitute the constants into solution and use Euler’s formula, <span class="math display">\[
-        \begin{align}
-            x(t) &amp; = \frac{1}{2}\left(x_0 -\frac{\dot{x}}{i\omega}\right) e^{-i\omega_n t} + \frac{1}{2}\left(x_0 +\frac{\dot{x}}{i\omega}\right) e^{i\omega_n t}                                                                                   \\
-                &amp; =  \frac{1}{2}x_0\underbrace{ \left(e^{i\omega_n t}  + e^{-i\omega_n t} \right) }_{2\cos\omega_n t}+\frac{1}{2}\frac{\dot{x}}{\omega}  \underbrace{\frac{1}{i}\left(e^{i\omega_n t}- e^{-i\omega_n t} \right)}_{2\sin\omega_n t}
-        \end{align}
-    \]</span> From the above, the <em>real</em> solution is given by, <span class="math display">\[
-        x(t) = x_0 \cos\omega_n t + \frac{\dot{x}_0}{\omega_n} \sin\omega_n t
-    \]</span> Finally, using the trigonometric identity <span class="math inline">\(a\cos\theta + b\sin\theta = \sqrt{a^2+b^2}\cos(\theta - \phi)\)</span> where <span class="math inline">\(\phi = \tan^{-1}(b/a)\)</span>, we can write the solution in a simple <span class="math inline">\(\cos\)</span> form as, <span class="math display">\[
-        x(t) = |A| \cos(\omega_nt-\phi) \quad \mbox{with}\quad |A| = \sqrt{x_0^2 +\frac{\dot{x}_0^2}{\omega^2}} \quad \mbox{and} \quad \phi = \tan^{-1}\left(\frac{1}{\omega_n}\frac{\dot{x}_0}{x_0}\right)
-    \]</span></p>
+\begin{align}
+    x(t) &amp; = \frac{1}{2}\left(x_0 -\frac{\dot{x}}{i\omega}\right) e^{-i\omega_n t} + \frac{1}{2}\left(x_0 +\frac{\dot{x}}{i\omega}\right) e^{i\omega_n t}                                                                                   \\
+        &amp; =  \frac{1}{2}x_0\underbrace{ \left(e^{i\omega_n t}  + e^{-i\omega_n t} \right) }_{2\cos\omega_n t}+\frac{1}{2}\frac{\dot{x}}{\omega}  \underbrace{\frac{1}{i}\left(e^{i\omega_n t}- e^{-i\omega_n t} \right)}_{2\sin\omega_n t}
+\end{align}
+\]</span> From the above, the <em>real</em> solution is given by, <span class="math display">\[
+x(t) = x_0 \cos\omega_n t + \frac{\dot{x}_0}{\omega_n} \sin\omega_n t
+\]</span> Finally, using the trigonometric identity <span class="math inline">\(a\cos\theta + b\sin\theta = \sqrt{a^2+b^2}\cos(\theta - \phi)\)</span> where <span class="math inline">\(\phi = \tan^{-1}(b/a)\)</span>, we can write the solution in a simple <span class="math inline">\(\cos\)</span> form as, <span class="math display">\[
+x(t) = |A| \cos(\omega_nt-\phi) \quad \mbox{with}\quad |A| = \sqrt{x_0^2 +\frac{\dot{x}_0^2}{\omega^2}} \quad \mbox{and} \quad \phi = \tan^{-1}\left(\frac{1}{\omega_n}\frac{\dot{x}_0}{x_0}\right)
+\]</span></p>
 <div id="fig-geoUndamped" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-geoUndamped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -593,25 +596,25 @@ Figure&nbsp;6: Response of undamped mass-spring system due to initial conditions
 <section id="damped" class="level2">
 <h2 class="anchored" data-anchor-id="damped">Damped</h2>
 <p>Let us now consider the damped system. Reintroducing <span class="math inline">\(c\)</span>, our homogenous EoM becomes, <span class="math display">\[
-        0 = m\ddot{x} + c\dot{x} + kx \quad \quad (F_e =0)
-    \]</span> As for the undamped, we divide through by <span class="math inline">\(m\)</span> to get, <span class="math display">\[
-        0 = \ddot{x} +2\zeta\omega_n \dot{x} + \omega_n^2 x
-    \]</span> where we introduce the <em>viscous damping factor</em>, defined as, <span class="math display">\[
-        \zeta = \frac{c}{2m\omega_n}
-    \]</span> Note that the reason for introducing <span class="math inline">\(\zeta\)</span> is largely for mathematical convenience, as we will see shortly. As before, we assume a solution of form <span class="math inline">\(x(t) = Ae^{st}\)</span> and make the necessary substiutiions, <span class="math display">\[
-        0 = s^2 Ae^{st}  +2\zeta\omega_n s Ae^{st} + \omega_n^2 Ae^{st}
-    \]</span> Finally, dividing through by <span class="math inline">\(Ae^{st}\)</span> we obtain the system’s characteristic equation, <span id="eq-dampedCharac"><span class="math display">\[
-        0 = s^2  +2\zeta\omega_n s  + \omega_n^2
-     \tag{7}\]</span></span> Note that <a href="#eq-dampedCharac" class="quarto-xref">Equation&nbsp;7</a> is simply a quadratic equation in <span class="math inline">\(s\)</span>. We can solve this easily using the quadratic formula as, <span id="eq-dampedCharacRoots"><span class="math display">\[
-        \begin{array}{c}
-            s_1 \\
-            s_2\end{array} = \left(-\zeta \pm \sqrt{\zeta^2-1}\right)\omega_n
-     \tag{8}\]</span></span> Perhaps it is clear now why we introduced <span class="math inline">\(\zeta\)</span>; it leads to <a href="#eq-dampedCharacRoots" class="quarto-xref">Equation&nbsp;8</a> takeing a particularly simple form.</p>
+0 = m\ddot{x} + c\dot{x} + kx \quad \quad (F_e =0)
+\]</span> As for the undamped, we divide through by <span class="math inline">\(m\)</span> to get, <span class="math display">\[
+0 = \ddot{x} +2\zeta\omega_n \dot{x} + \omega_n^2 x
+\]</span> where we introduce the <em>viscous damping factor</em>, defined as, <span class="math display">\[
+\zeta = \frac{c}{2m\omega_n}
+\]</span> Note that the reason for introducing <span class="math inline">\(\zeta\)</span> is largely for mathematical convenience, as we will see shortly. As before, we assume a solution of form <span class="math inline">\(x(t) = Ae^{st}\)</span> and make the necessary substitutions, <span class="math display">\[
+0 = s^2 Ae^{st}  +2\zeta\omega_n s Ae^{st} + \omega_n^2 Ae^{st}
+\]</span> Finally, dividing through by <span class="math inline">\(Ae^{st}\)</span> we obtain the system’s characteristic equation, <span id="eq-dampedCharac"><span class="math display">\[
+0 = s^2  +2\zeta\omega_n s  + \omega_n^2
+\tag{7}\]</span></span> Note that <a href="#eq-dampedCharac" class="quarto-xref">Equation&nbsp;7</a> is simply a quadratic equation in <span class="math inline">\(s\)</span>. We can solve this easily using the quadratic formula as, <span id="eq-dampedCharacRoots"><span class="math display">\[
+\begin{array}{c}
+    s_1 \\
+    s_2\end{array} = \left(-\zeta \pm \sqrt{\zeta^2-1}\right)\omega_n
+\tag{8}\]</span></span> Perhaps it is clear now why we introduced <span class="math inline">\(\zeta\)</span>; it leads to <a href="#eq-dampedCharacRoots" class="quarto-xref">Equation&nbsp;8</a> takeing a particularly simple form.</p>
 <p>Plugging our roots <span class="math inline">\(s_{1,2}\)</span> back into our assumed solution <span class="math inline">\(x(t) = Ae^{st}\)</span>, <span id="eq-dampedSolution0"><span class="math display">\[
-        x(t) = A_1e^{ \left(-\zeta - \sqrt{\zeta^2-1}\right)\omega_n t} + A_2 e^{\left(-\zeta + \sqrt{\zeta^2-1}\right)\omega_n t}
-     \tag{9}\]</span></span> or by factoring out constant part of exponential <span class="math inline">\(e^{-\zeta \omega_n t}\)</span>, <span id="eq-dampedSolution1"><span class="math display">\[
-        x(t) = \left(A_1e^{ -\sqrt{\zeta^2-1}\omega_n t} + A_2 e^{\sqrt{\zeta^2-1}\omega_n t}\right)e^{-\zeta\omega_n t}
-     \tag{10}\]</span></span> <a href="#eq-dampedSolution0" class="quarto-xref">Equation&nbsp;9</a> and <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> represent the general solution of our damped mass-spring system. As before, the constants <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> depend on the inital condition, and will be dealt with shortly. For now, it is more important to notice that the nature of this solution depends heavily on the value of <span class="math inline">\(\zeta\)</span>!</p>
+x(t) = A_1e^{ \left(-\zeta - \sqrt{\zeta^2-1}\right)\omega_n t} + A_2 e^{\left(-\zeta + \sqrt{\zeta^2-1}\right)\omega_n t}
+\tag{9}\]</span></span> or by factoring out constant part of exponential <span class="math inline">\(e^{-\zeta \omega_n t}\)</span>, <span id="eq-dampedSolution1"><span class="math display">\[
+x(t) = \left(A_1e^{ -\sqrt{\zeta^2-1}\omega_n t} + A_2 e^{\sqrt{\zeta^2-1}\omega_n t}\right)e^{-\zeta\omega_n t}
+\tag{10}\]</span></span> <a href="#eq-dampedSolution0" class="quarto-xref">Equation&nbsp;9</a> and <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> represent the general solution of our damped mass-spring system. As before, the constants <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> depend on the initial condition, and will be dealt with shortly. For now, it is more important to notice that the nature of this solution depends heavily on the value of <span class="math inline">\(\zeta\)</span>!</p>
 <ul>
 <li>If <span class="math inline">\(\zeta=0\)</span> then <span class="math inline">\(s_{1,2}\)</span> are purely imaginary and the solution is that of undamped case we have already seen.</li>
 <li>If <span class="math inline">\(0&lt;\zeta&lt;1\)</span> then <span class="math inline">\(s_{1,2}\)</span> are complex (because of negative in square root) and the solution will become a decaying sinusoid.</li>
@@ -667,21 +670,21 @@ Figure&nbsp;7: Different types of solution given by <a href="#eq-dampedSolution0
 <section id="undamped-1" class="level3">
 <h3 class="anchored" data-anchor-id="undamped-1">Undamped</h3>
 <p>When <span class="math inline">\(\zeta=0\)</span>, <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> reduces to (noting that <span class="math inline">\(\sqrt{-1}=i\)</span>), <span class="math display">\[
-        x(t) = \left(A_1e^{ -i\omega_n t} + A_2 e^{i\omega_n t}\right)
-    \]</span> which, as expected, is exactly what we obtained for the undamped case.</p>
+x(t) = \left(A_1e^{ -i\omega_n t} + A_2 e^{i\omega_n t}\right)
+\]</span> which, as expected, is exactly what we obtained for the undamped case.</p>
 </section>
 <section id="underdamped" class="level3">
 <h3 class="anchored" data-anchor-id="underdamped">Underdamped</h3>
 <p>For the under-damped case that <span class="math inline">\(0&lt;\zeta&lt;1\)</span>, it is useful to write <span class="math inline">\(\sqrt{\zeta^2-1}\)</span> instead as <span class="math inline">\(i\sqrt{1-\zeta^2}\)</span> such that <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> becomes, <span class="math display">\[
-        x(t) = \left(A_1e^{ -i\sqrt{1-\zeta^2}\omega_n t} + A_2 e^{i\sqrt{1-\zeta^2}\omega_n t}\right)e^{-\zeta\omega_n t}
-    \]</span> Taking the same form as the undamped case, the bracketed term represents a periodic oscillation at a frequency of <span class="math inline">\(\omega_d = \sqrt{1-\zeta^2}\omega_n\)</span>. This is termed the <em>frequency of damped natural vibration</em>. It is always slightly lower than the undamped natural frequency (<span class="math inline">\(\omega_d&lt;\omega_n\)</span>) on account of <span class="math inline">\(0&lt;\sqrt{1-\zeta^2}&lt;1\)</span> always being less than one. Using <span class="math inline">\(\omega_d\)</span>, <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> takes the form, <span class="math display">\[
-        x(t) = \left(A_1e^{ -i\omega_d t} + A_2 e^{i\omega_d t}\right)e^{-\zeta\omega_n t}
-    \]</span> The exponential sitting outside of the bracket has a real power, and so represents an exponential decay term. Note that this decay is proportional to the <em>undamped</em> natural frequency <span class="math inline">\(\omega_n\)</span>; higher frequencies decay more rapidly. The rate of decay is also proportional to <span class="math inline">\(\zeta\)</span>; larger values of <span class="math inline">\(\zeta\)</span> leads to a quicker decay.</p>
+x(t) = \left(A_1e^{ -i\sqrt{1-\zeta^2}\omega_n t} + A_2 e^{i\sqrt{1-\zeta^2}\omega_n t}\right)e^{-\zeta\omega_n t}
+\]</span> Taking the same form as the undamped case, the bracketed term represents a periodic oscillation at a frequency of <span class="math inline">\(\omega_d = \sqrt{1-\zeta^2}\omega_n\)</span>. This is termed the <em>frequency of damped natural vibration</em>. It is always slightly lower than the undamped natural frequency (<span class="math inline">\(\omega_d&lt;\omega_n\)</span>) on account of <span class="math inline">\(0&lt;\sqrt{1-\zeta^2}&lt;1\)</span> always being less than one. Using <span class="math inline">\(\omega_d\)</span>, <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> takes the form, <span class="math display">\[
+x(t) = \left(A_1e^{ -i\omega_d t} + A_2 e^{i\omega_d t}\right)e^{-\zeta\omega_n t}
+\]</span> The exponential sitting outside of the bracket has a real power, and so represents an exponential decay term. Note that this decay is proportional to the <em>undamped</em> natural frequency <span class="math inline">\(\omega_n\)</span>; higher frequencies decay more rapidly. The rate of decay is also proportional to <span class="math inline">\(\zeta\)</span>; larger values of <span class="math inline">\(\zeta\)</span> leads to a quicker decay.</p>
 <p>Following the same steps as for the undamped case, our <em>damped</em> solution can also be expressed in a simpler <span class="math inline">\(\cos\)</span> form as, <span class="math display">\[
-        x(t) = |A|\cos(\omega_d t - \phi) e^{-\zeta\omega_n t}
-    \]</span> with the initial conditions, <span class="math display">\[
-        A = x_0 + \frac{\dot{x}_0 {\color{orange} +\zeta\omega_n x_0}}{i \omega_d} \quad |A| = \sqrt{\Re(A)^2 + \Im(A)^2} \quad \phi = \tan^{-1}\left(\frac{\Im(A)}{\Re(A)}\right)
-    \]</span> It is this under-damped solution that we are most interested in, and will revist later when considering multi-DoF systems.</p>
+x(t) = |A|\cos(\omega_d t - \phi) e^{-\zeta\omega_n t}
+\]</span> with the initial conditions, <span class="math display">\[
+A = x_0 + \frac{\dot{x}_0 {\color{orange} +\zeta\omega_n x_0}}{i \omega_d} \quad |A| = \sqrt{\Re(A)^2 + \Im(A)^2} \quad \phi = \tan^{-1}\left(\frac{\Im(A)}{\Re(A)}\right)
+\]</span> It is this under-damped solution that we are most interested in, and will revisit later when considering multi-DoF systems.</p>
 <div id="fig-underDampedPlot" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-underDampedPlot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -696,55 +699,55 @@ Figure&nbsp;8: Response of under-damped mass-spring-damper system due to initial
 </section>
 <section id="critically-damped" class="level3">
 <h3 class="anchored" data-anchor-id="critically-damped">Critically damped</h3>
-<p>When <span class="math inline">\(\zeta=1\)</span> we reach the transition point between <em>under</em> and <em>over-damped</em> scenarios. We term this case <em>critical damping</em>. In reality, one never acheives critical damping exactly; <span class="math inline">\(\zeta\)</span> is always slightly larger or smaller than 1 in practice. Nevertheless, in theory it can be shown that the critically damped solution has the form, <span id="eq-critDamp"><span class="math display">\[
-        x(t) = (A_1+tA_2)e^{-\omega_n t}
-     \tag{11}\]</span></span> which occurs when, <span class="math display">\[
-        \zeta = 1 = \frac{c}{2m\omega_n} \rightarrow c_{cr} = 2m\omega_n = 2\sqrt{km}
-    \]</span> Admittedly, it is not immediately obvious how <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> reduces to <a href="#eq-critDamp" class="quarto-xref">Equation&nbsp;11</a> when <span class="math inline">\(\zeta=1\)</span>. Substituting <span class="math inline">\(\zeta=1\)</span> directly into <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> yields, <span id="eq-critDampSolution"><span class="math display">\[
-        x(t) = \left(A_1 + A_2 \right)e^{-\omega_n t} = A_1e^{-\omega_n t}
-     \tag{12}\]</span></span> which is indeed a valid solution, but it is not the only one. It implies that given an initial displacement <span class="math inline">\(x_0\)</span>, the initial velocity <em>must</em> be <span class="math inline">\(\dot{x}_0 = -A_1/\omega_n\)</span>. Physically however, there is nothing stopping us from setting the initial displacement and then applying whatever initial velocity we want! So, <a href="#eq-critDampSolution" class="quarto-xref">Equation&nbsp;12</a> is clearly missing something…</p>
+<p>When <span class="math inline">\(\zeta=1\)</span> we reach the transition point between <em>under</em> and <em>over-damped</em> scenarios. We term this case <em>critical damping</em>. In reality, one never achieves critical damping exactly; <span class="math inline">\(\zeta\)</span> is always slightly larger or smaller than 1 in practice. Nevertheless, in theory it can be shown that the critically damped solution has the form, <span id="eq-critDamp"><span class="math display">\[
+x(t) = (A_1+tA_2)e^{-\omega_n t}
+\tag{11}\]</span></span> which occurs when, <span class="math display">\[
+\zeta = 1 = \frac{c}{2m\omega_n} \rightarrow c_{cr} = 2m\omega_n = 2\sqrt{km}
+\]</span> Admittedly, it is not immediately obvious how <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> reduces to <a href="#eq-critDamp" class="quarto-xref">Equation&nbsp;11</a> when <span class="math inline">\(\zeta=1\)</span>. Substituting <span class="math inline">\(\zeta=1\)</span> directly into <a href="#eq-dampedSolution1" class="quarto-xref">Equation&nbsp;10</a> yields, <span id="eq-critDampSolution"><span class="math display">\[
+x(t) = \left(A_1 + A_2 \right)e^{-\omega_n t} = A_1e^{-\omega_n t}
+\tag{12}\]</span></span> which is indeed a valid solution, but it is not the only one. It implies that given an initial displacement <span class="math inline">\(x_0\)</span>, the initial velocity <em>must</em> be <span class="math inline">\(\dot{x}_0 = -A_1/\omega_n\)</span>. Physically however, there is nothing stopping us from setting the initial displacement and then applying whatever initial velocity we want! So, <a href="#eq-critDampSolution" class="quarto-xref">Equation&nbsp;12</a> is clearly missing something…</p>
 <p>The issue is that as <span class="math inline">\(\zeta\rightarrow 1\)</span> the two roots <span class="math inline">\(s_{1,2}\)</span> merge into <span class="math inline">\(s\)</span>, meaning we no longer have two independent solutions and so cannot guarantee all solutions. To find the missing solution we define <span class="math inline">\(\alpha=\sqrt{\zeta^2-1}\omega_n\)</span> such that our general solution takes the form, <span class="math display">\[
-         x(t) = \left(A_1e^{ -\alpha t} + A_2 e^{\alpha t}\right)e^{-\zeta\omega_n t}
-    \]</span> We then take <span class="math inline">\(A_2 = -A_1\)</span> and consider the limit as we approach critical damping <span class="math inline">\(\alpha \rightarrow 0\)</span> and <span class="math inline">\(\zeta\rightarrow 1\)</span>. For small <span class="math inline">\(\alpha\)</span> we can take <span class="math inline">\(e^{\pm\alpha t}=1\pm\alpha t\)</span>, which leads to our missing solution, <span class="math display">\[
-         x(t) = \left(A_1(1-\alpha t) - A_1 (1+\alpha t)\right)e^{-\zeta\omega_n t} = -2\alpha t e^{-\omega_n t}
-    \]</span> Recalling that we can multiply a solution by a constant and it remains a solution, we can rewrite our new solution as, <span class="math display">\[
-         x(t) = A_2 t e^{-\omega_n t}
-    \]</span> Finally, the general solution is the sum of our individual solution, as in <a href="#eq-critDamp" class="quarto-xref">Equation&nbsp;11</a>.</p>
+    x(t) = \left(A_1e^{ -\alpha t} + A_2 e^{\alpha t}\right)e^{-\zeta\omega_n t}
+\]</span> We then take <span class="math inline">\(A_2 = -A_1\)</span> and consider the limit as we approach critical damping <span class="math inline">\(\alpha \rightarrow 0\)</span> and <span class="math inline">\(\zeta\rightarrow 1\)</span>. For small <span class="math inline">\(\alpha\)</span> we can take <span class="math inline">\(e^{\pm\alpha t}=1\pm\alpha t\)</span>, which leads to our missing solution, <span class="math display">\[
+    x(t) = \left(A_1(1-\alpha t) - A_1 (1+\alpha t)\right)e^{-\zeta\omega_n t} = -2\alpha t e^{-\omega_n t}
+\]</span> Recalling that we can multiply a solution by a constant and it remains a solution, we can rewrite our new solution as, <span class="math display">\[
+    x(t) = A_2 t e^{-\omega_n t}
+\]</span> Finally, the general solution is the sum of our individual solution, as in <a href="#eq-critDamp" class="quarto-xref">Equation&nbsp;11</a>.</p>
 </section>
 <section id="over-damped" class="level3">
 <h3 class="anchored" data-anchor-id="over-damped">Over-damped</h3>
 <p>Lastly, in the <em>over-damped</em> case where <span class="math inline">\(\zeta&gt;1\)</span>, we see that our solution is just the sum of two exponential decays, <span id="eq-overDampedSolution0"><span class="math display">\[
-        x(t) = A_1e^{ -\left(\zeta + \sqrt{\zeta^2-1}\right)\omega_n t} + A_2 e^{-\left(\zeta - \sqrt{\zeta^2-1}\right)\omega_n t}
-     \tag{13}\]</span></span> Note that <span class="math inline">\(\left(\zeta \pm \sqrt{\zeta^2-1}\right) &gt; 1\)</span>, and so <a href="#eq-overDampedSolution0" class="quarto-xref">Equation&nbsp;13</a> will <em>always</em> decay slower than <a href="#eq-critDampSolution" class="quarto-xref">Equation&nbsp;12</a>. This means that the critically damped response corresponds to the fastest possible decay, without oscillation. Any further redution in the damping <span class="math inline">\(\zeta\)</span> will lead to complex roots <span class="math inline">\(s_{1,2}\)</span> and some oscillaton.</p>
+x(t) = A_1e^{ -\left(\zeta + \sqrt{\zeta^2-1}\right)\omega_n t} + A_2 e^{-\left(\zeta - \sqrt{\zeta^2-1}\right)\omega_n t}
+\tag{13}\]</span></span> Note that <span class="math inline">\(\left(\zeta \pm \sqrt{\zeta^2-1}\right) &gt; 1\)</span>, and so <a href="#eq-overDampedSolution0" class="quarto-xref">Equation&nbsp;13</a> will <em>always</em> decay slower than <a href="#eq-critDampSolution" class="quarto-xref">Equation&nbsp;12</a>. This means that the critically damped response corresponds to the fastest possible decay, without oscillation. Any further redution in the damping <span class="math inline">\(\zeta\)</span> will lead to complex roots <span class="math inline">\(s_{1,2}\)</span> and some oscillaton.</p>
 </section>
 </section>
 </section>
 <section id="forced-solution" class="level1">
 <h1>Forced solution</h1>
 <p>Now that we have dealt with the unforced, homogenous, solution we turn our attention to the <em>force solution</em>. As such, our EoM now takes the form, <span class="math display">\[
-        F_e = m\ddot{x} + kx + c\dot{x}
-    \]</span> where <span class="math inline">\(F_e\)</span> has been reintroduced. We will consider three different scenarios with regards to the external forcing; harmonic forcing at a single frequency, forcing by a periodic function, and forcing by an arbitary waveform.</p>
+F_e = m\ddot{x} + kx + c\dot{x}
+\]</span> where <span class="math inline">\(F_e\)</span> has been reintroduced. We will consider three different scenarios with regards to the external forcing; harmonic forcing at a single frequency, forcing by a periodic function, and forcing by an arbitrary waveform.</p>
 <section id="harmonic-forcing" class="level2">
 <h2 class="anchored" data-anchor-id="harmonic-forcing">Harmonic forcing</h2>
 <p>Harmonic forcing at frequency <span class="math inline">\(\omega\)</span> can be expressed in complex exponential form as, <span class="math display">\[
-        F_e(t) = F_0 e^{i\omega t}
-    \]</span> where <span class="math inline">\(F_0\)</span> is a complex ampltiude. We will assume that this force as been acting for all time, and so any transient behavior due to its initial application have decayed to 0.</p>
+F_e(t) = F_0 e^{i\omega t}
+\]</span> where <span class="math inline">\(F_0\)</span> is a complex amplitude. We will assume that this force as been acting for all time, and so any transient behavior due to its initial application have decayed to 0.</p>
 <p>As a consequence of our mass-spring-damper system being linear, its response must also be harmonic at the same frequency, <span id="eq-harmonicResp0"><span class="math display">\[
-        x(t) = X_0 e^{i\omega t}
-     \tag{14}\]</span></span> where <span class="math inline">\(X_0\)</span> is similarly a complex amplitude. Note that the magnitude and phase of <span class="math inline">\(X_0\)</span> will differ from <span class="math inline">\(F_0\)</span> on account of the system’s dynamics.</p>
+x(t) = X_0 e^{i\omega t}
+\tag{14}\]</span></span> where <span class="math inline">\(X_0\)</span> is similarly a complex amplitude. Note that the magnitude and phase of <span class="math inline">\(X_0\)</span> will differ from <span class="math inline">\(F_0\)</span> on account of the system’s dynamics.</p>
 <p>Substituting the harmonic terms above and performing the necessary derivatives we arrive at, <span class="math display">\[
-        F_e =  kx + c\dot{x} +  m\ddot{x} \quad \quad F_0 e^{i\omega t} = k X_0 e^{i\omega t} + ci\omega X_0 e^{i\omega t} - m\omega^2 X_0 e^{i\omega t}
-    \]</span> Now dividing through by <span class="math inline">\(e^{i\omega t}\)</span> leaves us with, <span id="eq-harmonicResp"><span class="math display">\[
-         F_0 = \overbrace{(k + i\omega c - \omega^2 m)}^{D(\omega)}X_0 \quad \rightarrow \quad X_0 = R(\omega) F_o
-     \tag{15}\]</span></span> where <span class="math inline">\(D(\omega)\)</span> is a complex function termed the <em>dynamic stiffness</em> that depends on frequency and describes the system’s dynamics; <span class="math inline">\(R(\omega)\)</span> is the inverse of <span class="math inline">\(D(\omega)\)</span> and is termed the <em>receptance</em>. More generally, <span class="math inline">\(D(\omega)\)</span> and <span class="math inline">\(R(\omega)\)</span> are termed <em>frequency response functions</em> or FRFs, a concept we will return to shortly.</p>
+F_e =  kx + c\dot{x} +  m\ddot{x} \quad \quad F_0 e^{i\omega t} = k X_0 e^{i\omega t} + ci\omega X_0 e^{i\omega t} - m\omega^2 X_0 e^{i\omega t}
+\]</span> Now dividing through by <span class="math inline">\(e^{i\omega t}\)</span> leaves us with, <span id="eq-harmonicResp"><span class="math display">\[
+    F_0 = \overbrace{(k + i\omega c - \omega^2 m)}^{D(\omega)}X_0 \quad \rightarrow \quad X_0 = R(\omega) F_o
+\tag{15}\]</span></span> where <span class="math inline">\(D(\omega)\)</span> is a complex function termed the <em>dynamic stiffness</em> that depends on frequency and describes the system’s dynamics; <span class="math inline">\(R(\omega)\)</span> is the inverse of <span class="math inline">\(D(\omega)\)</span> and is termed the <em>receptance</em>. More generally, <span class="math inline">\(D(\omega)\)</span> and <span class="math inline">\(R(\omega)\)</span> are termed <em>frequency response functions</em> or FRFs, a concept we will return to shortly.</p>
 <p><a href="#eq-harmonicResp" class="quarto-xref">Equation&nbsp;15</a> provides a means of calculating the complex amplitude of the harmonic response given the forcing amplitude. Once <span class="math inline">\(X_0\)</span> is obtained, the time series response can be obtained using <a href="#eq-harmonicResp0" class="quarto-xref">Equation&nbsp;14</a>. Alternativly, the magnitude and phase of <span class="math inline">\(R(\omega)\)</span> can be examined and the response obtained using the standard <span class="math inline">\(|A| \cos(\omega t - \phi)\)</span> form.</p>
-<p>To examine <span class="math inline">\(R(\omega)\)</span> further we seperate the real and imaginary parts of the denominator, <span class="math display">\[
-        R(\omega) = \frac{1}{k + i\omega c - \omega^2 m} =  \frac{1}{\underbrace{(k - \omega^2 m)}_{\mbox{Real}}+ \underbrace{i\omega c}_{\mbox{Imag}} }
-    \]</span> The magnitude is now obtained simply as, <span class="math display">\[
-        |R(\omega)| =  \frac{1}{|k - \omega^2 m+ i\omega c |} =  \frac{1}{\sqrt{(k - \omega^2 m)^2+ (\omega c)^2}}
-    \]</span> Recalling from our treatment of hte homogenous case <span class="math inline">\(\omega_n = \sqrt{k/m}\)</span> and <span class="math inline">\(c = \zeta 2 k/ \omega_n\)</span>, the receptance magnitude becomes, <span id="eq-receptMag"><span class="math display">\[
-        |R(\omega)| =  \frac{1}{\sqrt{k^2\left(1 - \omega^2 \frac{m}{k}\right)^2+ (\omega c)^2}} = \frac{1}{\sqrt{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 k \frac{\omega}{\omega_n}\right)^2}} = \frac{1}{k \sqrt{\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2}}
-     \tag{16}\]</span></span> We see that the magnitude increases as <span class="math inline">\(\left(1 - \frac{\omega^2}{\omega_n^2}\right)\)</span> goes to zero, and its maximum is limited by <span class="math inline">\(\zeta 2 k \frac{\omega}{\omega_n}\)</span>.</p>
+<p>To examine <span class="math inline">\(R(\omega)\)</span> further we separate the real and imaginary parts of the denominator, <span class="math display">\[
+R(\omega) = \frac{1}{k + i\omega c - \omega^2 m} =  \frac{1}{\underbrace{(k - \omega^2 m)}_{\mbox{Real}}+ \underbrace{i\omega c}_{\mbox{Imag}} }
+\]</span> The magnitude is now obtained simply as, <span class="math display">\[
+|R(\omega)| =  \frac{1}{|k - \omega^2 m+ i\omega c |} =  \frac{1}{\sqrt{(k - \omega^2 m)^2+ (\omega c)^2}}
+\]</span> Recalling from our treatment of hte homogenous case <span class="math inline">\(\omega_n = \sqrt{k/m}\)</span> and <span class="math inline">\(c = \zeta 2 k/ \omega_n\)</span>, the receptance magnitude becomes, <span id="eq-receptMag"><span class="math display">\[
+|R(\omega)| =  \frac{1}{\sqrt{k^2\left(1 - \omega^2 \frac{m}{k}\right)^2+ (\omega c)^2}} = \frac{1}{\sqrt{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 k \frac{\omega}{\omega_n}\right)^2}} = \frac{1}{k \sqrt{\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2}}
+\tag{16}\]</span></span> We see that the magnitude increases as <span class="math inline">\(\left(1 - \frac{\omega^2}{\omega_n^2}\right)\)</span> goes to zero, and its maximum is limited by <span class="math inline">\(\zeta 2 k \frac{\omega}{\omega_n}\)</span>.</p>
 <p>Shown in <a href="#fig-receptanceLin" class="quarto-xref">Figure&nbsp;9</a> are the receptance frequency response curves obtained for different levels of damping. The peak value of the magnitude is marked and takes a value <span class="math inline">\(\omega_{peak} = \omega_n\sqrt{1-2\zeta^2}\)</span>. Note that this peak value is always less than the undamped natural frequency <span class="math inline">\(\omega_n\)</span>. It is obtained by taking the derivative of <a href="#eq-receptMag" class="quarto-xref">Equation&nbsp;16</a>, setting this to zero, and solving for <span class="math inline">\(\omega\)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Want to see where $\omega_{peak} = \omega_n\sqrt{1-2\zeta^2}$ came from?">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -759,31 +762,31 @@ Want to see where <span class="math inline">\(\omega_{peak} = \omega_n\sqrt{1-2\
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Factoring our constants and using the reciporcal rule <span class="math inline">\([1/u(x)]' = - u(x)'/u(x)^2\)</span>, <span class="math display">\[
-        \frac{\partial |R|^2}{\partial \omega} = - \frac{1}{k^2}
-        \frac{ \frac{\partial}{\partial \omega} \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)}{ \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)^2}
-    \]</span> Using the summation rule <span class="math inline">\((a\cdot u(x) + b\cdot v(x))' = a\cdot u(x)' + b\cdot v(x)'\)</span> <span class="math display">\[
-        \frac{\partial |R|^2}{\partial \omega} = - \frac{1}{k^2}
-        \frac{ \frac{\partial}{\partial \omega} \left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+  \left(\frac{\zeta 2}{\omega_n}\right)^2 \frac{\partial}{\partial \omega}\left(\omega\right)^2}{ \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)^2}
-    \]</span> Using the chain rule <span class="math inline">\(u(v(x))' = u(v)'u(x)'\)</span> and the power rule <span class="math inline">\([u(x)^n]' = nu^{n-1}\)</span>, <span class="math display">\[
-        \frac{\partial |R|^2}{\partial \omega} = - \frac{1}{k^2}
-        \frac{  2\left(1 - \frac{\omega^2}{\omega_n^2}\right) \frac{\partial}{\partial \omega} \left(1 - \frac{\omega^2}{\omega_n^2}\right)+  \left(\frac{\zeta 2}{\omega_n}\right)^2 2\omega}{ \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)^2}
-    \]</span> Using <span class="math inline">\((1)' = 0\)</span> and reapplying the power rule, <span class="math display">\[
-        \frac{\partial |R|^2}{\partial \omega} = - \frac{1}{k^2}
-        \frac{  - 2\left(1 - \frac{\omega^2}{\omega_n^2}\right) \left( \frac{2 \omega}{\omega_n^2}\right)+  \left(\frac{\zeta 2}{\omega_n}\right)^2 2\omega}{ \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)^2}
-    \]</span> We now set the derivative to zero, and multily both sides by the denominator, <span class="math display">\[
-        0 = -
-         2\left(1 - \frac{\omega^2}{\omega_n^2}\right) \left( \frac{2 \omega}{\omega_n^2}\right)+  \left(\frac{\zeta 2}{\omega_n}\right)^2 2\omega
-    \]</span> Do a little algebra, <span class="math display">\[
-        \left(\frac{2 \omega}{\omega_n^2} - \frac{2 \omega^3}{\omega_n^4}\right) =  \left(\frac{\zeta 2}{\omega_n}\right)^2 \omega
-    \]</span> …a little more algerba… <span class="math display">\[
-         \frac{2}{\omega_n^2} - \frac{2 \omega^2}{\omega_n^4} =  \left(\frac{\zeta 2}{\omega_n}\right)^2
-    \]</span> …nearly there… <span class="math display">\[
-          \frac{2 \omega^2}{\omega_n^4} =  -\left(\frac{\zeta 2}{\omega_n}\right)^2+\frac{2}{\omega_n^2}
-    \]</span> <span class="math display">\[
-          \omega^2 =  -2\left(\frac{\zeta \omega_n^2}{\omega_n}\right)^2+\frac{\omega_n^4}{\omega_n^2} = -2\zeta^2 \omega_n^2+\omega_n^2 = \omega_n^2(1 - 2\zeta^2)
-    \]</span> And finally, taking the square-root of both sides, <span class="math display">\[
-          \omega_{peak} =  \omega_n\sqrt{1 - 2\zeta^2}
-    \]</span> Et voila! Now, was that worth it? Probably not!</p>
+\frac{\partial |R|^2}{\partial \omega} = - \frac{1}{k^2}
+\frac{ \frac{\partial}{\partial \omega} \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)}{ \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)^2}
+\]</span> Using the summation rule <span class="math inline">\((a\cdot u(x) + b\cdot v(x))' = a\cdot u(x)' + b\cdot v(x)'\)</span> <span class="math display">\[
+\frac{\partial |R|^2}{\partial \omega} = - \frac{1}{k^2}
+\frac{ \frac{\partial}{\partial \omega} \left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+  \left(\frac{\zeta 2}{\omega_n}\right)^2 \frac{\partial}{\partial \omega}\left(\omega\right)^2}{ \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)^2}
+\]</span> Using the chain rule <span class="math inline">\(u(v(x))' = u(v)'u(x)'\)</span> and the power rule <span class="math inline">\([u(x)^n]' = nu^{n-1}\)</span>, <span class="math display">\[
+\frac{\partial |R|^2}{\partial \omega} = - \frac{1}{k^2}
+\frac{  2\left(1 - \frac{\omega^2}{\omega_n^2}\right) \frac{\partial}{\partial \omega} \left(1 - \frac{\omega^2}{\omega_n^2}\right)+  \left(\frac{\zeta 2}{\omega_n}\right)^2 2\omega}{ \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)^2}
+\]</span> Using <span class="math inline">\((1)' = 0\)</span> and reapplying the power rule, <span class="math display">\[
+\frac{\partial |R|^2}{\partial \omega} = - \frac{1}{k^2}
+\frac{  - 2\left(1 - \frac{\omega^2}{\omega_n^2}\right) \left( \frac{2 \omega}{\omega_n^2}\right)+  \left(\frac{\zeta 2}{\omega_n}\right)^2 2\omega}{ \left(\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2+ \left( \zeta 2 \frac{\omega}{\omega_n}\right)^2\right)^2}
+\]</span> We now set the derivative to zero, and multiply both sides by the denominator, <span class="math display">\[
+0 = -
+    2\left(1 - \frac{\omega^2}{\omega_n^2}\right) \left( \frac{2 \omega}{\omega_n^2}\right)+  \left(\frac{\zeta 2}{\omega_n}\right)^2 2\omega
+\]</span> Do a little algebra, <span class="math display">\[
+\left(\frac{2 \omega}{\omega_n^2} - \frac{2 \omega^3}{\omega_n^4}\right) =  \left(\frac{\zeta 2}{\omega_n}\right)^2 \omega
+\]</span> …a little more algebra… <span class="math display">\[
+    \frac{2}{\omega_n^2} - \frac{2 \omega^2}{\omega_n^4} =  \left(\frac{\zeta 2}{\omega_n}\right)^2
+\]</span> …nearly there… <span class="math display">\[
+    \frac{2 \omega^2}{\omega_n^4} =  -\left(\frac{\zeta 2}{\omega_n}\right)^2+\frac{2}{\omega_n^2}
+\]</span> <span class="math display">\[
+    \omega^2 =  -2\left(\frac{\zeta \omega_n^2}{\omega_n}\right)^2+\frac{\omega_n^4}{\omega_n^2} = -2\zeta^2 \omega_n^2+\omega_n^2 = \omega_n^2(1 - 2\zeta^2)
+\]</span> And finally, taking the square-root of both sides, <span class="math display">\[
+    \omega_{peak} =  \omega_n\sqrt{1 - 2\zeta^2}
+\]</span> Et voila! Now, was that worth it? Probably not!</p>
 </div>
 </div>
 </div>
@@ -816,13 +819,13 @@ Figure&nbsp;9: Frequency response of the receptance FRF for different levels of 
 </figure>
 </div>
 <p>To get the phase response we need to separate real and imaginary parts of the receptance. We do this by multiplying numerator and denominator by the complex conjugate of the denominator, <span class="math display">\[
-        \begin{align}
-            R(\omega)&amp;=  \frac{1}{k\left(1 - \frac{\omega^2}{\omega_n^2}\right) + i \zeta 2 k \frac{\omega}{\omega_n} } {\color{black!50!green}\times \frac{k\left(1 - \frac{\omega^2}{\omega_n^2}\right) - i \zeta 2 k \frac{\omega}{\omega_n} }{k(1 - \frac{\omega^2}{\omega_n^2}) - i \zeta 2 k \frac{\omega}{\omega_n} }}\\
-            &amp;=\underbrace{\frac{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)}{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2 + \left(\zeta 2 k \frac{\omega}{\omega_n}\right)^2 } }_{\mbox{real part}}- i\underbrace{\frac{ \zeta 2 k \frac{\omega}{\omega_n} }{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2 + \left(\zeta 2 k \frac{\omega}{\omega_n}\right)^2 }}_{\mbox{imag part}}
-        \end{align}
-    \]</span> From the above we obtain the phase response as, <span class="math display">\[
-        \angle R(\omega) = \tan^{-1}\left( \frac{\mbox{imag}}{\mbox{real}} \right) =\tan^{-1}\left( \frac{-\zeta 2 k \frac{\omega}{\omega_n} }{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)} \right)= \tan^{-1}\left( \frac{-c \omega }{k - \omega^2 m} \right)
-    \]</span> Shown in <a href="#fig-receptancePhase" class="quarto-xref">Figure&nbsp;10</a> are the phase response curves for different levels fo damping alongside the harmonic response above and below the natural frequency of vibration. We see that the motion of the mass becomes progressively delayed, relative to the excitation force. In the limit at <span class="math inline">\(\omega\rightarrow \infty\)</span> they are <span class="math inline">\(180^\circ\)</span> out of phase. For all levels of damping, we have phase of <span class="math inline">\(-\pi/2\)</span> at undamped resonance <span class="math inline">\(\omega_n\)</span>.</p>
+\begin{align}
+    R(\omega)&amp;=  \frac{1}{k\left(1 - \frac{\omega^2}{\omega_n^2}\right) + i \zeta 2 k \frac{\omega}{\omega_n} } {\color{black!50!green}\times \frac{k\left(1 - \frac{\omega^2}{\omega_n^2}\right) - i \zeta 2 k \frac{\omega}{\omega_n} }{k(1 - \frac{\omega^2}{\omega_n^2}) - i \zeta 2 k \frac{\omega}{\omega_n} }}\\
+    &amp;=\underbrace{\frac{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)}{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2 + \left(\zeta 2 k \frac{\omega}{\omega_n}\right)^2 } }_{\mbox{real part}}- i\underbrace{\frac{ \zeta 2 k \frac{\omega}{\omega_n} }{k^2\left(1 - \frac{\omega^2}{\omega_n^2}\right)^2 + \left(\zeta 2 k \frac{\omega}{\omega_n}\right)^2 }}_{\mbox{imag part}}
+\end{align}
+\]</span> From the above we obtain the phase response as, <span class="math display">\[
+\angle R(\omega) = \tan^{-1}\left( \frac{\mbox{imag}}{\mbox{real}} \right) =\tan^{-1}\left( \frac{-\zeta 2 k \frac{\omega}{\omega_n} }{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)} \right)= \tan^{-1}\left( \frac{-c \omega }{k - \omega^2 m} \right)
+\]</span> Shown in <a href="#fig-receptancePhase" class="quarto-xref">Figure&nbsp;10</a> are the phase response curves for different levels fo damping alongside the harmonic response above and below the natural frequency of vibration. We see that the motion of the mass becomes progressively delayed, relative to the excitation force. In the limit at <span class="math inline">\(\omega\rightarrow \infty\)</span> they are <span class="math inline">\(180^\circ\)</span> out of phase. For all levels of damping, we have phase of <span class="math inline">\(-\pi/2\)</span> at undamped resonance <span class="math inline">\(\omega_n\)</span>.</p>
 <div id="fig-receptancePhase" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-receptancePhase-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -863,20 +866,20 @@ What happens at <span class="math inline">\(\omega_n\)</span> if there is no dam
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In the case of no damping we have discontinuity at resonance - in reality this never happens, there is <em>always</em> some damping to limit response. Nevertheless, lets look at what would happen anyway… Our EoM without damping, <span class="math display">\[
-        m\ddot{x} +k x = F_0 \cos(\omega_n t)       \quad \rightarrow \quad  \ddot{x} +\omega_n^2 x = \frac{F_0}{m} \cos(\omega_n t)    = \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)
-    \]</span> How do we solve this? We assume solution of <span class="math inline">\(x(t) =  \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)\)</span> and then prove it…</p>
+m\ddot{x} +k x = F_0 \cos(\omega_n t)       \quad \rightarrow \quad  \ddot{x} +\omega_n^2 x = \frac{F_0}{m} \cos(\omega_n t)    = \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)
+\]</span> How do we solve this? We assume solution of <span class="math inline">\(x(t) =  \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)\)</span> and then prove it…</p>
 <p>Our proof begins by getting the velocity and acceleration by differentiation (using product rule), <span class="math display">\[
-        \begin{align}
-            \dot{x}(t) &amp;=  \frac{\omega_n F_0}{2k} \sin(\omega_n t) +  \frac{\omega_n^2 F_0 t}{2k} \cos(\omega_n t)\\
-            \ddot{x}(t) &amp; = \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) +  \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) -  \frac{\omega_n^3 F_0 t}{2k} \sin(\omega_n t)
-        \end{align}
-    \]</span> Next, we plug everything into our EoM and check LHS and RHS are equal… <span class="math display">\[
-        \ddot{x} +\omega_n^2 x =  \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)
-    \]</span> <span class="math display">\[
-        \begin{align}
-        \overbrace{ \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) +  \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) -  \frac{\omega_n^3 F_0 t}{2k} \sin(\omega_n t)}^{ \ddot{x}} +\omega_n^2 \overbrace{ \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)}^{x} \\=  \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)    
-        \end{align}
-    \]</span> As we can see, it all checks out! <span class="math inline">\(x(t) =  \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)\)</span> is a solution at <span class="math inline">\(\omega=\omega_n\)</span>. What this is saying is that the amplitude grows linearly with time (as in <a href="#fig-discoResp" class="quarto-xref">Figure&nbsp;11</a>) and tends to infinity! In the presence of damping, we obtain a similar response, except that it will plataue at some amplitude on account of the damping removing energy from the system.</p>
+\begin{align}
+    \dot{x}(t) &amp;=  \frac{\omega_n F_0}{2k} \sin(\omega_n t) +  \frac{\omega_n^2 F_0 t}{2k} \cos(\omega_n t)\\
+    \ddot{x}(t) &amp; = \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) +  \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) -  \frac{\omega_n^3 F_0 t}{2k} \sin(\omega_n t)
+\end{align}
+\]</span> Next, we plug everything into our EoM and check LHS and RHS are equal… <span class="math display">\[
+\ddot{x} +\omega_n^2 x =  \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)
+\]</span> <span class="math display">\[
+\begin{align}
+\overbrace{ \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) +  \frac{\omega_n^2 F_0}{2k} \cos(\omega_n t) -  \frac{\omega_n^3 F_0 t}{2k} \sin(\omega_n t)}^{ \ddot{x}} +\omega_n^2 \overbrace{ \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)}^{x} \\=  \frac{\omega_n^2 F_0}{k} \cos(\omega_n t)    
+\end{align}
+\]</span> As we can see, it all checks out! <span class="math inline">\(x(t) =  \frac{\omega_n F_0 t}{2k} \sin(\omega_n t)\)</span> is a solution at <span class="math inline">\(\omega=\omega_n\)</span>. What this is saying is that the amplitude grows linearly with time (as in <a href="#fig-discoResp" class="quarto-xref">Figure&nbsp;11</a>) and tends to infinity! In the presence of damping, we obtain a similar response, except that it will plateau at some amplitude on account of the damping removing energy from the system.</p>
 <div id="fig-discoResp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-discoResp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -905,18 +908,18 @@ Figure&nbsp;12: Representation of FRF as an input-output relation.
 </figure>
 </div>
 <p>In general, an FRF <span class="math inline">\(G(\omega)\)</span> describes the complex (i.e.&nbsp;magnitude and phase) relation between a harmonic input signal and the corresponding output signal on a given system. <span class="math display">\[
-        G(\omega) = \frac{Y(\omega)}{X(\omega)} \quad \quad Y(\omega) = G(\omega)X(\omega)
-    \]</span> We can think of the FRF as a <em>black box</em> representation of the system dynamics. Like any complex number, it can be represented in polar form, <span class="math display">\[
-        G(\omega) = |G(\omega)| e^{-i\angle G(\omega)}
-    \]</span> The magnitude <span class="math inline">\(|G(\omega)|\)</span> describes the change in ampltiude between the input and output of a system. The phase <span class="math inline">\(\angle G(\omega)\)</span> describes the time lag between the input and output.</p>
+G(\omega) = \frac{Y(\omega)}{X(\omega)} \quad \quad Y(\omega) = G(\omega)X(\omega)
+\]</span> We can think of the FRF as a <em>black box</em> representation of the system dynamics. Like any complex number, it can be represented in polar form, <span class="math display">\[
+G(\omega) = |G(\omega)| e^{-i\angle G(\omega)}
+\]</span> The magnitude <span class="math inline">\(|G(\omega)|\)</span> describes the change in amplitude between the input and output of a system. The phase <span class="math inline">\(\angle G(\omega)\)</span> describes the time lag between the input and output.</p>
 <p>We have already derived the force-displacement FRFs for our mass-spring system in <a href="#eq-harmonicResp" class="quarto-xref">Equation&nbsp;15</a>, i.e.&nbsp;the dynamic stiffness <span class="math inline">\(D(\omega)\)</span> and recpetance <span class="math inline">\(R(\omega)\)</span>. Similar FRFs also exist for velocity and acceleration-based responses.</p>
 <p>Recall that for a harmonic response, displacement, velocity and acceleration are related by, <span class="math display">\[
-        \ddot{X}_0 = i\omega \dot{X}_0 = -\omega^2 X_0
-    \]</span> We can therefore derive the velocity-based FRFs from those of the displacement using <span class="math inline">\(\dot{X}_0 = i\omega X_0\)</span>. We thus have the <em>impedance</em> <span class="math inline">\(Z(\omega)\)</span> and <em>mobility</em> <span class="math inline">\(Y(\omega)\)</span>, <span class="math display">\[
-        Z(\omega) = \frac{F_0(\omega)}{\dot{X}_0(\omega)}= \frac{F_0(\omega)}{ i\omega X_0(\omega)}= \frac{1}{i\omega}D(\omega)\quad \quad \quad    Y(\omega) = \frac{\dot{X}_0(\omega)}{F_0(\omega)} = \frac{i\omega X_0(\omega)}{F_0(\omega)} =i\omega R(\omega)
-    \]</span> Simialrly, acceleration-based FRFs can be derived from those of displacement or velocity using <span class="math inline">\(\ddot{X}_0 = i\omega \dot{X}_0 = -\omega^2 X_0\)</span>. This leads us to the <em>effective mass</em> <span class="math inline">\(M(\omega)\)</span> and <em>accelerance</em> <span class="math inline">\(A(\omega)\)</span>, <span class="math display">\[
-        M(\omega) = \frac{F_0(\omega)}{\ddot{X}_0(\omega)}= \frac{F_0(\omega)}{ i\omega \dot{X}_0(\omega)}= \frac{1}{i\omega}Z(\omega)\quad \quad \quad     A(\omega) = \frac{\ddot{X}_0(\omega)}{F_0(\omega)} = \frac{i\omega \dot{X}_0(\omega)}{F_0(\omega)} =i\omega Y(\omega)
-    \]</span> Shown in <a href="#fig-dispVelAccFRF" class="quarto-xref">Figure&nbsp;13</a> are the receptance, mobility and accelerance FRFs for our single DoF mass-spring system with different levels of damping. Which of these FRFs is most useful very much depends on the problem at hand.</p>
+\ddot{X}_0 = i\omega \dot{X}_0 = -\omega^2 X_0
+\]</span> We can therefore derive the velocity-based FRFs from those of the displacement using <span class="math inline">\(\dot{X}_0 = i\omega X_0\)</span>. We thus have the <em>impedance</em> <span class="math inline">\(Z(\omega)\)</span> and <em>mobility</em> <span class="math inline">\(Y(\omega)\)</span>, <span class="math display">\[
+Z(\omega) = \frac{F_0(\omega)}{\dot{X}_0(\omega)}= \frac{F_0(\omega)}{ i\omega X_0(\omega)}= \frac{1}{i\omega}D(\omega)\quad \quad \quad    Y(\omega) = \frac{\dot{X}_0(\omega)}{F_0(\omega)} = \frac{i\omega X_0(\omega)}{F_0(\omega)} =i\omega R(\omega)
+\]</span> Similarly, acceleration-based FRFs can be derived from those of displacement or velocity using <span class="math inline">\(\ddot{X}_0 = i\omega \dot{X}_0 = -\omega^2 X_0\)</span>. This leads us to the <em>effective mass</em> <span class="math inline">\(M(\omega)\)</span> and <em>accelerance</em> <span class="math inline">\(A(\omega)\)</span>, <span class="math display">\[
+M(\omega) = \frac{F_0(\omega)}{\ddot{X}_0(\omega)}= \frac{F_0(\omega)}{ i\omega \dot{X}_0(\omega)}= \frac{1}{i\omega}Z(\omega)\quad \quad \quad     A(\omega) = \frac{\ddot{X}_0(\omega)}{F_0(\omega)} = \frac{i\omega \dot{X}_0(\omega)}{F_0(\omega)} =i\omega Y(\omega)
+\]</span> Shown in <a href="#fig-dispVelAccFRF" class="quarto-xref">Figure&nbsp;13</a> are the receptance, mobility and accelerance FRFs for our single DoF mass-spring system with different levels of damping. Which of these FRFs is most useful very much depends on the problem at hand.</p>
 <div id="fig-dispVelAccFRF" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dispVelAccFRF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -928,7 +931,7 @@ Figure&nbsp;13: Representation of FRF as an input-output relation.
 </figure>
 </div>
 <p>With knowledge of a systems FRF, say the receptance <span class="math inline">\(R(\omega)\)</span>, its response due to a harmonic excitation at frequency <span class="math inline">\(\omega\)</span> is given by, <span class="math display">\[
-    x(t) = |R(\omega)| F_0 \cos(\omega t - \angle R(\omega)) \quad \mbox{or} \quad x(t) = \mbox{Real}\left(R(\omega) F_0 e^{-i \omega t}\right)
+x(t) = |R(\omega)| F_0 \cos(\omega t - \angle R(\omega)) \quad \mbox{or} \quad x(t) = \mbox{Real}\left(R(\omega) F_0 e^{-i \omega t}\right)
 \]</span></p>
 </section>
 </section>
@@ -946,37 +949,37 @@ Figure&nbsp;14: Example of a periodic signal with interval <span class="math inl
 </figure>
 </div>
 <p>To deal with periodic excitation signals we simply note that any periodic function can be represented by a convergent series of harmonic functions whose frequencies are integer multiples of a fundamental <span class="math inline">\(\omega_0 = 2\pi/T\)</span>. This is the so-called <em>Fourier series</em>, <span class="math display">\[
-            F(t) = \frac{1}{2}F_0 + \mbox{Real}\left[ \sum_{n=1}^\infty F_n e^{-in\omega_0 t}\right]
-    \]</span> where <span class="math inline">\(F_n\)</span> is a complex coefficient that describes amplitude and phase of the <span class="math inline">\(n\)</span>th harmonic, with <span class="math inline">\(F_0\)</span> representing the DC offset of the signal. Since our EoM is linear, we can treat each harmonic individually and recombine their individual solutions afterwards. <span class="math display">\[
-        x(t) =  \frac{1}{2}F_0  R(0) + \mbox{Real}\left[\sum_{n=1}^\infty R(n\omega_0)   F_n e^{-in\omega_0 t} \right]
-    \]</span> Importantly, each forcing harmonic is multiplied by the complex FRF at the corresponding frequency, <span class="math inline">\(n\omega_0\)</span>.</p>
+    F(t) = \frac{1}{2}F_0 + \mbox{Real}\left[ \sum_{n=1}^\infty F_n e^{-in\omega_0 t}\right]
+\]</span> where <span class="math inline">\(F_n\)</span> is a complex coefficient that describes amplitude and phase of the <span class="math inline">\(n\)</span>th harmonic, with <span class="math inline">\(F_0\)</span> representing the DC offset of the signal. Since our EoM is linear, we can treat each harmonic individually and recombine their individual solutions afterwards. <span class="math display">\[
+x(t) =  \frac{1}{2}F_0  R(0) + \mbox{Real}\left[\sum_{n=1}^\infty R(n\omega_0)   F_n e^{-in\omega_0 t} \right]
+\]</span> Importantly, each forcing harmonic is multiplied by the complex FRF at the corresponding frequency, <span class="math inline">\(n\omega_0\)</span>.</p>
 </section>
-<section id="arbitary-forcing" class="level2">
-<h2 class="anchored" data-anchor-id="arbitary-forcing">Arbitary forcing</h2>
+<section id="arbitrary-forcing" class="level2">
+<h2 class="anchored" data-anchor-id="arbitrary-forcing">Arbitrary forcing</h2>
 <p>To consider an arbitrary, non-harmonic, forcing we can no longer assume that the system is operating at steady state. Rather, we must treat the entire response as transient. To deal with this problem, we will need to introduce the system’s <em>until impulse response function</em> (IRF).</p>
 <section id="impulse-response-function" class="level3">
 <h3 class="anchored" data-anchor-id="impulse-response-function">Impulse response function</h3>
 <p>The unit impulse response of a system is the response obtained by considering the external forcing <span class="math inline">\(F(t)\)</span> to be that of a <em>Dirac delta</em> function, defined mathematically as <span class="math display">\[
-        \begin{align}
-            \delta(t-a) &amp;= 0 \quad \quad \mbox{for } t\neq a\\
-            \int_{-\infty}^\infty \delta(t-a){\rm d}t &amp;=1
-        \end{align}
-    \]</span> Using <span class="math inline">\(F_e = \delta(t)\)</span>, the system impulse response is denoted <span class="math inline">\(g(t)\)</span>.</p>
+\begin{align}
+    \delta(t-a) &amp;= 0 \quad \quad \mbox{for } t\neq a\\
+    \int_{-\infty}^\infty \delta(t-a){\rm d}t &amp;=1
+\end{align}
+\]</span> Using <span class="math inline">\(F_e = \delta(t)\)</span>, the system impulse response is denoted <span class="math inline">\(g(t)\)</span>.</p>
 <p>Inserting <span class="math inline">\(F_e=\delta(t)\)</span> and <span class="math inline">\(x(t) = g(t)\)</span>, the EoM becomes, <span class="math display">\[
-        \delta(t) =  kg(t) + c\dot{g}(t) +  m\ddot{g}(t)
-    \]</span> Taking <span class="math inline">\(g(0)=\dot{g}(0) = 0\)</span> by definition, we integrate our EoM over the time interval <span class="math inline">\(\Delta t=\epsilon\)</span> and take the limit as this goes to <span class="math inline">\(0\)</span>, <span class="math display">\[
-        \underbrace{    \lim_{\epsilon\rightarrow 0} \int_0^\epsilon \delta(t)  dt }_{=1}=      \lim_{\epsilon\rightarrow 0} \int_0^\epsilon \left(kg(t) + c\dot{g}(t) +  m\ddot{g}(t) \right)dt
-    \]</span> Note that integration of the displacement is just a constant, which goes to zero on evaluation of the limits. Integration of the velocity term yields a displacement, however since it takes some time for a displacement to develop this term also tends to zero in the limit. All we are left with is the acceleration term which evaluates to, <span class="math display">\[
-        \lim_{\epsilon\rightarrow 0} \int_0^\epsilon m\ddot{g}(t)dt = \lim_{\epsilon\rightarrow 0} m\dot{g}(t)\Big|_0^\epsilon = m \lim_{\epsilon\rightarrow 0} [\dot{g}(\epsilon) - \dot{g}(0)] = m\dot{g}(0+)
-    \]</span> where the term <span class="math inline">\(\dot{g}(0+)\)</span> denotes a change in velocity at the end of the increment <span class="math inline">\(\epsilon\)</span>.</p>
+\delta(t) =  kg(t) + c\dot{g}(t) +  m\ddot{g}(t)
+\]</span> Taking <span class="math inline">\(g(0)=\dot{g}(0) = 0\)</span> by definition, we integrate our EoM over the time interval <span class="math inline">\(\Delta t=\epsilon\)</span> and take the limit as this goes to <span class="math inline">\(0\)</span>, <span class="math display">\[
+\underbrace{    \lim_{\epsilon\rightarrow 0} \int_0^\epsilon \delta(t)  dt }_{=1}=      \lim_{\epsilon\rightarrow 0} \int_0^\epsilon \left(kg(t) + c\dot{g}(t) +  m\ddot{g}(t) \right)dt
+\]</span> Note that integration of the displacement is just a constant, which goes to zero on evaluation of the limits. Integration of the velocity term yields a displacement, however since it takes some time for a displacement to develop this term also tends to zero in the limit. All we are left with is the acceleration term which evaluates to, <span class="math display">\[
+\lim_{\epsilon\rightarrow 0} \int_0^\epsilon m\ddot{g}(t)dt = \lim_{\epsilon\rightarrow 0} m\dot{g}(t)\Big|_0^\epsilon = m \lim_{\epsilon\rightarrow 0} [\dot{g}(\epsilon) - \dot{g}(0)] = m\dot{g}(0+)
+\]</span> where the term <span class="math inline">\(\dot{g}(0+)\)</span> denotes a change in velocity at the end of the increment <span class="math inline">\(\epsilon\)</span>.</p>
 <p>From the above we conclude that, <span id="eq-impRespInitVel"><span class="math display">\[
-        \dot{g}(0+) = \frac{1}{m}
-     \tag{17}\]</span></span> Physically, <a href="#eq-impRespInitVel" class="quarto-xref">Equation&nbsp;17</a> is telling us that the unit impulse response produces an instantaneous change in velocity; an impulse applied at <span class="math inline">\(t=0\)</span> is equivalent to the effect of initial velocity <span class="math inline">\(\dot{x}_0=1/m\)</span>. Recalling our solution to the unforced EoM (see ), the system impulse response is given by, <span class="math display">\[
-        \begin{align}
-            g(t) &amp;= \frac{1}{\omega_d m} \sin(\omega_d t) e^{-\zeta\omega_n t}  \quad  &amp;t&gt;0 \\
-            &amp;=0 &amp;t&lt;0
-        \end{align}
-    \]</span> If excitation happens at <span class="math inline">\(t=\tau\)</span>, <span class="math inline">\(F_e = \delta(t-\tau)\)</span>, then impulse response <span class="math inline">\(g(t)\)</span> is simply delayed by <span class="math inline">\(\tau\)</span>, <span class="math inline">\(g(t-\tau)\)</span>.</p>
+\dot{g}(0+) = \frac{1}{m}
+\tag{17}\]</span></span> Physically, <a href="#eq-impRespInitVel" class="quarto-xref">Equation&nbsp;17</a> is telling us that the unit impulse response produces an instantaneous change in velocity; an impulse applied at <span class="math inline">\(t=0\)</span> is equivalent to the effect of initial velocity <span class="math inline">\(\dot{x}_0=1/m\)</span>. Recalling our solution to the unforced EoM (see ), the system impulse response is given by, <span class="math display">\[
+\begin{align}
+    g(t) &amp;= \frac{1}{\omega_d m} \sin(\omega_d t) e^{-\zeta\omega_n t}  \quad  &amp;t&gt;0 \\
+    &amp;=0 &amp;t&lt;0
+\end{align}
+\]</span> If excitation happens at <span class="math inline">\(t=\tau\)</span>, <span class="math inline">\(F_e = \delta(t-\tau)\)</span>, then impulse response <span class="math inline">\(g(t)\)</span> is simply delayed by <span class="math inline">\(\tau\)</span>, <span class="math inline">\(g(t-\tau)\)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -988,18 +991,18 @@ Impulse response without the integrals..?
 </div>
 <div class="callout-body-container callout-body">
 <p>Consider a constant external force <span class="math inline">\(F_e\)</span> applied over the infinitesimal time <span class="math inline">\(0&lt;t&lt;\epsilon\)</span>. During this time, the velocity of the mass increases from 0 to <span class="math inline">\(\dot{x}(\epsilon)\)</span>, after which its motion is governed by the system dynamics. From Newton’s second law <span class="math inline">\(F=m\ddot{x}\)</span>, and simple kinematics <span class="math inline">\(\dot{x}(t) = t\ddot{x}\)</span>, we have that the velocity at <span class="math inline">\(t=\epsilon\)</span> is, <span class="math display">\[
-        \dot{x}(\epsilon) = \epsilon\ddot{x} = \frac{\epsilon F}{m}
-    \]</span> The product <span class="math inline">\(\epsilon F\)</span> is known as the <em>impulse</em>; it describes the change in momentum. We see that a <em>unit impulse</em> (<span class="math inline">\(\epsilon F = 1\)</span>) is equivalent to an initial velocity that is inversely proportional to the system mass, <span class="math inline">\(\dot{x}_0 = 1/m\)</span>.</p>
+\dot{x}(\epsilon) = \epsilon\ddot{x} = \frac{\epsilon F}{m}
+\]</span> The product <span class="math inline">\(\epsilon F\)</span> is known as the <em>impulse</em>; it describes the change in momentum. We see that a <em>unit impulse</em> (<span class="math inline">\(\epsilon F = 1\)</span>) is equivalent to an initial velocity that is inversely proportional to the system mass, <span class="math inline">\(\dot{x}_0 = 1/m\)</span>.</p>
 </div>
 </div>
 </section>
 <section id="convolution-integral" class="level3">
 <h3 class="anchored" data-anchor-id="convolution-integral">Convolution integral</h3>
 <p>Consider an arbitary forcing function <span class="math inline">\(F(t)\)</span>, for example as in <a href="#fig-arbitaryF" class="quarto-xref">Figure&nbsp;15</a>. During a small time instant <span class="math inline">\(\Delta \tau\)</span>, we can regard <span class="math inline">\(F(t)\)</span> as an impulse <span class="math inline">\(F(\tau)\Delta \tau\)</span>, <span class="math display">\[
-        \Delta F(\tau) = F(\tau) \Delta \tau \delta(t-\tau)
-    \]</span> Based on the impulse representation above, the complete forcing function can be approximated as, <span class="math display">\[
-        F(t)\approx \sum F(\tau) \Delta \tau \delta(t-\tau)
-    \]</span> which becomes exact at <span class="math inline">\(\Delta \tau \rightarrow 0\)</span>. Because our mass-spring system is linear, we can use the impulse response function <span class="math inline">\(g(t)\)</span> to predict response due to each individual excitation impulse, <span class="math inline">\(\Delta F(t,\tau)\)</span>, and then recombine them to realise the final response.</p>
+\Delta F(\tau) = F(\tau) \Delta \tau \delta(t-\tau)
+\]</span> Based on the impulse representation above, the complete forcing function can be approximated as, <span class="math display">\[
+F(t)\approx \sum F(\tau) \Delta \tau \delta(t-\tau)
+\]</span> which becomes exact at <span class="math inline">\(\Delta \tau \rightarrow 0\)</span>. Because our mass-spring system is linear, we can use the impulse response function <span class="math inline">\(g(t)\)</span> to predict response due to each individual excitation impulse, <span class="math inline">\(\Delta F(t,\tau)\)</span>, and then recombine them to realize the final response.</p>
 <div id="fig-arbitaryF" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-arbitaryF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1011,10 +1014,10 @@ Figure&nbsp;15: Example of force signal being approximated by series of impulses
 </figure>
 </div>
 <p>Response at time <span class="math inline">\(t\)</span> due to impulse <span class="math inline">\(\Delta F(\tau)\)</span> is given by, <span class="math display">\[
-        \Delta x(t) =F(\tau) \Delta \tau g(t-\tau)
-    \]</span> This is just the impulse response <span class="math inline">\(g(t)\)</span> wieghted by the forcing value <span class="math inline">\(F(\tau)\)</span> and delayed by <span class="math inline">\(\tau\)</span>, as illustrated in <a href="#fig-convResp" class="quarto-xref">Figure&nbsp;16</a>. The response due to the full <span class="math inline">\(F(t)\)</span> is the sum of all individual impulses, <span id="eq-approxConv"><span class="math display">\[
-        x(t) \approx \sum F(\tau) \Delta \tau g(t-\tau)
-     \tag{18}\]</span></span></p>
+\Delta x(t) =F(\tau) \Delta \tau g(t-\tau)
+\]</span> This is just the impulse response <span class="math inline">\(g(t)\)</span> weighted by the forcing value <span class="math inline">\(F(\tau)\)</span> and delayed by <span class="math inline">\(\tau\)</span>, as illustrated in <a href="#fig-convResp" class="quarto-xref">Figure&nbsp;16</a>. The response due to the full <span class="math inline">\(F(t)\)</span> is the sum of all individual impulses, <span id="eq-approxConv"><span class="math display">\[
+x(t) \approx \sum F(\tau) \Delta \tau g(t-\tau)
+\tag{18}\]</span></span></p>
 <div id="fig-convResp" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-convResp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1043,13 +1046,13 @@ Figure&nbsp;16: Response as the summation of impulse response functions weighted
 </figure>
 </div>
 <p>Equation <a href="#eq-approxConv" class="quarto-xref">Equation&nbsp;18</a> becomes exact at <span class="math inline">\(\Delta \tau \rightarrow 0\)</span>, <span id="eq-convResp"><span class="math display">\[
-        x(t) = \int_0^t F(\tau)  g(t-\tau) d\tau
-     \tag{19}\]</span></span> This is called the <em>convolution integral</em>. It simply states that the response can be expressed as a superposition of the impulse response weighted by the arbitrary forcing function. In vibration analysis, this is also known as Duhamel’s integral.</p>
+x(t) = \int_0^t F(\tau)  g(t-\tau) d\tau
+\tag{19}\]</span></span> This is called the <em>convolution integral</em>. It simply states that the response can be expressed as a superposition of the impulse response weighted by the arbitrary forcing function. In vibration analysis, this is also known as Duhamel’s integral.</p>
 <p>It is worthwhile noting that convolution in the time domain is simply a multiplication in the frequency domain. Taking the Fourier transform of <a href="#eq-convResp" class="quarto-xref">Equation&nbsp;19</a> yields our harmonic forcing equation from before, <span class="math display">\[
-        X_0(\omega)=R(\omega) F_0(\omega)
-    \]</span> From the above, we see that the FRF <span class="math inline">\(R(\omega)\)</span> is related to the IRF <span class="math inline">\(g(t)\)</span> by Fourier transform, <span class="math display">\[
-        R(\omega) = \mathcal{F}(g(t))
-    \]</span></p>
+X_0(\omega)=R(\omega) F_0(\omega)
+\]</span> From the above, we see that the FRF <span class="math inline">\(R(\omega)\)</span> is related to the IRF <span class="math inline">\(g(t)\)</span> by Fourier transform, <span class="math display">\[
+R(\omega) = \mathcal{F}(g(t))
+\]</span></p>
 </section>
 </section>
 </section>
@@ -1058,47 +1061,47 @@ Figure&nbsp;16: Response as the summation of impulse response functions weighted
 <p>Damping is of such crucial importance in structural vibration that it warants a little more discussion…</p>
 <section id="structural-damping" class="level2">
 <h2 class="anchored" data-anchor-id="structural-damping">Structural damping</h2>
-<p>In reality, damping is very very complicated… We almost always rely on simplified models. So far we have been assuming a viscous damping model, i.e.&nbsp;the damping force is proportional to velocity. In this case our EoM and dispacement FRF take the form, <span class="math display">\[
-        F_e =  kx + c\dot{x} +  m\ddot{x} \quad \quad  R(\omega) =  \frac{1}{k + i\omega c - \omega^2 m}
-    \]</span> The viscous damping model, though valid for viscous damping devices, is not always an appropriate representation for the intrinsic damping in structures, as will be discussed below.</p>
+<p>In reality, damping is very very complicated… We almost always rely on simplified models. So far we have been assuming a viscous damping model, i.e.&nbsp;the damping force is proportional to velocity. In this case our EoM and displacement FRF take the form, <span class="math display">\[
+F_e =  kx + c\dot{x} +  m\ddot{x} \quad \quad  R(\omega) =  \frac{1}{k + i\omega c - \omega^2 m}
+\]</span> The viscous damping model, though valid for viscous damping devices, is not always an appropriate representation for the intrinsic damping in structures, as will be discussed below.</p>
 <p>Because of damping, our mass-spring system is <em>non-conservative</em>, meaning that energy is not conserved, but dissipated with time. The energy dissipated is equal to work done by the external force. For a single cycle over period <span class="math inline">\(T\)</span> (noting <span class="math inline">\({\rm d}x = \dot{x}{\rm d}t\)</span>) the energy dissipated is given by, <span class="math display">\[
-        \Delta E = \int_0^{T} F_e {\rm d}x = \int_0^{2\pi/\omega} F_e\dot{x} {\rm d}t
-    \]</span> Since the dissipated energy must be real valued, we consider the real parts of <span class="math inline">\(F_e=F_0 e^{-i \omega t}\)</span> and <span class="math inline">\(\dot{x} = i\omega|R|F_0 e^{-i(\omega t-\phi)}\)</span>, <span class="math display">\[
-        \begin{align}
-                \mbox{Real}(\dot{x}) &amp;= |R| F_0 \omega \sin(\omega t - \phi)\\
-                \mbox{Real}(F_e) &amp;= F_0 \cos\omega t
-            \end{align}
-    \]</span> The energy dissipated then becomes, <span class="math display">\[
-            \begin{align}
-                    \Delta E = \int_0^{2\pi/\omega} F_e\dot{x} {\rm d}t &amp;=  \int_0^{2\pi/\omega}  F_0 \cos(\omega t)|R| F_0\omega \sin(\omega t -\phi) {\rm d}t\\
-                    &amp;=  F_0^2 \omega |R| \underbrace{\int_0^{2\pi/\omega}   \cos(\omega t) \sin(\omega t - \phi) {\rm d}t}_{\frac{\pi}{\omega} \sin \phi}\\
-                        &amp;= F_0^2  |R| \pi \sin \phi
-                \end{align}
-    \]</span> Next, we need to determine <span class="math inline">\(\sin\phi\)</span>… We know the phase angle is given by, <span class="math display">\[
-        \phi = \tan^{-1}\left( \frac{\mbox{imag}}{\mbox{real}} \right) = \tan^{-1}\left( \frac{-\zeta 2 k \frac{\omega}{\omega_n} }{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)} \right) =\tan^{-1}\left( \frac{-c \omega }{k - \omega^2 m} \right)
-    \]</span> So by using the trig identity <span class="math inline">\(\sin(\tan^{-1}(x)) = x/\sqrt{1+x^2}\)</span>, after a little algebra, we obtain, <span class="math display">\[
-        \sin\phi = \frac{-\omega c}{\sqrt{(k-\omega^2m)^2 + (\omega c)^2}} = -\omega c |R|
-    \]</span> The energy dissipated per cycle now becomes, <span id="eq-energyDiss"><span class="math display">\[
-        \Delta E = F_0^2  |R| \pi \sin \phi = \underbrace{|R|^2  F_0^2}_{|X_0|^2} \pi \omega c
-     \tag{20}\]</span></span></p>
-<p>We see from <a href="#eq-energyDiss" class="quarto-xref">Equation&nbsp;20</a> that for a viscous damper, the energy dissipated per cycle is propertional to: damping coefficient <span class="math inline">\(c\)</span>, frequency <span class="math inline">\(\omega\)</span> and amplitude squared <span class="math inline">\(|X_0|^2\)</span></p>
+\Delta E = \int_0^{T} F_e {\rm d}x = \int_0^{2\pi/\omega} F_e\dot{x} {\rm d}t
+\]</span> Since the dissipated energy must be real valued, we consider the real parts of <span class="math inline">\(F_e=F_0 e^{-i \omega t}\)</span> and <span class="math inline">\(\dot{x} = i\omega|R|F_0 e^{-i(\omega t-\phi)}\)</span>, <span class="math display">\[
+\begin{align}
+    \mbox{Real}(\dot{x}) &amp;= |R| F_0 \omega \sin(\omega t - \phi)\\
+    \mbox{Real}(F_e) &amp;= F_0 \cos\omega t
+\end{align}
+\]</span> The energy dissipated then becomes, <span class="math display">\[
+\begin{align}
+        \Delta E = \int_0^{2\pi/\omega} F_e\dot{x} {\rm d}t &amp;=  \int_0^{2\pi/\omega}  F_0 \cos(\omega t)|R| F_0\omega \sin(\omega t -\phi) {\rm d}t\\
+        &amp;=  F_0^2 \omega |R| \underbrace{\int_0^{2\pi/\omega}   \cos(\omega t) \sin(\omega t - \phi) {\rm d}t}_{\frac{\pi}{\omega} \sin \phi}\\
+            &amp;= F_0^2  |R| \pi \sin \phi
+    \end{align}
+\]</span> Next, we need to determine <span class="math inline">\(\sin\phi\)</span>… We know the phase angle is given by, <span class="math display">\[
+\phi = \tan^{-1}\left( \frac{\mbox{imag}}{\mbox{real}} \right) = \tan^{-1}\left( \frac{-\zeta 2 k \frac{\omega}{\omega_n} }{k\left(1 - \frac{\omega^2}{\omega_n^2}\right)} \right) =\tan^{-1}\left( \frac{-c \omega }{k - \omega^2 m} \right)
+\]</span> So by using the trig identity <span class="math inline">\(\sin(\tan^{-1}(x)) = x/\sqrt{1+x^2}\)</span>, after a little algebra, we obtain, <span class="math display">\[
+\sin\phi = \frac{-\omega c}{\sqrt{(k-\omega^2m)^2 + (\omega c)^2}} = -\omega c |R|
+\]</span> The energy dissipated per cycle now becomes, <span id="eq-energyDiss"><span class="math display">\[
+\Delta E = F_0^2  |R| \pi \sin \phi = \underbrace{|R|^2  F_0^2}_{|X_0|^2} \pi \omega c
+\tag{20}\]</span></span></p>
+<p>We see from <a href="#eq-energyDiss" class="quarto-xref">Equation&nbsp;29</a> that for a viscous damper, the energy dissipated per cycle is proportional to: damping coefficient <span class="math inline">\(c\)</span>, frequency <span class="math inline">\(\omega\)</span> and amplitude squared <span class="math inline">\(|X_0|^2\)</span></p>
 <p>In real systems, <em>even without designated damping devices</em>, energy is dissipated over time. For example, in real springs (i.e.&nbsp;coil springs) energy is dissipated as a result of internal friction within the material. This phenomenon occurs in all real structures. Experiments on wide variety of materials indicate that the energy loss per cycle due to internal friction is roughly proportional to amplitude squared, <span class="math display">\[
-            \Delta E = \alpha |X_0|^2
-    \]</span> where <span class="math inline">\(\alpha\)</span> is a constant <em>independent of frequency</em>. We call the above <em>structural damping</em>. It can be attributed to hysteresis phenomenon associated with cyclic stresses in elastic materials.</p>
+\Delta E = \alpha |X_0|^2
+\]</span> where <span class="math inline">\(\alpha\)</span> is a constant <em>independent of frequency</em>. We call the above <em>structural damping</em>. It can be attributed to hysteresis phenomenon associated with cyclic stresses in elastic materials.</p>
 <p>A system with structural damping can be treated as having viscous damping with an equivalent, <em>frequency dependent</em>, damping coefficient, <span class="math display">\[
-        \begin{align}
-            c_{eq} = \frac{\alpha}{\pi\omega} \quad \rightarrow\quad  \Delta E &amp;= c_{eq}\pi\omega |X_0|^2 \\
-            &amp;=\alpha|X_0|^2
-        \end{align}
-    \]</span> Using this new equivalent damping factor our EoM becomes, <span class="math display">\[
-        \begin{align}
-            F_e =  kx +  \frac{\alpha}{\pi\omega}  \dot{x} +  m\ddot{x} \quad \rightarrow \quad F_0 &amp;=  kX_0 +  \frac{i\omega \alpha}{\pi\omega} X_0 +m\ddot{X}_0\\
-            &amp;=  {\left(k +  \frac{i\omega \alpha}{\pi\omega} \right)} X_0 +m\ddot{X}_0
-        \end{align}
-    \]</span> From the above it is convenient to define a <em>complex stiffness</em> <span class="math inline">\(k(1+i\gamma)\)</span>, where <span class="math inline">\(\gamma = \alpha/\pi k\)</span> is termed the <em>structural loss factor</em>.</p>
+\begin{align}
+c_{eq} = \frac{\alpha}{\pi\omega} \quad \rightarrow\quad  \Delta E &amp;= c_{eq}\pi\omega |X_0|^2 \\
+&amp;=\alpha|X_0|^2
+\end{align}
+\]</span> Using this new equivalent damping factor our EoM becomes, <span class="math display">\[
+\begin{align}
+F_e =  kx +  \frac{\alpha}{\pi\omega}  \dot{x} +  m\ddot{x} \quad \rightarrow \quad F_0 &amp;=  kX_0 +  \frac{i\omega \alpha}{\pi\omega} X_0 +m\ddot{X}_0\\
+&amp;=  {\left(k +  \frac{i\omega \alpha}{\pi\omega} \right)} X_0 +m\ddot{X}_0
+\end{align}
+\]</span> From the above it is convenient to define a <em>complex stiffness</em> <span class="math inline">\(k(1+i\gamma)\)</span>, where <span class="math inline">\(\gamma = \alpha/\pi k\)</span> is termed the <em>structural loss factor</em>.</p>
 <p>In the presence of structural damping, the system’s harmonic response becomes, <span class="math display">\[
-        x(t) = \mbox{Real}\left(X_0 e^{i\omega t} \right) = |X_0| \cos(\omega t-\angle X_0)  \quad \quad X_0 = \overbrace{\frac{1}{k(1+i\gamma)-\omega^2m}}^{R(\omega)}F_0
-    \]</span></p>
+x(t) = \mbox{Real}\left(X_0 e^{i\omega t} \right) = |X_0| \cos(\omega t-\angle X_0)  \quad \quad X_0 = \overbrace{\frac{1}{k(1+i\gamma)-\omega^2m}}^{R(\omega)}F_0
+\]</span></p>
 <p>Shown in <a href="#fig-structuralDampMag" class="quarto-xref">Figure&nbsp;17</a> are some system responses for different levels of viscous and structural damping. We see that with structural damping the peak amplitude doesn’t shift with increasing levels of damping and the response is no longer stiffness controlled at low frequency.</p>
 <p>Here are some loss factors for typical materials:</p>
 <ul>
@@ -1125,14 +1128,14 @@ Figure&nbsp;17: Response of mass-spring system with different values of viscous 
 <section id="log-decrement-method" class="level3">
 <h3 class="anchored" data-anchor-id="log-decrement-method">Log-decrement method</h3>
 <p>Assuming a viscous damping force, we know that the system response decays exponentially according to, <span class="math display">\[
-        x(t) = A\cos(\omega_d t - \phi) e^{-\zeta\omega_n t}
-    \]</span> Let us consider the amplitude ratio after a period <span class="math inline">\(T\)</span>, <span class="math display">\[
-        \frac{x_1}{x_2} = \frac{A\cos(\omega_d t_1 - \phi) e^{-\zeta\omega_n t_1} }{A\cos(\omega_d t_2 - \phi) e^{-\zeta\omega_n t_2} }
-    \]</span> Noting that the <span class="math inline">\(\cos(\quad)\)</span> term does not change after period <span class="math inline">\(T\)</span>, the amplitude ratio reduces to, <span class="math display">\[
-        \frac{x_1}{x_2} = \frac{e^{-\zeta\omega_n t_1} }{e^{-\zeta\omega_n (t_1+T)} } = e^{\zeta\omega_n T}
-    \]</span> Taking the natural log <span class="math inline">\(\ln\)</span> of both sides yields, <span class="math display">\[
-        \ln\left(\frac{x_1}{x_2}\right) = \zeta\omega_n T
-    \]</span> where we define the so-called <em>log-decrement</em> as <span class="math inline">\(\delta = \ln(x_1/x_2)\)</span>. This is something that we can easily obtain from a measurement of the system’s decay response.</p>
+x(t) = A\cos(\omega_d t - \phi) e^{-\zeta\omega_n t}
+\]</span> Let us consider the amplitude ratio after a period <span class="math inline">\(T\)</span>, <span class="math display">\[
+\frac{x_1}{x_2} = \frac{A\cos(\omega_d t_1 - \phi) e^{-\zeta\omega_n t_1} }{A\cos(\omega_d t_2 - \phi) e^{-\zeta\omega_n t_2} }
+\]</span> Noting that the <span class="math inline">\(\cos(\quad)\)</span> term does not change after period <span class="math inline">\(T\)</span>, the amplitude ratio reduces to, <span class="math display">\[
+\frac{x_1}{x_2} = \frac{e^{-\zeta\omega_n t_1} }{e^{-\zeta\omega_n (t_1+T)} } = e^{\zeta\omega_n T}
+\]</span> Taking the natural log <span class="math inline">\(\ln\)</span> of both sides yields, <span class="math display">\[
+\ln\left(\frac{x_1}{x_2}\right) = \zeta\omega_n T
+\]</span> where we define the so-called <em>log-decrement</em> as <span class="math inline">\(\delta = \ln(x_1/x_2)\)</span>. This is something that we can easily obtain from a measurement of the system’s decay response.</p>
 <div id="fig-logdecrement" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-logdecrement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1143,22 +1146,98 @@ Figure&nbsp;18: Transient response of a viscously damped mass-spring system.
 </figcaption>
 </figure>
 </div>
-<p>Substiuting for the decay period <span class="math inline">\(T=2\pi/\omega_d\)</span> and also the natural frequencies <span class="math inline">\(\omega_n\)</span> and <span class="math inline">\(\omega_d\)</span>, the log-decrement becomes, <span id="eq-logdecrement0"><span class="math display">\[
-        \delta = \ln\left(\frac{x_1}{x_2}\right) = \zeta\omega_n T = \zeta\omega_n \frac{2\pi }{\omega_d} = \frac{\zeta 2\pi}{\sqrt{1-\zeta^2}}
-     \tag{21}\]</span></span> <a href="#eq-logdecrement0" class="quarto-xref">Equation&nbsp;21</a> can be rearranged and used to solve for damping factor <span class="math inline">\(\zeta\)</span>, <span class="math display">\[
-        \zeta = \frac{\delta}{\sqrt{(2\pi)^2 + \delta^2}}
-    \]</span> This estimate of <span class="math inline">\(\zeta\)</span> makes use of two sequential peaks in the decay response. This is fine, but can be quite sensitive to expeimrental uncertainty. A better estimate can be made by utilising multiple peaks as described below.</p>
+<p>Substituting for the decay period <span class="math inline">\(T=2\pi/\omega_d\)</span> and also the natural frequencies <span class="math inline">\(\omega_n\)</span> and <span class="math inline">\(\omega_d\)</span>, the log-decrement becomes, <span id="eq-logdecrement0"><span class="math display">\[
+\delta = \ln\left(\frac{x_1}{x_2}\right) = \zeta\omega_n T = \zeta\omega_n \frac{2\pi }{\omega_d} = \frac{\zeta 2\pi}{\sqrt{1-\zeta^2}}
+\tag{21}\]</span></span> <a href="#eq-logdecrement0" class="quarto-xref">Equation&nbsp;21</a> can be rearranged and used to solve for damping factor <span class="math inline">\(\zeta\)</span>, <span class="math display">\[
+\zeta = \frac{\delta}{\sqrt{(2\pi)^2 + \delta^2}}
+\]</span> This estimate of <span class="math inline">\(\zeta\)</span> makes use of two sequential peaks in the decay response. This is fine, but can be quite sensitive to experimental uncertainty. A better estimate can be made by utilizing multiple peaks as described below.</p>
 <p>Note that the displacement ratio for the <span class="math inline">\(1\)</span>st and <span class="math inline">\(n\)</span>th peaks can be written as, <span class="math display">\[
-        \begin{align}
-            \frac{x_1}{x_n} = \frac{x_1}{x_2}\, \frac{x_2}{x_3}  \, \frac{x_3}{x_4} \cdots \frac{x_{n-1}}{x_n} = (e^{\zeta\omega_nT})^n= e^{n\zeta\omega_nT}
-        \end{align}
-    \]</span> An improved (or at least more robust) estimate of the log-decrement (and so also <span class="math inline">\(\zeta\)</span>) can then be obtained using, <span class="math display">\[
-        \delta_n = \frac{1}{n-1} \ln\left(\frac{x_1}{x_n}\right)
-    \]</span></p>
+\begin{align}
+\frac{x_1}{x_n} = \frac{x_1}{x_2}\, \frac{x_2}{x_3}  \, \frac{x_3}{x_4} \cdots \frac{x_{n-1}}{x_n} = (e^{\zeta\omega_nT})^n= e^{n\zeta\omega_nT}
+\end{align}
+\]</span> An improved (or at least more robust) estimate of the log-decrement (and so also <span class="math inline">\(\zeta\)</span>) can then be obtained using, <span class="math display">\[
+\delta_n = \frac{1}{n-1} \ln\left(\frac{x_1}{x_n}\right)
+\]</span></p>
 </section>
 <section id="resonance-bandwidth" class="level3">
 <h3 class="anchored" data-anchor-id="resonance-bandwidth">Resonance bandwidth</h3>
-<p>Considering now the forced response of a viscous damped mass-spring system as in <a href="#fig-receptanceLin" class="quarto-xref">Figure&nbsp;9</a>. We note that for light damping, the maximum of the FRF magnitude occurs in the vicinity of t <span class="math inline">\(\omega/\omega_n = 1\)</span>.</p>
+<p>Considering now the forced response of a viscous damped mass-spring system as in <a href="#fig-receptanceLin" class="quarto-xref">Figure&nbsp;9</a>.</p>
+<p>The `peakyness’ or sharpness of a resonant response is an important characteristic of vibrating system. We can characterise the sharpness of a resonance using the so called Q-factor.</p>
+<p>There are two slightly different definitions of Q-factor, one defined in terms of <em>half power bandwidth</em> (as detailed below) and another defined in terms of dissipated energy. The two definitions tend to the same value for lightly damped system (i.e.&nbsp;<span class="math inline">\(\zeta&lt;0.05\)</span> or so), though the former is more useful from a damping estimation perspective as see shortly.</p>
+<p>The half power bandwidth-based definition of Q-factor takes the form, <span class="math display">\[
+Q \triangleq \frac{\omega_n}{\Delta \omega} = \frac{\omega_n}{\omega_2 - \omega_1}
+\]</span> where <span class="math inline">\(\omega_n\)</span> is the natural frequency of the system, and <span class="math inline">\(\Delta \omega\)</span> is the <em>half power bandwidth</em>, i.e.&nbsp;the spacing between the upper and lower frequencies <span class="math inline">\(\omega_2\)</span> and <span class="math inline">\(\omega_1\)</span> where the output power of the system is half that of the maximum value (these are the -3dB points surrounding the resonant peak in mobility). Note that <span class="math inline">\(\omega_n\)</span> and <span class="math inline">\(\Delta \omega\)</span> can be measured quite easily.</p>
+<p>It is possible to reformulate the Q-factor in terms of the mass, stiffness and damping of a system. This form will be particularly useful as it will allow us to estimate the damping based on measured Q-factor.</p>
+<p>To derive this alternate form we begin by recalling the natural frequency as a function of system mass and stiffness, <span id="eq-resF"><span class="math display">\[
+\omega_n = \sqrt{\frac{k}{m}}.
+\tag{22}\]</span></span> Next we must derive an appropriate expression for the full half power bandwidth <span class="math inline">\(\Delta \omega\)</span>.</p>
+<p>The complex power <span class="math inline">\(P\)</span> of a vibration system is given by, <span class="math display">\[
+P = \dot{x}^*F
+\]</span> where <span class="math inline">\(\dot{x}^*\)</span> is the complex conjugate of the velocity <span class="math inline">\(\dot{x}\)</span>. Note that we are interested in the <em>real</em> power. This is the power that actually does work on the system. <span class="math display">\[
+\mbox{real}(P) = \mbox{real}(\dot{x}^*F)
+\]</span> Now we can substitute the force <span class="math inline">\(F\)</span> for the product of velocity and impedance, <span class="math display">\[
+\mbox{real}(P) = \mbox{real}(\dot{x}^* \dot{x} Z).
+\]</span> Using the identity <span class="math inline">\(z^*z = |z|^2\)</span>, the above becomes <span class="math display">\[
+\mbox{real}(P) = |\dot{x}|^2 \mbox{real}(Z)
+\]</span><br>
+which leaves us with <span id="eq-realPower"><span class="math display">\[
+\mbox{real}(P) = |\dot{x}|^2 c.
+\tag{23}\]</span></span> where <span class="math inline">\(c\)</span> is the viscous damping factor. <a href="#eq-realPower" class="quarto-xref">Equation&nbsp;23</a> states that the real power is proportional to the velocity squared and the damping of the system.</p>
+<p>Clearly, the maximum achievable power is that when the velocity is a maximum, <span class="math display">\[
+P_{max} = |\dot{x}_{max} |^2 c
+\]</span> The half maximum power can then be written as, <span class="math display">\[
+\frac{P_{max}}{2} = \frac{|\dot{x}_{max} |^2}{2} c =  \left|\frac{\dot{x}}{\sqrt{2}}\right|^2 c
+\]</span></p>
+<p>We are interested in when the real power <span class="math inline">\(\mbox{real}(P)\)</span> is equal to the half maximum power, <span class="math display">\[
+\mbox{real}(P) = \frac{P_{max}}{2}\rightarrow |\dot{x}|^2 c = \frac{|{\dot{x}_{max}}|^2}{2} c
+\]</span> which is equivalent to, <span class="math display">\[
+|\dot{x}| = \left|\frac{\dot{x}_{max}}{\sqrt{2}}\right|
+\]</span> Noting that <span class="math inline">\(|\dot{x}|=\frac{F}{Z}\)</span>, the above may be rewritten in the form, <span class="math display">\[
+\left|\frac{F}{Z}\right| = \left|\frac{F}{c\sqrt{2}}\right| \rightarrow |Z|=c\sqrt{2}.
+\]</span> Squaring both sides of the above we get, <span class="math display">\[
+{c^2 + \left(\omega m - \frac{k}{\omega}\right)^2 } = 2c^2
+\]</span> This equation has two solutions, <span class="math inline">\(\left(\omega m - \frac{k}{\omega}\right)=\pm c\)</span>. <span class="math display">\[
+\begin{align}
+\omega_1 m - \frac{k}{\omega_1 } = c&amp;  &amp;\omega_2 m - \frac{k}{\omega_2} = -c\\
+\omega^2_1 m - \omega_1 c=k&amp; &amp; \omega^2_2 m + \omega_2 c=\phantom{-}k
+\end{align}
+\]</span> we arrive at an equation for the full half power bandwidth <span class="math inline">\(\Delta \omega = \omega_2 -\omega_1\)</span>, <span id="eq-fullHalfP"><span class="math display">\[
+\omega^2_1 m - \omega_1 c = \omega^2_2 m + \omega_2 c \rightarrow \omega_2 -\omega_1 = \frac{c}{m}.
+\tag{24}\]</span></span></p>
+<p>Substituting <a href="#eq-fullHalfP" class="quarto-xref">Equation&nbsp;24</a> and <a href="#eq-resF" class="quarto-xref">Equation&nbsp;22</a> into the definition of Q-factor we can derive alternate forms of the Q-factor, <span class="math display">\[
+Q = \frac{\sqrt{\frac{k}{m}}}{\frac{c}{m}} = \frac{m}{c} \sqrt{\frac{k}{m}} = \frac{m \omega_n}{c} = \frac{1}{c}\sqrt{mk}.
+\]</span> Recalling our defintion of the viscous damping coefficient <span class="math inline">\(\zeta = \frac{c}{2m\omega_n}\)</span>, we can substitute <span class="math inline">\(c = \zeta 2m\omega_n\)</span> into the above to obtain, <span id="eq-QZeta"><span class="math display">\[
+Q = \frac{m \omega_n}{c} = \frac{m \omega_n}{\zeta 2m\omega_n} = \frac{1}{2 \zeta}
+\tag{25}\]</span></span> or more simply, <span id="eq-QfactorZeta"><span class="math display">\[
+\frac{\omega_n}{\Delta \omega} = \frac{1}{2 \zeta}
+\tag{26}\]</span></span> From <a href="#eq-QfactorZeta" class="quarto-xref">Equation&nbsp;26</a> we can easily obtain <span class="math inline">\(\zeta\)</span> given a measurement of <span class="math inline">\(\omega_n\)</span> and <span class="math inline">\(\Delta \omega\)</span>. Note however, that in the above derivation we used the <em>undamped natural frequnecy</em> <span class="math inline">\(\omega_n\)</span>, even though our system is damped… For lightly damped systems <span class="math inline">\(\omega_n \approx \omega_d\)</span> and <a href="#eq-QfactorZeta" class="quarto-xref">Equation&nbsp;26</a> holds. For highly damped systems it does not.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Whats up with the other <span class="math inline">\(Q\)</span> factor definition?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A more precicse definition of Q-factor is by the ratio of the mean stored energy at resonance (<span class="math inline">\(\omega_d\)</span>) to the energy disipated per cycle at resonance, <span id="eq-defQEnergy"><span class="math display">\[
+Q = 2\pi \frac{\mbox{Mean energy stored at resonance}}{\mbox{Energy dissipated per cycle at resonance}}
+\tag{27}\]</span></span> The potential and kinetic energy of an oscillating mass-spring system are given by, <span class="math display">\[
+U = \frac{1}{2}k|X_0|^2 \quad \mbox{and} \quad K = \frac{1}{2}m|\dot{X}_0|^2 %= -\frac{1}{2}m \omega^2 |X_0|^2
+\]</span> When a system oscillates, energy is transformed backwards and forwards between potential and kinetic.</p>
+<p>At resonance, the mean energy stored can be expressed entirely in terms of the potential energy, <span id="eq-meanEnergyStored"><span class="math display">\[
+E = \frac{1}{2}k|X_0|^2%+\frac{1}{2}m \omega^2 |X_0|^2  = \frac{|X_0|^2}{2}\left(k+\omega^2 m\right)
+\tag{28}\]</span></span> Recalling <a href="#eq-energyDiss" class="quarto-xref">Equation&nbsp;29</a>, the energy disipated per cycles by a viscous damped is given by, <span id="eq-energyDiss"><span class="math display">\[
+\Delta E = |X_0|^2 \pi \omega c
+\tag{29}\]</span></span> Substiuting <a href="#eq-meanEnergyStored" class="quarto-xref">Equation&nbsp;28</a> and <a href="#eq-energyDiss" class="quarto-xref">Equation&nbsp;29</a> into the energy-based defintion of Q-factor (<a href="#eq-defQEnergy" class="quarto-xref">Equation&nbsp;27</a>), we obtain, <span class="math display">\[
+Q = 2\pi \frac{\frac{1}{2}k|X_{0}|^2}{|X_{0}|^2 \pi \omega_d c } =  \frac{k}{\omega_d c } = \frac{k}{ 2 \zeta  m \omega_d\omega_n } = \frac{\omega_n^2}{ 2 \zeta  \omega_d\omega_n } \approx \frac{1}{2 \zeta}
+\]</span> which, for lightly damped systems (<span class="math inline">\(\omega_d\approx \omega_n\)</span>), agrees with the bandwidth-based defintiion in <a href="#eq-QZeta" class="quarto-xref">Equation&nbsp;25</a>.</p>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -1572,8 +1651,8 @@ Figure&nbsp;18: Transient response of a viscously damped mass-spring system.
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../../introductions/VAVPs/summary/summary.html" class="pagination-link" aria-label="Vibro-Acoustic Virtual Prototyping">
-        <span class="nav-page-text">Vibro-Acoustic Virtual Prototyping</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../../introductions/POV/TDOF/TDOF.html" class="pagination-link" aria-label="Two degrees of freedom">
+        <span class="nav-page-text">Two degrees of freedom</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

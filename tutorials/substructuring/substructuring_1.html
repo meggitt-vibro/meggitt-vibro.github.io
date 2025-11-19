@@ -174,17 +174,6 @@ window.Quarto = {
     <a class="nav-link" href="../../research/summary.html"> 
 <span class="menu-text">Research</span></a>
   </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-teaching" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Teaching</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-teaching">    
-        <li>
-    <a class="dropdown-item" href="../../teaching/mlsd/mlsd.html">
- <span class="dropdown-text">Microphone and Loudspeaker Design</span></a>
-  </li>  
-    </ul>
-  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -288,7 +277,7 @@ Figure&nbsp;1: Numerical mass-spring assembly used for substructuring example. C
 <h2 class="anchored" data-anchor-id="define-component-matrices">Define component matrices</h2>
 <p>The first thing we need to do is build the mass and stiffness matrices that represent components <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. Whilst we are doing this, we will also build the mass and stiffness matrices for the rigidly coupled assembly (see <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;3</a>). We will use these later to provide some comparisons for substructured results. The mass and stiffness matrices of component <span class="math inline">\(A\)</span> are printed below as an example.</p>
 <p>Once we have built the mass and stiffness matrices, we quickly compute the natural frequencies for each system; this is just to give us an idea over what frequency range we should compute our FRFs; 1-100 Hz looks to cover everything.</p>
-<div id="ef4e81bc" class="cell" data-execution_count="1">
+<div id="5f8b5526" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
