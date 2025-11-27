@@ -635,12 +635,12 @@ This representation also transforms $N$ coupled EoM into $N$ uncoupled EoM. Toge
 \end{align}
 \]</span> At <span class="math inline">\(t=0\)</span> the initial displacement and velocity (<span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0\)</span>) become, <span class="math display">\[
         \mathbf{x}(0) = \sum_r^N A_r \mathbf{u}_r\cos(\phi_r) \quad \quad \dot{\mathbf{x}}(0) = \sum_r^N \omega_r A_r \mathbf{u}_r\sin(\phi_r)
-\]</span> Now lets pre-multiply by the mode shape and mass matrix <span class="math inline">\(\mathbf{u}^{\rm T}_s\mathbf{M}\)</span>, and use the orthogonality relation <span class="math inline">\(\mathbf{u}_s\mathbf{M}\mathbf{u}_r = 0\)</span> for <span class="math inline">\(r\neq s\)</span>, <span class="math display">\[
+\]</span> Now lets pre-multiply by the mode shape and mass matrix <span class="math inline">\(\mathbf{u}^{\rm T}_s\mathbf{M}\)</span>, and use the orthogonality relation <span class="math inline">\(\mathbf{u}_s\mathbf{M}\mathbf{u}_r = 0\)</span> for <span class="math inline">\(r\neq s\)</span>, <span id="eq-initCond1"><span class="math display">\[
         \begin{align}
         \mathbf{u}^{\rm T}_s\mathbf{M}  \mathbf{x}_0 &amp;= \sum_r^N A_r \mathbf{u}^{\rm T}_s\mathbf{M}\mathbf{u}_r\cos(\phi_r) =  {\color{red} A_r \cos(\phi_s) } \\
         \frac{1}{\omega_r}  \mathbf{u}^{\rm T}_s\mathbf{M}\mathbf{\dot{x}}_0 &amp;= \sum_r^N  A_r \mathbf{u}^{\rm T}_s\mathbf{M}\mathbf{u}_r\sin(\phi_r)=   {\color{green}A_r \sin(\phi_s)}
         \end{align}
-\]</span> We see that orthogonality removes the summation and reduces <span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0\)</span> to just a single <span class="math inline">\(\cos\)</span> and <span class="math inline">\(\sin\)</span> term.</p>
+\tag{24}\]</span></span> We see that orthogonality removes the summation and reduces <span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0\)</span> to just a single <span class="math inline">\(\cos\)</span> and <span class="math inline">\(\sin\)</span> term.</p>
 <p>Now lets return to our solution, <span class="math inline">\(\mathbf{x}(t)  = \sum_r^N A_r \mathbf{u}_r\cos(\omega_r t -\phi_r)\)</span> and rewrite it with a little trigonometric flair..! Specifically using, <span class="math inline">\(\cos(\alpha-\beta) = \cos\alpha\cos\beta+\sin\alpha\sin\beta\)</span>, <span class="math display">\[
          \mathbf{x}(t)  =\sum_r^N A_r \mathbf{u}_r\cos(\omega_r t - \phi_r) = \sum_r^N A_r \mathbf{u}_r \left(\cos\omega_r t\, {\color{red}\cos\phi_r} +\sin\omega_r t\,{\color{green}\sin\phi_r}\right)
 \]</span> After substituting in our IC from above, our system response, due to <span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0\)</span>, becomes, <span id="eq-ICsolution"><span class="math display">\[
@@ -648,8 +648,8 @@ This representation also transforms $N$ coupled EoM into $N$ uncoupled EoM. Toge
     \mathbf{x}(t)  &amp;= \sum_r^N A_r \mathbf{u}_r \left(\cos\omega_r t \,{\color{red}\cos\phi_r} + \sin\omega_r t \,{\color{green}\sin\phi_r}\right) \\
     &amp;= \sum_r^N  \mathbf{u}_r \left({\color{red}    \mathbf{u}^{\rm T}_r\mathbf{M}  \mathbf{x}_0 }  \cos\omega_r t +{\color{green}  \frac{1}{\omega_r}  \mathbf{u}^{\rm T}_r\mathbf{M}\dot{\mathbf{x}}_0} \sin\omega_r t\right)
 \end{align}
-\tag{24}\]</span></span> <a href="#eq-ICsolution" class="quarto-xref">Equation&nbsp;24</a> indicates that for an arbitrary set of IC, the system will oscillate in a superposition of all mode shapes. The highlighted terms <span class="math inline">\({\color{red}\mathbf{u}^{\rm T}_r\mathbf{M}\mathbf{x}_0 }\)</span> and <span class="math inline">\({\color{green}\frac{1}{\omega_r}\mathbf{u}^{\rm T}_r\mathbf{M}\mathbf{\dot{x}}_0}\)</span> describe by how much mode <span class="math inline">\(r\)</span> is excited by the prescribed initial conditions.</p>
-<p>From inspection of <a href="#eq-ICsolution" class="quarto-xref">Equation&nbsp;24</a> we can see that if the IC are set to <span class="math inline">\(\mathbf{x}_0 = \mathbf{u}_s\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0 = \mathbf{0}\)</span>, i.e.&nbsp;the system is initially displaced into a mode shape configuration and then released, the solution reduces to, <span class="math display">\[
+\tag{25}\]</span></span> <a href="#eq-ICsolution" class="quarto-xref">Equation&nbsp;25</a> indicates that for an arbitrary set of IC, the system will oscillate in a superposition of all mode shapes. The highlighted terms <span class="math inline">\({\color{red}\mathbf{u}^{\rm T}_r\mathbf{M}\mathbf{x}_0 }\)</span> and <span class="math inline">\({\color{green}\frac{1}{\omega_r}\mathbf{u}^{\rm T}_r\mathbf{M}\mathbf{\dot{x}}_0}\)</span> describe by how much mode <span class="math inline">\(r\)</span> is excited by the prescribed initial conditions.</p>
+<p>From inspection of <a href="#eq-ICsolution" class="quarto-xref">Equation&nbsp;25</a> we can see that if the IC are set to <span class="math inline">\(\mathbf{x}_0 = \mathbf{u}_s\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0 = \mathbf{0}\)</span>, i.e.&nbsp;the system is initially displaced into a mode shape configuration and then released, the solution reduces to, <span class="math display">\[
     \begin{align}
 \mathbf{x}(t)  = \mathbf{u}_r  \cos\omega_r t  
 \end{align}
@@ -672,6 +672,78 @@ $$
 $$ -->
 <section id="what-about-damping" class="level2">
 <h2 class="anchored" data-anchor-id="what-about-damping">What about damping?</h2>
+<p>Right, lets bring damping back into the mix. Our damped, but unforced, EoM is, <span class="math display">\[
+\mathbf{{M}}\ddot{\mathbf{x}}(t)+ \mathbf{{C}}\dot{\mathbf{x}}(t)  + \mathbf{{K}}\mathbf{x}(t) = \mathbf{0}
+\]</span> Lets substitute our modal transformation <span class="math inline">\(\mathbf{x}(t) = \mathbf{U} \mathbf{q}(t)\)</span> into <a href="#eq-forcedEoM" class="quarto-xref">Equation&nbsp;30</a> and pre-multiply by <span class="math inline">\(\mathbf{U}^{\rm T}\)</span>, <span class="math display">\[
+\mathbf{\tilde{M}}\ddot{\mathbf{q}}(t)+ \mathbf{\tilde{C}}\dot{\mathbf{q}}(t)  + \mathbf{\tilde{K}}\mathbf{q}(t) = \mathbf{0}
+\]</span> By using the mass normalised modes this becomes, <span class="math display">\[
+\mathbf{I}\ddot{\mathbf{q}}(t)+ \mathbf{\tilde{C}}\dot{\mathbf{q}}(t)  + \mathbf{\Omega}\mathbf{q}(t) = \mathbf{0}
+\]</span> where as expected the mass and stiffness matrices have been diagonalised. Now, a very important point… <strong>in general the natural modes do not diagonalise the damping matrix</strong>. That is, we cannot viscously uncouple our EoM! To proceed, we must assume a special type of damping termed <em>proportional</em> damping. A proportional damping matrix is one that is a linear combination of the mass and stiffness matrices. Since both the mass and stiffness matrices are diagonalised byt he natural modes, so to is the propotional damping matrix, <span class="math display">\[
+\mathbf{C} = \alpha \mathbf{M} + \beta \mathbf{K} \quad \quad \rightarrow \quad \quad   \mathbf{\tilde{C}} = \alpha \mathbf{I} + \beta \mathbf{\Omega}
+\]</span> where the values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are often obtained from experiment.</p>
+<p>If we use this proportional damping model, the modal damping matrix can be written as, <span class="math display">\[
+    \mathbf{\tilde{C}} = \left[\begin{array}{ccc}
+        2\zeta_1\omega_1 &amp; &amp;\\ &amp; \ddots &amp; \\
+        &amp; &amp; 2\zeta_N\omega_N
+    \end{array}\right] \quad \quad \mbox{with}\quad \quad \zeta_n = \frac{\alpha/\omega_n + \beta \omega_n}{2}
+\]</span> and our transformed EoM are now entirely diagonal, taking the form, <span class="math display">\[
+\mathbf{\ddot{q}}(t) +i\omega \mathbf{\tilde{C}}\dot{\mathbf{q}}(t) +\mathbf{\Omega}\mathbf{q}(t) = \mathbf{0} \quad \quad \mbox{or} \quad \quad \ddot{q}_r(t) +  2\zeta_r\omega_r \dot{q}(t) + \omega^2_r q_r(t) = 0 \quad \quad \mbox{for}\quad r=1,\, 2, \, \cdots, \, N
+\]</span> We have already dealt with equations of this form in our treatment of the damped SDOF oscillator. For each mode, the solution takes the form, <span class="math display">\[
+q_r(t) = A_r\cos(\omega_{d,r} t - \phi_r) e^{-\zeta_r\omega_{r} t}
+\]</span> where the damped modal frequency is given by, <span class="math display">\[
+\omega_{d,r} = \sqrt{1-\zeta_r^2}\omega_r
+\]</span> with <span class="math inline">\(\zeta_r\)</span> being the modal damping coefficient. Based on our treatment of the damped SDOF oscillator, and the undamped multi-DOF solution above, we can derive the following system response based on the initial conditions <span class="math inline">\(\mathbf{x}_0\)</span> <span class="math inline">\(\dot{\mathbf{x}}_0\)</span>, <span class="math display">\[
+\begin{align}
+    \mathbf{x}(t)  &amp;= \sum_r^N \mathbf{u}_r \left({\color{red}\mathbf{u}^{\rm T}_r\mathbf{M}    \mathbf{x}_0 }\, \cos\omega_{d,r} t + {\color{green}\frac{1}{\omega_{d,r} }\mathbf{u}^{\rm T}_r\mathbf{M} \left(\dot{\mathbf{x}}_0 + \zeta_r\omega_{r} \mathbf{x}_0 \right)}\, \sin\omega_{d,r} t \right)e^{-\zeta_r\omega_{r} t}
+\end{align}
+\]</span> If you want to see how we got to this equation, the details are in the box below! Its pretty similar to <a href="#eq-ICsolution" class="quarto-xref">Equation&nbsp;25</a>, with a few important differences. First of all, the modes oscillate at the damped natural frequencies <span class="math inline">\(\omega_{d,r}\)</span>. Second, we see that the contribution of the initial displacement now also effects the <span class="math inline">\(\sin\)</span> contribution also. Lastly, we see that each modal contribution decays exponentially according to the modal damping coefficient <span class="math inline">\(\zeta_r\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Derivation of damped system response due to initial conditions">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Derivation of damped system response due to initial conditions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To determine the unknown constants <span class="math inline">\(A_r\)</span> and <span class="math inline">\(\phi_r\)</span> we follow a similar procedure as for the undamped case. We begin with the general solution of the damped system, <span id="eq-initCondDamp1"><span class="math display">\[
+\begin{align}
+    \mathbf{x}(t) = \sum_r^N A_r \mathbf{u}_r\cos(\omega_{d,r} t -\phi_r)e^{-\zeta_r\omega_{r} t}
+\end{align}
+\tag{26}\]</span></span> We will also need an equation for the velocity, so we take the derivative of <a href="#eq-initCondDamp1" class="quarto-xref">Equation&nbsp;26</a>, <span id="eq-initCondDamp2"><span class="math display">\[
+\begin{align}
+    \dot{\mathbf{x}}(t) = \sum_r^N -\omega_{d,r} A_r \mathbf{u}_r\sin(\omega_{d,r} t -\phi_r)e^{-\zeta_r\omega_{r} t} - \sum_r^N \zeta_r\omega_{r} A_r \mathbf{u}_r\cos(\omega_{d,r} t -\phi_r)e^{-\zeta_r\omega_{r} t}
+\end{align}
+\tag{27}\]</span></span> Evaluating <a href="#eq-initCondDamp1" class="quarto-xref">Equation&nbsp;26</a> and <a href="#eq-initCondDamp2" class="quarto-xref">Equation&nbsp;27</a> for <span class="math inline">\(t=0\)</span> we get, <span id="eq-initCondDamp3"><span class="math display">\[
+        \mathbf{x}_0 = \sum_r^N A_r \mathbf{u}_r\cos(\phi_r) \quad \quad \dot{\mathbf{x}}(0) = \sum_r^N \omega_{d,r} A_r \mathbf{u}_r\sin(\phi_r) - \sum_r^N \zeta_r\omega_{r} A_r \mathbf{u}_r\cos(\phi_r)
+\tag{28}\]</span></span> As before we pre-multiply both sides of <a href="#eq-initCondDamp3" class="quarto-xref">Equation&nbsp;28</a> by <span class="math inline">\(\mathbf{u}^{\rm T}_s\mathbf{M}\)</span> and use orthogonality! For the initial displacement we get the same results as in <a href="#eq-initCond1" class="quarto-xref">Equation&nbsp;24</a>, <span class="math display">\[
+        \mathbf{u}^{\rm T}_s\mathbf{M}  \mathbf{x}_0 =  A_r \cos(\phi_r)
+\]</span> For the initial velocity we have an extra <span class="math inline">\(\cos\)</span> term to deal with. Pre-multiplying by <span class="math inline">\(\mathbf{u}^{\rm T}_s\mathbf{M}\)</span>, <span class="math display">\[
+\begin{align}
+        \mathbf{u}^{\rm T}_s\mathbf{M}  \dot{\mathbf{x}}_0 = \sum_r^N \omega_{d,r} A_r \mathbf{u}^{\rm T}_s\mathbf{M}   \mathbf{u}_r\sin(\phi_r) - \sum_r^N \zeta_r\omega_{r} A_r \mathbf{u}^{\rm T}_s\mathbf{M}\mathbf{u}_r\cos(\phi_r)
+\end{align}
+\]</span> and using orthogonality, <span class="math display">\[
+\begin{align}
+        \mathbf{u}^{\rm T}_r\mathbf{M}  \dot{\mathbf{x}}_0 &amp;= \omega_{d,r} A_r \mathbf{u}^{\rm T}_r\mathbf{M}   \mathbf{u}_r\sin(\phi_r) - \zeta_r\omega_{r} A_r \mathbf{u}^{\rm T}_r\mathbf{M}\mathbf{u}_r\cos(\phi_r) \\
+        &amp; = \omega_{d,r} A_r \sin(\phi_r) - \zeta_r\omega_{r} \overbrace{A_r \cos(\phi_r)}^{\mathbf{u}^{\rm T}_s\mathbf{M}  \mathbf{x}_0 }
+\end{align}
+\]</span> we have that, <span id="eq-initCondDamp4"><span class="math display">\[
+        \frac{1}{\omega_{d,r} }\mathbf{u}^{\rm T}_r\mathbf{M} \left(\dot{\mathbf{x}}_0 + \zeta_r\omega_{r} \mathbf{x}_0 \right) = A_r \sin(\phi_r)
+\tag{29}\]</span></span> Applying the trig identity <span class="math inline">\(\cos(\alpha-\beta) = \cos\alpha\cos\beta+\sin\alpha\sin\beta\)</span> to <a href="#eq-initCondDamp1" class="quarto-xref">Equation&nbsp;26</a>, <span class="math display">\[
+\begin{align}
+    \mathbf{x}(t)  &amp;= \sum_r^N A_r \mathbf{u}_r \left(\cos\omega_{d,r} t \,{\color{red}\cos\phi_r} + \sin\omega_{d,r} t \,{\color{green}\sin\phi_r}\right)e^{-\zeta_r\omega_{r} t}
+\end{align}
+\]</span> which, after substituting in <a href="#eq-initCondDamp3" class="quarto-xref">Equation&nbsp;28</a> and <a href="#eq-initCondDamp4" class="quarto-xref">Equation&nbsp;29</a>, leaves us with, <span class="math display">\[
+\begin{align}
+    \mathbf{x}(t)  &amp;= \sum_r^N \mathbf{u}_r \left({\color{red}\mathbf{u}^{\rm T}_s\mathbf{M}    \mathbf{x}_0 }\, \cos\omega_{d,r} t + {\color{green}\frac{1}{\omega_{d,r} }\mathbf{u}^{\rm T}_r\mathbf{M} \left(\dot{\mathbf{x}}_0 + \zeta_r\omega_{r} \mathbf{x}_0 \right)}\, \sin\omega_{d,r} t \right)e^{-\zeta_r\omega_{r} t}
+\end{align}
+\]</span></p>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="forced-solution" class="level1">
@@ -687,21 +759,21 @@ $$ -->
 <h2 class="anchored" data-anchor-id="direct-method">Direct method</h2>
 <p>Reintroducing our damped EoM, <span id="eq-forcedEoM"><span class="math display">\[
     \mathbf{M}\ddot{\mathbf{x}}(t)+ \mathbf{C}\dot{\mathbf{x}}(t)  + \mathbf{K}\mathbf{x}(t) = \mathbf{F}(t)
-\tag{25}\]</span></span> and taking the external force to be harmonic <span class="math inline">\(\mathbf{F}(t) = \mathbf{F}_0 e^{i\omega t}\)</span>, we know that our response will also be harmonic with the same frequency, <span class="math inline">\(\mathbf{x}(t) = \mathbf{X}_0 e^{i\omega t}\)</span>.</p>
-<p>Substituting <span class="math inline">\(\mathbf{x}(t) = \mathbf{X}_0 e^{i\omega t}\)</span> into <a href="#eq-forcedEoM" class="quarto-xref">Equation&nbsp;25</a> and taking the necessary derivatives (<span class="math inline">\(\ddot{\mathbf{x}}(t)\)</span>, <span class="math inline">\(\dot{\mathbf{x}}(t)\)</span>) we get, <span class="math display">\[
+\tag{30}\]</span></span> and taking the external force to be harmonic <span class="math inline">\(\mathbf{F}(t) = \mathbf{F}_0 e^{i\omega t}\)</span>, we know that our response will also be harmonic with the same frequency, <span class="math inline">\(\mathbf{x}(t) = \mathbf{X}_0 e^{i\omega t}\)</span>.</p>
+<p>Substituting <span class="math inline">\(\mathbf{x}(t) = \mathbf{X}_0 e^{i\omega t}\)</span> into <a href="#eq-forcedEoM" class="quarto-xref">Equation&nbsp;30</a> and taking the necessary derivatives (<span class="math inline">\(\ddot{\mathbf{x}}(t)\)</span>, <span class="math inline">\(\dot{\mathbf{x}}(t)\)</span>) we get, <span class="math display">\[
 \underbrace{\left(-\omega^2 \mathbf{M}+i\omega \mathbf{C}+ \mathbf{K}\right)}_{\mbox{dynamic stiffness } \mathbf{D}(\omega)}\mathbf{X}_0 e^{i\omega t} =  \mathbf{F}_0 e^{i\omega t}
 \]</span> Dividing through by <span class="math inline">\(e^{i\omega t}\)</span> leaves us with, <span id="eq-forcedEoM2"><span class="math display">\[
 \mathbf{D}(\omega)\mathbf{X}_0 = \mathbf{F}_0
-\tag{26}\]</span></span> To solve for the response amplitude <span class="math inline">\(\mathbf{X}_0\)</span> we pre-multiply both sides of <a href="#eq-forcedEoM2" class="quarto-xref">Equation&nbsp;26</a> by the inverse of the dynamic stiffness matrix, <span id="eq-directFRF"><span class="math display">\[
+\tag{31}\]</span></span> To solve for the response amplitude <span class="math inline">\(\mathbf{X}_0\)</span> we pre-multiply both sides of <a href="#eq-forcedEoM2" class="quarto-xref">Equation&nbsp;31</a> by the inverse of the dynamic stiffness matrix, <span id="eq-directFRF"><span class="math display">\[
 \mathbf{X}_0 = \mathbf{D}(\omega)^{-1} \mathbf{F}_0 = \mathbf{R}(\omega) \mathbf{F}_0 \quad \quad \mathbf{R}(\omega) = \mathbf{D}(\omega)^{-1}
-\tag{27}\]</span></span> The resulting FRF matrix <span class="math inline">\(\mathbf{R}\)</span> is termed the receptance. It is worth noting that taking the inverse of a matrix is <em>not the same</em> as taking the inverse of all of the matrix elements. It is a specific operation akin to rearranging a set of simultaneous equations. For all but the simplest <span class="math inline">\(2\times 2\)</span> matrices, the matrix inverse is not something you would ever consider doing by hand! Instead we use MATLAB or python, where it is as simple as calling the function <strong>inv( )</strong>.</p>
+\tag{32}\]</span></span> The resulting FRF matrix <span class="math inline">\(\mathbf{R}\)</span> is termed the receptance. It is worth noting that taking the inverse of a matrix is <em>not the same</em> as taking the inverse of all of the matrix elements. It is a specific operation akin to rearranging a set of simultaneous equations. For all but the simplest <span class="math inline">\(2\times 2\)</span> matrices, the matrix inverse is not something you would ever consider doing by hand! Instead we use MATLAB or python, where it is as simple as calling the function <strong>inv( )</strong>.</p>
 <p>The dynamic stiffness FRF can be thought of as describing ‘<em>local dynamics</em>’. Consider the case whereby a single mass is displaced harmonically; the dynamic stiffness describes what the resultant forces are on all masses of the system. Note however that the only masses that experience a force directly are those connected by a spring/damper to the displaced mass; if two masses are not connected by a spring/damper the dynamic stiffness between them will be zero. We saw this earlier for the mass-spring systems in <a href="#fig-massSpringMassSpringMass3" class="quarto-xref">Figure&nbsp;4</a> whose stiffness matrices are given in <a href="#eq-stiffstiffstiff" class="quarto-xref">Equation&nbsp;2</a>. Since in a typical mass-spring system each mass is only connected to a couple neighboring masses, the majority of the dynamic stiffness matrix values will be zero, it is a sparse matrix.</p>
 <p>On the other hand, the receptance can be thought of as describing ‘<em>global dynamics</em>’. Consider the case whereby a single masses is excited by a harmonic force; the receptance describes the resultant displacement of all masses in the system. Generally, all masses will exhibit some motion due to the applied force, wherever it is applied, and so all receptance matrix values will be non-zero, it is a dense matrix.</p>
-<p><a href="#eq-directFRF" class="quarto-xref">Equation&nbsp;27</a> looks pretty straightforward right? Why would we want to solve the forced response problem in any other way? Well, the main issue is that for large systems, the computation of a matrix inverse can be quite expensive, and seeing as this has to be done at every frequency, this direct method can quite easily become too much. Fortunately, using our newly understood modal decoupling, an alternative approach is available!</p>
+<p><a href="#eq-directFRF" class="quarto-xref">Equation&nbsp;32</a> looks pretty straightforward right? Why would we want to solve the forced response problem in any other way? Well, the main issue is that for large systems, the computation of a matrix inverse can be quite expensive, and seeing as this has to be done at every frequency, this direct method can quite easily become too much. Fortunately, using our newly understood modal decoupling, an alternative approach is available!</p>
 </section>
 <section id="modal-synthesis" class="level2">
 <h2 class="anchored" data-anchor-id="modal-synthesis">Modal synthesis</h2>
-<p>Lets substitute our modal transformation <span class="math inline">\(\mathbf{x}(t) = \mathbf{U} \mathbf{q}(t)\)</span> into <a href="#eq-forcedEoM" class="quarto-xref">Equation&nbsp;25</a> and pre-multiply by <span class="math inline">\(\mathbf{U}^{\rm T}\)</span>, <span class="math display">\[
+<p>Lets substitute our modal transformation <span class="math inline">\(\mathbf{x}(t) = \mathbf{U} \mathbf{q}(t)\)</span> into <a href="#eq-forcedEoM" class="quarto-xref">Equation&nbsp;30</a> and pre-multiply by <span class="math inline">\(\mathbf{U}^{\rm T}\)</span>, <span class="math display">\[
 \mathbf{\tilde{M}}\ddot{\mathbf{q}}(t)+ \mathbf{\tilde{C}}\dot{\mathbf{q}}(t)  + \mathbf{\tilde{K}}\mathbf{q}(t) = \mathbf{Q}(t)
 \]</span> By using the mass normalised modes this becomes, <span class="math display">\[
 \mathbf{I}\ddot{\mathbf{q}}(t)+ \mathbf{\tilde{C}}\dot{\mathbf{q}}(t)  + \mathbf{\Omega}\mathbf{q}(t) = \mathbf{Q}(t)
@@ -724,7 +796,7 @@ $$ -->
 \mathbf{x}(t) = \mathbf{U} \mathbf{q} = \mathbf{U} \left(-\omega^2 \mathbf{I} + i\omega \mathbf{\tilde{C}}  + \mathbf{\Omega}\right)^{-1}\mathbf{U}^{\rm T}\mathbf{F}(t)
 \]</span> from which we can identify the receptance FRF matrix as, <span id="eq-modalSummation"><span class="math display">\[
 \mathbf{R}(\omega) =  \mathbf{U} \left( i\omega \mathbf{\tilde{C}}  + \mathbf{\Omega}-\omega^2 \mathbf{I}\right)^{-1}\mathbf{U}^{\rm T}
-\tag{28}\]</span></span> Writing out <a href="#eq-modalSummation" class="quarto-xref">Equation&nbsp;28</a> in summation form, <span class="math display">\[
+\tag{33}\]</span></span> Writing out <a href="#eq-modalSummation" class="quarto-xref">Equation&nbsp;33</a> in summation form, <span class="math display">\[
 \mathbf{R}(\omega) = \sum_r^N \frac{\mathbf{u}_r\mathbf{u}_r^{\rm T}}{i\omega 2\zeta_r\omega_r + (\omega_r^2 - \omega^2)}
 \]</span> we see that the receptance matrix can be expressed as a summation of modal contributions.</p>
 <p>Note that we can apply the exact same process if we consider instead <em>structural damping</em>, <span class="math display">\[
@@ -764,7 +836,7 @@ $$ -->
 \end{array}\right]
 \]</span> and the receptance becomes, <span id="eq-modalContrib1"><span class="math display">\[
 {R}_{11}(\omega) = {\color{red}+} \frac{0.3237^2}{{\color{gray}i\eta\omega_1^2} + (\omega_1^2 - \omega^2)} {\color{red}+}  \frac{0.4240 ^2}{{\color{gray}i\eta\omega_2^2}+ (\omega_2^2 - \omega^2)} {\color{red}+}   \frac{ (-0.8458)^2}{{\color{gray}i\eta\omega_3^2} + (\omega_3^2 - \omega^2)}  
-\tag{29}\]</span></span> We see from <a href="#eq-modalContrib1" class="quarto-xref">Equation&nbsp;29</a> that as <span class="math inline">\(\omega\)</span> tends towards a resonant frequency <span class="math inline">\(\omega_i\)</span>, the denominator of the corresponding term tends towards zero, thus leading to a large contribution from that mode. Indeed at <span class="math inline">\(\omega=\omega_i\)</span>, the FRF is dominated by that single mode with its ampltidue being limited by the damping present.</p>
+\tag{34}\]</span></span> We see from <a href="#eq-modalContrib1" class="quarto-xref">Equation&nbsp;34</a> that as <span class="math inline">\(\omega\)</span> tends towards a resonant frequency <span class="math inline">\(\omega_i\)</span>, the denominator of the corresponding term tends towards zero, thus leading to a large contribution from that mode. Indeed at <span class="math inline">\(\omega=\omega_i\)</span>, the FRF is dominated by that single mode with its ampltidue being limited by the damping present.</p>
 <p>Now what happens in between the modes? This is a bit more interesting… First of all, note that for <span class="math inline">\(R_{11}\)</span> all the numerator terms are all strictly positive (as they are squared values). Next, recall that in the overlapping frequency range between two modes <span class="math inline">\(\omega_i &lt; \omega &lt; \omega_{i+1}\)</span> the denominators of neighboring modes have opposite sign. From these two statements we conclude that the contribution of neighboring modes must be out of phase and thus cancel with one another. It is this cancellation that leads to an <em>anti-resonance</em> in the FRF; a sharp notch the amplitude of which is limited by the amount of damping present.</p>
 <p>Since all the numerators are positive in <span class="math inline">\(R_{11}\)</span> we further conclude that an anti-resonance must occur between every pair of resonances, that that this is true for any receptance with <em>co-located</em> excitation and response, <span class="math inline">\(R_{nn}\)</span>. The FRFs in <a href="#fig-modalSum" class="quarto-xref">Figure&nbsp;6</a> illustrate exactly this.</p>
 <div id="fig-modalSum" class="quarto-layout-panel">
