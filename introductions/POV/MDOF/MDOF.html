@@ -70,6 +70,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -232,8 +261,36 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#equations-of-motion" id="toc-equations-of-motion" class="nav-link active" data-scroll-target="#equations-of-motion">Equations of motion</a>
+  <ul class="collapse">
+  <li><a href="#building-system-matrices" id="toc-building-system-matrices" class="nav-link" data-scroll-target="#building-system-matrices">Building system matrices</a></li>
+  </ul></li>
+  <li><a href="#decoupling-equations-of-motion" id="toc-decoupling-equations-of-motion" class="nav-link" data-scroll-target="#decoupling-equations-of-motion">Decoupling equations of motion</a>
+  <ul class="collapse">
+  <li><a href="#synchronous-motion" id="toc-synchronous-motion" class="nav-link" data-scroll-target="#synchronous-motion">Synchronous motion</a></li>
+  <li><a href="#orthogonality-and-mass-normalisation-of-mode-shapes" id="toc-orthogonality-and-mass-normalisation-of-mode-shapes" class="nav-link" data-scroll-target="#orthogonality-and-mass-normalisation-of-mode-shapes">Orthogonality and mass normalisation of mode shapes</a></li>
+  <li><a href="#wait-what-just-happened" id="toc-wait-what-just-happened" class="nav-link" data-scroll-target="#wait-what-just-happened">Wait, what just happened?</a></li>
+  </ul></li>
+  <li><a href="#unforced-solution" id="toc-unforced-solution" class="nav-link" data-scroll-target="#unforced-solution">Unforced solution</a>
+  <ul class="collapse">
+  <li><a href="#what-about-damping" id="toc-what-about-damping" class="nav-link" data-scroll-target="#what-about-damping">What about damping?</a></li>
+  </ul></li>
+  <li><a href="#forced-solution" id="toc-forced-solution" class="nav-link" data-scroll-target="#forced-solution">Forced solution</a>
+  <ul class="collapse">
+  <li><a href="#direct-method" id="toc-direct-method" class="nav-link" data-scroll-target="#direct-method">Direct method</a></li>
+  <li><a href="#modal-synthesis" id="toc-modal-synthesis" class="nav-link" data-scroll-target="#modal-synthesis">Modal synthesis</a>
+  <ul class="collapse">
+  <li><a href="#resonance-and-anti-resonance-phenomena-in-modal-summation" id="toc-resonance-and-anti-resonance-phenomena-in-modal-summation" class="nav-link" data-scroll-target="#resonance-and-anti-resonance-phenomena-in-modal-summation">Resonance and anti-resonance phenomena in modal summation</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -257,9 +314,569 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>On this page we …</p>
+<p>So far we have covered, in reasonable detail, the dynamics of single and two DoF mass-spring systems. Whilst some physical systems accept this simple representation, for example isolated machinery or the vented loudspeaker, most require models of much greater complexity, including many DoFs. Indeed, real systems with distributed physical properties (mass/stiffness) are said to have <span class="math inline">\(\infty\)</span> DoFs. Using techniques such as the <em>Finite Element Method</em> we are able to approximate such contiuous systems by <em>lumping</em> together mass and stiffness behaviour to form finite number of DoFs. An example of this is shown in <a href="#fig-fatRod" class="quarto-xref">Figure&nbsp;1</a>, where a continuous rod with varying geometry is approximated by a discrete mass-spring system.</p>
+<div id="fig-fatRod" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fatRod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="fatRod.png" class="img-fluid figure-img" width="750">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fatRod-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Continuous rod with variable cross-sectional area approximated by a discrete mass spring system.
+</figcaption>
+</figure>
+</div>
+<p>The long and short of it is that the modelling of real world systems inevitably involves the analysis of complex, but discrete, multi-DoF systems. And so on this page, we look to generalise some of the concepts and ideas previously covered to arbitrary multi-DoF systems.</p>
+<section id="equations-of-motion" class="level1">
+<h1>Equations of motion</h1>
+<p>In general, the Equation of Motion (EoM) of an <span class="math inline">\(N\)</span> DoF (linear and time invariant) system can be written in matrix form as, <span id="eq-EoM1"><span class="math display">\[
+    \mathbf{M} \ddot{\mathbf{x}}(t) + \mathbf{C} \dot{\mathbf{x}}(t) + \mathbf{K} \mathbf{x}(t) = \mathbf{F}(t)
+\tag{1}\]</span></span> where <span class="math inline">\(\mathbf{M}, \,\mathbf{C},\, \mathbf{K} \in \mathbb{R}^{N\times N}\)</span> are the mass, damping and stiffness matrices. The <span class="math inline">\(\in \mathbb{R}^{N\times N}\)</span> bit at the end basically just says that these matrices are real valued and of size <span class="math inline">\(N\times N\)</span>. The acceleration, velocity and displacement of each DoF is given by the <span class="math inline">\(N\)</span> dimensional real vectors <span class="math inline">\(\ddot{\mathbf{x}}, \, \dot{\mathbf{x}},\,\mathbf{x}\in \mathbb{R}^{N}\)</span>. Lastly, <span class="math inline">\(\mathbf{F} \in \mathbb{R}^{N}\)</span> denotes the vector of external force, also <span class="math inline">\(N\)</span> dimensional, also real valued.</p>
+<p>For real continuous systems, the mass, damping and stiffness matrices above can be obtained using the Finite Element Method [Add reference here]. For discrete mass-spring systems, we can construct these by hand!</p>
+<p>In general, these system matrices are quite sparse, containing mostly zeros and usually reciprocal, meaning for example that <span class="math inline">\(\mathbf{K}^{\rm T} = \mathbf{K}\)</span>. In the special case that the system being represented is indeed a discrete mass-spring system (as opposed to a continuous one that has been discretised), the mss matrix <span class="math inline">\(\mathbf{M}\)</span> is diagonal, meaning that the EoMs are inertially uncoupled. The stiffness <span class="math inline">\(\mathbf{K}\)</span> and damping <span class="math inline">\(\mathbf{C}\)</span> matrices however, will always have off-diagonal terms, meaning that out EoMs are elastically and viscously coupled.</p>
+<section id="building-system-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="building-system-matrices">Building system matrices</h2>
+<div id="fig-massSpringMassSpringMass" class="quarto-float quarto-figure quarto-figure-center anchored" style="float: right; margin: 10px;">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-massSpringMassSpringMass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="massSpringMassSpringMass.png" class="img-fluid figure-img" width="350">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-massSpringMassSpringMass-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Forces imparted on mass 1.
+</figcaption>
+</figure>
+</div>
+<p>Whilst is is beyond the scope of this page to introduce the Finite Element method in any real detail, it is useful to introduce a means of quickly building the system matrices for mass spring systems without having to go through every mass, draw a free-body diagram and start writing out all the forces. We want a quick, programmatic, way of building these EoM. To do that we are going to return to a two DoF system to build a little intuition before generalising to any system we like.</p>
+<p>The trickiest part of writing Newton’s 2nd law is making sure we ge the spring and damper forces all in the right direction. We do this by displacing each mass in turn, and imagining in what direction the restoring force acts. For example, considering mass 1 in <a href="#fig-massSpringMassSpringMass" class="quarto-xref">Figure&nbsp;2</a>. We first displace mass 1 upwards by some amount <span class="math inline">\(x_1\)</span> whilst keeping mass 2 fixed. Clearly, the spring <span class="math inline">\(k_1\)</span> will act to pull the mass back down, hence the spring force is <span class="math inline">\(-k_1 x_1\)</span>. Let us now keep mass 1 fixed and instead displace mass 2 upwards by some amount <span class="math inline">\(x_2\)</span>. The spring <span class="math inline">\(k_1\)</span> is now in compression, and as a result with push on mass 1 with an upwards force, <span class="math inline">\(k_1 x_2\)</span>. With the above in mind, the Newton’s 2nd law for mass 1 takes the form, <span class="math display">\[
+\begin{align}
+    m_1\ddot{x} _1&amp;= \sum_i F_i\\
+    &amp;= F_{e_1}  -k_1x_1 + k_1x_2
+\end{align}
+\]</span> Rearranging to isolate the external force yields our EoM as, <span class="math display">\[
+F_{e_1} = m_1\ddot{x}_1 + k_1 (x_1-x_2)
+\]</span></p>
+<div id="fig-massSpringMassSpringMass2" class="quarto-float quarto-figure quarto-figure-center anchored" style="float: right; margin: 10px;">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-massSpringMassSpringMass2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="massSpringMassSpringMass2.png" class="img-fluid figure-img" width="350">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-massSpringMassSpringMass2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Forces imparted on mass 2.
+</figcaption>
+</figure>
+</div>
+<p>We can now repeat this process for mass 2 using <a href="#fig-massSpringMassSpringMass2" class="quarto-xref">Figure&nbsp;3</a>. We first displace mass 2 and observed that both <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> develop forces that push/pull mass 2 downwards. Each spring contirbutes a force, and so the total force is <span class="math inline">\(-k_1 x_2 - k_2 x_2\)</span>. Next we displace mass 1 upwards, which generates an upwards pulling force on mass 2, <span class="math inline">\(k_1x_1\)</span>. Now Newton’s 2nd law for mass 2 is, <span class="math display">\[
+\begin{align}
+m_2\ddot{x} _2&amp;= \sum_i F_i\\
+&amp;= F_{e_2}  -k_1x_2 - k_2 x_2 + k_1 x_1
+\end{align}
+\]</span> and its EoM is given by, <span class="math display">\[
+\begin{align}
+F_{e_1} &amp;= m_1\ddot{x}_1 + k_1 (x_2-x_1) + k_2 x_2\\
+&amp; = m_1\ddot{x}_1 + (k_1+k_2)x_2  -k_1x_1
+\end{align}
+\]</span></p>
+<p>Notice from the above that when a mass is displaced its connected springs impart a negative <em>restoring</em> force (i.e.&nbsp;to bring it back to equilibrium), whilst when a neighboring mass is displaced a positive force is developed. This asymmetry can be seen in the EoM, <span class="math display">\[
+    \begin{align}
+        F_{e_1} &amp;= m_1\ddot{x}_1 + k_1 (x_1{\color{orange}-x_2})\\
+        F_{e_2} &amp; = m_2\ddot{x}_2 + (k_1+k_2)x_2  {\color{orange}-k_1x_1}
+    \end{align}
+\]</span> where the <em>coupling terms are always negative</em>. In matrix form, the off-diagonal stiffness terms are always negative whilst the diagonal terms are always positive, <span class="math display">\[
+    \left(\begin{array}{c}
+        F_{e_1} \\ F_{e_2}
+        \end{array}\right) =    \left[\begin{array}{cc}
+        m_1 &amp; 0 \\  0 &amp; m_2
+    \end{array}\right]  \left(\begin{array}{c}
+\ddot{x}_1 \\ \ddot{x}_2
+\end{array}\right) +    \left[\begin{array}{cc}
+    k_1 &amp; -k_1 \\  -k_1 &amp; k_1+k_2
+\end{array}\right]\left(\begin{array}{c}
+{x}_1 \\ {x}_2
+\end{array}\right)
+\]</span> Now, with the above in mind we can readily construct stiffness matrices or arbitary mass-spring systems. All we need to do is remember that:</p>
+<ol type="1">
+<li><p>The <span class="math inline">\(n\)</span>th diagonal of <span class="math inline">\(\mathbf{K}\)</span> is simply the sum of all spring stiffness connected to mass <span class="math inline">\(n\)</span></p></li>
+<li><p>If mass <span class="math inline">\(m\)</span> is connected to mass <span class="math inline">\(n\)</span> via a spring, its <em>negative stiffness</em> goes into the <span class="math inline">\(mn\)</span> and <span class="math inline">\(nm\)</span> entries of <span class="math inline">\(\mathbf{K}\)</span>.</p></li>
+</ol>
+<p>The exact same notion can be applied to the damping terms and used to build <span class="math inline">\(\mathbf{C}\)</span>. As said before, for a discrete mass-sopring system the mass matrix is just diagonal with the mass of mass <span class="math inline">\(n\)</span> in the <span class="math inline">\(n\)</span>th diagonal of <span class="math inline">\(\mathbf{M}\)</span>. In case you need a little more convincing, shown in <a href="#fig-massSpringMassSpringMass3" class="quarto-xref">Figure&nbsp;4</a> are three different 3-DOF systems, the sitffness matrices for which are given by, <span id="eq-stiffstiffstiff"><span class="math display">\[
+\mathbf{K} = \left[\begin{array}{c c c}
+k_1+k_2 &amp; -k_2 &amp; 0  \\
+-k_2 &amp; k_2+k_3 &amp; -k_3 \\
+0&amp; -k_3 &amp; k_3+k_4  \\
+\end{array}\right], \quad
+\left[\begin{array}{c c c}
+    k_1+k_2+k_5 &amp; -k_2 &amp; -k_5 \\
+    -k_2 &amp; k_2+k_3 &amp; -k_3 \\
+    -k_5&amp; -k_3 &amp; k_3+k_4 +k_5 \\
+\end{array}\right], \quad
+\left[\begin{array}{c c c}
+    k_1+k_2+k_5 &amp; -k_2 &amp; -k_5 \\
+    -k_2 &amp; k_2 &amp; 0 \\
+    -k_5&amp; 0 &amp;  k_5 \\
+\end{array}\right]
+\tag{2}\]</span></span></p>
+<div id="fig-massSpringMassSpringMass3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-massSpringMassSpringMass3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="massSpringMassSpringMass3.png" class="img-fluid figure-img" width="500">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-massSpringMassSpringMass3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Some example 3-DOF systems with different spring connectivity’s. The stiffness matrix for each is given in <a href="#eq-stiffstiffstiff" class="quarto-xref">Equation&nbsp;2</a>, from left to right.
+</figcaption>
+</figure>
+</div>
+<p>Now that we have a quick and progamatic way of building our system matrices, we want to start thinking about how we can go about solving <a href="#eq-EoM1" class="quarto-xref">Equation&nbsp;1</a>. However, there are some important concepts we might like to introduce first, particularly that of potential and kinetic energy (quadratic forms) and the notion of <em>positive definiteness</em>. These concepts are not really essential for what follows, so I have chucked it into the drop down box below in case you are interested.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Potential energy, kinetic energy and positive definiteness">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Potential energy, kinetic energy and positive definiteness
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The potential energy of an ideal spring given its final displacement <span class="math inline">\(x_f\)</span> takes the form, <span class="math display">\[
+\begin{align}
+    V = \int_0^{-x_f} F_s dx &amp;=  \int_0^{x_f} kx dx \\ &amp;=\frac{1}{2} kx^2_f = \frac{1}{2} F_s(x_f) x_f
+\end{align}
+\]</span> where we have used <span class="math inline">\(F_s = -k x\)</span>. We see that the potential energy <span class="math inline">\(V\)</span> is quadratic in <span class="math inline">\(x_f\)</span>, with <span class="math inline">\(k\)</span> playing role of constant. For multi-DoF system, the total potential energy can be written in a similar quadratic form.</p>
+<p>Noting that the potential energy depends only on displacement, for each mass we can write, <span class="math display">\[
+V_i = \frac{1}{2} F_i x_i
+\]</span> For system with <span class="math inline">\(N\)</span> masses the total potential energy is just sum of each mass’s potential energy, <span id="eq-potV"><span class="math display">\[
+V = \sum_i^N V_i =  \frac{1}{2} \sum_i^N F_i x_i
+\tag{3}\]</span></span> Now, in the absence of any external forces, the total force acting on <span class="math inline">\(m_i\)</span> is due to the displacement of all directly connected masses and can be written generally as, <span id="eq-potFi"><span class="math display">\[
+F_i = \sum_j^N k_{ij} x_j
+\tag{4}\]</span></span> Combining <a href="#eq-potFi" class="quarto-xref">Equation&nbsp;4</a> and <a href="#eq-potV" class="quarto-xref">Equation&nbsp;3</a> above we have for the total potential energy of the system, <span class="math display">\[
+V =  \frac{1}{2} \sum_i^N \left(  \sum_j^N k_{ij} x_j \right) x_i =  \frac{1}{2} \sum_i^N   \sum_j^N k_{ij} x_j  x_i
+\]</span> where <span class="math inline">\(k_{ij}\)</span> are simply the elements of the stiffness matrix <span class="math inline">\(\mathbf{K}\)</span>. We can write this in a more convenient matrix form, <span id="eq-potQuad"><span class="math display">\[
+V = \frac{1}{2} \mathbf{x}^{\rm T} \mathbf{K} \mathbf{x}
+\tag{5}\]</span></span> where it is noted that <span class="math inline">\(V\)</span> remains a scalar term and that the form of <a href="#eq-potQuad" class="quarto-xref">Equation&nbsp;5</a> is known as a <em>quadratic form</em>; the matrix equivalent of a quadratic equation.</p>
+<div id="fig-posDef" class="quarto-float quarto-figure quarto-figure-center anchored" style="float: right; margin: 10px;">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-posDef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="posDef.png" class="img-fluid figure-img" width="250">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-posDef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: An unconstrained system can exhibit rigid body motion.
+</figcaption>
+</figure>
+</div>
+<p>Moving on to the kinetic energy now. The kinetic energy of a mass depends on its mass and velocity, <span class="math display">\[
+T_i =  \frac{1}{2} m_i\dot{x}_i^2
+\]</span> Like the potential energy, the total kinetic energy (also a scalar quantity) is simply the sum of all the individual mass energies, <span class="math display">\[
+T = \frac{1}{2} \sum_i^N m_i\dot{x}_i^2
+\]</span> which can also be written in quadratic form, <span class="math display">\[
+T = \frac{1}{2} \mathbf{\dot{x}}^{\rm T} \mathbf{M}\mathbf{\dot{x}}
+\]</span></p>
+<p>On physical grounds, the kinetic energy <span class="math inline">\(T\)</span> should always be positive. Hence, for any velocity vector <span class="math inline">\(\mathbf{\dot{x}}\)</span>, we should have that <span class="math inline">\(\mathbf{\dot{x}}^{\rm T} \mathbf{M}\mathbf{\dot{x}}&gt;0\)</span>. A matrix that satisfies this inequality is said to be <em>positive-definite</em>.</p>
+<p>Similarly, <span class="math inline">\(V\)</span> should always be positive <em>or zero</em> for a given displacement <span class="math inline">\(\mathbf{x}\)</span>. That is, for any displacement vector <span class="math inline">\(\mathbf{x}\)</span>, we should have that <span class="math inline">\(\mathbf{x}^{\rm T} \mathbf{K} \mathbf{x}\geq 0\)</span>. A matrix that satisfies this inequality is said to be <em>positive-semi-definite</em>. A positive value indicates that a deformation of the system which incurs some potential energy. A zero value suggests that there is some set of displacements <span class="math inline">\(\mathbf{x}\)</span> that does not cause any deformation of the system, hence zero potential energy. This occurs when the system is not rigidly constrained and is able to move <em>entirely as a single rigid body</em>. An example of this is illustrated in <a href="#fig-posDef" class="quarto-xref">Figure&nbsp;5</a>.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="decoupling-equations-of-motion" class="level1">
+<h1>Decoupling equations of motion</h1>
+<p>In general, the coupling within an EoM depends on the coordinates used to describe the problem. We have already seen that if we use Cartesian/positional coordinates (i.e.&nbsp;the displacement <span class="math inline">\(\mathbf{x}\)</span>), our equations are elastically and viscously coupled through the off-diagonal terms in <span class="math inline">\(\mathbf{K}\)</span> and <span class="math inline">\(\mathbf{C}\)</span>. We are interested in choosing some alternative set of coordinates that <em>uncouple our EoM</em>, i.e.&nbsp;they make <span class="math inline">\(\mathbf{K}\)</span> and <span class="math inline">\(\mathbf{C}\)</span> both diagonal.</p>
+<p>Lets begin by considering the undamped (<span class="math inline">\(\mathbf{C}=\mathbf{0}\)</span>) EoM, <span class="math display">\[
+\mathbf{M}\ddot{\mathbf{x}}(t) + \mathbf{K}\mathbf{x}(t) = \mathbf{F}(t)
+\]</span> In general, an arbitrary change of coordinates can be represented by linear transformation of the form, <span id="eq-coordTrans"><span class="math display">\[
+\mathbf{x}(t) = \mathbf{U}\mathbf{q}(t) \quad \quad x_i = \sum_j^N U_{ij} q_j
+\tag{6}\]</span></span> where <span class="math inline">\(\mathbf{U}\)</span> is a constant matrix called a <em>transformation matrix</em>, and <span class="math inline">\(\mathbf{q}\)</span> are the new set of transformed coordinates. <a href="#eq-coordTrans" class="quarto-xref">Equation&nbsp;6</a> states that the physical displacements can be expressed as a linear combination of transformed coordinates, each weighted by an appropriate element of <span class="math inline">\(\mathbf{U}\)</span>. With <span class="math inline">\(\mathbf{U}\)</span> being a constant matrix, we also have for the velocity and acceleration, <span class="math display">\[
+\dot{\mathbf{x}}(t) = \mathbf{U}\dot{\mathbf{q}}(t)  \quad \quad    \ddot{\mathbf{x}}(t) = \mathbf{U}\ddot{\mathbf{q}}(t)
+\]</span></p>
+<p>Let us now substitute our coordinate transformation (<a href="#eq-coordTrans" class="quarto-xref">Equation&nbsp;6</a>) into the EoM, <span id="eq-EoMCoordTran1"><span class="math display">\[
+\mathbf{M}\ddot{\mathbf{x}}(t) + \mathbf{K}\mathbf{x}(t) = \mathbf{F}(t) \quad \quad \rightarrow \quad \quad    \mathbf{M}\mathbf{U}\ddot{\mathbf{q}}(t)+ \mathbf{K}\mathbf{U}\mathbf{q}(t)= \mathbf{F}(t)
+\tag{7}\]</span></span> Next, we <em>pre-multiply</em> both sides of <a href="#eq-EoMCoordTran1" class="quarto-xref">Equation&nbsp;7</a> by <span class="math inline">\(\mathbf{U}^{\rm T}\)</span>, <span class="math display">\[
+\underbrace{\mathbf{U}^{\rm T}\mathbf{M}\mathbf{U}}_{\mathbf{\tilde{M}}} \ddot{\mathbf{q}}(t)+  \underbrace{\mathbf{U}^{\rm T}\mathbf{K}\mathbf{U}}_{\mathbf{\tilde{K}}}\mathbf{q}(t)=  \underbrace{\mathbf{U}^{\rm T}\mathbf{F}(t)}_{\mathbf{Q}(t)}
+\]</span>{eq-EoMCoordTran2} where <span class="math inline">\(\mathbf{\tilde{M}}\)</span> and <span class="math inline">\(\mathbf{\tilde{K}}\)</span> are termed the transformed mass and stiffness matrices and <span class="math inline">\(\mathbf{Q}(t)\)</span> the generalised forces. In terms of the transformed coordinates <span class="math inline">\(\mathbf{q}\)</span>, our EoM now takes the form, <span class="math display">\[
+\mathbf{\tilde{M}}\ddot{\mathbf{q}}(t) + \mathbf{\tilde{K}}\mathbf{q}(t) = \mathbf{Q}(t)
+\]</span> With decoupling our EoM in mind, we want to choose a transformation matrix <span class="math inline">\(\mathbf{U}\)</span> that makes both <span class="math inline">\(\mathbf{\tilde{M}}\)</span> and <span class="math inline">\(\mathbf{\tilde{K}}\)</span> diagonal, simultaneously. This would have the effect of decoupling our EoMs, giving us for each coordinate, <span class="math display">\[
+\tilde{M}_j \ddot{q}_j(t) + \tilde{K}_{j}q_j(t) = Q_j(t)
+\]</span> which is just the EoM of an undamped SDOF oscillator! We already know how to solve equations of this form.</p>
+<p><strong>Spoiler alert</strong> - we will see shortly that the transformation sought is just the matrix of modal vectors, <span class="math display">\[
+\mathbf{U} = \left[\begin{array}{c c c c}
+\mathbf{u}_1 &amp; \mathbf{u}_2 &amp; \cdots &amp; \mathbf{u}_N
+\end{array}\right]
+\]</span> The coordinates <span class="math inline">\(\mathbf{q}\)</span> are then known as the <em>natural</em> or <em>principal</em> coordinates. This method of analysis is widely referred to as <em>modal analysis</em>.</p>
+<section id="synchronous-motion" class="level2">
+<h2 class="anchored" data-anchor-id="synchronous-motion">Synchronous motion</h2>
+<p>We are claiming above that, in the absence of damping, the EoM can be decoupled by using the modal matrix <span class="math inline">\(\mathbf{U}\)</span> as a coordinate transformation. To prove this we must first determine the modal matrix. This is done by considering the force free problem, <span id="eq-EoM2"><span class="math display">\[
+\mathbf{M}\ddot{\mathbf{x}}(t) + \mathbf{K}\mathbf{x}(t) = \mathbf{0}
+\tag{8}\]</span></span> As for the TDoF case on the previous page, we are interested in <em>synchronous motion</em>. That is, solutions to <a href="#eq-EoM2" class="quarto-xref">Equation&nbsp;8</a> where all displacements have the same time dependence. Mathematically, <span id="eq-synchMotion"><span class="math display">\[
+\mathbf{x}(t) = \mathbf{u} g(t) \quad \quad x_i(t) = u_i g(t)
+\tag{9}\]</span></span> where <span class="math inline">\(\mathbf{u}\)</span> describes the configuration of the system, and <span class="math inline">\(g(t)\)</span> its time dependence.</p>
+<p>Assuming synchronous motion, i.e.&nbsp;substituting <a href="#eq-synchMotion" class="quarto-xref">Equation&nbsp;9</a> into our EoM, we have that <span id="eq-synchEoM"><span class="math display">\[
+\mathbf{M} \mathbf{u} \ddot{g}(t)+ \mathbf{K} \mathbf{u} g(t)= \mathbf{0} \quad \quad\mbox{or} \quad \quad  \ddot{g}(t) \sum_j^N M_{ij} u_j + g(t) \sum_j^N K_{ij} u_j = 0 \quad \mbox{for}\quad  i=1,\, 2, \, \cdots, \, N
+\tag{10}\]</span></span> We can rewrite the element-wise form of <a href="#eq-synchEoM" class="quarto-xref">Equation&nbsp;10</a> for each of the <span class="math inline">\(N\)</span> DoFs as, <span id="eq-LHSRHSconst"><span class="math display">\[
+-\frac{\ddot{g}(t)}{g(t)} = \frac{\sum_j^N K_{ij} u_j }{ \sum_j^N M_{ij} u_j } \quad \quad \mbox{for } i=1,\, 2, \, \cdots, \, N
+\tag{11}\]</span></span> Note that the left hand side of <a href="#eq-LHSRHSconst" class="quarto-xref">Equation&nbsp;11</a> does not depend on cooridnste index <span class="math inline">\(i\)</span>, nor does the right hand side depend on time <span class="math inline">\(t\)</span>. From this we conclude that the two ratios can only be equal if they are themselves equal to a constant, defined here as <span class="math inline">\(\lambda_i\)</span>.</p>
+<p>From the above we can establish the follow equations, <span id="eq-timeEq"><span class="math display">\[    
+\ddot{g}(t) + \lambda_i g(t) = 0
+\tag{12}\]</span></span> <span class="math display">\[
+    \sum_j^N (K_{ij} - \lambda M_{ij})u_j = 0 \quad \quad \mbox{for } i=1,\, 2, \, \cdots, \, N
+\]</span> which are very similar to what we had previously for our TDOF system.</p>
+<p>Lets solve <a href="#eq-timeEq" class="quarto-xref">Equation&nbsp;12</a> first, which is trival as this point as we have already dealt with this form of SDOF equation several times. The solution has the form <span class="math inline">\(g(t) = Ae^{st}\)</span>, from which we obtain from <a href="#eq-timeEq" class="quarto-xref">Equation&nbsp;12</a>, <span class="math display">\[
+s^2+\lambda_i = 0\quad \quad s = \pm \sqrt{-\lambda_i}
+\]</span> If <span class="math inline">\(\lambda_i&lt;0\)</span> then <span class="math inline">\(s\)</span> is real and the solution is made up of one decaying and one growing exponential. This is not a synchronous oscillation. So, we must consider case <span class="math inline">\(\lambda_i&gt;0\)</span>, which is ensured by defining <span class="math inline">\(\lambda_i =\omega_i^2\)</span>. Our solution then takes the form, <span id="eq-solution_om1"><span class="math display">\[
+g(t) = A_1 e^{-i \omega_i t} + A_2 e^{i\omega_i t}
+\quad  \mbox{or} \quad  g(t) = C \cos(\omega_i t - \phi)
+\tag{13}\]</span></span> from which we conclude that <strong>if synchronous motion is possible, its time dependence will be harmonic at frequency <span class="math inline">\(\omega_i\)</span></strong></p>
+<p>With <a href="#eq-solution_om1" class="quarto-xref">Equation&nbsp;13</a> in hand, our synchronous EoM becomes, <span class="math display">\[
+\mathbf{M} \mathbf{u} \ddot{g}(t)+ \mathbf{K} \mathbf{u} g(t)= \mathbf{0} \quad \quad \rightarrow \quad \quad  -\omega_i^2 \mathbf{M} \mathbf{u}+ \mathbf{K} \mathbf{u}  = \mathbf{0}
+\]</span> Written in a slightly different form we have that, <span id="eq-eigProb1"><span class="math display">\[
+\left( \mathbf{K}-\omega_i^2 \mathbf{M}\right) \mathbf{u} = \mathbf{0}  \quad \quad \mbox{or} \quad \quad   \omega_i^2 \mathbf{M} \mathbf{u} =\mathbf{K} \mathbf{u}  
+\tag{14}\]</span></span> This equation does not permit a solution for <em>any</em> value of <span class="math inline">\(\omega_i\)</span>, only particular values are valid of which there are <span class="math inline">\(N\)</span>. Finding the values of <span class="math inline">\(\omega_i\)</span> is called <em>characteristic/eigenvalue problem</em>.</p>
+<p>To find the characteristic values of <a href="#eq-eigProb1" class="quarto-xref">Equation&nbsp;14</a> we note that <span class="math inline">\(\left(\mathbf{K}-\omega^2 \mathbf{M}\right) \mathbf{u} = \mathbf{0}\)</span> only has non-trivial solutions if the determinant of the bracketed matrix goes to 0 (we justified this requirement on the previous page!), <span id="eq-det0"><span class="math display">\[
+\mbox{det}\left( \mathbf{K}-\omega^2 \mathbf{M} \right) = 0
+\tag{15}\]</span></span> <a href="#eq-det0" class="quarto-xref">Equation&nbsp;15</a> is a polynomial of degree <span class="math inline">\(N\)</span> in <span class="math inline">\(\omega^2\)</span>, and has <span class="math inline">\(N\)</span> distinct roots. These roots are the characteristic/eigenvalues <span class="math inline">\(\omega_r \quad r = 1,\, 2, \, \cdots ,\, N\)</span>. Associated with each <span class="math inline">\(\omega_r\)</span> (previously denoted <span class="math inline">\(\omega_i\)</span>) is a unique vector <span class="math inline">\(\mathbf{u}_r\)</span> whose elements define the relative motion of the cooridnates - these are the so-called <em>modal vectors</em>, <span id="eq-eigProb2"><span class="math display">\[
+\left( \mathbf{K}-\omega_r^2 \mathbf{M}\right) \mathbf{u}_r = \mathbf{0}
+\tag{16}\]</span></span></p>
+</section>
+<section id="orthogonality-and-mass-normalisation-of-mode-shapes" class="level2">
+<h2 class="anchored" data-anchor-id="orthogonality-and-mass-normalisation-of-mode-shapes">Orthogonality and mass normalisation of mode shapes</h2>
+<p>The natural modes possess a very important and useful property - <em>orthogonality</em>. It is the orthogonality of the mode shapes that leads to the decoupling of our EoM.</p>
+<p>Conventional orthogonality means that the inner product of two vectors is equal to zero, <span class="math inline">\(\mathbf{x}^{\rm T} \mathbf{y} = 0\)</span>. The orthogonality of the natural modes is slightly different. We say that they are orthogonality with respect to the mass and stiffness matrices, meaning, <span id="eq-mdofOrthog"><span class="math display">\[
+        \mathbf{u}_s^{\rm T} \mathbf{M} \mathbf{u}_r = 0 \quad \mbox{and} \quad \mathbf{u}_s^{\rm T}\mathbf{K}\mathbf{u}_r  = \mathbf{0} \quad \quad \mbox{for} \quad r\neq s
+\tag{17}\]</span></span> We proved this fact on the previous page for a two DOF system. If you recall, it involved quite a lot of algebra… A more general `proof’, which requires some tricks from linear algebra, is detailed in the box below. I say ‘proof’ as we will use some linear algebra relations without explicitly proving them. If you are happy to accept <a href="#eq-mdofOrthog" class="quarto-xref">Equation&nbsp;17</a> on face value, feel free to skip the box enitrely!</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Proof of orthogonality (kind of…)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To prove that the mode shapes are indeed orthogonal with respect to the mass and stiffness matrices let us consider 2 distinct solutions (<span class="math inline">\(\omega_r^2, \, \mathbf{u}_r\)</span>) and (<span class="math inline">\(\omega_s^2, \, \mathbf{u}_s\)</span>), each of which satisfy <a href="#eq-eigProb2" class="quarto-xref">Equation&nbsp;16</a>, <span id="eq-orthog1"><span class="math display">\[
+\mathbf{K}\mathbf{u}_r = \omega_r^2\mathbf{M} \mathbf{u}_r
+\tag{18}\]</span></span> <span id="eq-orthog2"><span class="math display">\[
+\mathbf{K}\mathbf{u}_s = \omega_s^2\mathbf{M} \mathbf{u}_s  
+\tag{19}\]</span></span> We beging by pre-multiplying <a href="#eq-orthog1" class="quarto-xref">Equation&nbsp;18</a> by <span class="math inline">\(\mathbf{u}_s^{\rm T}\)</span> and <a href="#eq-orthog2" class="quarto-xref">Equation&nbsp;19</a> by <span class="math inline">\(\mathbf{u}_r^{\rm T}\)</span>, <span id="eq-orthog3"><span class="math display">\[
+\mathbf{u}_s^{\rm T}\mathbf{K}\mathbf{u}_r = \omega_r^2 \mathbf{u}_s^{\rm T}\mathbf{M} \mathbf{u}_r
+\tag{20}\]</span></span> <span id="eq-orthog4"><span class="math display">\[
+\mathbf{u}_r^{\rm T}\mathbf{K}\mathbf{u}_s = \omega_s^2\mathbf{u}_r^{\rm T}\mathbf{M} \mathbf{u}_s  
+\tag{21}\]</span></span> Next, we transpose <a href="#eq-orthog3" class="quarto-xref">Equation&nbsp;20</a> and subtract it from <a href="#eq-orthog4" class="quarto-xref">Equation&nbsp;21</a> (noting that the stiffness and mass matrices are <em>reciprocal</em>, i.e.&nbsp;<span class="math inline">\(\mathbf{K}=\mathbf{K}^{\rm T}\)</span> and <span class="math inline">\(\mathbf{M}=\mathbf{M}^{\rm T}\)</span>), <span class="math display">\[
+0 = (\omega_s^2 - \omega_r^2) \mathbf{u}_s^{\rm T} \mathbf{M} \mathbf{u}_r
+\]</span> Now, its time to call on a useful fact from linear algebra. For almost all <span class="math inline">\(N\times N\)</span> matrices, it is the case that its <span class="math inline">\(N\)</span> eigenvalues are <em>distinct</em>, i.e.&nbsp;<span class="math inline">\(\omega_s^2 \neq \omega_r^2\)</span>. We won’t prove this here, but you can have a google of it if you want to know more. Using this fact, we conclude that, <span class="math display">\[
+        \mathbf{u}_s^{\rm T} \mathbf{M} \mathbf{u}_r = 0 \quad \quad \mbox{for} \quad r\neq s
+\]</span> This is our <em>orthogonality with respect to the mass matrix</em> <span class="math inline">\(\mathbf{M}\)</span>!</p>
+<p>Now, recalling <a href="#eq-orthog3" class="quarto-xref">Equation&nbsp;20</a>, <span class="math display">\[
+        \mathbf{u}_s^{\rm T}\mathbf{K}\mathbf{u}_r = \omega_r^2 \overbrace{\mathbf{u}_s^{\rm T}\mathbf{M} \mathbf{u}_r}^{=0}
+\]</span> we see immediately that <span class="math inline">\(\mathbf{u}_r\)</span> and <span class="math inline">\(\mathbf{u}_s\)</span> are also <em>orthogonal with respect to the stiffness matrix</em> <span class="math inline">\(\mathbf{K}\)</span>, <span class="math display">\[
+\mathbf{u}_s^{\rm T}\mathbf{K}\mathbf{u}_r = 0 \quad \quad \mbox{for} \quad r\neq s
+\]</span></p>
+</div>
+</div>
+</div>
+<p>Taking instead the inner product of mode shape <span class="math inline">\(\mathbf{u}_r\)</span> with itself we have, <span class="math display">\[
+\mathbf{u}_r^{\rm T} \mathbf{M} \mathbf{u}_r \neq 0 \quad \quad \mathbf{u}_r^{\rm T} \mathbf{K} \mathbf{u}_r \neq 0 \quad \quad \mbox{for } r=1,\, 2, \, \cdots, \, N
+\]</span> where, on account of the modal vectors <span class="math inline">\(\mathbf{u}_r\)</span> only being unique up to a scalar multiple (meaning that if <span class="math inline">\(\mathbf{u}_r\)</span> is a solution, so is <span class="math inline">\(\alpha \mathbf{u}_r\)</span>), the right hand sides are not well defined. It is therefore convenient to make <span class="math inline">\(\mathbf{u}_r\)</span> unique by normalising it some way. As we will see, a particularly useful normalisation is so-called <em>mass normalisation</em> where the elements of <span class="math inline">\(\mathbf{u}_r\)</span> are normalised such that, <span class="math display">\[
+\mathbf{u}_r^{\rm T} M_r \mathbf{u}_r = 1 \quad \quad \mbox{for } r=1,\, 2, \, \cdots, \, N
+\]</span> where <span class="math inline">\(M_r\)</span> is the <span class="math inline">\(r\)</span>th diagonal element of the mass matrix <span class="math inline">\(\mathbf{M}\)</span>.</p>
+<p>The benefit of this particular normalisation is clear if we pre-multiply <a href="#eq-eigProb2" class="quarto-xref">Equation&nbsp;16</a> by <span class="math inline">\(\mathbf{u}_r^{\rm T}\)</span>, <span class="math display">\[
+            \mathbf{u}_r^{\rm T}    \left( \mathbf{K}-\omega_r^2 \mathbf{M}\right) \mathbf{u}_r =   \mathbf{u}_r^{\rm T}\mathbf{K}\mathbf{u}_r  - \omega_r^2 = {0}
+\]</span> as we see immediately that, <span class="math display">\[
+        \mathbf{u}_r^{\rm T}\mathbf{K}\mathbf{u}_r   =  \omega_r^2
+\]</span></p>
+<p>By combining all the mass normalised natural modes to build the modal matrix, <span class="math display">\[
+\mathbf{U}  = \left[\begin{array}{c c c c}
+    \mathbf{u}_1 &amp; \mathbf{u}_2 &amp; \cdots &amp; \mathbf{u}_N
+\end{array}\right]
+\]</span> we are able to <em>diagonalize</em> the mass and stiffness matrices <span class="math inline">\(\mathbf{M}\)</span> and <span class="math inline">\(\mathbf{K}\)</span>, <span class="math display">\[
+\mathbf{U}^{\rm T} \mathbf{M} \mathbf{U} = \mathbf{I} \quad \quad
+\mathbf{U}^{\rm T} \mathbf{K} \mathbf{U} = \mathbf{\Omega} \quad \quad \mbox{with} \quad \quad  \mathbf{\Omega} \left[\begin{array}{cccc}
+                \omega_1^2 &amp; &amp;&amp; \\
+                &amp; \omega_2^2 &amp;&amp; \\
+                &amp; &amp;\ddots &amp;\\
+                &amp;&amp;&amp; \omega_N^2
+            \end{array}\right]
+\]</span> By diagonalising the mass and stiffness matrices, we are effectively <em>decoupling</em> our EoM! Recalling <a href="#eq-coordTrans" class="quarto-xref">Equation&nbsp;6</a> and its surrounding discussion, this is exactly what we have been looking for; a transformation matrix <span class="math inline">\(\mathbf{U}\)</span> that simultaneously diagonalises the mass and stiffness matrices! As we have just seen, the modal shape matrix is exactly what we are looking for.</p>
+</section>
+<section id="wait-what-just-happened" class="level2">
+<h2 class="anchored" data-anchor-id="wait-what-just-happened">Wait, what just happened?</h2>
+<p>In summary, by using the mode shape matrix <span class="math inline">\(\mathbf{U}\)</span> as a coordinate transformation as per <a href="#eq-coordTrans" class="quarto-xref">Equation&nbsp;6</a>, <span id="eq-decouplingSum"><span class="math display">\[
+\mathbf{x}(t) = \mathbf{U}\mathbf{q}(t)
+\tag{22}\]</span></span> we are able to diagonalise our mass and stiffness matrices, <span class="math display">\[
+\underbrace{\mathbf{U}^{\rm T}\mathbf{M}\mathbf{U}}_{\mathbf{\tilde{M}}} \ddot{\mathbf{q}}(t)+  \underbrace{\mathbf{U}^{\rm T}\mathbf{K}\mathbf{U}}_{\mathbf{\tilde{K}}}\mathbf{q}(t)=  \underbrace{\mathbf{U}^{\rm T}\mathbf{F}(t)}_{\mathbf{Q}(t)}
+\]</span> which effectively uncouples our EoM giving us <span class="math inline">\(N\)</span> independent SDOF EoMs, <span class="math display">\[
+\mathbf{\tilde{M}}\ddot{\mathbf{q}}(t) + \mathbf{\tilde{K}}\mathbf{q}(t) = \mathbf{Q}(t)\quad \quad\mbox{or} \quad \quad
+\tilde{M}_j \ddot{q}_j(t) + \tilde{K}_{j}q_j(t) = Q_j(t)
+\]</span> which we can solve for the modal coordinates <span class="math inline">\(q_j(t)\)</span> using our SDOF techniques from earlier. After solving each modal EoM, we can reconstruct the solution in the physical coordinates by substituting our modal solution <span class="math inline">\(\mathbf{q}(t)\)</span> into our initial coordinate transformation in <a href="#eq-decouplingSum" class="quarto-xref">Equation&nbsp;22</a>. With this approach we have completely avoided having to solve any coupled EoMs!</p>
+<!-- 
+Since the natural modes are orthogonal to one another, they are form a linearly independent set. This means that *any* $N$ dimensional vector can be represented as a linear combination of these modal vectors. Physically, any motion of the system can be regarded as a superposition of the natural modes, each multiplied by a factor representing its contribution,
+$$
+\mathbf{x} = \mathbf{U} \mathbf{q} \quad \quad      \rightarrow \quad \quad     \mathbf{\tilde{M}}\mathbf{{q}} + \mathbf{\tilde{K}}\mathbf{q} = \mathbf{0}
+$$
+This representation also transforms $N$ coupled EoM into $N$ uncoupled EoM. Together, $\mathbf{U}$ and $\mathbf{\Omega}$ characterise the system's dynamics, much like the FRF $\mathbf{R}$. -->
+<!-- Before we discuss how to obtain $C_r$ and $\phi_r$ from initial conditions, we need to address an important property of $\mathbf{u}_r$ - *orthogonality!* -->
+</section>
+</section>
+<section id="unforced-solution" class="level1">
+<h1>Unforced solution</h1>
+<p>Okay, time to use our modal decoupling to actually solve some equations. We will start, as usual, with the simplified undamped and unforced case. Our EoM is then, <span class="math display">\[
+\mathbf{M}\ddot{\mathbf{x}}(t) + \mathbf{K}\mathbf{x}(t) = \mathbf{0}
+\]</span> Given the mass and stiffness matrices <span class="math inline">\(\mathbf{M}\)</span> and <span class="math inline">\(\mathbf{K}\)</span> we can set up the eigenvalue problem, <span id="eq-eigProb3"><span class="math display">\[
+\left( \mathbf{K}-\omega_r^2 \mathbf{M}\right) \mathbf{u}_r = \mathbf{0} \quad \quad \mbox{or} \quad \quad \left( \mathbf{K}-\mathbf{\Omega}^2 \mathbf{M}\right) \mathbf{U} = \mathbf{0}
+\tag{23}\]</span></span> Solving <a href="#eq-eigProb3" class="quarto-xref">Equation&nbsp;23</a> (i.e.&nbsp;finding natural frequencies <span class="math inline">\(\mathbf{\Omega}\)</span> and mode shape matrix <span class="math inline">\(\mathbf{U}\)</span>) by hand is generally not possible, but efficient algorithms are available in MATLAB/python/etc. Once we have <span class="math inline">\(\mathbf{\Omega}\)</span> and <span class="math inline">\(\mathbf{U}\)</span> (don’t forget mass normalisation step) we can transform to modal coordinates using <span class="math inline">\(\mathbf{x}(t) = \mathbf{U}\mathbf{q}(t)\)</span> and <span class="math inline">\(\mathbf{\ddot{x}}(t) = \mathbf{U}\mathbf{\ddot{q}}(t)\)</span>. <span class="math display">\[
+\mathbf{M} \mathbf{U}\mathbf{\ddot{q}}(t) + \mathbf{K} \mathbf{U}\mathbf{{q}}(t) = \mathbf{0}\quad  \rightarrow \quad  \underbrace{\mathbf{U}^{\rm T}   \mathbf{M} \mathbf{U}}_{\mathbf{I}}\mathbf{\ddot{q}}(t) +   \underbrace{\mathbf{U}^{\rm T}\mathbf{K} \mathbf{U}}_{\mathbf{\Omega}}\mathbf{{q}}(t) = \mathbf{0}
+\]</span> We now have <span class="math inline">\(N\)</span> uncoupled (SDOF) EoMs of the form, <span class="math display">\[
+\mathbf{\ddot{q}}(t) + \mathbf{\Omega}\mathbf{q}(t) = \mathbf{0} \quad \quad \mbox{or} \quad \quad \ddot{q}_r(t) + \omega^2_r q_r(t) = 0 \quad \quad \mbox{for}\quad r=1,\, 2, \, \cdots, \, N
+\]</span> which we know have a solution of the form <span class="math inline">\(q_r(t) = A_r \cos(\omega_r t - \phi_r)\)</span>. What’s left to do is find modal amplitude <span class="math inline">\(A_r\)</span> and phase <span class="math inline">\(\phi_r\)</span> terms given some set of initial conditions in the physical coordinates.</p>
+<p>To do so we recall that the total solution is obtained by recombining SDOF solutions, <span class="math display">\[
+\begin{align}
+\mathbf{x}(t) &amp;= \mathbf{U}\mathbf{q}(t)\\
+&amp; = \sum_r^N q_r(t) \mathbf{u}_r = \sum_r^N A_r \mathbf{u}_r\cos(\omega_r t -\phi_r)
+\end{align}
+\]</span> At <span class="math inline">\(t=0\)</span> the initial displacement and velocity (<span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0\)</span>) become, <span class="math display">\[
+        \mathbf{x}(0) = \sum_r^N A_r \mathbf{u}_r\cos(\phi_r) \quad \quad \dot{\mathbf{x}}(0) = \sum_r^N \omega_r A_r \mathbf{u}_r\sin(\phi_r)
+\]</span> Now lets pre-multiply by the mode shape and mass matrix <span class="math inline">\(\mathbf{u}^{\rm T}_s\mathbf{M}\)</span>, and use the orthogonality relation <span class="math inline">\(\mathbf{u}_s\mathbf{M}\mathbf{u}_r = 0\)</span> for <span class="math inline">\(r\neq s\)</span>, <span class="math display">\[
+        \begin{align}
+        \mathbf{u}^{\rm T}_s\mathbf{M}  \mathbf{x}_0 &amp;= \sum_r^N A_r \mathbf{u}^{\rm T}_s\mathbf{M}\mathbf{u}_r\cos(\phi_r) =  {\color{red} A_r \cos(\phi_s) } \\
+        \frac{1}{\omega_r}  \mathbf{u}^{\rm T}_s\mathbf{M}\mathbf{\dot{x}}_0 &amp;= \sum_r^N  A_r \mathbf{u}^{\rm T}_s\mathbf{M}\mathbf{u}_r\sin(\phi_r)=   {\color{green}A_r \sin(\phi_s)}
+        \end{align}
+\]</span> We see that orthogonality removes the summation and reduces <span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0\)</span> to just a single <span class="math inline">\(\cos\)</span> and <span class="math inline">\(\sin\)</span> term.</p>
+<p>Now lets return to our solution, <span class="math inline">\(\mathbf{x}(t)  = \sum_r^N A_r \mathbf{u}_r\cos(\omega_r t -\phi_r)\)</span> and rewrite it with a little trigonometric flair..! Specifically using, <span class="math inline">\(\cos(\alpha-\beta) = \cos\alpha\cos\beta+\sin\alpha\sin\beta\)</span>, <span class="math display">\[
+         \mathbf{x}(t)  =\sum_r^N A_r \mathbf{u}_r\cos(\omega_r t - \phi_r) = \sum_r^N A_r \mathbf{u}_r \left(\cos\omega_r t\, {\color{red}\cos\phi_r} +\sin\omega_r t\,{\color{green}\sin\phi_r}\right)
+\]</span> After substituting in our IC from above, our system response, due to <span class="math inline">\(\mathbf{x}_0\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0\)</span>, becomes, <span id="eq-ICsolution"><span class="math display">\[
+\begin{align}
+    \mathbf{x}(t)  &amp;= \sum_r^N A_r \mathbf{u}_r \left(\cos\omega_r t \,{\color{red}\cos\phi_r} + \sin\omega_r t \,{\color{green}\sin\phi_r}\right) \\
+    &amp;= \sum_r^N  \mathbf{u}_r \left({\color{red}    \mathbf{u}^{\rm T}_r\mathbf{M}  \mathbf{x}_0 }  \cos\omega_r t +{\color{green}  \frac{1}{\omega_r}  \mathbf{u}^{\rm T}_r\mathbf{M}\dot{\mathbf{x}}_0} \sin\omega_r t\right)
+\end{align}
+\tag{24}\]</span></span> <a href="#eq-ICsolution" class="quarto-xref">Equation&nbsp;24</a> indicates that for an arbitrary set of IC, the system will oscillate in a superposition of all mode shapes. The highlighted terms <span class="math inline">\({\color{red}\mathbf{u}^{\rm T}_r\mathbf{M}\mathbf{x}_0 }\)</span> and <span class="math inline">\({\color{green}\frac{1}{\omega_r}\mathbf{u}^{\rm T}_r\mathbf{M}\mathbf{\dot{x}}_0}\)</span> describe by how much mode <span class="math inline">\(r\)</span> is excited by the prescribed initial conditions.</p>
+<p>From inspection of <a href="#eq-ICsolution" class="quarto-xref">Equation&nbsp;24</a> we can see that if the IC are set to <span class="math inline">\(\mathbf{x}_0 = \mathbf{u}_s\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_0 = \mathbf{0}\)</span>, i.e.&nbsp;the system is initially displaced into a mode shape configuration and then released, the solution reduces to, <span class="math display">\[
+    \begin{align}
+\mathbf{x}(t)  = \mathbf{u}_r  \cos\omega_r t  
+\end{align}
+\]</span><br>
+i.e.&nbsp;the system will move only with that mode shape.</p>
+<!-- In view of the above, we can conclude the the free vibration problem admits special independent solutions in which system vibrates synchronously in any one of the natural modes. The solution $\mathbf{x}(t)$ from @eq-synchMotion thus takes form,
+$$
+    \begin{align}
+        \mathbf{x}_r(t) &= \mathbf{u}_r g_r(t)\\
+        &= \mathbf{u}_r C_r \cos(\omega_r t - \phi_r)
+    \end{align}
+$$
+where $C_r$ and $\phi_r$ are modal amplitude and phase constants, related to the initial conditions. Furthermore, because our system is linear, the general response is written as a sum of all individual modal solutions,
+$$
+    \begin{align}
+        \mathbf{x}_r(t)  = \sum_r^N  \mathbf{u}_r g_r(t) = \mathbf{U} \mathbf{g}(t) \quad \quad \mbox{with} \quad \mathbf{U} = \left[\begin{array}{cccc}
+            \mathbf{u}_1 & \mathbf{u}_2 & \cdots & \mathbf{u}_N
+        \end{array}\right]
+    \end{align}
+$$ -->
+<section id="what-about-damping" class="level2">
+<h2 class="anchored" data-anchor-id="what-about-damping">What about damping?</h2>
+</section>
+</section>
+<section id="forced-solution" class="level1">
+<h1>Forced solution</h1>
+<p>Having dealt with the unforced initial value problem above, lets now consider the forced response of a general multi-DoF system. As we have seen for the SDOF and TDOF systems, the forced response (assuming harmonic or periodic forcing) is most conveniently dealt with using the concept of a Frequency Response Function.</p>
+<p>The FRF of a system describes the relation between a particular input (in our case, force) and output (displacement). For a multi-DOF system, we require a <em>matrix</em> of FRF elements to fully describe the interaction between all inputs and outputs, <span class="math display">\[
+    \mathbf{X}_0 = \mathbf{R}(\omega) \mathbf{F}_0
+\]</span> where <span class="math inline">\(\mathbf{R}\)</span> is terms the receptance FRF. This FRF matrix is central to solving the forced response, and can be obtained in a number of ways. Below we will describe the two most common approaches; a direct calculation and a modal synthesis.</p>
+<p>Once the receptance is known, the complex amplitude can be computed for each harmonic term of one or more external periodic forces. The displacement signal for each mass can then be computed in a similar way as for a SDOF system, <span class="math display">\[
+    \mathbf{x}(t) = |\mathbf{X}_1| \cos(\omega_1 t - \angle{\mathbf{X}_1}) + |\mathbf{X}_2| \cos(2\omega_1 t - \angle{\mathbf{X}_2}) + \cdots = \sum_{n=1}|\mathbf{X}_n| \cos(n \omega_1 t - \angle{\mathbf{X}_n})
+\]</span> where <span class="math inline">\(\mathbf{X}_n = \mathbf{R}(n\omega) \mathbf{F}_n\)</span> is the vector of complex response amplitudes for each mass due to the <span class="math inline">\(n\)</span>th harmonic of the forcing <span class="math inline">\(\mathbf{f}(t) = \sum_{n=1} \mathbf{F}_n e^{-i n \omega_1 t}\)</span>.</p>
+<section id="direct-method" class="level2">
+<h2 class="anchored" data-anchor-id="direct-method">Direct method</h2>
+<p>Reintroducing our damped EoM, <span id="eq-forcedEoM"><span class="math display">\[
+    \mathbf{M}\ddot{\mathbf{x}}(t)+ \mathbf{C}\dot{\mathbf{x}}(t)  + \mathbf{K}\mathbf{x}(t) = \mathbf{F}(t)
+\tag{25}\]</span></span> and taking the external force to be harmonic <span class="math inline">\(\mathbf{F}(t) = \mathbf{F}_0 e^{i\omega t}\)</span>, we know that our response will also be harmonic with the same frequency, <span class="math inline">\(\mathbf{x}(t) = \mathbf{X}_0 e^{i\omega t}\)</span>.</p>
+<p>Substituting <span class="math inline">\(\mathbf{x}(t) = \mathbf{X}_0 e^{i\omega t}\)</span> into <a href="#eq-forcedEoM" class="quarto-xref">Equation&nbsp;25</a> and taking the necessary derivatives (<span class="math inline">\(\ddot{\mathbf{x}}(t)\)</span>, <span class="math inline">\(\dot{\mathbf{x}}(t)\)</span>) we get, <span class="math display">\[
+\underbrace{\left(-\omega^2 \mathbf{M}+i\omega \mathbf{C}+ \mathbf{K}\right)}_{\mbox{dynamic stiffness } \mathbf{D}(\omega)}\mathbf{X}_0 e^{i\omega t} =  \mathbf{F}_0 e^{i\omega t}
+\]</span> Dividing through by <span class="math inline">\(e^{i\omega t}\)</span> leaves us with, <span id="eq-forcedEoM2"><span class="math display">\[
+\mathbf{D}(\omega)\mathbf{X}_0 = \mathbf{F}_0
+\tag{26}\]</span></span> To solve for the response amplitude <span class="math inline">\(\mathbf{X}_0\)</span> we pre-multiply both sides of <a href="#eq-forcedEoM2" class="quarto-xref">Equation&nbsp;26</a> by the inverse of the dynamic stiffness matrix, <span id="eq-directFRF"><span class="math display">\[
+\mathbf{X}_0 = \mathbf{D}(\omega)^{-1} \mathbf{F}_0 = \mathbf{R}(\omega) \mathbf{F}_0 \quad \quad \mathbf{R}(\omega) = \mathbf{D}(\omega)^{-1}
+\tag{27}\]</span></span> The resulting FRF matrix <span class="math inline">\(\mathbf{R}\)</span> is termed the receptance. It is worth noting that taking the inverse of a matrix is <em>not the same</em> as taking the inverse of all of the matrix elements. It is a specific operation akin to rearranging a set of simultaneous equations. For all but the simplest <span class="math inline">\(2\times 2\)</span> matrices, the matrix inverse is not something you would ever consider doing by hand! Instead we use MATLAB or python, where it is as simple as calling the function <strong>inv( )</strong>.</p>
+<p>The dynamic stiffness FRF can be thought of as describing ‘<em>local dynamics</em>’. Consider the case whereby a single mass is displaced harmonically; the dynamic stiffness describes what the resultant forces are on all masses of the system. Note however that the only masses that experience a force directly are those connected by a spring/damper to the displaced mass; if two masses are not connected by a spring/damper the dynamic stiffness between them will be zero. We saw this earlier for the mass-spring systems in <a href="#fig-massSpringMassSpringMass3" class="quarto-xref">Figure&nbsp;4</a> whose stiffness matrices are given in <a href="#eq-stiffstiffstiff" class="quarto-xref">Equation&nbsp;2</a>. Since in a typical mass-spring system each mass is only connected to a couple neighboring masses, the majority of the dynamic stiffness matrix values will be zero, it is a sparse matrix.</p>
+<p>On the other hand, the receptance can be thought of as describing ‘<em>global dynamics</em>’. Consider the case whereby a single masses is excited by a harmonic force; the receptance describes the resultant displacement of all masses in the system. Generally, all masses will exhibit some motion due to the applied force, wherever it is applied, and so all receptance matrix values will be non-zero, it is a dense matrix.</p>
+<p><a href="#eq-directFRF" class="quarto-xref">Equation&nbsp;27</a> looks pretty straightforward right? Why would we want to solve the forced response problem in any other way? Well, the main issue is that for large systems, the computation of a matrix inverse can be quite expensive, and seeing as this has to be done at every frequency, this direct method can quite easily become too much. Fortunately, using our newly understood modal decoupling, an alternative approach is available!</p>
+</section>
+<section id="modal-synthesis" class="level2">
+<h2 class="anchored" data-anchor-id="modal-synthesis">Modal synthesis</h2>
+<p>Lets substitute our modal transformation <span class="math inline">\(\mathbf{x}(t) = \mathbf{U} \mathbf{q}(t)\)</span> into <a href="#eq-forcedEoM" class="quarto-xref">Equation&nbsp;25</a> and pre-multiply by <span class="math inline">\(\mathbf{U}^{\rm T}\)</span>, <span class="math display">\[
+\mathbf{\tilde{M}}\ddot{\mathbf{q}}(t)+ \mathbf{\tilde{C}}\dot{\mathbf{q}}(t)  + \mathbf{\tilde{K}}\mathbf{q}(t) = \mathbf{Q}(t)
+\]</span> By using the mass normalised modes this becomes, <span class="math display">\[
+\mathbf{I}\ddot{\mathbf{q}}(t)+ \mathbf{\tilde{C}}\dot{\mathbf{q}}(t)  + \mathbf{\Omega}\mathbf{q}(t) = \mathbf{Q}(t)
+\]</span> where as expected the mass and stiffness matrices have been diagonalised. Now, a very important point… <strong>in general the natural modes do not diagonalise the damping matrix</strong>. That is, we cannot viscously uncouple our EoM! To proceed, we must assume a special type of damping termed <em>proportional</em> damping. A proportional damping matrix is one that is a linear combination of the mass and stiffness matrices. Since both the mass and stiffness matrices are diagonalised byt he natural modes, so to is the propotional damping matrix, <span class="math display">\[
+\mathbf{C} = \alpha \mathbf{M} + \beta \mathbf{K} \quad \quad \rightarrow \quad \quad   \mathbf{\tilde{C}} = \alpha \mathbf{I} + \beta \mathbf{\Omega}
+\]</span> where the values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are often obtained from experiment.</p>
+<p>If we use this proportional damping model, the modal damping matrix can be written as, <span class="math display">\[
+    \mathbf{\tilde{C}} = \left[\begin{array}{ccc}
+        2\zeta_1\omega_1 &amp; &amp;\\ &amp; \ddots &amp; \\
+        &amp; &amp; 2\zeta_N\omega_N
+    \end{array}\right] \quad \quad \mbox{with}\quad \quad \zeta_n = \frac{\alpha/\omega_n + \beta \omega_n}{2}
+\]</span> and our transformed EoM are now entirely diagonal.</p>
+<p>Substituting derivatives <span class="math inline">\(\ddot{\mathbf{q}}(t)\)</span> and <span class="math inline">\(\dot{\mathbf{q}}(t)\)</span> we have, <span class="math display">\[
+    \left(-\omega^2 \mathbf{I} + i\omega \mathbf{\tilde{C}}  + \mathbf{\Omega}\right)\mathbf{q}(t) = \mathbf{Q}(t)
+\]</span> Now comes the big reveal. To solve for <span class="math inline">\(\mathbf{q}(t)\)</span> we need to take the inverse of the left hand bracketed term. <strong>BUT</strong>, the inverse of diagonal matrix is the inverse of each diagonal entry! This is easy to do, and very quick! No need for a full matrix inverse calculation. <span class="math display">\[
+\mathbf{q}(t) = \left(-\omega^2 \mathbf{I} + i\omega \mathbf{\tilde{C}}  + \mathbf{\Omega}\right)^{-1}\mathbf{Q}(t)
+\]</span> Now that we have solved for our modal cooridnates, let substitue these back into our modal transformation equation, <span class="math display">\[
+\mathbf{x}(t) = \mathbf{U} \mathbf{q} = \mathbf{U} \left(-\omega^2 \mathbf{I} + i\omega \mathbf{\tilde{C}}  + \mathbf{\Omega}\right)^{-1}\mathbf{Q}(t)
+\]</span> Recalling that <span class="math inline">\(\mathbf{Q}(t) = \mathbf{U}^{\rm T}\mathbf{F}(t)\)</span>, we get the following, <span class="math display">\[
+\mathbf{x}(t) = \mathbf{U} \mathbf{q} = \mathbf{U} \left(-\omega^2 \mathbf{I} + i\omega \mathbf{\tilde{C}}  + \mathbf{\Omega}\right)^{-1}\mathbf{U}^{\rm T}\mathbf{F}(t)
+\]</span> from which we can identify the receptance FRF matrix as, <span id="eq-modalSummation"><span class="math display">\[
+\mathbf{R}(\omega) =  \mathbf{U} \left( i\omega \mathbf{\tilde{C}}  + \mathbf{\Omega}-\omega^2 \mathbf{I}\right)^{-1}\mathbf{U}^{\rm T}
+\tag{28}\]</span></span> Writing out <a href="#eq-modalSummation" class="quarto-xref">Equation&nbsp;28</a> in summation form, <span class="math display">\[
+\mathbf{R}(\omega) = \sum_r^N \frac{\mathbf{u}_r\mathbf{u}_r^{\rm T}}{i\omega 2\zeta_r\omega_r + (\omega_r^2 - \omega^2)}
+\]</span> we see that the receptance matrix can be expressed as a summation of modal contributions.</p>
+<p>Note that we can apply the exact same process if we consider instead <em>structural damping</em>, <span class="math display">\[
+\mathbf{M}\ddot{\mathbf{x}}(t) + (1+i\eta)\mathbf{K}\mathbf{x}(t) = \mathbf{F}(t)
+\]</span> since <span class="math inline">\(i\eta\mathbf{K}\)</span> will also be diagonalised by the modal matrix <span class="math inline">\(\mathbf{U}\)</span>. If you follow this through you will end up with, <span class="math display">\[
+\mathbf{R}(\omega) =  \mathbf{U} \left((1+i\eta)\mathbf{\Omega}-\omega^2 \mathbf{I} \right)^{-1}\mathbf{U}^{\rm T} = \sum_r^N \frac{\mathbf{u}_r\mathbf{u}_r^{\rm T}}{i\eta\omega_r^2+ (\omega_r^2 - \omega^2)}
+\]</span></p>
+<p>Lastly, breaking down the modal summation even further, we might consider the FRF between DoFs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, which is given by, <span class="math display">\[
+{R}_{ij}(\omega) = \sum_r^N \frac{{u}_{i,r}{u}_{j,r}}{i\eta\omega_r^2+ (\omega_r^2 - \omega^2)}
+\]</span> where the term <span class="math inline">\({u}_{j,r}\)</span> describes how more <span class="math inline">\(r\)</span> is excited by a force on DoF <span class="math inline">\(j\)</span>, and <span class="math inline">\({u}_{i,r}\)</span> how much mode <span class="math inline">\(r\)</span> contributes to the response at DoF <span class="math inline">\(i\)</span>.</p>
+<section id="resonance-and-anti-resonance-phenomena-in-modal-summation" class="level3">
+<h3 class="anchored" data-anchor-id="resonance-and-anti-resonance-phenomena-in-modal-summation">Resonance and anti-resonance phenomena in modal summation</h3>
+<p>Whilst the modal summation provides an efficient route to computing the FRF matrix of a large complex system, it also provides new insight into the FRF itself. In particular, by examining the modal summation equation, <span class="math display">\[
+{R}_{ij}(\omega) = \sum_r^N \frac{{u}_{i,r}{u}_{j,r}}{i\eta\omega_r^2+ (\omega_r^2 - \omega^2)}
+\]</span> we can clearly see where the key features (namely resonances, anti-resonances and minimums) of an FRF come from. To make this more concrete, lets walk through example using one of the 3 DOF systems from earlier. Our modal summation is then made up of three modal contributions, <span class="math display">\[
+{R}_{ij}(\omega) = \frac{{u}_{i,1}{u}_{j,1}}{{\color{gray}i\eta\omega_1^2}+ (\omega_1^2 - \omega^2)} +  \frac{{u}_{i,2}{u}_{j,2}}{{\color{gray}i\eta\omega_2^2}+ (\omega_2^2 - \omega^2)} +  \frac{{u}_{i,3}{u}_{j,3}}{{\color{gray}i\eta\omega_3^2} + (\omega_3^2 - \omega^2)}
+\]</span></p>
+<p>It will be important to keep track of the relative sign of each modal contribution; this will dictate whether we have an anti-resonance or just a minimum between two resonances. So with this in mind, note that for neighboring modes the denominators have opposite signs in their overlapping region, i.e.&nbsp;for <span class="math inline">\(\omega_i &lt; \omega &lt; \omega_{i+1}\)</span> we have that <span class="math inline">\((\omega_i^2 - \omega^2)&lt;0\)</span> and <span class="math inline">\((\omega_{i+1}^2 - \omega^2)&gt;0\)</span>.</p>
+<p>For this example I have computed some modal vectors using an arbitrary set of mass and stiffness values as, <span class="math display">\[
+\mathbf{U} = \left[\begin{array}{ccc}
+    \mathbf{u}_{1}   &amp; \mathbf{u}_{2} &amp; \mathbf{u}_{3}
+\end{array}\right]  = \left[\begin{array}{ccc}
+    {u}_{1,1}   &amp; {u}_{1,2} &amp; {u}_{1,3} \\
+   {u}_{2,1}   &amp; {u}_{2,2} &amp; {u}_{2,3}\\
+    {u}_{3,1}   &amp; {u}_{3,2} &amp; {u}_{3,3}
+\end{array}\right] = \left[\begin{array}{ccc}
+    0.3237   &amp; \phantom{-}0.4240 &amp; -0.8458 \\
+    0.4102  &amp;   \phantom{-}0.4365  &amp;  \phantom{-}0.3758\\
+    0.4315  &amp; -0.3826  &amp; -0.0266
+\end{array}\right]
+\]</span> where it is recalled that the columns of <span class="math inline">\(\mathbf{U}\)</span> correspond to different modes, whilst the rows correspond to different physical DoFs.</p>
+<p>Lets begin by considering the receptance <span class="math inline">\(R_{11}\)</span>, where the excitation and response are both on mass 1. In this case the numerator terms for each contribution come from the same row of <span class="math inline">\(\mathbf{U}\)</span>, <span class="math display">\[
+\mathbf{U} = \left[\begin{array}{ccc}
+    \color{red}0.3237   &amp;\color{red} \phantom{-}0.4240 &amp; \color{red} -0.8458 \\
+    0.4102  &amp;   \phantom{-}0.4365  &amp;  \phantom{-}0.3758\\
+    0.4315  &amp; -0.3826  &amp; -0.0266
+\end{array}\right]
+\]</span> and the receptance becomes, <span id="eq-modalContrib1"><span class="math display">\[
+{R}_{11}(\omega) = {\color{red}+} \frac{0.3237^2}{{\color{gray}i\eta\omega_1^2} + (\omega_1^2 - \omega^2)} {\color{red}+}  \frac{0.4240 ^2}{{\color{gray}i\eta\omega_2^2}+ (\omega_2^2 - \omega^2)} {\color{red}+}   \frac{ (-0.8458)^2}{{\color{gray}i\eta\omega_3^2} + (\omega_3^2 - \omega^2)}  
+\tag{29}\]</span></span> We see from <a href="#eq-modalContrib1" class="quarto-xref">Equation&nbsp;29</a> that as <span class="math inline">\(\omega\)</span> tends towards a resonant frequency <span class="math inline">\(\omega_i\)</span>, the denominator of the corresponding term tends towards zero, thus leading to a large contribution from that mode. Indeed at <span class="math inline">\(\omega=\omega_i\)</span>, the FRF is dominated by that single mode with its ampltidue being limited by the damping present.</p>
+<p>Now what happens in between the modes? This is a bit more interesting… First of all, note that for <span class="math inline">\(R_{11}\)</span> all the numerator terms are all strictly positive (as they are squared values). Next, recall that in the overlapping frequency range between two modes <span class="math inline">\(\omega_i &lt; \omega &lt; \omega_{i+1}\)</span> the denominators of neighboring modes have opposite sign. From these two statements we conclude that the contribution of neighboring modes must be out of phase and thus cancel with one another. It is this cancellation that leads to an <em>anti-resonance</em> in the FRF; a sharp notch the amplitude of which is limited by the amount of damping present.</p>
+<p>Since all the numerators are positive in <span class="math inline">\(R_{11}\)</span> we further conclude that an anti-resonance must occur between every pair of resonances, that that this is true for any receptance with <em>co-located</em> excitation and response, <span class="math inline">\(R_{nn}\)</span>. The FRFs in <a href="#fig-modalSum" class="quarto-xref">Figure&nbsp;6</a> illustrate exactly this.</p>
+<div id="fig-modalSum" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modalSum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row quarto-layout-valign-bottom">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="massSpringMassSpringMass3_2_y11.png" class="img-fluid figure-img" width="90"></p>
+<figcaption>Excitation and response DoFs</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="modalSum.png" class="img-fluid figure-img" width="500"></p>
+<figcaption>FRF as modal summation</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modalSum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Breakdown of FRF <span class="math inline">\(R_{11}\)</span> as a modal summation. Each colored curve represents the contribution of a single mode, which acts as a single DoF oscillator.
+</figcaption>
+</figure>
+</div>
+<p>Lets move on to consider the receptance <span class="math inline">\(R_{12}\)</span> with the excitation now applied to mass 2. <span class="math display">\[
+\mathbf{U} = \left[\begin{array}{ccc}
+\color{red}0.3237   &amp;\color{red} \phantom{-}0.4240 &amp; \color{red} -0.8458  \\
+\color{blue}0.4102  &amp; \color{blue}  \phantom{-}0.4365  &amp; \color{blue} \phantom{-}0.3758 \\
+0.4315  &amp; -0.3826  &amp; -0.0266
+\end{array}\right]
+\]</span> As before, we expect to see a resonance as <span class="math inline">\(\omega\rightarrow \omega_i\)</span> and a single mode dominates. What about in between our resonances? Well, notice that our numerators are no-longer strictly positive, <span class="math display">\[
+    {R}_{12}(\omega) = {\color{red}+}  \frac{0.3237\times 0.4102  }{i\eta\omega_1^2+ (\omega_1^2 - \omega^2)} {\color{red}+}  \frac{0.4240\times 0.4365}{i\eta\omega_2^2 + (\omega_2^2 - \omega^2)}  {\color{blue}-}  \frac{ 0.8458\times  0.3758\ }{i\eta\omega_3^2+ (\omega_3^2 - \omega^2)}  
+\]</span> The last modal contribution is accompanied by a <span class="math inline">\(-\)</span>ve sign. This has the effect of flipping the phase of that mode, leading to the contribution of modes 2 and 3 no longer cancelling. Rather, they interfere constructively and we get an increase in the amplitude. This effect is clearly visible between <span class="math inline">\(\omega_2\)</span> and <span class="math inline">\(\omega_3\)</span> in <a href="#fig-modalSum2" class="quarto-xref">Figure&nbsp;7</a>. In this case we no longer have an anti-resonance, just a <em>minimum</em>. In contrast, the positive numerators for modes 1 and 2 still provide an anti-resonance.</p>
+<div id="fig-modalSum2" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modalSum2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row quarto-layout-valign-bottom">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="massSpringMassSpringMass3_2_y12.png" class="img-fluid figure-img" width="90"></p>
+<figcaption>Excitation and response DoFs</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="modalSum2.png" class="img-fluid figure-img" width="500"></p>
+<figcaption>FRF as modal summation</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modalSum2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Breakdown of FRF <span class="math inline">\(R_{12}\)</span> as a modal summation. Each colored curve represents the contribution of a single mode, which acts as a single DoF oscillator.
+</figcaption>
+</figure>
+</div>
+<p>Finally, lets consider the receptance <span class="math inline">\(R_{13}\)</span> where the exictation is now applied to mass 3.</p>
+<p><span class="math display">\[
+\mathbf{U} = \left[\begin{array}{ccc}
+\color{red}0.3237   &amp;\color{red} \phantom{-}0.4240 &amp; \color{red} -0.8458 \\
+0.4102  &amp;   \phantom{-}0.4365  &amp;  \phantom{-}0.3758 \\
+\color{blue}    0.4315  &amp; \color{blue}-0.3826  &amp; \color{blue}-0.0266
+\end{array}\right]
+\]</span> Substituting in the corresponding mode shape values the receptance becomes, <span class="math display">\[
+{R}_{13}(\omega) = {\color{red}+}  \frac{0.3237\times  0.4315  }{{\color{gray}i\eta\omega_1^2}+ (\omega_1^2 - \omega^2)} {\color{blue}-}  \frac{0.4240\times 0.3826}{{\color{gray}i\eta\omega_2^2}+ (\omega_2^2 - \omega^2)}  {\color{red}+}   \frac{ 0.8458\times 0.0266 \ }{{\color{gray}i\eta\omega_3^2}+ (\omega_3^2 - \omega^2)}  
+\]</span> where it is noted that the 2nd modal contribution is now negative. Consequently, neither pairs of modes will interfere destructively, and between each resonance we will simply get a minimum.</p>
+<div id="fig-modalSum3" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modalSum3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row quarto-layout-valign-bottom">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="massSpringMassSpringMass3_2_y13.png" class="img-fluid figure-img" width="90"></p>
+<figcaption>Excitation and response DoFs</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="modalSum3.png" class="img-fluid figure-img" width="500"></p>
+<figcaption>FRF as modal summation</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modalSum3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Breakdown of FRF <span class="math inline">\(R_{13}\)</span> as a modal summation. Each colored curve represents the contribution of a single mode, which acts as a single DoF oscillator.
+</figcaption>
+</figure>
+</div>
+<p>In summary of the above, we have just seen that it is the relative phase, or sign, of the neighboring modal contributions that dictates whether an anti-resonance occurs. Constructive interference between two modes will lead to a simple minimum, whilst destructive interference will yield an anti-resonance.</p>
+</section>
+</section>
+</section>
+<section id="examples" class="level1">
+<h1>Examples</h1>
+<p>If you would like to see some examples of multi-DoF systems and their FRF have a look at the <a href="../../../tutorials/synthFRF/synthFRF_1.html">Synthesising FRF tutorial</a>. There I show some FRFs for mass-spring and finite beam systems with both proportional and non-proportional damping.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
