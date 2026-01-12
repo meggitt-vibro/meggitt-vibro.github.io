@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,6 +65,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../tutorials/synthFRF/synthFRF_1.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -68,10 +104,39 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -101,7 +166,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Book</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../tutorials/summary.html"> 
+    <a class="nav-link active" href="../../tutorials/summary.html" aria-current="page"> 
 <span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
@@ -114,13 +179,75 @@ ul.task-list li input[type="checkbox"] {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../tutorials/synthIRF/synthIRF.html">Synthesising Impulse Response Functions</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Summary of tutorials</strong></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/substructuring/substructuring_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Substructuring (mass-spring example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/blockedForce/blockedForce_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">In situ blocked force (mass-spring example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/synthFRF/synthFRF_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Synthesising Frequency Response Functions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/synthIRF/synthIRF.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Synthesising Impulse Response Functions</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-little-bit-of-theory" id="toc-a-little-bit-of-theory" class="nav-link active" data-scroll-target="#a-little-bit-of-theory">A little bit of theory</a></li>
+  <li><a href="#modal-synthesis" id="toc-modal-synthesis" class="nav-link" data-scroll-target="#modal-synthesis">Modal synthesis</a></li>
+  <li><a href="#numerical-integration" id="toc-numerical-integration" class="nav-link" data-scroll-target="#numerical-integration">Numerical integration</a>
+  <ul class="collapse">
+  <li><a href="#initial-conditions-for-irf-computation" id="toc-initial-conditions-for-irf-computation" class="nav-link" data-scroll-target="#initial-conditions-for-irf-computation">Initial conditions for IRF computation</a></li>
+  <li><a href="#newmark-beta-method" id="toc-newmark-beta-method" class="nav-link" data-scroll-target="#newmark-beta-method">Newmark-<span class="math inline">\(\beta\)</span> method</a></li>
+  <li><a href="#first-order-integration" id="toc-first-order-integration" class="nav-link" data-scroll-target="#first-order-integration">First order integration</a></li>
+  </ul></li>
+  <li><a href="#inverse-fourier-transform" id="toc-inverse-fourier-transform" class="nav-link" data-scroll-target="#inverse-fourier-transform">Inverse Fourier transform</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -144,9 +271,478 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>In this tutorial we will…</p>
+<p>In this tutorial we will introduce a few different methods that can be used to compute the impulse response function (IRF) of a numerical system when the mass, stiffness and damping matrices are known. Specifically, we will look at modal synthesis (for proportionally damped systems only), numerical integration, and inverse Fourier transform methods.</p>
+<section id="a-little-bit-of-theory" class="level2">
+<h2 class="anchored" data-anchor-id="a-little-bit-of-theory">A little bit of theory</h2>
+<p>So, what is an impulse response function (IRF) and why might we want it? As the name suggests, the IRF of a system is its response when excited by a (unit) impulse, i.e.&nbsp;an external force of very short duration. More specifically, the unit impulse response of a system is the response obtained by considering the external forcing <span class="math inline">\(F(t)\)</span> to be that of a <em>Dirac delta</em> function, defined mathematically as <span id="eq-Dirac"><span class="math display">\[
+\begin{align}
+    \delta(t-a) &amp;= 0 \quad \quad \mbox{for } t\neq a\\
+    \int_{-\infty}^\infty \delta(t-a){\rm d}t &amp;=1
+\end{align}
+\tag{1}\]</span></span> For all intents and purposes we can think of this <span class="math inline">\(\delta\)</span> as a very sharp and sudden <em>kick</em> which disappears immediately after impact. The response of a system (say displacement, <span class="math inline">\({x}(t)\)</span>) due to such excitation is labelled <span class="math inline">\({g}(t)\)</span> and termed the IRF.</p>
+<p>Now, why might we want the IRF? It can be shown (see our previous discussion of forced single DoF systems) that, for a linear and time invariant system, the response due to an arbitrary time varying force <span class="math inline">\(F(t)\)</span> can be expressed in the form of a convolution integral involving the IRF, <span id="eq-convResp"><span class="math display">\[
+x(t) = \int_0^t F(\tau)  g(t-\tau) d\tau
+\tag{2}\]</span></span> In vibration analysis, <a href="#eq-convResp" class="quarto-xref">Equation&nbsp;2</a> is also called Duhamel’s integral; it states that the response of a system at time <span class="math inline">\(t\)</span> is simply the super-position of all previously applied forces weighted appropriately by the IRF. Key to its application is knowing the IRF of the system.</p>
+<p>In this tutorial we will consider general multi-DoF system that are described by an equation of motion of the form, <span id="eq-EoM1"><span class="math display">\[
+    \mathbf{M}\ddot{\mathbf{x}}(t) + \mathbf{C}\dot{\mathbf{x}}(t) + \mathbf{K}\mathbf{x}(t) = \mathbf{f}(t).
+\tag{3}\]</span></span> where we will seek the solution <span class="math inline">\(\mathbf{x}(t)\rightarrow \mathbf{g}(t)\)</span> for the case whereby <span class="math inline">\(\mathbf{f}(t) \rightarrow \delta_j(0)\)</span>, where <span class="math inline">\(\delta_j(0)\)</span> is a delta function applied to the <span class="math inline">\(j\)</span>th DoF only.</p>
+<p>To illustrate the various methods for computing <span class="math inline">\(\mathbf{g}(t)\)</span>, we will use the same numerical mass-spring system as in our previous <a href="../../tutorials/synthFRF/synthFRF_1.html">Synthesising FRFs</a> tutorial, as illustrated in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div id="fig-massSpring_coupled" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-massSpring_coupled-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="massSpring_coupled.png" class="img-fluid figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-massSpring_coupled-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Numerical mass-spring assembly used for FRF synthesis example.
+</figcaption>
+</figure>
+</div>
+<p>We begin by re-defining the mass and stiffness matrices <span class="math inline">\(\mathbf{M}\)</span> and <span class="math inline">\(\mathbf{K}\)</span> for the system in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a> and computing the system FRFs for inspection purposes.</p>
+<div id="cell-fig-frf" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(linewidth<span class="op">=</span><span class="dv">250</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys <span class="im">as</span> sys</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">1000</span>) <span class="co"># Generate frequency array</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f <span class="co"># Convert to radians</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define component masses and build matrices</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>m1, m2, m3, m4, m5 <span class="op">=</span> <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="fl">0.5</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>m6, m7, m8, m9, m10, m11 <span class="op">=</span> <span class="fl">0.5</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>,<span class="fl">0.5</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> np.diag(np.array([m1,m2,m3<span class="op">+</span>m6,m4<span class="op">+</span>m7,m5<span class="op">+</span>m8,m9,m10,m11])) <span class="co"># Coupled AB</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Define component stiffnesses and build matrices (complex stiffness -&gt; structural damping)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>η <span class="op">=</span> <span class="fl">0.05</span> <span class="co"># Structural loss factor</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>k1, k2, k3, k4, k5 <span class="op">=</span> <span class="dv">1</span>, <span class="fl">1.5</span>, <span class="fl">0.7</span>, <span class="dv">1</span>, <span class="fl">0.5</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>k6, k7, k8, k9, k10, k11 <span class="op">=</span> <span class="fl">0.5</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="fl">0.2</span>, <span class="dv">1</span>, <span class="fl">0.5</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> np.array([[k1<span class="op">+</span>k2<span class="op">+</span>k5, <span class="op">-</span>k2,        <span class="dv">0</span>,     <span class="dv">0</span>,    <span class="op">-</span>k5,     <span class="dv">0</span>,     <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                [<span class="op">-</span>k2,       k2<span class="op">+</span>k3<span class="op">+</span>k4, <span class="op">-</span>k3,   <span class="op">-</span>k4,    <span class="dv">0</span>,      <span class="dv">0</span>,     <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,        <span class="op">-</span>k3,        k3<span class="op">+</span>k6, <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="op">-</span>k6,    <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,        <span class="op">-</span>k4,        <span class="dv">0</span>,     k4<span class="op">+</span>k7, <span class="dv">0</span>,      <span class="dv">0</span>,    <span class="op">-</span>k7,         <span class="dv">0</span>],</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                [<span class="op">-</span>k5,       <span class="dv">0</span>,         <span class="dv">0</span>,     <span class="dv">0</span>,     k5<span class="op">+</span>k8,  <span class="dv">0</span>,    <span class="op">-</span>k8,         <span class="dv">0</span>],</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,        <span class="op">-</span>k6,    <span class="dv">0</span>,     <span class="dv">0</span>,      k6<span class="op">+</span>k9, <span class="dv">0</span>,         <span class="op">-</span>k9],</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,         <span class="dv">0</span>,    <span class="op">-</span>k7,   <span class="op">-</span>k8,     <span class="dv">0</span>,     k7<span class="op">+</span>k8<span class="op">+</span>k10, <span class="op">-</span>k10],</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,         <span class="dv">0</span>,         <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="dv">0</span>,     <span class="op">-</span>k9,   <span class="op">-</span>k10,        k9<span class="op">+</span>k10<span class="op">+</span>k11]])<span class="op">*</span><span class="fl">1e5</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>C_prop <span class="op">=</span> <span class="fl">0.0001</span><span class="op">*</span>K <span class="op">+</span> <span class="dv">1</span><span class="op">*</span>M <span class="co"># Proportional damping matrix</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct solution:</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>Y_C_dir_prop <span class="op">=</span> np.linalg.inv(K <span class="op">+</span><span class="ot">1j</span><span class="op">*</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω, C_prop) <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M))</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>ax.semilogy(f, np.<span class="bu">abs</span>(Y_C_dir_prop[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>]),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.legend()</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-frf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-frf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthIRF_files/figure-html/fig-frf-output-1.png" width="599" height="429" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-frf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Frequency Response Function (FRF) of the numerical mass-spring system considered in this tutorial.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="modal-synthesis" class="level2">
+<h2 class="anchored" data-anchor-id="modal-synthesis">Modal synthesis</h2>
+<p>We saw in our treatment of <a href="../../introductions/POV/SDOF/SDOF.html">single DoF systems</a> that the IRF can be synthesied by applying an initial velocity that is inverse proportional to the mass, <span class="math inline">\(\dot{x}_0 = 1/M\)</span>. The IRF is then given by, <span class="math display">\[
+\begin{align}
+    g(t) &amp;= \frac{1}{\omega_d m} \sin(\omega_d t) e^{-\zeta\omega_n t}  \quad  &amp;t&gt;0 \\
+    &amp;=0 &amp;t&lt;0
+\end{align}
+\]</span> The same approach can be taken for a multi-DoF system by treating each mode as a single DoF system and super-imposing their individual IRFs (we can do this because our system is linear and we are assuming proportional damping!). From our treatment of general <a href="../../introductions/POV/MDOF/MDOF.html">multi-DoF systems</a> we have for the system response due an initial displacement <span class="math inline">\(\mathbf{x}_0\)</span> and velocity <span class="math inline">\(\dot{\mathbf{x}}_0\)</span>, <span id="eq-mdofResp"><span class="math display">\[
+\begin{align}
+    \mathbf{x}(t)  &amp;= \sum_r^N \mathbf{u}_r \left({\color{red}\mathbf{u}^{\rm T}_r\mathbf{M}    \mathbf{x}_0 }\, \cos\omega_{d,r} t + {\color{green}\frac{1}{\omega_{d,r} }\mathbf{u}^{\rm T}_r\mathbf{M} \left(\dot{\mathbf{x}}_0 + \zeta_r\omega_{r} \mathbf{x}_0 \right)}\, \sin\omega_{d,r} t \right)e^{-\zeta_r\omega_{r} t}
+\end{align}
+\tag{4}\]</span></span> Considering the IRF, for which <span class="math inline">\(\mathbf{x}_0 = \mathbf{0}\)</span> by definition, <a href="#eq-mdofResp" class="quarto-xref">Equation&nbsp;4</a> reduces to, <span id="eq-mdofResp2"><span class="math display">\[
+\begin{align}
+    \mathbf{x}(t)  &amp;= \sum_r^N \mathbf{u}_r \overbrace{\frac{1}{\omega_{d,r}}\mathbf{u}^{\rm T}_r\mathbf{M} \dot{\mathbf{x}}_0}^{A_n}\, \sin(\omega_{d,r} t) \, e^{-\zeta_r\omega_{r} t}
+\end{align}
+\tag{5}\]</span></span> where <span class="math inline">\(A_n\)</span> is the amplitude of each modal contribution, <span class="math inline">\(\omega_{d,r} = \omega_{n,r}\sqrt{1-\zeta_r^2}\)</span> and <span class="math inline">\(\omega_{n,r}\)</span> are the damped and undamped natural frequency of the <span class="math inline">\(r\)</span>th mode, and <span class="math inline">\(\zeta_{r}\)</span> is the corresponding damping factor. The undamped natural frequencies <span class="math inline">\(\omega_{n,r}\)</span> are obtained from the solution of the eigen-problem, <span class="math display">\[
+(\mathbf{K} -  \omega_{n,r}\mathbf{M}) \mathbf{u}_r = \mathbf{0}
+\]</span> Since we have assumed that the damping is proportional (i.e.&nbsp;<span class="math inline">\(\mathbf{C} = \alpha \mathbf{M} + \beta \mathbf{K}\)</span>), the damping factor for mode <span class="math inline">\(r\)</span> is given by, <span class="math display">\[
+\zeta_r = \frac{\mathbf{u}_r^{\rm T}\mathbf{C}\mathbf{u}_r}{2\omega_{n,r}}
+\]</span> Note that the mass term usually found in the denominator of <span class="math inline">\(\zeta\)</span> corresponds to modal mass, which owing to our mass normalisation is simply 1.</p>
+<p>Shown in <a href="#fig-modalsynth" class="quarto-xref">Figure&nbsp;3</a> is the IRF generated for the mass spring system in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a> using the modal synthesis in <a href="#eq-mdofResp2" class="quarto-xref">Equation&nbsp;5</a>.</p>
+<div id="cell-fig-modalsynth" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code: compute impulse response function using modal summation</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>λ, Φ_ <span class="op">=</span> sp.linalg.eig(K, M) <span class="co"># Get mode shapes Φ_ and natural frequencies λ=ω_n**2</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Φ <span class="op">=</span> Φ_<span class="op">@</span>np.diag(<span class="dv">1</span><span class="op">/</span>np.sqrt(np.diag((Φ_.T<span class="op">@</span>M<span class="op">@</span>Φ_)))) <span class="co"># Mass normalise mode shapes</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ΦCΦ <span class="op">=</span> Φ.T <span class="op">@</span> C_prop <span class="op">@</span> Φ <span class="co"># Check modal damping matrix is diagonal</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>numDoF <span class="op">=</span> <span class="dv">8</span> <span class="co"># Number of coupled DoFs</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> <span class="dv">10</span> <span class="co"># Total time </span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>nsamp <span class="op">=</span> <span class="dv">10000</span> <span class="co"># Number of samples</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> (T<span class="op">/</span>nsamp) <span class="co"># Sample rate</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, T, nsamp) <span class="co"># Time vector</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.zeros((numDoF, nsamp)) <span class="co"># Initialize displacement array for each mass</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> np.zeros((numDoF,<span class="dv">1</span>)) <span class="co"># Initial displacement</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>xd0 <span class="op">=</span> np.zeros((numDoF,<span class="dv">1</span>)) <span class="co"># Initial velocity</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>xd0[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>M[<span class="dv">0</span>,<span class="dv">0</span>] <span class="co"># Apply impulse to specific mass</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(numDoF): <span class="co"># Loop over modal contributions</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  ωr <span class="op">=</span> np.sqrt(λ[n]) <span class="co"># Undamped natural frequency from Eigen-solution</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  ζ <span class="op">=</span> ΦCΦ[n,n]<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>ωr) <span class="co"># Calculate modal damping factor</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  ωd <span class="op">=</span> ωr <span class="op">*</span> np.sqrt(<span class="dv">1</span><span class="op">-</span>ζ<span class="op">**</span><span class="dv">2</span>) <span class="co"># Damped natural frequency</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  A <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>ωd<span class="op">*</span>Φ[:,n].T<span class="op">@</span>M<span class="op">@</span>xd0 <span class="co"># Amplitude of nth mode</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> x <span class="op">+</span> np.outer(Φ[:,n],(A<span class="op">*</span>np.sin(ωd<span class="op">*</span>t))<span class="op">*</span>np.exp(<span class="op">-</span>ζ<span class="op">*</span>ωr<span class="op">*</span>t)) <span class="co"># Add modal contribution to total.</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>ax.plot(t, x[<span class="dv">5</span>,:],label<span class="op">=</span><span class="st">'Modal'</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (S)'</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Displacement (m)'</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="op">-</span><span class="fl">0.05</span>,<span class="dv">5</span>])</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-modalsynth" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modalsynth-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthIRF_files/figure-html/fig-modalsynth-output-1.png" width="630" height="430" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modalsynth-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Impulse response of mass-spring system generated by modal synthesis. Excitation at mass 1, response at mass 5.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="numerical-integration" class="level2">
+<h2 class="anchored" data-anchor-id="numerical-integration">Numerical integration</h2>
+<p>Whilst the modal synthesis approach is straightforward and easy to implement, it is quite limited. First of all, it requires proportional damping model to ensure the underlying EoM can be diagonalised. Second, although we are mostly interested in linear structures, it would be nice to have the ability to deal with non-linearities if they arise; this is generally not possible, or at least very difficult, with the modal formulation. As such, we would like a more general method for computing the system impulse response encompassing fewer assumptions. This is achieved by working directly with the EoM in the physical domain and using <em>numerical integration</em> techniques.</p>
+<p>Now, numerical integration is a massive topic with loads of different techniques available. In this tutorial we will limit ourself to two particular approaches. The first is a multi-step second order integration method called using the Newmark-<span class="math inline">\(\beta\)</span> method. The second is a first order integration method that we implement using established algorithms/functions. Both methods can be applied to systems with non-proportional damping and, with some minor modifications, to non-linear systems also.</p>
+<p>Broadly speaking, we can catagorise an integration scheme by the type of equation they are applied to. <em>Direct</em> methods are applied directly to the governing ODE, for example our second order EoM in <a href="#eq-EoM1" class="quarto-xref">Equation&nbsp;15</a>. The Newmark-<span class="math inline">\(\beta\)</span> method described below is an example of a direct method. There also exist a suite of <em>first-order</em> methods that are applicable to first-order ODEs, this includes the popular family of Runge-Kutta methods, among many others.</p>
+<p>A further categorisation of integration methods is whether they are <em>explicit</em> or <em>implicit</em>. In short, explicit methods solve for the response at a future time step using the solution from the current and previous time steps only. Implicit methods instead determine the response at the future time step by solving an equation that also depends on the response at the future time step. Explicit methods are generally more computationally efficient than implicit methods, though have stricter requirements regarding their stability.</p>
+<section id="initial-conditions-for-irf-computation" class="level3">
+<h3 class="anchored" data-anchor-id="initial-conditions-for-irf-computation">Initial conditions for IRF computation</h3>
+<p>The numerical integration schemes described below take as an input the arbitrary discretized forcing signal <span class="math inline">\(\mathbf{f}_n\)</span> and output the resulting system response. In order to obtain the system Impulse Response Function (IRF), it is necessary to force the system in such a way that approximates the ideal Dirac function described above. This can be done in a few different ways as detailed below.</p>
+<section id="application-of-an-initial-force-at-n0" class="level4">
+<h4 class="anchored" data-anchor-id="application-of-an-initial-force-at-n0">Application of an initial force at <span class="math inline">\(n=0\)</span></h4>
+<p>To approximate a Dirac excitation we can set the initial displacement and velocity to zero, <span class="math display">\[
+\mathbf{x}_0 = \mathbf{0}
+\]</span> <span class="math display">\[
+\dot{\mathbf{x}}_0 = \mathbf{0}
+\]</span> and consider a force of amplitude <span class="math inline">\(\frac{2}{\Delta t}\)</span> applied at timestep 0, <span class="math display">\[
+  \mathbf{f}_0 = \frac{2}{\Delta t} \mathbf{1}_j
+\]</span> The reason for the force amplitude of <span class="math inline">\(\frac{2}{\Delta t}\)</span> is to ensure that when integrated over one whole time step, the resulting impulse has a value of 1 (as per the definition of the Dirac, see <a href="#eq-Dirac" class="quarto-xref">Equation&nbsp;1</a>). By setting the initial force <span class="math inline">\(\mathbf{f}_0\)</span> to <span class="math inline">\(\frac{2}{\Delta t}\)</span> and all remaining forces to 0, we approximate the Dirac <span class="math inline">\(\delta(t=0)\)</span> as a <em>right angle triangle</em> with base <span class="math inline">\(\Delta t\)</span> and height <span class="math inline">\(\frac{2}{\Delta t}\)</span>; the total area under this triangle is 1.</p>
+<p>With the initial displacement and velocity set to zero, the EoM reduced to, <span class="math display">\[
+\mathbf{M}\ddot{\mathbf{x}}_0 = \frac{2}{\Delta t}  \mathbf{1}_j
+\]</span> which can be solved for the initial acceleration produced by the applied force <span class="math inline">\(\mathbf{f}_0\)</span>, <span id="eq-initF0"><span class="math display">\[
+\ddot{\mathbf{x}}_0 = \frac{2}{\Delta t} \mathbf{M}^{-1} \mathbf{1}_j
+\tag{6}\]</span></span> <a href="#eq-initF0" class="quarto-xref">Equation&nbsp;6</a> is the initial acceleration generated by the applied force (i.e.&nbsp;approximation of <span class="math inline">\(\delta(0)\)</span>), and can be used as an initial condition (instead of using <span class="math inline">\(\mathbf{f}_0\)</span> directly) to compute the system IRF.</p>
+</section>
+<section id="application-of-initial-force-at-n1" class="level4">
+<h4 class="anchored" data-anchor-id="application-of-initial-force-at-n1">Application of initial force at <span class="math inline">\(n=1\)</span></h4>
+<p>A similar idea to the previous approach is to apply the an initial force, but instead at the second time step. In this case we set the initial displacement, velocity, <em>and acceleration</em> to zero, <span class="math display">\[
+\mathbf{x}_0 = \mathbf{0}
+\]</span> <span class="math display">\[
+\dot{\mathbf{x}}_0 = \mathbf{0}
+\]</span> <span class="math display">\[
+\ddot{\mathbf{x}}_0 = \mathbf{0}
+\]</span> and define the force at <span class="math inline">\(n=1\)</span> as, <span class="math display">\[
+  \mathbf{f}_1 = \frac{1}{\Delta t}\mathbf{1}_j
+\]</span> Note that the factor of two is no longer in the force amplitude. This is because our force signal is now approximating the Dirac as an <em>equilateral triangle</em> with base length of <span class="math inline">\(2\Delta t\)</span>; the force is 0 at <span class="math inline">\(n=0\)</span>, rises linearly up to a value of <span class="math inline">\(\frac{1}{\Delta t}\)</span> at time <span class="math inline">\(\Delta t\)</span>, and then back down to 0 at a time <span class="math inline">\(2\Delta t\)</span>. Again, the total area under this triangle is 1.</p>
+<p>Also, unlike the previous case, with <span class="math inline">\(\mathbf{f}_1=\frac{1}{\Delta t}\mathbf{1}_j\)</span> our Dirac is effectively being applied on the second time step; hence the IRFs obtained must all be shifted back by 1 sample to align correctly.</p>
+<p>The main advantage of this particular approach is that we avoid having to compute the inverse of the mass matrix <span class="math inline">\(\mathbf{M}\)</span>, which for a large numerical model might have some computationally non-negligible expense.</p>
+</section>
+<section id="applitcation-of-an-step-velocity-at-n0" class="level4">
+<h4 class="anchored" data-anchor-id="applitcation-of-an-step-velocity-at-n0">Applitcation of an step velocity at <span class="math inline">\(n=0\)</span></h4>
+<p>The final method of approximating a Dirac is be considering a step velocity at <span class="math inline">\(n=0\)</span>. To do so we first integrate our EoM over the <em>infintesimal</em> interval <span class="math inline">\([-\delta t, \, +\delta t]\)</span>, <span class="math display">\[
+    \int_{-\delta t}^{+\delta t} \left[\mathbf{M}\ddot{\mathbf{x}}(t) + \mathbf{C}\dot{\mathbf{x}}(t) + \mathbf{K}\mathbf{x}(t) \right] {\rm d}t = \int_{-\delta t}^{+\delta t} \mathbf{f}(t) {\rm d}t
+\]</span> If we consider the force to be a Dirac <span class="math inline">\(\mathbf{f}(t) = \delta(0)\)</span> the right hand side integrates to 1 for the DoF being excited, i.e.&nbsp;<span class="math inline">\(\mathbf{1}_j\)</span>. Integrating each term on the left hand side, <span class="math display">\[
+     \mathbf{M}\int_{-\delta t}^{+\delta t}\ddot{\mathbf{x}}(t) {\rm d}t+ {\color{gray}\mathbf{C}\int_{-\delta t}^{+\delta t}\dot{\mathbf{x}}(t) {\rm d}t+ \mathbf{K}\int_{-\delta t}^{+\delta t}\mathbf{x}(t) {\rm d}t} = \mathbf{1}_j
+\]</span> whilst noting that the since our system is initially at rest (i.e.&nbsp;<span class="math inline">\(\mathbf{x}_0 = \mathbf{0}\)</span>), the displacement and absement (integral of displacement) terms resulting the from the damping and stiffness integrals (in gray) must be 0, we obtain, <span class="math display">\[
+     \mathbf{M}(\dot{\mathbf{x}}(+\delta t)-\dot{\mathbf{x}}(-\delta t))  = \int_{-\delta t}^{+\delta t} \mathbf{f}(t) {\rm d}t
+\]</span> Again, since our system is initially at rest, <span class="math inline">\(\dot{\mathbf{x}}(-\delta t)=0\)</span>. This leaves us with the initial velocity relation, <span class="math display">\[
+\mathbf{M}\dot{\mathbf{x}}_0 = \mathbf{1}_j \rightarrow \dot{\mathbf{x}}_0 = \mathbf{M}^{-1} \mathbf{1}_j
+\]</span> Note that the initial velocity <span class="math inline">\(\dot{\mathbf{x}}_0\)</span> is not enough to completely represent the Dirac forcing; we must also include the initial acceleration that results. Noting that <span class="math inline">\(\mathbf{x}_0 = \mathbf{0}\)</span> and that the Dirac forcing is accounted for by <span class="math inline">\(\dot{\mathbf{x}}_0\)</span>, our initial EoM reduces to, <span class="math display">\[
+    \mathbf{M}\ddot{\mathbf{x}}_0 + \mathbf{C}\dot{\mathbf{x}}_0 = \mathbf{0}
+\]</span> from which we obtain for the initial acceleration, <span class="math display">\[
+\ddot{\mathbf{x}}_0 = -\mathbf{M}^{-1}\mathbf{C}\dot{\mathbf{x}}_0
+\]</span> In summary, by using the initial conditions: <span class="math display">\[
+\mathbf{x}_0 = \mathbf{0}
+\]</span> <span class="math display">\[
+\dot{\mathbf{x}}_0 = \mathbf{M}^{-1} \mathbf{1}_j
+\]</span> <span class="math display">\[
+\ddot{\mathbf{x}}_0 = -\mathbf{M}^{-1}\mathbf{C}\dot{\mathbf{x}}_0
+\]</span> we can compute the IRF of a system through numerical integration.</p>
+</section>
+</section>
+<section id="newmark-beta-method" class="level3">
+<h3 class="anchored" data-anchor-id="newmark-beta-method">Newmark-<span class="math inline">\(\beta\)</span> method</h3>
+<p>From <a href="#eq-EoM1" class="quarto-xref">Equation&nbsp;15</a>, the dynamic equilibrium at timestep <span class="math inline">\(n+1\)</span> can be written as, <span id="eq-EoMDisc"><span class="math display">\[
+    \mathbf{M}\ddot{\mathbf{x}}_{n+1} + \mathbf{C}\dot{\mathbf{x}}_{n+1} + \mathbf{K}\mathbf{x}_{n+1} = \mathbf{f}_{n+1}.
+\tag{7}\]</span></span></p>
+<p>To solve <a href="#eq-EoMDisc" class="quarto-xref">Equation&nbsp;7</a>, the Newmark-<span class="math inline">\(\beta\)</span> method approximates the displacement and velocity at <span class="math inline">\(n+1\)</span> by, <span id="eq-xn1"><span class="math display">\[
+\mathbf{x}_{n+1} = \overbrace{\mathbf{x}_n + \Delta_t \dot{\mathbf{x}}_n + \Delta_t^2(0.5-\beta) \ddot{\mathbf{x}}_n}^{{\rm Predictor: \,} \mathbf{\tilde{x}}_{n+1} } + \overbrace{\Delta_t^2 \beta \ddot{\mathbf{x}}_{n+1}}^{{\rm Corrector}}
+\tag{8}\]</span></span> and <span id="eq-dxn1"><span class="math display">\[
+\dot{\mathbf{x}}_{n+1} =  \overbrace{\dot{\mathbf{x}}_{n} + \Delta_t (1-\gamma) \ddot{\mathbf{x}}_n}^{{\rm Predictor: \,} \dot{\mathbf{\tilde{x}}}_{n+1} }  + \overbrace{\Delta_t \gamma \ddot{\mathbf{x}}_{n+1}}^{{\rm Corrector}}
+\tag{9}\]</span></span> where the constants <span class="math inline">\(0\leq\gamma\leq 1\)</span> and <span class="math inline">\(0\leq\beta\leq 1\)</span> control the relative weighting of the <span class="math inline">\(n\)</span> and <span class="math inline">\(n+1\)</span> acceleration contributions to <span class="math inline">\(\mathbf{x}_{n+1}\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_{n+1}\)</span>, and also the stability properties of the scheme. A common choice that yields an implicit and unconditionally stable scheme is <span class="math inline">\(\gamma = 1/2\)</span> and <span class="math inline">\(\beta = 1/4\)</span> (termed average constant acceleration method and equivalent to the trapezoidal integration rule).</p>
+<!-- :::{.callout-note collapse=true title="Where do the Newmark equations come from?"}
+?
+::: -->
+<p>Note that at a given time step <span class="math inline">\(n\)</span>, the acceleration term <span class="math inline">\(\ddot{\mathbf{x}}_{n+1}\)</span> is not available and so <a href="#eq-xn1" class="quarto-xref">Equation&nbsp;8</a> and <a href="#eq-dxn1" class="quarto-xref">Equation&nbsp;9</a> cannot be computed directly. The idea behind the Newmark-<span class="math inline">\(\beta\)</span> method is to approximate <span class="math inline">\(\mathbf{x}_{n+1}\)</span> and <span class="math inline">\(\dot{\mathbf{x}}_{n+1}\)</span> using the terms that are available – these are termed the <em>predictors</em> <span class="math inline">\(\mathbf{\tilde{x}}_{n+1}\)</span> and <span class="math inline">\(\dot{\mathbf{\tilde{x}}}_{n+1}\)</span> – and later correct for the missing terms when an estimate for the acceleration <span class="math inline">\(\ddot{\mathbf{x}}_{n+1}\)</span> is available.</p>
+<p>Substituting <a href="#eq-xn1" class="quarto-xref">Equation&nbsp;8</a> and <a href="#eq-dxn1" class="quarto-xref">Equation&nbsp;9</a> into <a href="#eq-EoMDisc" class="quarto-xref">Equation&nbsp;7</a> we <span id="eq-EoMDisc2"><span class="math display">\[
+    \mathbf{M}\ddot{\mathbf{x}}_{n+1} + \mathbf{C}\left[\dot{\mathbf{\tilde{x}}}_{n+1}  + \Delta_t \gamma \ddot{\mathbf{x}}_{n+1} \right] + \mathbf{K}\left[\mathbf{\tilde{x}}_{n+1} + \Delta_t^2 \beta \ddot{\mathbf{x}}_{n+1} \right] = \mathbf{f}_{n+1}
+\tag{10}\]</span></span> and moving all <em>predictor</em> terms to the right hand side we have, <span id="eq-EoMDisc2"><span class="math display">\[
+    \mathbf{M}\ddot{\mathbf{x}}_{n+1} + \mathbf{C} \Delta_t \gamma \ddot{\mathbf{x}}_{n+1}  + \mathbf{K} \Delta_t^2 \beta \ddot{\mathbf{x}}_{n+1} = \mathbf{f}_{n+1} - \mathbf{C}\dot{\mathbf{\tilde{x}}}_{n+1} - \mathbf{K}\mathbf{\tilde{x}}_{n+1}
+\tag{11}\]</span></span> Factoring out the acceleration term on the left hand side, <span id="eq-EoMDisc2"><span class="math display">\[
+    \overbrace{\left(\mathbf{M} + \mathbf{C} \Delta_t \gamma   + \mathbf{K} \Delta_t^2 \beta \right)}^{\mathbf{A}} \ddot{\mathbf{x}}_{n+1} = \mathbf{f}_{n+1} - \mathbf{C}\dot{\mathbf{\tilde{x}}}_{n+1} - \mathbf{K}\mathbf{\tilde{x}}_{n+1}
+\tag{12}\]</span></span> we can compute the inverse of the constant terms and solve for <span class="math inline">\(\ddot{\mathbf{x}}_{n+1}\)</span>, <span id="eq-EoMDisc2"><span class="math display">\[
+\ddot{\mathbf{x}}_{n+1} = \mathbf{A}^{-1}\left(\mathbf{f}_{n+1} - \mathbf{C}\dot{\mathbf{\tilde{x}}}_{n+1} - \mathbf{K}\mathbf{\tilde{x}}_{n+1}\right)
+\tag{13}\]</span></span> After computing the acceleration <span class="math inline">\(\ddot{\mathbf{x}}_{n+1}\)</span>, we can correct our estimates of displacement and velocity, <span class="math display">\[
+\mathbf{x}_{n+1} = \mathbf{\tilde{x}}_{n+1} + \overbrace{\Delta_t^2 \beta \ddot{\mathbf{x}}_{n+1}}^{{\rm Corrector}}
+\]</span> and <span class="math display">\[
+\dot{\mathbf{x}}_{n+1} = \dot{\mathbf{\tilde{x}}}_{n+1}   + \overbrace{\Delta_t \gamma \ddot{\mathbf{x}}_{n+1}}^{{\rm Corrector}}
+\]</span> We now have estimates for <span class="math inline">\(\mathbf{x}_{n+1}\)</span>, <span class="math inline">\(\dot{\mathbf{x}}_{n+1}\)</span> and <span class="math inline">\(\ddot{\mathbf{x}}_{n+1}\)</span> and can proceed to the next time step.</p>
+<p>In the code snippet below implement the Newmark-<span class="math inline">\(\beta\)</span> method and apply it to our discrete mass-spring system to compute its IRF. To do this use the initial velocity condition <span class="math inline">\(\dot{\mathbf{x}}_0 = \mathbf{1}_j m_j\)</span> as described above. We see that the resulting IRF is in agreement with that of the modal synthesis before.</p>
+<div id="cell-fig-numintnewmark" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code: compute the IRF using Newmark method and compare against modal solution and scipy.integrate.ode</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Newmark functions:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> newmarkImp(M, C, K, L, dt, e, gamma<span class="op">=</span><span class="fl">0.5</span>, beta<span class="op">=</span><span class="fl">0.25</span>, <span class="bu">type</span><span class="op">=</span><span class="st">'initForce'</span>):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ndof <span class="op">=</span> M.shape[<span class="dv">0</span>]  <span class="co"># Number of DOFs</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    tSteps <span class="op">=</span> <span class="bu">int</span>(L<span class="op">/</span>dt)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'initForce'</span>:  <span class="co"># Initial force applied by acceleration IC</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        Pj <span class="op">=</span> np.zeros((ndof,))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        Pj[e] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        u <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        ud <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        udd <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        udd[:, <span class="dv">0</span>] <span class="op">=</span> np.linalg.inv(M)<span class="op">@</span>Pj<span class="op">*</span><span class="dv">2</span><span class="op">/</span>dt</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        f <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        f[e, <span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'stepVel'</span>:  <span class="co"># Initial force applied by equivalent initial velocity IC</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        Pj <span class="op">=</span> np.zeros((ndof,))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        Pj[e] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        u <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        ud <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        udd <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        ud[:, <span class="dv">0</span>] <span class="op">=</span> np.linalg.inv(M)<span class="op">@</span>Pj</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        udd[:, <span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span>np.linalg.inv(M)<span class="op">@</span>C<span class="op">@</span>ud[:, <span class="dv">0</span>]</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        f <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        f[e, <span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="bu">type</span> <span class="op">==</span> <span class="st">'secondForce'</span>:  <span class="co"># Dirac force at second time step</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        Pj <span class="op">=</span> np.zeros((ndof,))</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        Pj[e] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        u <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        ud <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        udd <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        f <span class="op">=</span> np.zeros((ndof, tSteps))</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        f[e, <span class="dv">1</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>dt</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> np.linspace(<span class="dv">0</span>, L<span class="op">-</span>dt, <span class="bu">int</span>(L<span class="op">/</span>dt))  <span class="co"># Time array</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.linalg.inv(M<span class="op">+</span>gamma<span class="op">*</span>dt<span class="op">*</span>C<span class="op">+</span>beta<span class="op">*</span>(dt<span class="op">**</span><span class="dv">2</span>)<span class="op">*</span>K)  <span class="co"># Acceleration update matrix</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> tn <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, t.shape[<span class="dv">0</span>]):  <span class="co"># Start loop at second time step</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Prediction step:</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Displacement prediction based on previous u, ud and udd</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        u[:, tn] <span class="op">=</span> u[:, tn<span class="op">-</span><span class="dv">1</span>]<span class="op">+</span>dt<span class="op">*</span>ud[:, tn<span class="op">-</span><span class="dv">1</span>]<span class="op">+</span>(<span class="fl">0.5</span><span class="op">-</span>beta)<span class="op">*</span>dt<span class="op">**</span><span class="dv">2</span><span class="op">*</span>udd[:, tn<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Velocity prediction based on previous ud and udd</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        ud[:, tn] <span class="op">=</span> ud[:, tn<span class="op">-</span><span class="dv">1</span>]<span class="op">+</span>(<span class="dv">1</span><span class="op">-</span>gamma)<span class="op">*</span>dt<span class="op">*</span>udd[:, tn<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Acceleration prediction based on current u and ud</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        udd[:, tn] <span class="op">=</span> A<span class="op">@</span>(f[:, tn]<span class="op">-</span>K<span class="op">@</span>u[:, tn]<span class="op">-</span>C<span class="op">@</span>ud[:, tn])</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Correction step:</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Displacement update using prediced udd</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>        u[:, tn] <span class="op">=</span> u[:, tn]<span class="op">+</span>dt<span class="op">**</span><span class="dv">2</span><span class="op">*</span>beta<span class="op">*</span>udd[:, tn]</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Velocity update using prediced udd</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>        ud[:, tn] <span class="op">=</span> ud[:, tn]<span class="op">+</span>dt<span class="op">*</span>gamma<span class="op">*</span>udd[:, tn]</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> u, ud, udd</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co"># %% Define system parameters and initial conditions</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>ndof <span class="op">=</span> <span class="dv">8</span>  <span class="co"># Number of DoFs</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>u_NM, ud_NM, udd_NM <span class="op">=</span> newmarkImp(M, C_prop, K, T, dt, <span class="dv">0</span>, gamma<span class="op">=</span><span class="fl">0.5</span>, beta<span class="op">=</span><span class="fl">0.25</span>,</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>                                 <span class="bu">type</span><span class="op">=</span><span class="st">'stepVel'</span>)</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>ax.plot(t, x[<span class="dv">5</span>,:],label<span class="op">=</span><span class="st">'Modal'</span>)</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>ax.plot(t, u_NM[<span class="dv">5</span>,:],<span class="st">'--'</span>,label<span class="op">=</span><span class="st">'Newmark'</span>)</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (S)'</span>)</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Displacement (m)'</span>)</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">0</span>,<span class="dv">5</span>])</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-numintnewmark" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-numintnewmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthIRF_files/figure-html/fig-numintnewmark-output-1.png" width="630" height="430" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-numintnewmark-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Impulse response of mass-spring system generated using second order Newmark integration. Excitation at mass 1, response at mass 5.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="first-order-integration" class="level3">
+<h3 class="anchored" data-anchor-id="first-order-integration">First order integration</h3>
+<p>There exists a wide range of numerical methods for solving ordinary differential equations (ODE). Many of these are designed to solve general <em>first-order Initial Value Problems (IVPs)</em>. These are problems that take the form, <span id="eq-firstOrderODE"><span class="math display">\[
+\frac{dy}{dt} = f(y,t) \quad \quad \mbox{with} \quad \quad y(t_0) = y_0
+\tag{14}\]</span></span> where <span class="math inline">\(y(t)\)</span> is the sought after solution, <span class="math inline">\(f(y,t)\)</span> is a function that describes its derivative with respect to <span class="math inline">\(t\)</span> and <span class="math inline">\(y_0\)</span> is the initial value of <span class="math inline">\(y\)</span> at <span class="math inline">\(t=0\)</span>. The fact that we have limited ourselves to first order ODE here (meaning that no higher order derivatives are present in <a href="#eq-firstOrderODE" class="quarto-xref">Equation&nbsp;14</a>) at first sounds somewhat limiting. However, as we will see shortly, higher-order ODEs can be converted into a larger system of first-order equations by introducing extra variables, and so <a href="#eq-firstOrderODE" class="quarto-xref">Equation&nbsp;14</a> is broadly applicable to most IVPs.</p>
+<p>The advantage of working with a first order equation, as in <a href="#eq-firstOrderODE" class="quarto-xref">Equation&nbsp;14</a>, is that we can avoid having to code our own time stepping integration algorithm and instead use one of the many preexisting functions/packages such as ODE45 in MATLAB, or scipy.integrate.ode in Python. It is beyond the scope of this tutorial to give a detailed description of the various methods available to solve <a href="#eq-firstOrderODE" class="quarto-xref">Equation&nbsp;14</a>; this information is available through the relevant MATLAB/scipy documentation. In the numerical example below we will use the standard scipy.integrate.ode function.</p>
+<p>Our first job is to convert our second order ODE into a first order ODE. Recall our EoM for a general MDOF system, <span id="eq-EoM1"><span class="math display">\[
+    \mathbf{M}\ddot{\mathbf{x}}(t) + \mathbf{C}\dot{\mathbf{x}}(t) + \mathbf{K}\mathbf{x}(t) = \mathbf{f}(t)
+\tag{15}\]</span></span> To convert <a href="#eq-EoM1" class="quarto-xref">Equation&nbsp;15</a> into a first order ODE we combine the displacement and velocity into a single solution vector, as with their respective derivatives, <span class="math display">\[
+\mathbf{y} = \left(\begin{array}{c} \mathbf{x} \\ \dot{\mathbf{x}} \end{array}\right) \quad \mbox{and} \quad \dot{\mathbf{y}} = \left(\begin{array}{c} \dot{\mathbf{x}} \\ \ddot{\mathbf{x}} \end{array}\right)
+\]</span> Inspecting <a href="#eq-EoM1" class="quarto-xref">Equation&nbsp;15</a>, we can rewrite our ODE in the form, <span id="eq-EoM2"><span class="math display">\[
+\dot{\mathbf{y}} = \mathbf{A} \mathbf{y} + \mathbf{B}\mathbf{f} \quad \quad \left(\begin{array}{c} \dot{\mathbf{x}} \\ \ddot{\mathbf{x}} \end{array}\right) = \left[\begin{array}{cc}\mathbf{0} &amp; \mathbf{I} \\ \mathbf{M}^{-1}\mathbf{K} &amp; \mathbf{M}^{-1}\mathbf{C} \end{array}\right]\left(\begin{array}{c} \mathbf{x} \\ \dot{\mathbf{x}} \end{array}\right) + \left[\begin{array}{c} \mathbf{0} \\ \mathbf{M}^{-1} \end{array}\right]\mathbf{f}
+\tag{16}\]</span></span> where it is noted that the top row of <a href="#eq-EoM2" class="quarto-xref">Equation&nbsp;16</a> simply states that <span class="math inline">\(\dot{\mathbf{x}} = \dot{\mathbf{x}}\)</span>. Notice that we have doubled the number of unknowns in our solution (<span class="math inline">\(\mathbf{x}\in\mathbb{R}^N\)</span> but <span class="math inline">\(\mathbf{y}\in\mathbb{R}^{2N}\)</span>), but reduced the problem to first order in <span class="math inline">\(\mathbf{y}\)</span>. <a href="#eq-EoM2" class="quarto-xref">Equation&nbsp;16</a> can now be dealt with using standard IVP solvers such as ODE45 in MATLAB, or scipy.integrate.ode in Python.</p>
+<p>In the code snippet below we use the Python scipy.integrate.ode package to solve our ODE. Note that to do this we must write a function that describes our first-order ODE, taking as inputs the solution vector <span class="math inline">\(\mathbf{y}\)</span> and the current time step <span class="math inline">\(t_i\)</span>, as well as the system properties (<span class="math inline">\(\mathbf{M}\)</span>, <span class="math inline">\(\mathbf{C}\)</span> and <span class="math inline">\(\mathbf{K}\)</span>). To obtain the impulse response function as the solution, we set <span class="math inline">\(\mathbf{f} = 0\)</span> and the initial velocity of the <span class="math inline">\(j\)</span>th mass as <span class="math inline">\(\dot{\mathbf{x}}_{0,j} = 1/M_j\)</span>. As expected we get a near identical IRF compared to the modal summation from before. Note however, that the numerical IRF is only an <em>approximation</em> in the sense that numerical integration is an approximate method for computing the solution to an IVP, requiring a balance between accuracy and computation effort through the specification of error tolerances, etc.</p>
+<div id="cell-fig-numintode" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code: compute the IRF using scipy.integrate.ode and compare against modal solution</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> odeint</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define ODE function</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mass_spring(y, ti, M, C, K, f, om<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    invM <span class="op">=</span> np.linalg.inv(M)  <span class="co"># Pre-compute inverse mass matrix</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.block([[np.zeros(M.shape), np.eye(M.shape[<span class="dv">0</span>])],</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                  [<span class="op">-</span>invM<span class="op">@</span>K, <span class="op">-</span>invM<span class="op">@</span>C]])  <span class="co"># State matrix</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> np.vstack((np.zeros((M.shape[<span class="dv">0</span>], <span class="dv">1</span>)),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                   invM.dot(f<span class="op">*</span>np.cos(<span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>om<span class="op">*</span>ti))))  <span class="co"># Input matrix = 0</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    dydt <span class="op">=</span> np.squeeze(A<span class="op">@</span>y) <span class="op">+</span> np.squeeze(b)  <span class="co"># Compute derivative</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dydt</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial conditions (displacement, velocity):</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>u0 <span class="op">=</span> np.zeros((numDoF,))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>ud0 <span class="op">=</span> np.zeros((numDoF,))</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>ud0[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>M[<span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> np.concatenate((u0, ud0))</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Applied force:</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.zeros((numDoF, <span class="dv">1</span>))</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>om <span class="op">=</span> np.zeros((numDoF, <span class="dv">1</span>))  <span class="co"># Excitation frequency</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># ODE integration using first-order representation</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> odeint(mass_spring, y0, t, args<span class="op">=</span>(M, C_prop, K, f, om), rtol<span class="op">=</span><span class="fl">1e-5</span>, atol<span class="op">=</span><span class="fl">1e-5</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>u_ODE <span class="op">=</span> sol[:, <span class="dv">0</span>:<span class="dv">8</span>].T <span class="co"># Displacement IRF</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>ud_ODE <span class="op">=</span> sol[:, <span class="dv">8</span>:].T <span class="co"># Velocity IRF</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>ax.plot(t, x[<span class="dv">5</span>,:],label<span class="op">=</span><span class="st">'Modal'</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>ax.plot(t, u_NM[<span class="dv">5</span>,:],<span class="st">'--'</span>,label<span class="op">=</span><span class="st">'Newmark'</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>ax.plot(t, u_ODE[<span class="dv">5</span>,:],<span class="st">'-.'</span>,label<span class="op">=</span><span class="st">'ODE'</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (S)'</span>)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Displacement (m)'</span>)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">0</span>,<span class="dv">5</span>])</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-numintode" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-numintode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthIRF_files/figure-html/fig-numintode-output-1.png" width="630" height="430" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-numintode-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Impulse response of mass-spring system generated using first order numerical integration. Excitation at mass 1, response at mass 5.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="inverse-fourier-transform" class="level2">
+<h2 class="anchored" data-anchor-id="inverse-fourier-transform">Inverse Fourier transform</h2>
+<p>Finally, we can compute the system impulse response directly from its Frequency Response Function (FRF) <span class="math inline">\(H(\omega)\)</span> by using the inverse Fourier transform. To do so we simply need to reconstruct the complex double sided spectrum from the single sided spectrum that is <span class="math inline">\(H(\omega)\)</span>, <span class="math display">\[
+S(\vec{\omega}) = \left[\begin{array}{ccccc|cccc}
+H(0) &amp; H(\omega_0) &amp; H(\omega_1) &amp; \cdots &amp; H(\omega_N) &amp; H^*(\omega_N) &amp; H^*(\omega_{N-1}) &amp; \cdots &amp; H^*(\omega_0)
+\end{array}\right]
+\]</span> With <span class="math inline">\(S(\vec{\omega})\)</span> built, IRF is then given by, <span class="math display">\[
+G(\,\vec{t}\,) = \frac{1}{\Delta t} \mbox{iFT}\left(S(\vec{\omega}) \right)
+\]</span> where <span class="math inline">\(\Delta t\)</span> is the sample rate of the IRF and <span class="math inline">\(\mbox{iFT}(\square)\)</span> is any standard implementation of the inverse Fourier Transform (for example using scipy.fft.ifft).</p>
+<p>Note that there are some important relations between the sample rate <span class="math inline">\(\Delta t\)</span>, impulse length <span class="math inline">\(T\)</span>, frequency resolution <span class="math inline">\(\Delta f\)</span> and maximum frequency <span class="math inline">\(f_N\)</span> of the FRF that must be satisfied to obtain a corretly scaled IRF in both time and amplitude:</p>
+<ul>
+<li>The sample rate <span class="math inline">\(\Delta t\)</span> is inversely proportional to the so-called Nyquist frequency, which for our purposes corresponds to the maximum frequency of the measured FRF <span class="math inline">\(f_{N} = 1/(2 \Delta t)\)</span>.</li>
+<li>The total number of samples <span class="math inline">\(N_{samp}\)</span> is related to the sample rate <span class="math inline">\(\Delta t\)</span> and the impulse length <span class="math inline">\(T\)</span> by <span class="math inline">\(N_{samp} = \Delta t T\)</span>.</li>
+<li>The frequency resolution <span class="math inline">\(\Delta f\)</span> is related to the maximum frequency and the number of samples <span class="math inline">\(N_{samp}\)</span> by <span class="math inline">\(\Delta f = f_{N}/N_{samp}\)</span></li>
+</ul>
+<p>In the code snippet below we synthesis the FRF of the assembly with an appropriate <span class="math inline">\(\Delta f\)</span> and <span class="math inline">\(f_N\)</span> and compute the IRF by the iFFT. We see that the IRF agrees with all previous methods.</p>
+<div id="cell-fig-invFRF" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code: compute the IRF using inverse Fourier transform of the Frequency Response Function</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> <span class="dv">10</span> <span class="co"># Total impulse time </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>nsamp <span class="op">=</span> <span class="dv">10000</span> <span class="co"># Number of samples</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>Δt <span class="op">=</span> T<span class="op">/</span>nsamp <span class="co"># Sample rate</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>f_nq <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>dt<span class="op">/</span><span class="dv">2</span> <span class="co"># Nyquist limit (max FRF frequency)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>Δf <span class="op">=</span> f_nq<span class="op">/</span>nsamp <span class="co"># Frerquency resolution</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">0</span>,f_nq,<span class="bu">int</span>(nsamp<span class="op">/</span><span class="dv">2</span>)) <span class="co"># Generate frequency array</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f <span class="co"># Convert to radians</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct solution:</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>Y_C_dir_prop <span class="op">=</span> np.linalg.inv(K <span class="op">+</span><span class="ot">1j</span><span class="op">*</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω, C_prop) <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>doubleSidedH <span class="op">=</span> np.hstack((Y_C_dir_prop[:,<span class="dv">0</span>,<span class="dv">5</span>], np.flip(Y_C_dir_prop[<span class="dv">1</span>:,<span class="dv">0</span>,<span class="dv">5</span>].conj()))) <span class="co"># Build double sided spectrum</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>u_FFT <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>Δt <span class="op">*</span> np.real(sp.fft.ifft(doubleSidedH))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>ax.plot(t, x[<span class="dv">5</span>,:],label<span class="op">=</span><span class="st">'Modal'</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>ax.plot(t, u_NM[<span class="dv">5</span>,:],<span class="st">'--'</span>,label<span class="op">=</span><span class="st">'Newmark'</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>ax.plot(t, u_ODE[<span class="dv">5</span>,:],<span class="st">'-.'</span>,label<span class="op">=</span><span class="st">'ODE'</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>ax.plot(t[<span class="dv">0</span>:<span class="op">-</span><span class="dv">1</span>], u_FFT[:],<span class="st">':'</span>,label<span class="op">=</span><span class="st">'iFFT'</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>ax.grid(<span class="va">True</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Time (S)'</span>)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Displacement (m)'</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">0</span>,<span class="dv">5</span>])</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-invfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-invfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="synthIRF_files/figure-html/fig-invfrf-output-1.png" width="630" height="430" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-invfrf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Impulse response of mass-spring system generated using inverse Fourier transform of the system FRF. Excitation at mass 1, response at mass 5.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this tutorial we have introduced the Impulse Response Function (IRF) as a time domain representation of a system’s dynamics. Knowing the IRF of a system allows us to predict its response to an <em>arbitary</em> time varying input force. It is a very useful tool in structural dynamics and forms the basis of Impulse-based Substructuring (IBS, a substructuring technique formulated in the time domain).</p>
+<p>We have covered 3 different approaches for computing IRFs, including modal synthesis (only applicable to proportional damped systems), numericl integration (including both Newmark multi-step and first order methods) and inverse Fourier transform of the system FRF. All methods were demonstrated on a simple discrete mass-spring system, and shown to return the same IRF.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -548,6 +1144,15 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../tutorials/synthFRF/synthFRF_1.html" class="pagination-link" aria-label="Synthesising Frequency Response Functions">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Synthesising Frequency Response Functions</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

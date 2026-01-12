@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-01-11">
+<meta name="keywords" content="Blocked force, Virtual point transformation, Interface dynamics, Inverse problem">
+
+<title>Improved force identification using a global–residual interface representation – Joshua Meggitt</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../research/frf_tmm_substruct/frf_tmm_substruct.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Joshua Meggitt</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../introductions/summary.html"> 
+<span class="menu-text">A quick introduction to:</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../book/book.html"> 
+<span class="menu-text">Book</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../tutorials/summary.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../research/summary.html" aria-current="page"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../research/GRVP/Main.html">Improved force identification using a global-residual interface representation</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../research/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Summary of research</strong></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../research/frf_tmm_substruct/frf_tmm_substruct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A mixed admittance/transfer matrix substructuring approach</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../research/GRVP/Main.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Improved force identification using a global-residual interface representation</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sec-intro" id="toc-sec-intro" class="nav-link active" data-scroll-target="#sec-intro"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#sec-Theory" id="toc-sec-Theory" class="nav-link" data-scroll-target="#sec-Theory"><span class="header-section-number">2</span> Theory</a>
+  <ul class="collapse">
+  <li><a href="#sec-indirectBlkF" id="toc-sec-indirectBlkF" class="nav-link" data-scroll-target="#sec-indirectBlkF"><span class="header-section-number">2.1</span> Blocked force identification</a>
+  <ul class="collapse">
+  <li><a href="#interface-representations" id="toc-interface-representations" class="nav-link" data-scroll-target="#interface-representations"><span class="header-section-number">2.1.1</span> Interface representations</a></li>
+  </ul></li>
+  <li><a href="#sec-virtualPoint" id="toc-sec-virtualPoint" class="nav-link" data-scroll-target="#sec-virtualPoint"><span class="header-section-number">2.2</span> Virtual Point Transformation</a>
+  <ul class="collapse">
+  <li><a href="#force-identification" id="toc-force-identification" class="nav-link" data-scroll-target="#force-identification"><span class="header-section-number">2.2.1</span> Force identification</a></li>
+  </ul></li>
+  <li><a href="#sec-gloablresidual" id="toc-sec-gloablresidual" class="nav-link" data-scroll-target="#sec-gloablresidual"><span class="header-section-number">2.3</span> Global–Residual Virtual Point</a></li>
+  </ul></li>
+  <li><a href="#sec-Example" id="toc-sec-Example" class="nav-link" data-scroll-target="#sec-Example"><span class="header-section-number">3</span> Experimental Study</a>
+  <ul class="collapse">
+  <li><a href="#resilient-connection" id="toc-resilient-connection" class="nav-link" data-scroll-target="#resilient-connection"><span class="header-section-number">3.1</span> Resilient connection</a></li>
+  <li><a href="#rigid-connection" id="toc-rigid-connection" class="nav-link" data-scroll-target="#rigid-connection"><span class="header-section-number">3.2</span> Rigid connection</a></li>
+  <li><a href="#sec-subset" id="toc-sec-subset" class="nav-link" data-scroll-target="#sec-subset"><span class="header-section-number">3.3</span> GR‑VP Subset Selection</a>
+  <ul class="collapse">
+  <li><a href="#resilient-connection-bss" id="toc-resilient-connection-bss" class="nav-link" data-scroll-target="#resilient-connection-bss"><span class="header-section-number">3.3.1</span> Resilient connection (BSS)</a></li>
+  <li><a href="#rigid-connection-bss" id="toc-rigid-connection-bss" class="nav-link" data-scroll-target="#rigid-connection-bss"><span class="header-section-number">3.3.2</span> Rigid connection (BSS)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#sec-conc" id="toc-sec-conc" class="nav-link" data-scroll-target="#sec-conc"><span class="header-section-number">4</span> Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Improved force identification using a global–residual interface representation</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Seyed M Hoseyni </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Acoustics Research Centre, University of Salford
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Ehsan Ahmadi </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Farrat IsoLevel LTD
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Oliver Farrell </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Farrat IsoLevel LTD
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Joshua WR Meggitt </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Acoustics Research Centre, University of Salford
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 11, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    <p>Choosing an appropriate interface representation is a crucial step when identifying forces by inverse methods. A preferred interface representation should be interpretable, but also well conditioned and able to recover forces with low error. Currently, the most widely adopted representation is that of the Virtual Point (VP), a local projection of measured degrees of freedom (DoFs) onto a set of co-located rigid-body modes. Though easily interpretable, poor conditioning/large errors are often obtained at low frequencies when the source dynamics are dominated by global rigid body motions; a result of over-parametrising the interface model. In this paper we explore a reformulation of the VP representation by separating the global and residual components of the interface dynamics; global rigid body dynamics are filtered out of the local interface motions and projected onto their own <em>global</em> VP, the remaining <em>residual</em> interface motions are projected onto a set of local VPs. The result is an interpretable interface representation that provides a clear separation of the local and global source dynamics. Its application is demonstrated on a heavy weight stamping press under rigid and resilient boundary conditions.</p>
+  </div>
+</div>
+
+<div>
+  <div class="keywords">
+    <div class="block-title">Keywords</div>
+    <p>Blocked force, Virtual point transformation, Interface dynamics, Inverse problem</p>
+  </div>
+</div>
+
+</header>
+
+
+<section id="sec-intro" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>To characterise a vibration source, such as an operating machine, it is standard practice to consider some set of <em>equivalent</em> forces at its connecting interface, as opposed to the complex generating forces that reside within the machine. This choice is largely one of convenience, as the internal forces are inaccessible and often not well defined in terms of their position or direction. It does however offer other advantages; it allows us to compare one source with another, to identify troublesome force contributions, and even build Vibro-Acoustic Virtual Prototypes of hypothetical assemblies <span class="citation" data-cites="meggitt2025experimental"><a href="#ref-meggitt2025experimental" role="doc-biblioref">[1]</a></span>.</p>
+<p>The most common means of characterising a vibration source is by inverse methods; the operational response of system (i.e.&nbsp;whilst the machine is active) is used to infer a set of equivalent forces that would yield the observed response when applied to the interface DoFs. This approach forms the basis of inverse force identification (IFI) <span class="citation" data-cites="inoue2001review"><a href="#ref-inoue2001review" role="doc-biblioref">[2]</a></span> as used in classical (contact force) <span class="citation" data-cites="plunt2005finding van2007transfer"><a href="#ref-plunt2005finding" role="doc-biblioref">[3]</a>, <a href="#ref-van2007transfer" role="doc-biblioref">[4]</a></span> and blocked force <span class="citation" data-cites="moorhouse2009situ"><a href="#ref-moorhouse2009situ" role="doc-biblioref">[5]</a></span> Transfer Path Analysis methods.</p>
+<p>The first, and often most crucial, step in the application of IFI is the selection of an interface model, i.e.&nbsp;choosing the location and form of the equivalent forces (translations, rotations, etc.) that are to act across the interface. Mathematically, the choice of interface model is rather arbitrary, providing that it is sufficiently detailed that it is able to control the response within the attached receiver (i.e.&nbsp;enough DoFs are included). However, as a practical method not all representations are created equal.</p>
+<p>An interface representation appropriate for IFI should be:</p>
+<ol type="1">
+<li><strong>Interpretable</strong> — the identified forces should be easily understood by a test engineer.<br>
+</li>
+<li><strong>Well conditioned</strong> — the resulting inverse problem should be able to recover forces with low error.<br>
+</li>
+<li><strong>Practical</strong> — the representation should be accessible from a set of measured DoFs.</li>
+</ol>
+<p>A variety of interface representations have been proposed over the decades, including: equivalent multi-point connection <span class="citation" data-cites="de2008solving"><a href="#ref-de2008solving" role="doc-biblioref">[6]</a></span>, equivalent single-point connection <span class="citation" data-cites="mayr2012single"><a href="#ref-mayr2012single" role="doc-biblioref">[7]</a></span>, finite difference approximations <span class="citation" data-cites="elliott2012moment"><a href="#ref-elliott2012moment" role="doc-biblioref">[8]</a></span>, interface mobility <span class="citation" data-cites="bonhoff2010influence"><a href="#ref-bonhoff2010influence" role="doc-biblioref">[9]</a></span>, virtual point <span class="citation" data-cites="van2013improved"><a href="#ref-van2013improved" role="doc-biblioref">[10]</a></span> (with flexible extension <span class="citation" data-cites="pasma2018frequency"><a href="#ref-pasma2018frequency" role="doc-biblioref">[11]</a></span>), and polynomial basis <span class="citation" data-cites="almiron2022flexible"><a href="#ref-almiron2022flexible" role="doc-biblioref">[12]</a></span>, among others. At the time of writing, the virtual point appears to be the front runner in terms of popularity, owing to its straightforward implementation, enforcement of co-located DoFs, and ability to include flexible interface dynamics.</p>
+<p>With a standard VP, each interface connection point is first characterized experimentally by a set of ‘measurement’ DoFs which are then projected onto a <em>virtual point</em> through a set of rigid body constraints. The result is an interface representation where each connection point is described by 6 DoFs; translations in <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span>, along with a rotation about each axis (<span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span>). In the mid frequency range, where the connection points move independently whilst remaining locally rigid, this is a valid representation. At higher frequencies, where local flexure becomes important, the VPT representation can be extended to include the so-called flexible interface deformation modes, such as extension, skew, etc. However, in the low frequency range, where the source dynamics are dominated by <em>global</em> rigid body motions (i.e.&nbsp;the entire machine moves as a single rigid body), the above representation leads to a severe redundancy/over-parametrisation of the interface. As an example, for a 4 footed source <span class="math inline">\(24\)</span> VP DoFs would be used to describe just <span class="math inline">\(6\)</span> dominant rigid body motions. This over-parametrisation can lead to ill-conditioning of the inverse problem and cause increased levels of uncertainty as a result. In this paper, we are interested in means of better representing interfaces, specifically in the low-mid frequency range, to reduce the above issues.</p>
+<p>Our approach is quite simple and is based on an augmentation of the standard VP approach. In short, we define a <em>global</em> VP onto which all interface measurements are projected. This captures the global rigid body motions of the source (more specifically, it captures the linearly correlated interface dynamics). These rigid body motions are then filtered out of the initial interface measurements, the <em>residuals</em> of which are projected onto a series of local VPs which describe the non-rigid body local flexure of the source (i.e.&nbsp;the linearly uncorrelated dynamics). If interest is strictly in the low-frequency range, these residual DoFs can be omitted. Alternatively, they can be retained in their entirety, or subject to a DoF selection procedure<span class="citation" data-cites="bofinger2025x"><a href="#ref-bofinger2025x" role="doc-biblioref">[13]</a></span>.</p>
+<p>Having outlined the context of this paper, its remainder will be organised as follows. In <a href="#sec-Theory" class="quarto-xref">Section&nbsp;2</a> we first introduce the relevant background theory (namely, blocked force identification <a href="#sec-indirectBlkF" class="quarto-xref">Section&nbsp;2.1</a> and the virtual point transformation <a href="#sec-virtualPoint" class="quarto-xref">Section&nbsp;2.2</a>) before outlining our proposed <em>global-residual</em> interface representation in <a href="#sec-gloablresidual" class="quarto-xref">Section&nbsp;2.3</a>. In <a href="#sec-Example" class="quarto-xref">Section&nbsp;3</a> we consider an experimental example consisting of a large heavy weight stamping press on both rigid and resilient footings. Finally, in <a href="#sec-conc" class="quarto-xref">Section&nbsp;4</a> we provide some concluding remarks and thoughts for further development.</p>
+</section>
+<section id="sec-Theory" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Theory</h1>
+<p>In this section we describe the main background theory relevant to this work, namely; the indirect determination of blocked forces (<a href="#sec-indirectBlkF" class="quarto-xref">Section&nbsp;2.1</a>) and the virtual point transformation (<a href="#sec-virtualPoint" class="quarto-xref">Section&nbsp;2.2</a>). In <a href="#sec-gloablresidual" class="quarto-xref">Section&nbsp;2.3</a> we propose our reformulation of the virtual point representation in terms of <em>global and residual</em> interface dynamics.</p>
+<div id="fig-blkF" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-blkF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Diagrams/blkF.png" class="img-fluid figure-img" style="width:40.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-blkF-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Illustration of blocked force. <span class="math inline">\(\mathbf{f}_i\)</span> and <span class="math inline">\(p(x)\)</span> represent internal forcing and distributed loading over the source. <span class="math inline">\(\mathbf{\bar{f}}_c\)</span> is the blocking constraint force required to satisfy the rigid constraint <span class="math inline">\(\mathbf{v}_c = \mathbf{0}\)</span>.
+</figcaption>
+</figure>
+</div>
+<section id="sec-indirectBlkF" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sec-indirectBlkF"><span class="header-section-number">2.1</span> Blocked force identification</h2>
+<p>The <em>blocked force</em> describes the reaction force at the interface <span class="math inline">\(c\)</span> of a vibration source whilst operating under a rigid constraint, as illustrated in <a href="#fig-blkF" class="quarto-xref">Figure&nbsp;1</a>. Equivalently, it can be interpreted as the force which when applied externally to the interface, counteracts the motion of the interface and thus constrains its motion to zero.</p>
+<p>Mathematically, we can define the blocked force as, <span class="math display">\[
+\mathbf{\bar{f}}_{c} = \mathbf{{g}}_{c}\Big|_{\mathbf{v}_{c}=\mathbf{0}}
+\]</span> where <span class="math inline">\(\mathbf{{g}}_{c}\)</span> denotes the contact force occurring at the interface <span class="math inline">\(c\)</span>, with the blocked force <span class="math inline">\(\mathbf{\bar{{f}}}_{c}\)</span> simply the limiting force as the interface is placed under the rigid constraint <span class="math inline">\(\mathbf{v}_{c}=\mathbf{0}\)</span>.</p>
+<p>It is clear that by providing an idealised rigid constraint at the boundary, the blocked force provides an independent source description free from the influence of any specific receiver. The blocked force is therefore also an independent source property.</p>
+<p>To characterise the blocked force of a vibration source <em>directly</em> it is necessary to attach the source to an (approx.) infinitely rigid test bench, for example a large blocking mass, with force transducers placed between the source contacts and the test bench. Clearly, this ‘infinitely rigid’ requirement can only be satisfied approximately over a particular frequency range; even the most rigid test bench will eventually enter a modal/flexible regime. Achieving a sufficiently rigid condition can be further complicated by the mounting requirements of the source. Another notable challenge involves the determination of rotational and in-plane blocked forces. In short, the direct measurement of the blocked force is fraught with difficulties and generally not practical. Fortunately, an indirect measurement approach is available.</p>
+<p>The direct method described above is focused on measuring force directly, by means of installed force transducers. The indirect approach involves the measurement of induced response, from which we infer the unknown blocked force.</p>
+<p>The key equation on which the indirect approach is based is given by<span class="citation" data-cites="moorhouse2009situ"><a href="#ref-moorhouse2009situ" role="doc-biblioref">[5]</a></span>, <span id="eq-BlkF"><span class="math display">\[
+\mathbf{v}_{b} = \mathbf{Y}_{Cbc}\,\mathbf{\bar{f}}_{c}  
+\tag{1}\]</span></span> where <span class="math inline">\(\mathbf{v}_{b}\)</span> is the operational response (to be measured) of the structure at a set of <em>indicator</em> positions <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{Y}_{Cbc}\)</span> is the transfer FRF of the assembled structure (also to be measured), and <span class="math inline">\(\mathbf{\bar{f}}_{c}\)</span> is the unknown blocked force. <a href="#eq-BlkF" class="quarto-xref">Equation&nbsp;1</a> provides a relation between the blocked force of a vibration source and the response of the assembly in which it is installed.</p>
+<p>Note that the indicator DoFs <span class="math inline">\(b\)</span> can be located at the interface <span class="math inline">\(c\)</span>, in which case <a href="#eq-BlkF" class="quarto-xref">Equation&nbsp;1</a> becomes, <span id="eq-BlkF1"><span class="math display">\[
+\mathbf{v}_{c} = \mathbf{Y}_{Ccc}\,\mathbf{\bar{f}}_{c}.  
+\tag{2}\]</span></span></p>
+<p>To determine the blocked force we have to solve the <em>inverse problem</em>. Pre-multiplication of both sides of <a href="#eq-BlkF" class="quarto-xref">Equation&nbsp;1</a> by the (pseudo-)inverse FRF matrix yields (assuming it exists), <span id="eq-BlkF2"><span class="math display">\[
+\mathbf{\bar{f}}_{c} = \mathbf{Y}_{Cbc}^{-1}\mathbf{v}_{b} \quad \left( \text{or } \quad
+\mathbf{\bar{f}}_{c} = \mathbf{Y}_{Ccc}^{-1}\mathbf{v}_{c} \right).
+\tag{3}\]</span></span></p>
+<p>To solve <a href="#eq-BlkF" class="quarto-xref">Equation&nbsp;1</a>, as per <a href="#eq-BlkF2" class="quarto-xref">Equation&nbsp;3</a>, it is necessary that number of measured responses (<span class="math inline">\(M\)</span>) is equal to, or greater than, the number of blocked forces that are being determined. That is, to determine <span class="math inline">\(N\)</span> blocked forces, <span class="math inline">\(M\geq N\)</span> responses should be recorded. The dimensions of the FRF matrix <span class="math inline">\(\mathbf{Y}_{Cbc}\)</span> should be consistent with those of the blocked force and velocity vectors; it should be <span class="math inline">\(M\times N\)</span>.</p>
+<p>For more detail on the specifics of <a href="#eq-BlkF1" class="quarto-xref">Equation&nbsp;2</a> and <a href="#eq-BlkF2" class="quarto-xref">Equation&nbsp;3</a>, including its derivation, practical implementation, and uncertainty the reader is referred to <span class="citation" data-cites="meggitt2025experimental"><a href="#ref-meggitt2025experimental" role="doc-biblioref">[1]</a></span> and the references therein.</p>
+<p>Importantly, <a href="#eq-BlkF2" class="quarto-xref">Equation&nbsp;3</a> provides a means of determining the blocked force <em>without requiring an infinitely rigid test bench</em>. In fact, no restrictions are placed on the assembly <span class="math inline">\(C\)</span> in which the source is installed. As such, <a href="#eq-BlkF2" class="quarto-xref">Equation&nbsp;3</a> enables an <em>in-situ</em> characterisation of the blocked force; the source need not be removed from its intended installation. Of such practical use is the indirect blocked force method that it has now been established as an international standard (ISO 20270:2019).</p>
+<section id="interface-representations" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="interface-representations"><span class="header-section-number">2.1.1</span> Interface representations</h3>
+<p>In our description of the in-direct blocked force method we glossed over one very important detail, the interface representation. In <a href="#eq-BlkF" class="quarto-xref">Equation&nbsp;1</a> and <a href="#eq-BlkF1" class="quarto-xref">Equation&nbsp;2</a> we denoted the interface DoFs simply by the subscript <span class="math inline">\(c\)</span>. We did not however, describe <em>what</em> these DoFs are… In fact, we have great flexibility over how we choose to define, or represent, the interface. For example, an interface with discrete connection points might be well represented by a set of co-located point-like DoFs (like the VP method). What about a continuous weld-like interface? Such an interface might be better represented using a point-like discretisation <span class="citation" data-cites="meggitt2020completeness"><a href="#ref-meggitt2020completeness" role="doc-biblioref">[14]</a></span>, or perhaps a continuous Fourier-based representation <span class="citation" data-cites="bonhoff2010influence"><a href="#ref-bonhoff2010influence" role="doc-biblioref">[9]</a></span>. In effect, the choice of interface representation depends on the problem.</p>
+<p>A precise understanding of interface dynamics is essential when analysing complex structural systems, particularly in experimental techniques such as source identification. Since interfaces have several physical forms, from bolted flanges to broader contact surfaces, developing a model from measured data and identifying their dynamic behaviour is not always straightforward. When the contact region is small in comparison to the relevant structural wavelengths, it is a common practice to simplify the interface as a discrete point. This leads to single- or multi-point representations where the interface is modelled as a localized connection. The goal in such models is to represent the full dynamic behaviour at the interface, typically requiring six degrees of freedom: three translations along the Cartesian axes and three corresponding rotations. However, direct measurement of all six DoFs has significant experimental challenges. Rotational motions are particularly difficult to capture, as sensors capable of measuring them are rare in standard practice. Even capturing translational FRF at a single point requires a precise alignment of force and response measurements, which is often impractical.</p>
+<p>To address these limitations, indirect methods are used to infer interface DoFs from surrounding measurements. One such approach is the finite difference (FD) method, where translation-only data from symmetrically spaced sensors around the point of interest are used to estimate both translational and rotational behaviours. Although conceptually simple, this method can be restrictive due to its reliance on symmetry and may lead to inaccuracies when perfect co-location is not achieved. A more flexible and robust method is the Virtual Point Transformation (VPT). This technique is based on rigid-body kinematics and enables the reconstruction of both translational and rotational DoFs at a virtual point by combining data from multiple arbitrarily positioned sensors. VPT offers several key advantages. By using all available measurements, the system becomes overdetermined, allowing for a more accurate estimation of the virtual point DoFs. Additionally, translational and rotational responses are mathematically located at the same physical point, eliminating alignment inconsistencies when combining models or measurements from different sources. Unlike FD methods, VPT does not require a symmetric sensor arrangement, making it highly adaptable to complex experimental setups.</p>
+<p><strong>High frequencies</strong> - In the mid-high frequency range structural wavelength becomes comparable in <em>size to the interface contact region</em>. As a result local flexure begins to play an important role in the interface dynamics and the point-like assumption breaks down. At this stage, the VPT can be extended by including <em>flexible deformation modes</em>, to accompany those describing the rigid interface behaviour, thus extending its working frequency range. However, due to instrumentation and practicality requirements, there is a limit to how far this extension can take us. At some point, it will be necessary to adopt an alternative, perhaps wave or energy-based, paradigm better suited to high frequency dynamics. Though, at the time of writing this is a relatively unexplored area of research.</p>
+<p><strong>Low frequencies</strong> - What about low frequencies? Well, challenges lie here also. When the structural wavelength is comparable to the <em>size of the source</em>, the global rigid-body (RB) dynamics of the source can dominate the response of a system. Whilst these rigid-body DoFs are implicitly captured by the collection of VP DoFs defined at each interface connection, they do so with massive redundancy. Recall from <a href="#eq-BlkF2" class="quarto-xref">Equation&nbsp;3</a> that to obtain the blocked force we must compute a matrix inverse. When the FRF matrix <span class="math inline">\(\mathbf{Y}_C\)</span>, defined using the VP representation, is dominated by rigid-body motions, it becomes rank deficient, i.e.&nbsp;2 or more of its rows/columns become linearly related. For example, if a source exhibits perfect RB vertical motion, the <span class="math inline">\(z\)</span> DoF at each VP will be identical and so will the corresponding rows/columns of the FRF matrix. The result is a poorly conditioned matrix inverse that is incredibly sensitive to small measurement imperfections, which leads to unreliable force estimates. A common solution here is to apply a form of regularisation termed <em>truncated Singular Value Decomposition</em> <span class="citation" data-cites="hansen1987truncated"><a href="#ref-hansen1987truncated" role="doc-biblioref">[15]</a></span>. The rationale being that in the low frequency range, the rigid body motions of the source are likely to be described by the first 6 (or so) singular values (SVs) of the FRF matrix; the remaining SVs can then be discarded and a well-conditioned matrix inverse computed. This approach tends to work well, though its main shortcoming is a lack of interpretability in the resulting forces; the tSVD is simply a mathematical tool, it does not consider the underlying physics of the problem. In this paper we propose an alternative approach based on an augmented global-residual VP, as described below in <a href="#sec-gloablresidual" class="quarto-xref">Section&nbsp;2.3</a>.</p>
+</section>
+</section>
+<section id="sec-virtualPoint" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="sec-virtualPoint"><span class="header-section-number">2.2</span> Virtual Point Transformation</h2>
+<p>The Virtual Point Transformation is a mathematical framework used to reconstruct both translational and rotational degrees of freedom at a single point on an interface of a complex structure, and it is based on excitation forces and translational response measurements at multiple surrounding locations. This method allows for arbitrarily positioned sensors and forces, making it highly flexible in experimental applications. Based on rigid body kinematics, the method enables the transformation of distributed measurements into a six-DoF response at a single, collocated virtual point. It is also extended to include flexible displacement modes that add more DoFs to the interface representation.</p>
+<div id="fig-VPT" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-VPT-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="Diagrams/VPT_force.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="Diagrams/VPT_resp.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-VPT-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: An interface with impact (left) and response (right) positions for virtual point transformation.
+</figcaption>
+</figure>
+</div>
+<p>To perform the virtual point transformation, the relationship between the measured responses and the virtual point is expressed through a rigid-body transformation matrix <span class="math inline">\(\mathbf{T}_v\)</span>. This matrix relates the translational responses measured at various sensor locations <span class="math inline">\(\mathbf{v}\)</span> to the translational and rotational degrees of freedom at the virtual point <span class="math inline">\(\mathbf{v}_{vp}\)</span>.</p>
+<p><span class="math display">\[
+\mathbf{v}_{vp} = \mathbf{T}_v \,\mathbf{v}
+\]</span></p>
+<p>To construct the transformation matrix <span class="math inline">\(\mathbf{T}_v\)</span>, the spatial locations and orientations of the sensors with respect to the virtual point must be accurately defined. In practice, it is common to use three triaxial sensors arranged around each virtual point, providing a total of nine translational measurements. For each sensor (say, sensor number <span class="math inline">\(n\)</span> shown in <a href="#fig-VPT" class="quarto-xref">Figure&nbsp;2</a>) a local transformation matrix <span class="math inline">\(\mathbf{R}_v^n\)</span> that accounts for its position and orientation relative to the virtual point can be constructed as, <span class="math display">\[
+\mathbf{R}_v^n =
+\begin{bmatrix}
+e_{x,X}^n &amp; e_{x,Y}^n &amp; e_{x,Z}^n \\
+e_{y,X}^n &amp; e_{y,Y}^n &amp; e_{y,Z}^n \\
+e_{z,X}^n &amp; e_{z,Y}^n &amp; e_{z,Z}^n
+\end{bmatrix}
+\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; 0 &amp; r_Z^n &amp; -r_Y^n \\
+0 &amp; 1 &amp; 0 &amp; -r_Z^n &amp; 0 &amp; r_X^n \\
+0 &amp; 0 &amp; 1 &amp; r_Y^n &amp; -r_X^n &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>To allow for interface flexibility, additional modes can be incorporated into the <span class="math inline">\(\mathbf{R}_v^n\)</span> matrices, specifically by adding more columns along with the existing rigid body modes. As an example, extension and torsion flexible modes will add six more columns: three extension (or strain) modes along the <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, and <span class="math inline">\(Z\)</span> axes, and three torsion modes about these axes.</p>
+<p><span id="eq-Rn_matrix"><span class="math display">\[
+\mathbf{R}_v^n =
+\begin{bmatrix}
+e_{x,X}^n &amp; e_{x,Y}^n &amp; e_{x,Z}^n \\
+e_{y,X}^n &amp; e_{y,Y}^n &amp; e_{y,Z}^n \\
+e_{z,X}^n &amp; e_{z,Y}^n &amp; e_{z,Z}^n
+\end{bmatrix}
+\left[
+\begin{array}{ccc|ccc|ccc|ccc}
+1 &amp; 0 &amp; 0 &amp; 0 &amp; r_Z^n &amp; -r_Y^n &amp; r_X^n &amp; 0 &amp; 0 &amp; 0 &amp; r_Y^n r_Z^n &amp; -r_Z^n r_Y^n \\
+0 &amp; 1 &amp; 0 &amp; -r_Z^n &amp; 0 &amp; r_X^n &amp; 0 &amp; r_Y^n &amp; 0 &amp; -r_X^n r_Z^n &amp; 0 &amp; r_Z^n r_X^n \\
+0 &amp; 0 &amp; 1 &amp; r_Y^n &amp; -r_X^n &amp; 0 &amp; 0 &amp; 0 &amp; r_Z^n &amp; r_X^n r_Y^n &amp; -r_Y^n r_X^n &amp; 0
+\end{array}
+\right]
+\tag{4}\]</span></span></p>
+<p>This method defines flexible interface behavior without requiring prior knowledge of the component’s dynamics, making it broadly applicable.Other flexible modes can be added with the same manner.</p>
+<p>Having <span class="math inline">\(\mathbf{R}_v^n\)</span> for all three sensors, we stack them vertically to construct the full transformation matrix <span class="math inline">\(\mathbf{R}_v\)</span>, which has a size of <span class="math inline">\(9 \times 6\)</span> and relates the virtual point response to the measured translational responses,</p>
+<p><span class="math display">\[
+\mathbf{R}_v =
+\begin{bmatrix}
+\mathbf{R}_v^1 \\
+\mathbf{R}_v^2 \\
+\mathbf{R}_v^3
+\end{bmatrix}.
+\]</span></p>
+<p>Once the full transformation matrix <span class="math inline">\(\mathbf{R}_v\)</span> is assembled, the virtual point transformation matrix <span class="math inline">\(\mathbf{T}_v\)</span> can be obtained by computing the pseudo-inverse of <span class="math inline">\(\mathbf{R}_v\)</span>,</p>
+<p><span class="math display">\[
+\mathbf{T}_v = \mathbf{R}_v^{+} = (\mathbf{R}_v^{\rm T} \mathbf{R}_v)^{-1} \mathbf{R}_v^{\rm T}.
+\]</span></p>
+<p>In addition to transforming the measured responses, it is also necessary to transform the excitation forces applied at several locations of the interface to their equivalent representation at the virtual point. The force transformation matrix <span class="math inline">\(\mathbf{T}_f\)</span> converts the forces at the virtual point <span class="math inline">\(\mathbf{f}_{vp}\)</span> to those physically applied to the interface <span class="math inline">\(\mathbf{f}\)</span> as follows,</p>
+<p><span class="math display">\[
+\mathbf{f} = \mathbf{T}_f^{\mathrm{T}}\, \mathbf{f}_{vp}.
+\]</span></p>
+<p>Considering a single impact force applied at an arbitrary location on the interface (denoted as <span class="math inline">\(\mathbf{f}^m\)</span> in <a href="#fig-VPT" class="quarto-xref">Figure&nbsp;2</a>), the corresponding six-DoF force vector at the virtual point (three translational forces and three rotational moments) can be obtained using a transformation matrix <span class="math inline">\(\mathbf{R}_f^m\)</span>. This matrix is defined based on the distance <span class="math inline">\(\mathbf{r}_f^m\)</span> and direction <span class="math inline">\(\mathbf{e}_f^m\)</span> of the impact force relative to the virtual point. The local transformation matrix <span class="math inline">\(\mathbf{R}_f^{m,\rm T}\)</span> for the <span class="math inline">\(m\)</span>th force is defined as,</p>
+<p><span class="math display">\[
+\mathbf{R}_f^{m,\rm T} =
+\begin{bmatrix}
+1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 \\
+0 &amp; 0 &amp; 1 \\
+0 &amp; -r_Z &amp; r_Y \\
+r_Z &amp; 0 &amp; -r_X \\
+-r_Y &amp; r_X &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+e_X^m \\
+e_Y^m \\
+e_Z^m
+\end{bmatrix}.
+\]</span></p>
+<p>Once all <span class="math inline">\(\mathbf{R}_f^m\)</span> matrices are defined for the set of <span class="math inline">\(m = 9\)</span> independent impact points, they are stacked to form the <span class="math inline">\(\mathbf{R}_f\)</span> matrix,</p>
+<p><span class="math display">\[
+\mathbf{R}_f =
+\begin{bmatrix}
+\mathbf{R}_f^1 \\
+\mathbf{R}_f^2 \\
+\vdots \\
+\mathbf{R}_f^9
+\end{bmatrix}
+\]</span></p>
+<p>The force transformation matrix <span class="math inline">\(\mathbf{T}_f\)</span> is then computed as the pseudo-inverse of <span class="math inline">\(\mathbf{R}_f\)</span>,</p>
+<p><span class="math display">\[
+\mathbf{T}_f^{\mathrm{T}} = \mathbf{R}_f (\mathbf{R}_f^{\rm T} \mathbf{R}_f)^{-1}.
+\]</span></p>
+<p>With both transformation matrices <span class="math inline">\(\mathbf{T}_v\)</span> and <span class="math inline">\(\mathbf{T}_f\)</span> defined, we are now equipped to transform the measured frequency response functions (FRFs) from the surrounding sensor locations to the virtual point. By pre-multiplying <span class="math inline">\(\mathbf{T}_v\)</span> and and post-multiplying <span class="math inline">\(\mathbf{T}_f\)</span> to the measured FRFs <span class="math inline">\(\mathbf{Y}\)</span>, <span class="math display">\[
+\mathbf{Y}_{vp} = \mathbf{T}_v\, \mathbf{Y}\, \mathbf{T}_f^{\mathrm{T}}
+\]</span> they can be expressed in terms of translational and rotational degrees of freedom at the virtual point <span class="math inline">\(\mathbf{Y}_{vp}\)</span>.</p>
+<section id="force-identification" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="force-identification"><span class="header-section-number">2.2.1</span> Force identification</h3>
+<p>Based on the VP transformations described above, two options are available to us when estimating the blocked force, depending on whether or not we transform the response vector. Considering the VP transformation applied to both forces and responses, our blocked force estimation becomes,</p>
+<p><span class="math display">\[
+\mathbf{v}_{vp} = \mathbf{T}_v \mathbf{v} = \big( \mathbf{T}_v \mathbf{Y}_{C} \mathbf{T}_f^{\mathrm{T}} \big)\,\mathbf{\bar{f}}_{vp}
+\quad \longrightarrow \quad
+\mathbf{\bar{f}}_{vp} = \big( \mathbf{T}_v \mathbf{Y}_{C} \mathbf{T}_f^{\mathrm{T}} \big)^{+}\, \mathbf{T}_v\, \mathbf{v}
+\]</span></p>
+<p>where it is noted that the elements of response vector <span class="math inline">\(\mathbf{v}\)</span> situated at the interface <span class="math inline">\(c\)</span> have been projected onto the VP by <span class="math inline">\(\mathbf{T}_v\)</span>. Note that the transformation <span class="math inline">\(\mathbf{T}_v\)</span> occurs twice; together this has the effect of filtering out the flexible dynamics from <span class="math inline">\(\mathbf{v}\)</span> and inferring <span class="math inline">\(\mathbf{\bar{f}}_{vp}\)</span> from the rigid body response only. It can be argued that this step unnecessary and in fact weakens the blocking constraints imposed (only rigid interface motions will be constrained). Omitting the response transformation entirely we have,</p>
+<p><span id="eq-blkFVP"><span class="math display">\[
+\mathbf{v} = \big( \mathbf{Y}_{C} \mathbf{T}_f^{\mathrm{T}} \big)\, \mathbf{\bar{f}}_{vp}
+\quad \longrightarrow \quad
+\mathbf{\bar{f}}_{vp} = \big( \mathbf{Y}_{C} \mathbf{T}_f^{\mathrm{T}} \big)^{+}\, \mathbf{v}
+\tag{5}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbf{\bar{f}}_{vp}\)</span> is now defined such that both rigid and flexible interface motions are constrained.</p>
+</section>
+</section>
+<section id="sec-gloablresidual" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-gloablresidual"><span class="header-section-number">2.3</span> Global–Residual Virtual Point</h2>
+<p>In this section we develop the VP theory into the proposed <em>Global-Residual</em> representation. We will focus on the case where interface transformations are applied only to the sought after forces, i.e.&nbsp;measurement/indicator DoFs are left untransformed. We are then interested in the equation,</p>
+<p><span class="math display">\[
+\mathbf{v} = \big( \mathbf{Y}_{m,m} \mathbf{T}_f^{\mathrm{T}} \big) \mathbf{\bar{f}}_{vp}
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{\bar{f}}_{vp}\)</span> is the VP blocked force, <span class="math inline">\(\mathbf{Y}_{m,m}\)</span> is matrix of FRFs relating the <em>measurement</em> DoFs, and <span class="math inline">\(\mathbf{T}_f\)</span> is the transformation matrix that projects the measurement DoF forces onto the VP.</p>
+<p>We seek a transformation matrix <span class="math inline">\(\mathbf{T}_f\)</span> that separates the global (rigid body) dynamics from the local connection dynamics such that the acquired blocked force takes the form, <span class="math display">\[
+\mathbf{\bar{f}}_{vp} =
+\begin{bmatrix}
+\mathbf{\bar{f}}_{vp}^{g} \\
+\mathbf{\bar{f}}_{vp}^{\Delta}
+\end{bmatrix}
+\]</span> where <span class="math inline">\(\mathbf{\bar{f}}_{vp}^{g}\)</span> is the force component describing the global (rigid body) source behaviour, and <span class="math inline">\(\mathbf{\bar{f}}_{vp}^{\Delta}\)</span> the residual forces that remain at the connections when global forces are removed.</p>
+<p>Recalling <a href="#eq-blkFVP" class="quarto-xref">Equation&nbsp;5</a>, the response vector <span class="math inline">\(\mathbf{v}\)</span> (indicator DoFs) can be expressed in terms of a VP at each interface connection in the standard form, <span class="math display">\[
+\mathbf{v} = \mathbf{Y}_{m,vp}\,\mathbf{f}_{vp}
+\]</span> where <span class="math inline">\(\mathbf{Y}_{m,vp} = \mathbf{Y}_{m,m}\mathbf{T}_f^{\rm T}\)</span>. In this representation, the force <span class="math inline">\(\mathbf{f}_{vp}\)</span> contains the net forces at each connection point of the source.</p>
+<p>This net force can be decomposed into a contribution from the rigid body dynamics (<span class="math inline">\(\mathbf{f}_{vp}^{g}\)</span>), and the residuals (<span class="math inline">\(\mathbf{f}_{vp}^{\Delta}\)</span>). The response at some set of measurement DoFs can then be given by, <span class="math display">\[
+\mathbf{v} =
+\mathbf{Y}_{m,vp}^{g}\mathbf{f}_{vp}^{g} + \mathbf{Y}_{m,vp}^{\Delta}\mathbf{f}_{vp}^{\Delta}
+=
+\begin{bmatrix}
+\mathbf{Y}_{m,vp}^{g} &amp; \mathbf{Y}_{m,vp}^{\Delta}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{f}_{vp}^{g} \\
+\mathbf{f}_{vp}^{\Delta}
+\end{bmatrix}
+\]</span> where <span class="math inline">\(\mathbf{Y}_{m,vp}^g\)</span> and <span class="math inline">\(\mathbf{Y}_{m,vp}^{\Delta}\)</span> are the FRFs that relate the global and residual forces to the set of indicator responses. To solve the above equation we need to determine the global and residual FRFs, which amounts to finding the transformation <span class="math inline">\(\mathbf{T}_f\)</span> that filters out the rigid body components from each connection point.</p>
+<p>Consider the force transformations for the global and local VP representations, <span id="eq-globalF"><span class="math display">\[
+\mathbf{f}_{vp}^{g} = \mathbf{R}_{f}^{g,\mathrm{T}}\,\mathbf{f} \qquad \mbox{and} \qquad
+\mathbf{f}_{vp} = \mathbf{R}_{f}^{\mathrm{T}}\,\mathbf{f}
+\tag{6}\]</span></span> where <span class="math inline">\(\mathbf{f}_{vp}^g\)</span> and <span class="math inline">\(\mathbf{f}_{vp}\)</span> are the transformed global (RB) and local VP forces. Note that <span class="math inline">\(\mathbf{R}_f^{\rm T}\)</span> is a matrix that projects the forces applied around each connection point to their corresponding VP, whilst <span class="math inline">\(\mathbf{R}_f^{g, {\rm T}}\)</span> projects the same set of forces instead onto a single VP placed at some arbitrary position, most likely within the source.</p>
+<p>To obtain a transformation for the residual VP forces, <span class="math inline">\(\mathbf{f}_{vp}^{\Delta}\)</span>, we need to remove the rigid body contributions from the local VP representation. This can be done by first projecting the global forces <span class="math inline">\(\mathbf{f}_{vp}^g\)</span> back onto the measurement set, <span class="math display">\[
+\mathbf{f}' = \underbrace{\mathbf{R}_{f}^{+g,\mathrm{T}}\,\mathbf{R}_{f}^{g,\mathrm{T}}}_{\mathbf{F}_{f}^{g}}\,\mathbf{f}
+\]</span> where <span class="math inline">\(\mathbf{F}^g_f\)</span> is the rigid body filtering matrix and <span class="math inline">\(\square'\)</span> denotes a rigid body filtered quantity. Next, we subtract the rigid body contributions from the initial forces before projecting them onto the local VP, <span id="eq-residualF"><span class="math display">\[
+\mathbf{f}_{vp}^{\Delta} = \mathbf{R}_{f}^{\mathrm{T}} \big( \mathbf{f} - \mathbf{f}' \big)
+= \mathbf{R}_{f}^{\mathrm{T}} \big( \mathbf{I} - \mathbf{F}_{f}^{g} \big)\, \mathbf{f}
+\tag{7}\]</span></span> The resulting force <span class="math inline">\(\mathbf{f}_{vp}^\Delta\)</span> is the residual component of the local VP, with the rigid body/global component removed.</p>
+<p>Rearranging <a href="#eq-globalF" class="quarto-xref">Equation&nbsp;6</a> and <a href="#eq-residualF" class="quarto-xref">Equation&nbsp;7</a> above obtain equations for <span class="math inline">\(\mathbf{f}\)</span>, <span class="math display">\[
+\mathbf{f} = \mathbf{R}_f^{+g, {\rm T}} \mathbf{f}_{vp}^g = \mathbf{T}_f^{g, {\rm T} }\mathbf{f}_{vp}^g
+\]</span> <span class="math display">\[
+\mathbf{f} = \left[\mathbf{R}_f^{\rm T}\left(\mathbf{I}-\mathbf{F}^g_f\right)\right]^+ \mathbf{f}_{vp}^\Delta
+\]</span> from which we can identify the necessary transformations to separate the measured FRF matrix into its global and residual components, <span id="eq-GRVPT"><span class="math display">\[
+\mathbf{v} = \mathbf{Y}_{m,m}
+\begin{bmatrix}
+\mathbf{T}_{f}^{g,\mathrm{T}} &amp;
+\big[ \mathbf{R}_{f}^{\mathrm{T}} ( \mathbf{I} - \mathbf{F}_{f}^{g} ) \big]^{+}
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{f}_{vp}^{g} \\
+\mathbf{f}_{vp}^{\Delta}
+\end{bmatrix}.
+\tag{8}\]</span></span></p>
+</section>
+</section>
+<section id="sec-Example" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Experimental Study</h1>
+<p>This experimental study aims to evaluate the Global-Residual Virtual Point as an interface representation for estimating the blocked force of a heavy industrial machine under different boundary conditions. The test object is a one-ton stamping press mounted on an inertial block. The machine is supported at three distinct feet <a href="#fig-CP" class="quarto-xref">Figure&nbsp;3</a>. Two boundary conditions are considered: (1) a rigid interface with steel blocks beneath each foot, and (2) a resilient interface using Isomat BR70 rubber manufactured by Farrat Isolevel Ltd.&nbsp;To characterize the dynamic behaviour at the interface, nine triaxial accelerometers (PCB 356A) are used (three per foot). Additionally, two single-axis accelerometers (PCB 393B05) were positioned on the inertial block, away from the feet, serving as remote points to perform onboard validation of the blocked forces. A large modal impact hammer (B&amp;K type 8207) was used to excite the system at multiple locations on each foot. For each foot, three impacts were delivered in each Cartesian direction (<span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, <span class="math inline">\(Z\)</span>), resulting in 9 impacts per foot and a total of 27 impacts across the three feet. All measurements were acquired using DEWEsoft SIRUS acquisition system.</p>
+<p>The experimental procedure consisted of two primary phases: passive and active characterization. In the passive phase, acceleration FRFs were obtained using a large modal impact hammer.</p>
+<div id="fig-CP" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-CP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="pics/StampinPress.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Experimental setup of the one-ton stamping press mounted on an inertial block for blocked-force identification. The press is supported on three discrete feet (Foot 1–Foot 3) seated on a rigid inertial block. Two single-axis accelerometers mounted on the inertial block serve as remote validation points.
+</figcaption>
+</figure>
+</div>
+<p>In the active phase, the machine was operated under normal working conditions to capture its dynamic response at the interface and remote points. During operation, the machine’s internal compressor remained active continuously, representing a persistent background excitation. The primary operational event was triggered by two safety buttons that, when pressed simultaneously, activated the stamping press. This caused the pressing beam to deliver a high-energy impact onto the material below. This pressing action was repeated constantly throughout the test. The resulting operational accelerations were recorded at the interfaces and at the remote points on the inertial block.</p>
+<p>Following the active and passive characterization steps, the Virtual Point Transformation was applied to estimate the blocked forces. For this purpose, three VP representations were considered, i.e., individual VP (I-VP), global VP (G-VP), and global-residual VP (GR-VP). For the I-VP case, a single virtual point is defined on each foot, leading to a total of 18 DoFs. For the G-VP, a single VP is defined at the machine’s geometric centre, leaving just 6 DoFs in total (note that the measurements at all feet are projected onto the G-VP). For the GR-VP, the G-VP is accompanied by a residual VP at each foot, giving a total of 24 DoFs. Recall that the residual VPs are defined in such a way that the G-VP dynamics have been removed (see <a href="#eq-GRVPT" class="quarto-xref">Equation&nbsp;8</a>); <em>they describe the linearly uncorrelated interface dynamics</em>.</p>
+<p>Note that for each representation, only the measured forces are transformed; the interface FRF matrices used to compute the blocked force thus have the dimensions: <span class="math inline">\(\mathbf{Y}_{Ccc}^{\rm I\mbox{-}VP} \in \mathbb{C}^{27\times 18}\)</span>, <span class="math inline">\(\mathbf{Y}_{Ccc}^{\rm G\mbox{-}VP} \in \mathbb{C}^{27\times 6}\)</span>, and <span class="math inline">\(\mathbf{Y}_{Ccc}^{\rm GR\mbox{-}VP} \in \mathbb{C}^{27\times 24}\)</span>.</p>
+<section id="resilient-connection" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="resilient-connection"><span class="header-section-number">3.1</span> Resilient connection</h2>
+<p>We consider first the resiliently coupled case. Shown in <strong>?@fig-coh_res</strong> is the average coherence across all FRFs (including both interface and validation DoFs) for the resiliently coupled system. Given the heavy weight nature of this assembly, we see poor coherence in the low frequency range, below approx. 10 Hz. For this reason, in what follows we will only present results between 10-1500 Hz.</p>
+<div id="fig-coh-res" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-coh-res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/Coh.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coh-res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Average coherence across all measurements for resiliently mounted source.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-forceMap18_res" class="quarto-xref">Figure&nbsp;5</a> shows the time averaged blocked force maps for each representation; from left to right we have the I-VP, G-VP and GR-VP. In each subplot the DoFs 1-6 correspond to the G-VP defined at the machine centre, whilst the DoFs 7-24 are those defined locally at the centre of each foot. These local DoFs are ordered as, <span class="math display">\[
+\left(\begin{array}{cccccc|cccccc|cccccc}x_1&amp; y_1 &amp; z_1 &amp; \alpha_1&amp; \beta_1&amp; \gamma_1 &amp; x_2&amp; y_2&amp; z_2&amp; \alpha_2&amp; \beta_2&amp; \gamma_2&amp; x_3&amp; y_3&amp; z_3&amp;\alpha_3&amp; \beta_3&amp; \gamma_3\end{array}\right)
+\]</span> where the subscript denotes the foot.</p>
+<p>Inspecting the force maps we see in the I-VP considerable variation across the individual DoFs, in particular between the translational and rotational DoFs. This is expected on account of their different units. We see that in the GR-VP this variation is much reduced; it is suspected that the translational part of each I-VP is largely accounted for by the G-VP, and so the residual is of a much lower magnitude. The G-VP reveals the expected result that in the low frequency range (where the G-VP is considered appropriate), the vertical force (i.e.&nbsp;in the direction of the machine stamping) is of the greatest magnitude.</p>
+<p>It should be noted that in the GR-VP case, a singular value truncation is used; 18 singular values are retained based on the notion that the the I-VPs implicitly capture the G-VP dynamics, and so by separating the global and residual terms, no additional information is added. We therefore limit the number of singular values in the GR-VP representation to the same as the I-VP.</p>
+<div id="fig-forceMap18_res" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-forceMap18_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/forceMap_18GR_SV.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-forceMap18_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Force maps for the time averaged blocked force obtained using; individual VPs (I-VP left), global VP (G-VP middle) and global-residual (GR-VP right).
+</figcaption>
+</figure>
+</div>
+<p>To validate the blocked forces we use the standard <em>onboard validation</em> approach, whereby the blocked forces are used to make a response prediction within the attached receiver. Whilst the onboard validation is a somewhat limited test of the blocked force, modification or replacement of the receiver was not possible within this case study. Shown in <a href="#fig-obVal_NB_res" class="quarto-xref">Figure&nbsp;6</a> and <a href="#fig-obVal_OB_res" class="quarto-xref">Figure&nbsp;7</a> are the narrowband and 1/3rd octave-band onboard validation predictions for the two remote sensors. In all three cases we see a reasonable level of predictive accuracy. A surprising result is the apparent success of the G-VP representation in the mid-high frequency range. This supports the notion that the G-VP representation, though accurately capturing the low frequency rigid-body dynamics, in fact captures the dynamics across the entire frequency range.</p>
+<div id="fig-obVal_NB_res" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obVal_NB_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/obVal_NB_18GR_SV.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obVal_NB_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: On-board validation results in narrow band for two remote sensors using each of the interface representations; individual VPs (I-VP top), global VP (G-VP middle) and global-residual (GR-VP bottom).
+</figcaption>
+</figure>
+</div>
+<div id="fig-obVal_OB_res" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obVal_OB_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/obVal_OB_18GR_SV.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obVal_OB_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: On-board validation results in 1/3rd octave bands for two remote sensors using each of the interface representations; individual VPs (I-VP top), global VP (G-VP middle) and global-residual VPs (GR-VP bottom).
+</figcaption>
+</figure>
+</div>
+<p>To better judge the performance of each representation, in <a href="#fig-obValError_18_res" class="quarto-xref">Figure&nbsp;8</a> we plot the 1/3rd octave-band errors compared against the directly measured response. We see that all three methods remain below 5dB error across the majority of the frequency range. It appears that the G-VP out performs I-VP in the lowest part of the response (i.e.below approx 30 Hz). This is likely because a) the source is behaving rigidly and so the G-VP completely captures its dynamics and b) the G-VP yields a smaller matrix, less sensitive to ill conditioning and sensitivities in the matrix inversion. In the mid frequency range the I-VP out performs the G-VP which begins to see its largest errors. This is likely due to the source exhibiting some flexibility not captured by the G-VP. Again, as previously noted we see that the G-VP begins to out perform the I-VP in the upper end of the frequency range. We suspect the reason for this is as follows; at high frequencies the individual feet are uncorrelated with one another and as a result can readily be <em>collapse</em> into a single equivalent rigid-body force. This is commensurate with the idea of using power-based methods at high frequencies, where increasing modal complexity in fact leads to simpler dynamical relations, e.g.&nbsp;as in Statistical Energy Analysis.</p>
+<p>Considering now the GR-VP error, we see that it is comparable to the I-VP and G-VP, and tends to lie between the two. In <a href="#fig-obValError_18_res" class="quarto-xref">Figure&nbsp;8</a> we also plot the GR-VP error when no singular value truncation is used in the blocked force solution; this is likely due to the GR-VP acting as a DoF expansion, and the resulting matrix being rank deficient/ill-conditioned.</p>
+<div id="fig-obValError_18_res" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obValError_18_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/obValError_OB_18GR_SV_18VP_SV.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obValError_18_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: 1/3rd octave band error plots for on-board validation. The GR-VP representation in blue uses a TSVD with 18 singular values. Shown in gray is the error plot for the GR-VP without TSVD.
+</figcaption>
+</figure>
+</div>
+<div id="fig-obValError_6_VPT_res" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obValError_6_VPT_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/obValError_OB_6GR_SV_6VP_SV.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obValError_6_VPT_res-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: 1/3rd octave band error plots for on-board validation. The I-VP and GR-VP representations use a TSVD with 6 singular values.
+</figcaption>
+</figure>
+</div>
+<p>Recalling the rational of the GR-VP – to factor out the rigid-body (or linearly correlated) dynamics with the aim of improving interpretability of the interface dynamics – it will prove interesting to consider the truncation of both the I-VP and GR-VP representations to just 6 singular values. By doing so, each representation is reduced to contain only the <em>most important</em> (in terms of explanation of variance) information. The resulting errors are presented in <a href="#fig-obValError_6_VPT_res" class="quarto-xref">Figure&nbsp;9</a>. Comparison against previous errors in <a href="#fig-obValError_18_res" class="quarto-xref">Figure&nbsp;8</a> we identity two key results; 1) the I-VP error has increased significantly across almost the entire frequency range, whilst 2) the GR-VP error has tended towards that of the G-VP. This latter result implies that the 6 most dominant singular values in the GR-VP are closely related to the G-VP DoFs, making them both more interpretable and expressive than those of the I-VP. Based on this result, later in <a href="#sec-subset" class="quarto-xref">Section&nbsp;3.3</a> we will breifly investigate whether the GR-VP representation might be well suited to a best sub-set selection procedure; the first 6 G-VP DoFs would always be retained, and the selection procedure applied to the remaining residuals.</p>
+</section>
+<section id="rigid-connection" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="rigid-connection"><span class="header-section-number">3.2</span> Rigid connection</h2>
+<p>We now consider the results obtained from the rigidly coupled assembly. Shown in <a href="#fig-coh_rigid" class="quarto-xref">Figure&nbsp;10</a> is the average coherence across all FRFs (including both interface and validation FRFs) for the rigidly coupled case. As expected, compared to the resilient case the rigid FRFs are affected to a greater extent by noise, especially at low frequencies. We can see that only from approx 50 Hz do we begin to get reasonable measurement quality. Therefore, hereafter we will only present results between 50-1500 Hz.</p>
+<p><a href="#fig-forceMap18_rigid" class="quarto-xref">Figure&nbsp;11</a> - <a href="#fig-obValError_6_VPT" class="quarto-xref">Figure&nbsp;15</a> are structured in the same way as for the resilient case, and largely lead to the same conclusions. Perhaps the main difference is that for the rigid case, the G-VP does not perform quite as well. This is likely because the rigid-body blocked forces occur mostly below the frequency range considered (i.e.&nbsp;within the noise floor). As before, in the high frequency range we see that the G-VP produces relatively low errors considering its simplicity, performing slightly better than the I-VP. The GR-VP error is seen to mostly follow that of the I-VP when 18 singular values are retained. Reducing this to 6, the GR-VP errors begins to follow the G-VP error. This again supports the notion that the dominant singular values of the GR-VP representation are related to the rigid-body (linearly correlated) interface dynamics. In contrast, I-VP error is seen to increase dramatically when only 6 singular values are retained.</p>
+<div id="fig-coh_rigid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-coh_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/Coh_rigid.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coh_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Average coherence across all measurements for rigidly mounted source. Useable frequency range: 50-1500 Hz.
+</figcaption>
+</figure>
+</div>
+<div id="fig-forceMap18_rigid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-forceMap18_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/RigidForceMap_18GR_SV.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-forceMap18_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Force maps for the time averaged blocked force obtained using; individual VPs (I-VP left), global VP (G-VP middle) and global-residual (GR-VP right).
+</figcaption>
+</figure>
+</div>
+<p>Perhaps the main conclusion from the above results is that the G-VP (and by extension first 6 DoFs of the GR-VP) appears to provide a better representation of the interface dynamics than the 6 most dominant singular values of the conventional I-VP representation. This begs the question whether a more interpretable solution with lower error could be obtained from the GR-VP by utilising a subset selection scheme. The idea would be to always retain the G-VP DoFs within the GR-VP (which have been shown to out perform I-VP at low and high frequencies), whilst using a selection procedure to determine which residual DoFs to include in the solution. We briefly consider this approach in the following section, though a more in depth and general study of subset selection in the context of blocked force identification is considered beyond the scope of this paper.</p>
+<div id="fig-obVal_NB_rigid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obVal_NB_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/RigidObVal_NB_18GR_SV_18VP_SV.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obVal_NB_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: On-board validation results in narrow band for two remote sensors using each of the interface representations; individual VPs (I-VP top), global VP (G-VP middle) and global-residual (GR-VP bottom).
+</figcaption>
+</figure>
+</div>
+<div id="fig-obVal_OB_rigid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obVal_OB_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/RigidObVal_OB_18GR_SV_18VP_SV.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obVal_OB_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: On-board validation results in 1/3rd octave bands for two remote sensors using each of the interface representations; individual VPs (I-VP top), global VP (G-VP middle) and global-residual VPs (GR-VP bottom).
+</figcaption>
+</figure>
+</div>
+<div id="fig-obValError_18_rigid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obValError_18_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/RigidObValError_OB_18GR_SV_18VP_SV.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obValError_18_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: 1/3rd octave band error plots for on-board validation. The GR-VP representation in blue uses a TSVD with 18 singular values. Shown in gray is the error plot for the GR-VP without TSVD.
+</figcaption>
+</figure>
+</div>
+<div id="fig-obValError_6_VPT" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-obValError_6_VPT-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/RigidObValError_OB_6GR_SV_6VP_SV.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-obValError_6_VPT-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15: 1/3rd octave band error plots for on-board validation. The I-VP and GR-VP representations use a TSVD with 6 singular values.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-subset" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-subset"><span class="header-section-number">3.3</span> GR‑VP Subset Selection</h2>
+<p>Best subset selection is a solution strategy for over-parametrised linear problems. It’s aim is to find a reduced set of parameters that adequately satisfy the underlying systems of equations with respect to some chosen error metric. Though well established in disciplines such as signal processing (i.e.&nbsp;compressive sensing), it has only recently been proposed for in-situ blocked force estimation <span class="citation" data-cites="carter2024thoughts"><a href="#ref-carter2024thoughts" role="doc-biblioref">[16]</a></span>. An argument for its use in this context is that whilst an interface might be represented by a complete set of interface DoFs, at a given frequency only a reduced subset of these DoFs are active. Including non-contributing DoFs can lead to ill-conditioned, or over-parametrized, interface models and large errors on the identified blocked forces. Subset selection aims to identify a reduced set of interface DoFs that provide better predictive accuracy whilst also benefiting from improved interpretability.</p>
+<p>A variety of subset selection procedures exist and the time of writing there is no consensus as to which is most appropriate for blocked force identification. In this paper we employ an <em>orthogonal least squares</em> approach <span class="citation" data-cites="blumensath2007difference"><a href="#ref-blumensath2007difference" role="doc-biblioref">[17]</a></span>. Also termed <em>sequential forward selection</em>, this method has been applied to blocked force identification in <span class="citation" data-cites="bofinger2025x"><a href="#ref-bofinger2025x" role="doc-biblioref">[13]</a></span>, where it was termed <em>X-DoF</em>.</p>
+<p>The procedure starts by defining an empty set <span class="math inline">\(\Gamma_0 = \{\}\)</span> as the set of indices corresponding to non-zero elements in <span class="math inline">\(\mathbf{f}\)</span> (i.e.&nbsp;all elements in <span class="math inline">\(\mathbf{f}\)</span> are initially zero). In the <span class="math inline">\(k\)</span>th step of the procedure, a single index <span class="math inline">\(i_{max}\)</span> is added to the set <span class="math inline">\(\Gamma_{k-1}\)</span>, which meets the criterion, <span class="math display">\[
+    i_{max} = \underset{i}{\mbox{argmin}} ||\overbrace{\mathbf{v} - \mathbf{Y}_{\Gamma_{k-1}^i} \mathbf{Y}_{\Gamma_{k-1}^i}^+ \mathbf{v}}^{\mathbf{r}_k}||_2^2 \quad \mbox{with} \quad  \Gamma_{k-1}^i = \Gamma_{k-1} \cup i
+\]</span> where <span class="math inline">\(\mathbf{Y}_{\Gamma_{k-1}^i}\)</span> is defined as the matrix containing the columns of <span class="math inline">\(\mathbf{Y}\)</span> corresponding to the non-zero indices in <span class="math inline">\(\Gamma_{k-1}^i\)</span>. Effectively, we add the index that minimises the error on the current response reconstruction, i.e.&nbsp;the residual <span class="math inline">\(\mathbf{r}_k\)</span>.</p>
+<p>In contrast to an exhaustive BSS, orthogonal least squares reduces the total number of evaluations from <span class="math inline">\(2^n\)</span> to <span class="math inline">\(n+(n-1)+\cdots+2+1=\frac{n(n+1)}{2}\)</span>. In each step of the algorithm a candidate solution is produced that contains an increasing number of DoFs. Once all iterations have been completed, the final step is to perform a model selection, i.e.&nbsp;pick from the set of candidate solutions based on an appropriate error metric. <em>Our implementation of this algorithm is given in the code block below.</em></p>
+<div id="ca8828f5" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code: Sequential forward selection function used for BSS approximation</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forwardSelection(start_dofs, select_dofs, Y_ind, Y_val, u_ind, u_val):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Forward selection algorithm (same as Orthogonal Least Squares, OLS) - iteratively add one DoF at a time to the solution - added DoF is the one that gives the smallest error</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">    start_dofs - initial DoF array</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">    select_dofs - DoFs to be selected</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Y_ind - indicator-interface FRF matrix</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Y_val - interface-validation FRF matrix</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    u_ind - indicator responses</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">    u_val - validation responses</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    λ_range <span class="op">=</span> select_dofs.shape[<span class="dv">0</span>] <span class="co"># Number of DoFs to iterate over</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    blkF_final <span class="op">=</span> np.zeros((Y_ind.shape[<span class="dv">0</span>],</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                           Y_ind.shape[<span class="dv">2</span>],</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                           u_ind.shape[<span class="dv">2</span>]), dtype<span class="op">=</span><span class="bu">complex</span>) <span class="co"># Final blocked force after model selection</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    blkF_all <span class="op">=</span> np.zeros((Y_ind.shape[<span class="dv">0</span>],</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                         λ_range<span class="op">+</span><span class="dv">1</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                         Y_ind.shape[<span class="dv">2</span>],</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                         u_ind.shape[<span class="dv">2</span>]), dtype<span class="op">=</span><span class="bu">complex</span>) <span class="co"># Blocked force for all models</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    error_all <span class="op">=</span> np.zeros((Y_ind.shape[<span class="dv">0</span>], λ_range<span class="op">+</span><span class="dv">1</span>)) <span class="co"># Error for each model - used to perform model selection</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fi <span class="kw">in</span> tqdm(<span class="bu">range</span>(Y_ind.shape[<span class="dv">0</span>]), desc<span class="op">=</span><span class="st">"Computing solutions"</span>): <span class="co"># Loop over frequencies</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        Γ <span class="op">=</span> start_dofs <span class="co"># Selection indices: initialised as starting DoFs [0,1,2,3,4,5]</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        Γ_ <span class="op">=</span> select_dofs <span class="co"># Remaining DoFs: [6,7,8,...]</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ind = 0 # Model index</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(λ_range<span class="op">+</span><span class="dv">1</span>): <span class="co"># Loop over models; i.e. number of select_dofs</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>            error <span class="op">=</span> [] </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span>: <span class="co"># Compute blocked force using initial DoFs</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                OLS_block_force <span class="op">=</span> np.einsum(<span class="st">'ij,jk-&gt;ik'</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                                            invSVD(Y_ind[fi][:, Γ.astype(<span class="bu">int</span>)], <span class="dv">24</span>),</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                                            u_ind[fi, :, :])</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                obVal <span class="op">=</span> np.einsum(<span class="st">'ij,jk-&gt;ik'</span>, </span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                                  Y_val[fi][:, Γ.astype(<span class="bu">int</span>)],</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                                  OLS_block_force)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                error_all[fi, i] <span class="op">=</span> np.linalg.norm(u_val[fi,:,:].flatten() <span class="op">-</span> obVal.flatten(), <span class="bu">ord</span><span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                blkF_all[fi, i, Γ.astype(<span class="bu">int</span>), :] <span class="op">=</span> OLS_block_force</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> N <span class="kw">in</span> Γ_: <span class="co"># Loop over remaining DoFs</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>                    Γ_i <span class="op">=</span> np.sort(np.append(Γ, N)) <span class="co"># Append current DoF to list of selected DoFs</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># Compute blocked force solution using previous 'i' iteration DoFs and current 'N' iteration DoF:</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>                    OLS_block_force <span class="op">=</span> np.einsum(<span class="st">'ij,jk-&gt;ik'</span>,</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>                                                invSVD(Y_ind[fi][:, Γ_i.astype(<span class="bu">int</span>)], <span class="dv">24</span>),</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>                                                u_ind[fi, :, :])</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>                    <span class="co"># Compute onboard validation and error metric</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>                    obVal <span class="op">=</span> np.einsum(<span class="st">'ij,jk-&gt;ik'</span>,</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>                                      Y_val[fi][:, Γ_i.astype(<span class="bu">int</span>)],</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>                                      OLS_block_force)</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>                    error.append(np.linalg.norm(u_val[fi,:,:].flatten() <span class="op">-</span> obVal.flatten(), <span class="bu">ord</span><span class="op">=</span><span class="dv">2</span>)) </span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>                Γ_min <span class="op">=</span> np.argmin(np.asarray(error)) <span class="co"># Find which new DoF index gives smallest error</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>                Γ <span class="op">=</span> np.sort(np.append(Γ, Γ_[Γ_min])) <span class="co"># Add corresponding DoF value (not index) to DoF set</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>                Γ_ <span class="op">=</span> np.delete(Γ_, Γ_min) <span class="co"># Remove this DoF index from the remaining DoF set</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>                error_all[fi, i] <span class="op">=</span> np.<span class="bu">min</span>(error) <span class="co"># Find index for lowest error from current models with M DoFs</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>                blkF_all[fi, i, Γ.astype(<span class="bu">int</span>), :] <span class="op">=</span> np.einsum(<span class="st">'ij,jk-&gt;ik'</span>, </span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>                                                         invSVD(Y_ind[fi][:, Γ.astype(<span class="bu">int</span>)],<span class="dv">24</span>), </span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>                                                         u_ind[fi, :, :]) <span class="co"># Compute blocked force for the lowest error model</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        min_model_error <span class="op">=</span> np.argmin(error_all[fi,:]) <span class="co"># Find the model with the lowest error (model selection)</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        blkF_final[fi, Γ.astype(<span class="bu">int</span>), :] <span class="op">=</span> blkF_all[fi, min_model_error, Γ.astype(<span class="bu">int</span>)] <span class="co"># Select the corresponding blocked force</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> blkF_final, error_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>With the purpose of subset selection being to identify sparse solutions, if two candidate models produce the same error, the one with fewer non-zero elements is typically chosen. To this end, it is common practice to use for model selection an error metric that takes into account the complexity of the solution (i.e.&nbsp;the number of non-zero elements), see for example in <span class="citation" data-cites="bofinger2025x"><a href="#ref-bofinger2025x" role="doc-biblioref">[13]</a></span>. In our brief investigation here, we omit this step and use the standard mean-squared-error to perform model selection.</p>
+<p>To validate a model selection it is good practice to use a novel data set that was not used in the selection procedure itself. In our study, limited channel count has meant that this was not possible. Hence, the model selection was based on the onboard validation errors, with no further validation available. Whilst this is not the most robust approach to model selection, we believe it sufficient to demonstrate the potential application of subset selection applied to the GR-VP and to promote further research on this application.</p>
+<p>One final remark with regards to our implementation of the forward selection, it is noted that rather than starting with the empty solution, as is done is a typical forward selection, for the GR-VP representation we start by including all G-VP DoFs; the selection procedure is applied to the residual DoFs only. For the I-VP we start in the usual way with an empty solution.</p>
+<section id="resilient-connection-bss" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="resilient-connection-bss"><span class="header-section-number">3.3.1</span> Resilient connection (BSS)</h3>
+<p>Shown in <a href="#fig-BSS_resilient" class="quarto-xref">Figure&nbsp;16</a> are the blocked forces obtained from the resiliently coupled source for both the I-VP and GR-VP representations using the sequential forward selection described above. For both cases an onboard validation MSE is used for model selection.</p>
+<div id="fig-BSS_resilient" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-BSS_resilient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="results/BSS_blockedForce18VP_SV.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="results/BSS_blockedForce18GR_SV.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-BSS_resilient-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16: Blocked force map obtained from resilient assembly using sequential forward selection with MSE model selection using VP (left) and GR-VP (right).
+</figcaption>
+</figure>
+</div>
+<p>We see that in both cases a sparse solution is obtained in preference to a ‘full’ solution, though the resulting sparsity patterns differ greatly. Inspecting the I-VP forces, we see a slight increase in sparsity in the low frequency range, likely on account of the rigid-body dynamics being dominant in this range. In the mid-high frequency range the forces, though remaining somewhat sparse, behave erratically ‘turning on and off’ rapidly over frequency with little to no identifiable trends. Lastly, we see that across the majority of the frequency range, the <span class="math inline">\(z\)</span> DoF of each VP is kept active. This is expected as the main excitation mechanism of the source acts in this direction.</p>
+<p>Inspecting the GR-VP forces, we see that similarly in the low frequency range the solution is relatively sparse, with the majority of residual terms being set to 0. This is in-agreement with the notion that at low frequencies the rigid body forces are largely captured by the retained G-VP. In contrast to the I-VP, the GR-VP produces a sparse solution also in the high frequency range. This is in keeping with the notion that at high frequencies the residual terms become uncorrelated and can therefore be described by an equivalent single point representation. In the mid frequency range, where the source is suspected to deform flexibly with low modal density, the solution is rather dense with many of the residual terms being active.</p>
+<div id="fig-BSS_resilient_error" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-BSS_resilient_error-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/BSS_obValError_OB.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-BSS_resilient_error-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17: O1/3rd octave band error plots of the on-board validation for the I-VP and GR-VP representation using forward selection.
+</figcaption>
+</figure>
+</div>
+<p>Based on the force maps shown in <a href="#fig-BSS_resilient" class="quarto-xref">Figure&nbsp;16</a>, <a href="#fig-BSS_resilient_error" class="quarto-xref">Figure&nbsp;17</a> presents the onboard validation error for the sparse I-VP and GR-VP solutions. For both cases we see a significant reduction in the error across all frequencies compared to <a href="#fig-obValError_18_res" class="quarto-xref">Figure&nbsp;8</a>. This illustrates the potential benefit of a sparse BSS solution. Of the two solutions we see that the GR-VP generally out performs the I-VP.</p>
+</section>
+<section id="rigid-connection-bss" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="rigid-connection-bss"><span class="header-section-number">3.3.2</span> Rigid connection (BSS)</h3>
+<p>Shown in <a href="#fig-BSS_rigid" class="quarto-xref">Figure&nbsp;18</a> are the blocked forces obtained from the rigidly coupled source for both the I-VP and GR-VP representations using the sequential forward selection described above. As before, for both cases an onboard validation MSE is used for model selection.</p>
+<div id="fig-BSS_rigid" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-BSS_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="results/RigidBSS_VPT_blockedForce.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="results/RigidBSS_GR_blockedForce.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-BSS_rigid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;18: Blocked force map obtained from rigid assembly using sequential forward selection with MSE model selection using VP (left) and GR-VP (right).
+</figcaption>
+</figure>
+</div>
+<p>The rigid force maps bare some similarities to the resilient case in <a href="#fig-BSS_resilient" class="quarto-xref">Figure&nbsp;16</a>, especially for the GR-VP case. For the I-VP we see some increased sparsity in the high frequency range with reduced sparsity in the frequency range. This reduction in sparsity at low frequencies is likely due to the rigid body dynamics occurring outside of the frequency range considered, i.e.&nbsp;within the noise floor.</p>
+<p>With regards to the GR-VP we draw the same general conclusions as before; at low and high frequencies the interface is well described by just the G-VP DoFs, whilst in the mid frequency range the residual DoFs provide important contributions.</p>
+<p>Inspecting the onboard validation errors in <a href="#fig-RigidBSS_error" class="quarto-xref">Figure&nbsp;19</a> we see similar, though perhaps not great, reductions in the error, again with the GR-VP generally out performing the I-VP.</p>
+<div id="fig-RigidBSS_error" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-RigidBSS_error-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/RigidBSS_obValError_OB.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-RigidBSS_error-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;19: 1/3rd octave band error plots for the on-board validation of the I-VP and GR-VP representations with forward selection.
+</figcaption>
+</figure>
+</div>
+<p>In the above we limited our frequency range to &gt;50 Hz, on account of the noise floor dominating below this (see <a href="#fig-coh_rigid" class="quarto-xref">Figure&nbsp;10</a>). Inspecting the error plots below 50 Hz, as in <a href="#fig-RigidBSS_error_ext" class="quarto-xref">Figure&nbsp;20</a>, illustrates a further potential benefit of the GR-VP representation. As expected, we see that the I-VP error increases significantly below <span class="math inline">\(50\)</span> Hz, up to 17.5 dB at 10 Hz. The GR-VP error remains below 3 dB down to 10 Hz. The suspected reasons for this massive reduction in error are two fold: 1) the fact that the G-VP DoFs are estimated based on <em>all</em> interface measurements makes them massively over-determined, thus reducing sensitivity to error and b) the reduced matrix size as a result of the forward selection (i.e.&nbsp;retaining mostly just the G-VPs) reduces the amplification of uncertainty when the inverse is performed.</p>
+<div id="fig-RigidBSS_error_ext" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-RigidBSS_error_ext-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results/RigidBSS_obValError_OB_extended.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-RigidBSS_error_ext-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;20: Extended frequency range: 1/3rd octave errors below 50 Hz for I‑VP vs GR‑VP with forward selection.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+<section id="sec-conc" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Conclusion</h1>
+<p>In this paper we have introduced a new interface representation for TPA-based force identification problems, such as the in-situ blocked force method. Termed the <em>Global–Residual Virtual Point</em> (GR‑VP), our approach is based on the separation of global rigid-body (or more precisely, linearly correlated) dynamics from local (uncorrelated) interface dynamics. To do so, all interface forces are first projected onto a global VP placed within the source. These global dynamics are then projected back onto the interface where they are subtracted from the initial forces, leaving behind a set of residuals. These residual subsequently projected onto a series of local VPs. Together, the global VP and local residual VPs form our proposed GR-VP interface representation.</p>
+<p>To verify the GR-VP representation we consider the blocked force characterisation of a heavy weight stamping press under resilient and rigid interface conditions. Comparisons are made against: 1) a conventional interface representation where an individual VP (I-VP) is assigned to each connection, and 2) the use of a single global VP (G-VP). Onboard validation results indicate that the GR-VP performs similarly to the I-VP; an expected result as the GR-VP does not contain any more information than the I-VP representation. The main advantage of the GR-VP is interpretation. We see that in the 6 most dominant singular values the GR-VP capture the linearly correlated dynamics of the source, yielding relatively low errors on par with the G-VP. For the same level of singular value truncation, the I-VP leads to considerably larger errors, implying that the GR-VP is able to provide a better representation of the interface given the same amount of ‘information’.</p>
+<p>Based on the above observations, we investigate the combined application of GR-VP with best subset selection (specifically, sequential forward selection) to identify improved blocked force models with reduced errors. Though our investigation is brief and in need of further verification, it appears that by retaining all G-VP DoFs and selectively including specific residual GR-VP DoFs, interpretable blocked force models can be obtained with a significant reduction in error. An interesting observation from this subset selection (also the previous onboard validation results) is that in the high frequency range, where one would expect more residual DoFs to be necessary, the opposite is found. The G-VP DoFs alone are able to describe the source with an onboard validation error lower than the I-VP. We hypothesises that this is a result of a) the individual connections becoming uncorrelated with one another and the resulting forces readily collapsing into a single equivalent rigid-body force, and b) the smaller matrix inversion having a reduced amplification of error.</p>
+<p>Similar benefits where observed in the very low frequency range; where the conventional I-VP is overcome by noise floor issues, the GR-VP maintains a relatively low error (&lt;3 dB). This is likely on account of the G-VPs being massively over-determined as compared to the I-VPs which use only local dynamics.</p>
+<p>In summary, the Global-Residual interface representation appears to have some potential for the improved identification of forces in TPA. At the moment our study is limited to a single heavy weight assembly, which is itself subject to several experimental challenges. Additional experimental studies on a range of assembly types are required for further verification for the method, particularly in combination with best subset selection.</p>
+<p><strong>Acknowledgements</strong></p>
+<p>This work was funded by Innovate UK through the Knowledge Transfer Partnership scheme (project reference 10008155) in collaboration with Farrat Isolevel Ltd.</p>
+<p><strong>References</strong></p>
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-meggitt2025experimental" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">J. Meggitt and A. Moorhouse, <em>Experimental vibro-acoustics: In situ and blocked force methods for component-based simulation and virtual prototyping</em>. CRC Press, 2025.</div>
+</div>
+<div id="ref-inoue2001review" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">H. Inoue, J. J. Harrigan, and S. R. Reid, <span>“Review of inverse analysis for indirect measurement of impact force,”</span> <em>Applied Mechanics Reviews</em>, vol. 54, no. 6, pp. 503–524, 2001.</div>
+</div>
+<div id="ref-plunt2005finding" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">J. Plunt, <span>“Finding and fixing vehicle NVH problems with transfer path analysis,”</span> <em>Sound and vibration</em>, vol. 39, no. 11, pp. 12–17, 2005.</div>
+</div>
+<div id="ref-van2007transfer" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">H. Van der Auweraer, P. Mas, S. Dom, A. Vecchio, K. Janssens, and P. Van de Ponseele, <span>“Transfer path analysis in the critical path of vehicle refinement: The role of fast, hybrid and operational path analysis,”</span> 2007.</div>
+</div>
+<div id="ref-moorhouse2009situ" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">A. Moorhouse, A. Elliott, and T. Evans, <span>“In situ measurement of the blocked force of structure-borne sound sources,”</span> <em>Journal of sound and vibration</em>, vol. 325, no. 4–5, pp. 679–685, 2009.</div>
+</div>
+<div id="ref-de2008solving" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">D. de Klerk, D. Rixen, S. Voormeeren, and F. Pasteuning, <span>“Solving the RDoF problem in experimental dynamic substructuring,”</span> in <em>Proceedings of the twentysixth international modal analysis conference, orlando, FL</em>, 2008.</div>
+</div>
+<div id="ref-mayr2012single" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">A. R. Mayr and B. Gibbs, <span>“Single equivalent approximation for multiple contact structure-borne sound sources in buildings,”</span> <em>Acta Acustica united with Acustica</em>, vol. 98, no. 3, pp. 402–410, 2012.</div>
+</div>
+<div id="ref-elliott2012moment" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">A. Elliott, A. Moorhouse, and G. Pavić, <span>“Moment excitation and the measurement of moment mobilities,”</span> <em>Journal of sound and vibration</em>, vol. 331, no. 11, pp. 2499–2519, 2012.</div>
+</div>
+<div id="ref-bonhoff2010influence" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">H. Bonhoff and B. Petersson, <span>“The influence of cross-order terms in interface mobilities for structure-borne sound source characterization,”</span> <em>Journal of sound and vibration</em>, vol. 329, no. 16, pp. 3280–3303, 2010.</div>
+</div>
+<div id="ref-van2013improved" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">M. V. Van Der Seijs, D. D. Van Den Bosch, D. J. Rixen, and D. De Klerk, <span>“An improved methodology for the virtual point transformation of measured frequency response functions in dynamic substructuring,”</span> in <em>4th ECCOMAS thematic conference on computational methods in structural dynamics and earthquake engineering</em>, 2013.</div>
+</div>
+<div id="ref-pasma2018frequency" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline">E. Pasma, M. van der Seijs, S. Klaassen, and M. van der Kooij, <span>“Frequency based substructuring with the virtual point transformation, flexible interface modes and a transmission simulator,”</span> in <em>Dynamics of coupled structures, volume 4: Proceedings of the 36th IMAC, a conference and exposition on structural dynamics 2018</em>, Springer, 2018, pp. 205–213.</div>
+</div>
+<div id="ref-almiron2022flexible" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">J. O. Almirón, F. Bianciardi, and W. Desmet, <span>“Flexible interface models for force/displacement field reconstruction applications,”</span> <em>Journal of Sound and Vibration</em>, vol. 534, p. 117001, 2022.</div>
+</div>
+<div id="ref-bofinger2025x" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[13] </div><div class="csl-right-inline">P. E. Bofinger, J. Boelens, S. W. Klaassen, and D. De Klerk, <span>“X-DoF: Automatic degree-of-freedom subset selection for inverse blocked force characterization,”</span> <em>Journal of Vibration and Acoustics</em>, vol. 147, no. 1, 2025.</div>
+</div>
+<div id="ref-meggitt2020completeness" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[14] </div><div class="csl-right-inline">J. Meggitt and A. Moorhouse, <span>“On the completeness of interface descriptions and the consistency of blocked forces obtained in situ,”</span> <em>Mechanical Systems and Signal Processing</em>, vol. 145, p. 106850, 2020.</div>
+</div>
+<div id="ref-hansen1987truncated" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[15] </div><div class="csl-right-inline">P. C. Hansen, <span>“The truncated SVD as a method for regularization,”</span> <em>BIT Numerical Mathematics</em>, vol. 27, no. 4, pp. 534–553, 1987.</div>
+</div>
+<div id="ref-carter2024thoughts" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[16] </div><div class="csl-right-inline">S. Carter, <span>“Thoughts on using sparse inverse solutions in transfer path analysis,”</span> in <em>IMAC, a conference and exposition on structural dynamics</em>, Springer, 2024, pp. 21–36.</div>
+</div>
+<div id="ref-blumensath2007difference" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[17] </div><div class="csl-right-inline">T. Blumensath and M. E. Davies, <span>“On the difference between orthogonal matching pursuit and orthogonal least squares,”</span> 2007.</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../research/frf_tmm_substruct/frf_tmm_substruct.html" class="pagination-link" aria-label="A mixed admittance/transfer matrix substructuring approach">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">A mixed admittance/transfer matrix substructuring approach</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

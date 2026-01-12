@@ -348,7 +348,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#example-1-dof-systems" id="toc-example-1-dof-systems" class="nav-link" data-scroll-target="#example-1-dof-systems">Example 1 DOF systems</a>
   <ul class="collapse">
-  <li><a href="#bass-isolated-machinery-force-transmissibility" id="toc-bass-isolated-machinery-force-transmissibility" class="nav-link" data-scroll-target="#bass-isolated-machinery-force-transmissibility">Bass isolated machinery (force transmissibility)</a></li>
+  <li><a href="#base-isolated-machinery-force-transmissibility" id="toc-base-isolated-machinery-force-transmissibility" class="nav-link" data-scroll-target="#base-isolated-machinery-force-transmissibility">Base isolated machinery (force transmissibility)</a></li>
   <li><a href="#sealed-loudspeaker" id="toc-sealed-loudspeaker" class="nav-link" data-scroll-target="#sealed-loudspeaker">Sealed loudspeaker</a></li>
   </ul></li>
   </ul>
@@ -1041,7 +1041,7 @@ Impulse response without the integrals..?
 </section>
 <section id="convolution-integral" class="level3">
 <h3 class="anchored" data-anchor-id="convolution-integral">Convolution integral</h3>
-<p>Consider an arbitary forcing function <span class="math inline">\(F(t)\)</span>, for example as in <a href="#fig-arbitaryF" class="quarto-xref">Figure&nbsp;15</a>. During a small time instant <span class="math inline">\(\Delta \tau\)</span>, we can regard <span class="math inline">\(F(t)\)</span> as an impulse <span class="math inline">\(F(\tau)\Delta \tau\)</span>, <span class="math display">\[
+<p>Consider an arbitrary forcing function <span class="math inline">\(F(t)\)</span>, for example as in <a href="#fig-arbitaryF" class="quarto-xref">Figure&nbsp;15</a>. During a small time instant <span class="math inline">\(\Delta \tau\)</span>, we can regard <span class="math inline">\(F(t)\)</span> as an impulse <span class="math inline">\(F(\tau)\Delta \tau\)</span>, <span class="math display">\[
 \Delta F(\tau) = F(\tau) \Delta \tau \delta(t-\tau)
 \]</span> Based on the impulse representation above, the complete forcing function can be approximated as, <span class="math display">\[
 F(t)\approx \sum F(\tau) \Delta \tau \delta(t-\tau)
@@ -1286,8 +1286,9 @@ Q = 2\pi \frac{\frac{1}{2}k|X_{0}|^2}{|X_{0}|^2 \pi \omega_d c } =  \frac{k}{\om
 </section>
 <section id="example-1-dof-systems" class="level1">
 <h1>Example 1 DOF systems</h1>
-<section id="bass-isolated-machinery-force-transmissibility" class="level2">
-<h2 class="anchored" data-anchor-id="bass-isolated-machinery-force-transmissibility">Bass isolated machinery (force transmissibility)</h2>
+<p>Before moving onto our treatment of general 2 DoF systems, lets consider a couple notable 1 DoF systems, specifically a base isolated machine and the sealed loudspeaker.</p>
+<section id="base-isolated-machinery-force-transmissibility" class="level2">
+<h2 class="anchored" data-anchor-id="base-isolated-machinery-force-transmissibility">Base isolated machinery (force transmissibility)</h2>
 <div id="fig-forceTrans" class="quarto-float quarto-figure quarto-figure-center anchored" style="float: right; margin: 10px;">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-forceTrans-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">

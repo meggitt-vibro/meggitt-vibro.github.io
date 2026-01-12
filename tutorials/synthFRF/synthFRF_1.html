@@ -85,6 +85,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../tutorials/synthIRF/synthIRF.html" rel="next">
 <link href="../../tutorials/blockedForce/blockedForce_1.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -204,7 +205,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../tutorials/synthFRF/synthFRF_1.html">Synthesising FRFs</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../tutorials/synthFRF/synthFRF_1.html">Synthesising Frequency Response Functions</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -237,7 +238,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/synthFRF/synthFRF_1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Synthesising FRFs</span></a>
+ <span class="menu-text">Synthesising Frequency Response Functions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/synthIRF/synthIRF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Synthesising Impulse Response Functions</span></a>
   </div>
 </li>
     </ul>
@@ -403,7 +410,7 @@ Figure&nbsp;1: Numerical mass-spring assembly used for FRF synthesis example.
 </figure>
 </div>
 <p>We begin by defining the mass and stiffness matrices <span class="math inline">\(\mathbf{M}\)</span> and <span class="math inline">\(\mathbf{K}\)</span> for the system in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a>.</p>
-<div id="d3e6154e" class="cell" data-execution_count="1">
+<div id="f1061b5b" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -822,7 +829,7 @@ Figure&nbsp;9: Structure of the global mass and stiffness matrices for a beam. B
 <section id="frf-functions" class="level3">
 <h3 class="anchored" data-anchor-id="frf-functions">FRF functions</h3>
 <p>Now that we have a means of building its mass and stiffness matrices, we are able to compute the beams FRF matrix. In the code below we define two FRF functions; one using the direct matrix inversion method, and the other a modal summation.</p>
-<div id="d4c6050d" class="cell" data-execution_count="9">
+<div id="e65e58ba" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> directFRF(M,K,C,f):</span>
@@ -1515,6 +1522,9 @@ Petyt, Maurice. 2010. <em>Introduction to Finite Element Vibration Analysis</em>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../../tutorials/synthIRF/synthIRF.html" class="pagination-link" aria-label="Synthesising Impulse Response Functions">
+        <span class="nav-page-text">Synthesising Impulse Response Functions</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="JWR Meggitt">
-<meta name="dcterms.date" content="2025-08-01">
+<meta name="dcterms.date" content="2026-01-05">
 <meta name="keywords" content="Substructuring, Transfer matrix method, Frequency response functions, Admittance coupling">
 
 <title>A mixed admittance/transfer matrix substructuring approach – Joshua Meggitt</title>
@@ -88,6 +88,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../research/GRVP/Main.html" rel="next">
 <link href="../../research/summary.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -231,6 +232,12 @@ window.Quarto = {
  <span class="menu-text">A mixed admittance/transfer matrix substructuring approach</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../research/GRVP/Main.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Improved force identification using a global-residual interface representation</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -241,18 +248,15 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#sec-structCoup" id="toc-sec-structCoup" class="nav-link" data-scroll-target="#sec-structCoup">Frequency-based structural coupling</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#sec-structCoup" id="toc-sec-structCoup" class="nav-link" data-scroll-target="#sec-structCoup"><span class="header-section-number">2</span> Frequency-based structural coupling</a>
   <ul class="collapse">
-  <li><a href="#sec-dualSS" id="toc-sec-dualSS" class="nav-link" data-scroll-target="#sec-dualSS">Admittance-based (FRF) coupling</a></li>
-  <li><a href="#transfer-matrix-based-tm-coupling" id="toc-transfer-matrix-based-tm-coupling" class="nav-link" data-scroll-target="#transfer-matrix-based-tm-coupling">Transfer matrix-based (TM) coupling</a></li>
+  <li><a href="#sec-dualSS" id="toc-sec-dualSS" class="nav-link" data-scroll-target="#sec-dualSS"><span class="header-section-number">2.1</span> Admittance-based (FRF) coupling</a></li>
+  <li><a href="#transfer-matrix-based-tm-coupling" id="toc-transfer-matrix-based-tm-coupling" class="nav-link" data-scroll-target="#transfer-matrix-based-tm-coupling"><span class="header-section-number">2.2</span> Transfer matrix-based (TM) coupling</a></li>
   </ul></li>
-  <li><a href="#sec-hybridCoup" id="toc-sec-hybridCoup" class="nav-link" data-scroll-target="#sec-hybridCoup">Hybrid Admittance-TM coupling</a></li>
-  <li><a href="#sec-numSim" id="toc-sec-numSim" class="nav-link" data-scroll-target="#sec-numSim">Numerical example</a></li>
-  <li><a href="#sec-conc" id="toc-sec-conc" class="nav-link" data-scroll-target="#sec-conc">Conclusions</a>
-  <ul class="collapse">
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
-  </ul></li>
+  <li><a href="#sec-hybridCoup" id="toc-sec-hybridCoup" class="nav-link" data-scroll-target="#sec-hybridCoup"><span class="header-section-number">3</span> Hybrid Admittance-TM coupling</a></li>
+  <li><a href="#sec-numSim" id="toc-sec-numSim" class="nav-link" data-scroll-target="#sec-numSim"><span class="header-section-number">4</span> Numerical example</a></li>
+  <li><a href="#sec-conc" id="toc-sec-conc" class="nav-link" data-scroll-target="#sec-conc"><span class="header-section-number">5</span> Conclusions</a></li>
   </ul>
 </nav>
     </div>
@@ -270,7 +274,7 @@ window.Quarto = {
   <div class="quarto-title-meta-heading">Affiliation</div>
   
     <div class="quarto-title-meta-contents">
-    <p class="author">JWR Meggitt <a href="mailto:j.w.r.meggitt1@salford.ac.uk" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+    <p class="author">JWR Meggitt </p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -285,7 +289,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 1, 2025</p>
+      <p class="date">January 5, 2026</p>
     </div>
   </div>
   
@@ -309,8 +313,8 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>To analyse the vibro-acoustic performance of a complex built-up structure it is convenient to adopted a component-based approach <span class="citation" data-cites="meggitt2025experimental"><a href="#ref-meggitt2025experimental" role="doc-biblioref">[1]</a></span>. The assembly is decomposed into a series of interconnecting components which are independently characterised, either by experiment or numerically. These component representations are then combined mathematically to yield a model of the assembled system, a process termed substructuring. The process of substructuring amounts to the enforcement of compatibility and equilibrium between the connecting degrees of freedom (DoFs) of each component. This can be achieved in a variety of ways, and in any of the domains typically used for structural dynamic analysis, including the physical, modal, state, time and frequency domains <span class="citation" data-cites="de2008general"><a href="#ref-de2008general" role="doc-biblioref">[2]</a></span>. In recent years, frequency domain methods have gained popularity, given their ease in which they allow for combining experimental and numerical component representations.</p>
 <p>In the frequency domain, components are most often represented by their <em>free-interface admittance</em> matrices, which describe their kinematic response due to a set of applied forces. Based on component admittance, various substructuring schemes are available, including direct <span class="citation" data-cites="meggitt2025experimental"><a href="#ref-meggitt2025experimental" role="doc-biblioref">[1]</a></span>, primal/dual <span class="citation" data-cites="de2008general"><a href="#ref-de2008general" role="doc-biblioref">[2]</a></span> and mixed <span class="citation" data-cites="d2014inverse"><a href="#ref-d2014inverse" role="doc-biblioref">[3]</a></span> formulations. The advantage of an admittance-based approach, is the relative ease in which the component admittance matrices can be measured. It is not however the only approach available. An alternative frequency domain representation is by the so-called <em>transfer matrix</em> <span class="citation" data-cites="rubin1967mechanical"><a href="#ref-rubin1967mechanical" role="doc-biblioref">[4]</a></span>, which relates the state vector (stacked force and response) between two sets of DoFs, usually considered the input and output of the component. The advantage of a transfer matrix approach is that structural coupling of two of more components is reduced to a simple multiplication of their respective transfer matrices. This is especially convenient for modeling systems where the components form a cascaded chain, such as when dealing with layered materials <span class="citation" data-cites="yildirim1999free"><a href="#ref-yildirim1999free" role="doc-biblioref">[5]</a></span>,<span class="citation" data-cites="song2014reduction"><a href="#ref-song2014reduction" role="doc-biblioref">[6]</a></span>.</p>
 <p>The transfer matrix method (TMM) has found greatest application in acoustics, where it is used extensively to model sound transmission through multi-layered structures <span class="citation" data-cites="lauriks1992acoustic"><a href="#ref-lauriks1992acoustic" role="doc-biblioref">[7]</a></span>, <span class="citation" data-cites="brouard1995general"><a href="#ref-brouard1995general" role="doc-biblioref">[8]</a></span>, <span class="citation" data-cites="massaglia2017modelling"><a href="#ref-massaglia2017modelling" role="doc-biblioref">[9]</a></span>, though applications also exist in structural dynamics and vibration. For example, in <span class="citation" data-cites="boiangiu2016transfer"><a href="#ref-boiangiu2016transfer" role="doc-biblioref">[10]</a></span> and <span class="citation" data-cites="lee2016free"><a href="#ref-lee2016free" role="doc-biblioref">[11]</a></span> the authors use the TMM to model the dynamics of beams with variable cross-sections. In <span class="citation" data-cites="pearson1982transfer"><a href="#ref-pearson1982transfer" role="doc-biblioref">[12]</a></span> the TMM is used as an analytical tool to study the vibration of compressed helical springs. In <span class="citation" data-cites="hsieh2006modified"><a href="#ref-hsieh2006modified" role="doc-biblioref">[13]</a></span> and <span class="citation" data-cites="tsai2013transfer"><a href="#ref-tsai2013transfer" role="doc-biblioref">[14]</a></span> the TMM is applied to the study of rotor-bearing systems comprising coupled lateral and torsional vibration and local/global coupler offsets. In <span class="citation" data-cites="sun2007vibrational"><a href="#ref-sun2007vibrational" role="doc-biblioref">[15]</a></span> TMs are used to analyses the vibrational power flow through a MIMO system.</p>
@@ -318,14 +322,14 @@ window.Quarto = {
 <p>In this paper we present a mixed admittance/transfer matrix-based substructuring scheme. We consider the problem depicted in <a href="#fig-FRFTT" class="quarto-xref">Figure&nbsp;1</a> (though the proposed scheme can readily be generalised to more complex systems), where two admittance-based components are coupled by a series of connecting elements which together form a <em>junction</em>. We wish to represent the dynamics of this layered junction by the more convenient transfer matrix, whilst keeping the end components in their admittance form. The result is a generalization of the dual formulation for admittance-based substructuring, where the conditions of equilibrium and compatibility between components are replaced by the junction transfer matrix equations, themselves built from an arbitrary number of sub-element transfer matrices. The principle advantage of the proposed approach is the ease of which complex layered systems can be incorporated within an admittance substructuring scheme. Adding, removing, or reordering junction components is achieved by directly including, removing, or reordering their respective transfer matrices, thus avoiding the need to redefine the Boolean coupling matrices required by the conventional dual formulation.</p>
 <p>Having outlined the context of this paper, its remainder will be structured as follows. In <a href="#sec-structCoup" class="quarto-xref">Section&nbsp;2</a> we introduce the admittance and transfer matrix methods for structural coupling. Following this in <a href="#sec-hybridCoup" class="quarto-xref">Section&nbsp;3</a>, we present the mixed admittance-transfer matrix substructuring scheme with a simple numerical example in <a href="#sec-numSim" class="quarto-xref">Section&nbsp;4</a>. Finally, <a href="#sec-conc" class="quarto-xref">Section&nbsp;5</a> draws some concluding remarks.</p>
 </section>
-<section id="sec-structCoup" class="level1">
-<h1>Frequency-based structural coupling</h1>
+<section id="sec-structCoup" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Frequency-based structural coupling</h1>
 <p>In this section we introduce the admittance and transfer matrix-based substructuring methods that we wish to combine into a common framework. The principle difference between these two methods is in how they represent the dynamics of their respective substructures (described below). Irrespective of this representation, the rigid coupling of two components is governed by the conditions of compatibility and equilibrium, <span class="math display">\[
     \mathbf{u}_1 = \mathbf{u}_2 \qquad
     \mathbf{g}_1 = -\mathbf{g}_2
 \]</span> which state that when two components are in rigid contact their interface DoFs must a) have the same kinematic response (displacement, velocity and acceleration) and b) exert equal and opposite forces onto one another. Depending on the chosen domain and/or component representation, the methods for enforcing these constraints will differ.</p>
-<section id="sec-dualSS" class="level2">
-<h2 class="anchored" data-anchor-id="sec-dualSS">Admittance-based (FRF) coupling</h2>
+<section id="sec-dualSS" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sec-dualSS"><span class="header-section-number">2.1</span> Admittance-based (FRF) coupling</h2>
 <p>With admittance-based substructuring, each component is represented by a complex admittance matrix <span class="math inline">\(\mathbf{Y}^{(n)}\)</span> that satisfies the equation of motion (per frequency), <span class="math display">\[
     \mathbf{u}^{(n)} = \mathbf{Y}^{(n)} (\mathbf{f}^{(n)} + \mathbf{g}^{(n)})
 \]</span> where <span class="math inline">\(\mathbf{f}\)</span> and <span class="math inline">\(\mathbf{g}\)</span> are, respectively, the externally applied and interface coupling forces that act on the component, and <span class="math inline">\(\mathbf{u}\)</span> is its kinematic response (displacement, velocity or acceleration depending on the units of <span class="math inline">\(\mathbf{Y}\)</span>).</p>
@@ -376,8 +380,8 @@ window.Quarto = {
     \mathbf{Y}_C =   \mathbf{Y} -\mathbf{Y}\mathbf{B}^{\rm T}\left(\mathbf{B}\mathbf{Y}\mathbf{B}^{\rm T}\right)^{-1}\mathbf{B}\mathbf{Y}.  
 \tag{5}\]</span></span> Equation <a href="#eq-dual" class="quarto-xref">Equation&nbsp;5</a> provides a convenient framework for general substructuring; it allows an arbitrary number of components to be assembled in any configuration, and avoids large matrix inversions typical of other admittance-based formulations.</p>
 </section>
-<section id="transfer-matrix-based-tm-coupling" class="level2">
-<h2 class="anchored" data-anchor-id="transfer-matrix-based-tm-coupling">Transfer matrix-based (TM) coupling</h2>
+<section id="transfer-matrix-based-tm-coupling" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="transfer-matrix-based-tm-coupling"><span class="header-section-number">2.2</span> Transfer matrix-based (TM) coupling</h2>
 <p>With transfer matrix-based coupling, each component is represented by a complex transfer matrix <span class="math inline">\(\mathbf{T}\)</span> that relates the force and response between two sets of DoFs (say <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>), <span class="math display">\[
     \left(\begin{array}{c}\mathbf{u}_{b} \\ \mathbf{f}_b - \mathbf{g}_{b}\end{array}\right) = \overbrace{\left[\begin{array}{c c} \mathbf{T}^u&amp; \mathbf{\Gamma} \\ \mathbf{\Omega} &amp; \mathbf{T}^g\end{array}\right]}^{\mathbf{T}}\left( \begin{array}{c}\mathbf{u}_{a} \\ \mathbf{f}_a + \mathbf{g}_a \end{array} \right).
 \]</span> Within the transfer matrix, the submatrices <span class="math inline">\(\mathbf{T}^g\)</span> and <span class="math inline">\(\mathbf{T}^u\)</span> represent a pair of force and response transmissibilities. Whilst transmissibilities have many interesting properties and applications, they do not themselves fully characterize a component <span class="citation" data-cites="maia12011whys"><a href="#ref-maia12011whys" role="doc-biblioref">[20]</a></span>. The off-diagonal terms <span class="math inline">\(\mathbf{\Gamma}\)</span> and <span class="math inline">\(\mathbf{\Omega}\)</span> provide the necessary force-response cross-terms required for the transfer matrix representation of a component to be complete (see <a href="#nte-addTM" class="quarto-xref">Note&nbsp;1</a>).</p>
@@ -439,8 +443,8 @@ Note&nbsp;1: Relation between admittance and transfer matrix
 </div>
 </section>
 </section>
-<section id="sec-hybridCoup" class="level1">
-<h1>Hybrid Admittance-TM coupling</h1>
+<section id="sec-hybridCoup" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Hybrid Admittance-TM coupling</h1>
 <p>We wish to combine the admittance and transfer matrix coupling schemes describe above, to model systems of the form shown in <a href="#fig-FRFTT" class="quarto-xref">Figure&nbsp;1</a>, where the junction between two admittance components is represented by a general transfer matrix.</p>
 <p>In the proposed hybrid substructuring scheme, the coupling conditions (i.e.&nbsp;equilibrium and compatibility) between two admittance-based components (<span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>) are replaced by the transfer matrix of a coupling junction <span class="math inline">\(J\)</span>, <span id="eq-jTM2"><span class="math display">\[
     \left(\begin{array}{c}\mathbf{u}_{c_2} \\ -\mathbf{g}_{c_2}\end{array}\right)  = \left[\begin{array}{c c} \mathbf{T}^u_{J} &amp; \mathbf{\Gamma}_J \\ \mathbf{\Omega}_J &amp; \mathbf{T}^{g}_J\end{array}\right] \left( \begin{array}{c}\mathbf{u}_{c_1} \\ \mathbf{g}_{c_1}\end{array} \right).
@@ -551,8 +555,8 @@ Figure&nbsp;1: Hybrid substructuring model; components <span class="math inline"
     \end{array}\right],  \quad \quad    \mathbf{T}_J = \left[\begin{array}{c c} \mathbf{T}_u &amp; \mathbf{\Gamma} \\ \mathbf{\Omega} &amp; \mathbf{T}_{g}\end{array}\right].
 \]</span> Note that in <a href="#eq-coupY" class="quarto-xref">Equation&nbsp;22</a> only the interface DoFs of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are included, i.e.&nbsp;not those of at the ends of the layered junction. Instead, the effect of the junction is treated similarly to a static joint, through the <em>dynamic</em> compatibility/equilibrium conditions in <a href="#eq-3field2" class="quarto-xref">Equation&nbsp;16</a> - <a href="#eq-3field3" class="quarto-xref">17</a>.</p>
 <p>To verify <a href="#eq-coupY" class="quarto-xref">Equation&nbsp;22</a> and <a href="#eq-coupY2" class="quarto-xref">23</a> we can consider two basic junction types: a rigid connection and a massless spring-damper.</p>
-<section id="rigid-junction" class="level4">
-<h4 class="anchored" data-anchor-id="rigid-junction">Rigid junction</h4>
+<section id="rigid-junction" class="level4" data-number="3.0.0.1">
+<h4 data-number="3.0.0.1" class="anchored" data-anchor-id="rigid-junction"><span class="header-section-number">3.0.0.1</span> Rigid junction</h4>
 <p>The transfer matrix of a rigid junction is given by, <span class="math display">\[
     \left(\begin{array}{c}\mathbf{u}_{c_2} \\ -\mathbf{g}_{c_2}\end{array}\right) = \left[\begin{array}{c c}  \mathbf{I} &amp;\mathbf{0} \\ \mathbf{0} &amp; \mathbf{I}\end{array}\right] \left( \begin{array}{c}\mathbf{u}_{c_1} \\ \mathbf{g}_{c_1}\end{array} \right)
 \]</span> from which we have, <span class="math display">\[
@@ -572,8 +576,8 @@ Figure&nbsp;1: Hybrid substructuring model; components <span class="math inline"
     \mathbf{Y}_C =  \mathbf{Y}-\mathbf{Y}\mathbf{B}^{\rm T}\left[\mathbf{B} \mathbf{Y}\mathbf{B}^{\rm T}\right]^{-1}\mathbf{B}\mathbf{Y}
 \]</span> which is standard admittance-based coupling.</p>
 </section>
-<section id="spring-damper-junction" class="level4">
-<h4 class="anchored" data-anchor-id="spring-damper-junction">Spring damper junction</h4>
+<section id="spring-damper-junction" class="level4" data-number="3.0.0.2">
+<h4 data-number="3.0.0.2" class="anchored" data-anchor-id="spring-damper-junction"><span class="header-section-number">3.0.0.2</span> Spring damper junction</h4>
 <p>The transfer matrix of an idealised spring-damper junction with stiffness <span class="math inline">\(K\)</span> and damping <span class="math inline">\(C\)</span> is given by, <span class="math display">\[
     \left(\begin{array}{c}\mathbf{u}_{c_2} \\ -\mathbf{g}_{c_2}\end{array}\right)= \left[\begin{array}{c c} - \mathbf{Z}_{ab}^{-1}\mathbf{Z}_{aa} &amp;\mathbf{Z}_{ab}^{-1} \\ -\mathbf{Z}_{ba}+\mathbf{Z}_{bb} \mathbf{Z}_{ab}^{-1}\mathbf{Z}_{aa} &amp; -\mathbf{Z}_{bb} \mathbf{Z}_{ab}^{-1}\end{array}\right]   \left(\begin{array}{c}\mathbf{u}_{c_1} \\ \mathbf{g}_{c_1}\end{array}\right)= \left[\begin{array}{c c} \mathbf{I} &amp; -\mbox{diag}\left(\frac{K}{j\omega}+C\right)^{-1} \\ \mathbf{0}  &amp; \mathbf{I}\end{array}\right]     \left(\begin{array}{c}\mathbf{u}_{c_1} \\ \mathbf{g}_{c_1}\end{array}\right)
 \]</span> from which we have, <span class="math display">\[
@@ -594,8 +598,8 @@ Figure&nbsp;1: Hybrid substructuring model; components <span class="math inline"
 \]</span> which is the same as the well known result obtained when considering the dual formulation with interface weakening (i.e.&nbsp;a relaxation of compatibility), see for example <span class="citation" data-cites="mahmoudi2020comparison"><a href="#ref-mahmoudi2020comparison" role="doc-biblioref">[21]</a></span>.</p>
 </section>
 </section>
-<section id="sec-numSim" class="level1">
-<h1>Numerical example</h1>
+<section id="sec-numSim" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Numerical example</h1>
 <p>To verify the hybrid substructuring scheme described through <a href="#sec-hybridCoup" class="quarto-xref">Section&nbsp;3</a>, and illustrate some of its potential benefits, we present a simple numerical example consisting of end-to-end coupled beams considering translational and rotational DoFs. An illustration of the example is shown in <a href="#fig-numSim" class="quarto-xref">Figure&nbsp;2</a>. Two free-free beams (<span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>) are coupled end-to-end through a junction <span class="math inline">\(J\)</span>. This junction is itself composed two identical beams coupled end-to-end. The individual junction beams are described by their transfer matrix <span class="math inline">\(\mathbf{T}_{J1}\)</span>, and the entire junction by the coupled transfer matrix <span class="math inline">\(\mathbf{T}_{J11} = \mathbf{T}_{J1}\mathbf{T}_{J1}\)</span>. We will also consider a second example, not shown in <a href="#fig-numSim" class="quarto-xref">Figure&nbsp;2</a>, where a third beam is installed in the junction such that <span class="math inline">\(\mathbf{T}_{J121} = \mathbf{T}_{J1}\mathbf{T}_{J2}\mathbf{T}_{J1}\)</span>, where <em>J2</em> differs in material properties and geometry to <em>A, B</em> and <em>J1</em>.</p>
 <div id="fig-numSim" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -664,7 +668,7 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
 </div>
 </figure>
 </div>
-<div id="ce639d7f" class="cell" data-execution_count="1">
+<div id="754c813f" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code: Set up some function definitions</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %% Load packages</span></span>
@@ -871,7 +875,7 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
 <span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Yc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="235318df" class="cell" data-execution_count="2">
+<div id="e0e906fb" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code: Compute substructure admittance matrices</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %% Compute FRFs</span></span>
@@ -928,7 +932,7 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
         &amp; \mathbf{Y}_B
     \end{array}\right] \quad \mbox{with} \quad \mathbf{T}_{J11} = \mathbf{T}_{J1} \mathbf{T}_{J1} \quad \mbox{or} \quad \mathbf{T}_{J121} = \mathbf{T}_{J1}\mathbf{T}_{J2}\mathbf{T}_{J1}.
 \]</span></p>
-<div id="2044aea5" class="cell" data-execution_count="3">
+<div id="87953a94" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code: Perform substructuring</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-allocate arrays</span></span>
@@ -1164,13 +1168,12 @@ Figure&nbsp;4: Coupled mobility of <em>A-J1-J1-B</em> (orange) and <em>A-J1-J2-J
 </div>
 <p>The convenience of the hybrid scheme becomes evident when investigating more complex junctions. One can readily compute the transfer matrix of an arbitrarily complex junction <span class="math inline">\(\mathbf{T}_{J} = \mathbf{T}_{J1}\mathbf{T}_{J2}\cdots\mathbf{T}_{JN}\)</span> with no need to redefine the substructuring equations. This might be useful for problems involving the optimisation of layered structures, such as multi-stage isolation platforms.</p>
 </section>
-<section id="sec-conc" class="level1">
-<h1>Conclusions</h1>
+<section id="sec-conc" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Conclusions</h1>
 <p>Substructuring is an important step in the analysis of complex built-up structures, with formulations existing in the physical, modal, state, time and frequency domains. In the frequency domain, admittance-based substructuring has become the preferred approach, especially when dealing with components that are characterised experimentally. An alternative approach is the transfer matrix method (TMM). With the TMM, structural components are represented by their <em>transfer matrices</em> (TMs) and coupling is achieved simply by multiplying the TMs of the respective components together; there is no need to define any Boolean matrices to co-locate coupling DoFs. This makes the TMM especially convenient when dealing with periodic or complex layered structures, where TMs can be easily combined into arbitrary configurations.</p>
 <p>In the present paper we formulate a hybrid substructuring scheme that enables the coupling of admittance-based components by an arbitrarily complex ‘junction’, whose dynamics are represented a transfer matrix. This approach allows for the convenient manipulation of the coupling junction (e.g.&nbsp;adding, removing or reordering components) by directly manipulating the product of their transfer matrices. The result is a generalization of the dual substructuring formulation; the standard Boolean coupling matrices are replaced with force and response transmissibilties and additional force-response coupling terms are introduced.</p>
 <p>The method is verified by simple numerical model consisting of end-to-end coupled beams, showing exact agreement with standard dual formulation.</p>
-<section id="references" class="level3">
-<h3 class="anchored" data-anchor-id="references">References</h3>
+<p><strong>References</strong></p>
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-meggitt2025experimental" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">J. Meggitt and A. Moorhouse, <em>Experimental vibro-acoustics: In situ and blocked force methods for component-based simulation and virtual prototyping</em>. CRC Press, 2025.</div>
@@ -1239,9 +1242,36 @@ Figure&nbsp;4: Coupled mobility of <em>A-J1-J1-B</em> (orange) and <em>A-J1-J2-J
 
 
 </section>
-</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@article{meggitt2026,
+  author = {Meggitt, JWR},
+  title = {A Mixed Admittance/Transfer Matrix Substructuring Approach},
+  journal = {Journal of Structural Dynamics},
+  volume = {4},
+  pages = {45 - 57},
+  date = {2026-01-05},
+  doi = {10.25518/2684-6500.314},
+  langid = {en},
+  abstract = {Substructuring is an important step in the analysis of
+    complex built-up structures. It is the process by which individual
+    components are mathematically assembled to build a model of a
+    coupled system. In the frequency domain, admittance or FRF-based
+    substructuring has become the preferred approach, especially when
+    considering experimental components for which FRFs are the most
+    convenient representation. However, FRFs are not the only way to
+    represent a component in the frequency domain. Often, particularly
+    for layered systems, the so-called *transfer matrix* (TM)
+    representation becomes more convenient; component coupling is
+    achieved by simply multiplying together their respective TMs. In the
+    present paper we develop a hybrid substructuring scheme that allows
+    the coupling of FRF-based components using a TM representation of
+    the interconnecting junction. Such an approach might be beneficial
+    for structures with complex layered connections (well suited to
+    TM-based coupling), and has the potential to provide additional
+    insight into structural transmission through multiple interconnected
+    elements.}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1648,6 +1678,9 @@ Figure&nbsp;4: Coupled mobility of <em>A-J1-J1-B</em> (orange) and <em>A-J1-J2-J
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../../research/GRVP/Main.html" class="pagination-link" aria-label="Improved force identification using a global-residual interface representation">
+        <span class="nav-page-text">Improved force identification using a global-residual interface representation</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
