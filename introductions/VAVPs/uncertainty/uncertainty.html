@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Uncertainty – Joshua Meggitt</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -38,10 +41,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-4621e6c092758692ba23953146af9eda.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,7 +74,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -84,7 +87,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -434,9 +437,9 @@ Figure&nbsp;1: Unconstrained and partially constrained assemblies for use in der
 \mathbf{{{v}}}_{{r}} = \mathbf{Y}_{X{rc}} \mathbf{{\bar{f}}}_{{c}}.
 \]</span> Let us now consider what happens if the interface model is <em>incomplete</em>. We do this by treating the interface <span class="math inline">\(c\)</span> as two sets of DoFs: those that are known and measurable, <span class="math inline">\(c_i\)</span>; and those that are unknown, or known but unmeasurable, <span class="math inline">\(c_j\)</span>. The in situ relation (in its forward form) can then be rewritten as the sum of their respective contributions, <span id="eq-genProb"><span class="math display">\[
 \mathbf{v}_{{b}}  = \mathbf{Y}_{C{bc_i}}\mathbf{\bar{f}}_{{c_i}} +\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{_{c_j}}.
-\qquad(1)\]</span></span> As discussed in <a href="../../../introductions/VAVPs/blockedForce/blockedForce.html">Blocked forces</a>, the in situ characterisation of the blocked force requires the operational response to be pre-multiplied by the inverse of a measured FRF matrix. Recall that the <span class="math inline">\(c_j\)</span> DoFs are inaccessible for measurement, or perhaps unknown, and only the <span class="math inline">\(\mathbf{Y}_{C{bc_i}}\)</span> FRF is available. The blocked force is then given by, <span id="eq-acquiredBF"><span class="math display">\[
+\tag{1}\]</span></span> As discussed in <a href="../../../introductions/VAVPs/blockedForce/blockedForce.html">Blocked forces</a>, the in situ characterisation of the blocked force requires the operational response to be pre-multiplied by the inverse of a measured FRF matrix. Recall that the <span class="math inline">\(c_j\)</span> DoFs are inaccessible for measurement, or perhaps unknown, and only the <span class="math inline">\(\mathbf{Y}_{C{bc_i}}\)</span> FRF is available. The blocked force is then given by, <span id="eq-acquiredBF"><span class="math display">\[
 \mathbf{Y}_{C{bc_i}}^{-1}\mathbf{v}_{{b}}  = \mathbf{\tilde{\bar{f}}}_{{c_i}} = \mathbf{\bar{f}}_{{c_i}} +\mathbf{Y}_{C{bc_i}}^{-1}\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{{c_j}}
-\qquad(2)\]</span></span> where <span class="math inline">\(\mathbf{\tilde{\bar{f}}}_{{c_i}}\)</span> represents the acquired blocked force and <span class="math inline">\(\mathbf{\bar{f}}_{{c_i}}\)</span> its true value. Note that the true blocked force is accompanied by an additional term, <span class="math inline">\(\mathbf{Y}_{C{bc_i}}^{-1}\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{{c_j}}\)</span>. This has arisen due to the neglected DoFs <span class="math inline">\(c_j\)</span>. This term constitutes a <em>bias error</em> on the true blocked force. Also notice that this additional term is dependent upon the dynamics of the coupled assembly. Consequently, the acquired blocked force is no longer an independent property of the source and is no longer transferable between assemblies! This is bad news for a VAVP… After all, one of the principle advantages of the blocked force over other source characterisation methods is that the acquired result may be transferred from one assembly, say a test bench, to another, say a virtual prototype.</p>
+\tag{2}\]</span></span> where <span class="math inline">\(\mathbf{\tilde{\bar{f}}}_{{c_i}}\)</span> represents the acquired blocked force and <span class="math inline">\(\mathbf{\bar{f}}_{{c_i}}\)</span> its true value. Note that the true blocked force is accompanied by an additional term, <span class="math inline">\(\mathbf{Y}_{C{bc_i}}^{-1}\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{{c_j}}\)</span>. This has arisen due to the neglected DoFs <span class="math inline">\(c_j\)</span>. This term constitutes a <em>bias error</em> on the true blocked force. Also notice that this additional term is dependent upon the dynamics of the coupled assembly. Consequently, the acquired blocked force is no longer an independent property of the source and is no longer transferable between assemblies! This is bad news for a VAVP… After all, one of the principle advantages of the blocked force over other source characterisation methods is that the acquired result may be transferred from one assembly, say a test bench, to another, say a virtual prototype.</p>
 <p>If we consider the transfer of this incomplete blocked force into a secondary assembly denote <span class="math inline">\(X\)</span> (say a VAVP), we obtain a response prediction of the form, <span class="math display">\[
 \mathbf{\tilde{v}}_{X{r}}  =  \mathbf{Y}_{X{rc_i}}  \mathbf{{\bar{f}}}_{{c_i}} +\mathbf{Y}_{X{rc_i}} \mathbf{Y}_{C{bc_i}}^{-1}\mathbf{Y}_{C{bc_j}}\mathbf{\bar{f}}_{{c_j}}.
 \]</span> whilst the true response (using the complete blocked force) takes the form, <span class="math display">\[
@@ -455,17 +458,17 @@ Figure&nbsp;1: Unconstrained and partially constrained assemblies for use in der
 <p>A solution is to replace the operational blocked force with those obtained using <em>artificial excitations</em>, i.e.&nbsp;external forces applied to the housing of the source, usually by an instrumented force hammer. Artificial excitations can be applied in any number, and in such a way to ensure that all interface DoFs are excited, overcoming issue 1. Also, with the source remaining inactive, inconsistencies between active and passive quantities (issue 2) are also avoided.</p>
 <p>So, the response produced by an artificial excitation at some remote location <span class="math inline">\(a\)</span> on the source, can be reproduced identically by the corresponding (artificial) blocked force according to, <span id="eq-blockFComplete2"><span class="math display">\[
         \mathbf{v}_{{c_i}}  = \mathbf{Y}_{C{c_ic_i}}\mathbf{\bar{f}}_{{c_i}} = \mathbf{Y}_{C{c_ia}}\mathbf{{f}}_{a}.
-\qquad(3)\]</span></span> From the above we obtain a transmissibility-based relation between the artificial excitation force and the resulting blocked force, <span class="math display">\[
+\tag{3}\]</span></span> From the above we obtain a transmissibility-based relation between the artificial excitation force and the resulting blocked force, <span class="math display">\[
     \mathbf{\bar{f}}_{{c_i}} = \mathbf{Y}_{C{c_ic_i}}^{-1}\mathbf{Y}_{C{c_ia}}\mathbf{\bar{f}}_{a}.
 \]</span> Using the blocked force, we are able to predict the response at the remote receiver DoFs <span class="math inline">\(b\)</span>, <span id="eq-ICC_eq"><span class="math display">\[
         \mathbf{v}_{{b}}  = \overbrace{\mathbf{Y}_{C{bc_i}}\mathbf{Y}_{C{c_ic_i}}^{-1}\mathbf{Y}_{C{c_ia}}}^{\mathbf{Y}_{C{ba}}^{(c_i)}}\mathbf{{f}}_{a}.
-\qquad(4)\]</span></span> Noting that <a href="#eq-ICC_eq" class="quarto-xref">Equation&nbsp;4</a> simply relates the external force at <span class="math inline">\(a\)</span> to the response at <span class="math inline">\(b\)</span>, its FRF product must be the transfer FRF from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)}\)</span>. Here we use the superscript <span class="math inline">\(\square^{(c_i)}\)</span> to denote that the FRF reconstruction is done only through the interface DoFs <span class="math inline">\(c_i\)</span>.</p>
+\tag{4}\]</span></span> Noting that <a href="#eq-ICC_eq" class="quarto-xref">Equation&nbsp;4</a> simply relates the external force at <span class="math inline">\(a\)</span> to the response at <span class="math inline">\(b\)</span>, its FRF product must be the transfer FRF from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)}\)</span>. Here we use the superscript <span class="math inline">\(\square^{(c_i)}\)</span> to denote that the FRF reconstruction is done only through the interface DoFs <span class="math inline">\(c_i\)</span>.</p>
 <p>With a complete interface (<span class="math inline">\(c=c_i\)</span>), the reconstructed FRF <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)} = \mathbf{Y}_{C{bc_i}}\mathbf{Y}_{C{c_ic_i}}^{-1}\mathbf{Y}_{C{c_ia}}\)</span> is identically equal to the direct FRF <span class="math inline">\(\mathbf{Y}_{C{ba}}\)</span> (in practice small discrepancies due to experimental error will be present). However, with an <em>incomplete</em> interface, the contribution of the neglected <span class="math inline">\(c_j\)</span> DoFs will not be accounted for by <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)}\)</span>, though will be present in <span class="math inline">\(\mathbf{Y}_{C{ba}}\)</span>. As a result an approximation is introduced. The level of agreement between the reconstructed and direct FRFs is proportional to the bias error in <a href="#eq-acquiredBF" class="quarto-xref">Equation&nbsp;2</a>. Therefore, to quantify completeness it is sufficient to assess the similarity of the direct and reconstructed FRFs, <span class="math inline">\(\mathbf{Y}_{C{ba}}\)</span> and <span class="math inline">\(\mathbf{Y}_{C{ba}}^{(c_i)}\)</span>. To this end, a correlation-based measure of similarity yields the so-called <em>Interface Completeness Criterion</em> (ICC), <span id="eq-ICCeq"><span class="math display">\[
 \begin{align}
     &amp;\mbox{ICC} = \mbox{Corr}\left(\mbox{Vec}\left({\mathbf{Y}}_{{C}{ba}}^{{(c)}}\right),\mbox{Vec}\left({\mathbf{Y}}_{{C}{ba}}^{{(c_i)}}\right)\right) \\
     &amp; \mbox{Corr}\left(\mathbf{a},\mathbf{b}\right) = \frac{ \left|\mathbf{a}^{\rm H}\mathbf{b} \right|^2 }{ \mathbf{a}^{\rm H} \mathbf{a} \cdot \mathbf{b}^{\rm H}\mathbf{b}}
 \end{align}
-\qquad(5)\]</span></span> where <span class="math inline">\(\mbox{Vec}\left({\square}\right)\)</span> denotes matrix column-wise vectorisation and <span class="math inline">\(\square^{\rm H}\)</span> represents a conjugate transpose. Note that to form the necessary vectors, multiple excitation and/or response DoFs (<span class="math inline">\(b\)</span> and <span class="math inline">\(a\)</span>) should be considered when measuring the necessary FRFs. Ideally, the excitations <span class="math inline">\(a\)</span> should be sufficient in number, and varied in direction, such that they are able to control all interface motions in the frequency range of interest. This requires the number of <span class="math inline">\(a\)</span> points to be equal to or greater than the number of interface DoFs. Similarly, the responses positions <span class="math inline">\(b\)</span> should be such that they are sufficient in number and orientation to observe all interface motions. This requires the number of <span class="math inline">\(b\)</span> points to also be equal to or greater than the number of interface DoFs.</p>
+\tag{5}\]</span></span> where <span class="math inline">\(\mbox{Vec}\left({\square}\right)\)</span> denotes matrix column-wise vectorisation and <span class="math inline">\(\square^{\rm H}\)</span> represents a conjugate transpose. Note that to form the necessary vectors, multiple excitation and/or response DoFs (<span class="math inline">\(b\)</span> and <span class="math inline">\(a\)</span>) should be considered when measuring the necessary FRFs. Ideally, the excitations <span class="math inline">\(a\)</span> should be sufficient in number, and varied in direction, such that they are able to control all interface motions in the frequency range of interest. This requires the number of <span class="math inline">\(a\)</span> points to be equal to or greater than the number of interface DoFs. Similarly, the responses positions <span class="math inline">\(b\)</span> should be such that they are sufficient in number and orientation to observe all interface motions. This requires the number of <span class="math inline">\(b\)</span> points to also be equal to or greater than the number of interface DoFs.</p>
 <p>If the chosen interface representation is complete, that is, <span class="math inline">\(|c_i| = |c|\)</span>, the ICC will be equal to one. If the interface description is incomplete, <span class="math inline">\(|c_i| &lt; |c|\)</span> the ICC will be less than 1. In practice, it is important to note that the FRFs used in <a href="#eq-ICCeq" class="quarto-xref">Equation&nbsp;5</a> are obtained from measurement and are therefore subject to some degree of uncertainty. Consequently, even in the case of a complete interface representation, an ICC equal to 1 is unlikely to be achieved (though the authors have found it usually straightforward to distinguish noise-induced discrepancies, which tend to be localised in frequency, with those from neglected DoFs which tend to cover a wide frequency range).</p>
 <p>The ICC provides a measure of interface completeness irrespective of the operating nature of the connected components. For example, suppose a vibration source generates forces exclusively in the vertical <span class="math inline">\(z\)</span> DoFs. Whilst a decent blocked force characterisation might be obtained using the <span class="math inline">\(z\)</span> DoFs alone, this would not constitute a complete interface representation according to the ICC if other DoFs are important for the coupling. The ICC considers completeness more generally, specifically with respect to the applied forces at <span class="math inline">\(a\)</span> and observed responses at <span class="math inline">\(b\)</span>.</p>
 <p>The ICC can be used also to assess the completeness of interface representations for structural coupling and decoupling problems. For decoupling, tests are required on the assembled structure (target component coupled to residual test bench), and so the ICC can be applied as standard. For coupling problems, one usually only measures the component in its free-interface configuration, from which the ICC can not be computed. The component must be installed onto some test bench such that ICC can be computed its interface representation be assessed.</p>
@@ -491,15 +494,15 @@ Figure&nbsp;1: Unconstrained and partially constrained assemblies for use in der
 <h4 class="anchored" data-anchor-id="variance-and-covariance">Variance and covariance</h4>
 <p>Variance is a measure of how far a set of values are spread out from the mean. Given a discrete set of values, for example the repeated measurement of a quantity <span class="math inline">\(x\)</span>, the variance is calculated as, <span id="eq-var2"><span class="math display">\[
 \mbox{Var}(x) = \frac{1}{N-1}\sum_{n=1}^N (x_n-{\mu_x})^2=\sigma^2_x.
-\qquad(6)\]</span></span> where <span class="math inline">\(\sigma_x\)</span> is termed the standard deviation. The variance and standard deviation are a strictly positive quantities, which get larger as the data becomes more widely spread.</p>
+\tag{6}\]</span></span> where <span class="math inline">\(\sigma_x\)</span> is termed the standard deviation. The variance and standard deviation are a strictly positive quantities, which get larger as the data becomes more widely spread.</p>
 <p>Strictly speaking, <a href="#eq-var2" class="quarto-xref">Equation&nbsp;6</a> is called the <em>sample</em> variance, as opposed to the population variance because it is based on the sample mean, which is not necessarily equal to the population mean. The sample <em>vs.</em> population mean can introduce a bias error on the estimate of <span class="math inline">\(\sigma_x^2\)</span>. The use of <span class="math inline">\(N-1\)</span> as opposed to <span class="math inline">\(N\)</span> ensures that the sample variance gives an unbiased estimate of the population variance. Clearly, this only has a noticeable effect when <span class="math inline">\(N\)</span> is quite small.</p>
 <p>Variance describes the variability of a measured quantity, say <span class="math inline">\(x\)</span>. Covariance describes the <em>joint variability</em> between two measured quantities, say <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. The sample covariance is calculated as, <span id="eq-cov"><span class="math display">\[
 \mbox{Cov}(x,y) = \frac{1}{N-1}\sum_{n=1}^N (x_n-\mu_x)(y_n-\mu_y) =\sigma_{xy}^2.
-\qquad(7)\]</span></span> Unlike the variance, covariance can be positive or negative depending on how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> vary relative to one another. For example, suppose we have a set of measurements for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. If the larger values of <span class="math inline">\(x\)</span> correspond mostly with larger values of <span class="math inline">\(y\)</span>, and the same holds for small values - <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have similar behaviour - then their covariance is positive. Conversely, if the larger values of <span class="math inline">\(x\)</span> correspond mostly with smaller values of <span class="math inline">\(y\)</span>, and visa versa - <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have opposite behaviour - then their covariance is negative. The sign of the covariance shows the linear tendency between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+\tag{7}\]</span></span> Unlike the variance, covariance can be positive or negative depending on how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> vary relative to one another. For example, suppose we have a set of measurements for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. If the larger values of <span class="math inline">\(x\)</span> correspond mostly with larger values of <span class="math inline">\(y\)</span>, and the same holds for small values - <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have similar behaviour - then their covariance is positive. Conversely, if the larger values of <span class="math inline">\(x\)</span> correspond mostly with smaller values of <span class="math inline">\(y\)</span>, and visa versa - <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have opposite behaviour - then their covariance is negative. The sign of the covariance shows the linear tendency between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
 <p><strong>The notion of covariance is particularly important when dealing with the uncertainty of FRF matrices, the elments of which are often highly correlated with each other.</strong></p>
 <p>For vector quantities, the notion of covariance can be extended to a covariance matrix. Given a set of measurements for the vector quantity <span class="math inline">\(\mathbf{x}\)</span>, its sample covariance matrix is calculated as, <span id="eq-covMateq"><span class="math display">\[
 \boldsymbol{\Sigma}_{\mathbf{x}} = \frac{1}{N-1}\left[\left(\mathbf{\hat{x}} - \mathbf{\mu_x}\mathbf{1}^{\rm T}\right)\left(\mathbf{\hat{x}} -  \mathbf{\mu_x}\mathbf{1}^{\rm T}\right)^{\rm T}\right]
-\qquad(8)\]</span></span> where, to avoid summation notation, the repeated <span class="math inline">\(N\)</span> measurements of the vector <span class="math inline">\(\mathbf{x}\)</span> are arranged into the columns of a measurement matrix <span class="math inline">\(\mathbf{\hat{x}}\)</span>, <span class="math display">\[
+\tag{8}\]</span></span> where, to avoid summation notation, the repeated <span class="math inline">\(N\)</span> measurements of the vector <span class="math inline">\(\mathbf{x}\)</span> are arranged into the columns of a measurement matrix <span class="math inline">\(\mathbf{\hat{x}}\)</span>, <span class="math display">\[
     \mathbf{\hat{x}} = \left[\begin{array}{cccc}
        \mathbf{x}^{(1)}  &amp; \mathbf{x}^{(2)} &amp; \cdots &amp; \mathbf{x}^{(N)}
     \end{array}\right]
@@ -511,20 +514,20 @@ Figure&nbsp;1: Unconstrained and partially constrained assemblies for use in der
 <p>Note that the diagonal entries of <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{x}}\)</span> correspond to the variances of each element of <span class="math inline">\(\mathbf{x}\)</span>, whilst the off-diagonal entries (covariances) satisfy <span class="math inline">\(\left(\boldsymbol{\Sigma}_{\mathbf{x}}\right)_{ij} = \left(\boldsymbol{\Sigma}_{\mathbf{x}}\right)_{ji}\)</span>, i.e.&nbsp;the covariance matrix is symmetric.</p>
 <p>We can similarly calculate a covariance matrix between two vector quantities <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>, <span id="eq-covMateq2"><span class="math display">\[
 \boldsymbol{\Sigma}_{\mathbf{xy}} = \frac{1}{N-1}\left[\left(\mathbf{\hat{x}} - \mathbf{\mu_x}\mathbf{1}^{\rm T}\right)\left(\mathbf{\hat{y}} - \mathbf{\mu_y}\mathbf{1}^{\rm T}\right)^{T}\right].
-\qquad(9)\]</span></span> Note that the diagonal elements of <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{xy}}\)</span> are not variances in this case, but covariances.</p>
+\tag{9}\]</span></span> Note that the diagonal elements of <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{xy}}\)</span> are not variances in this case, but covariances.</p>
 <p>For matrix quantities <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> we can calculate a covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{XY}}\)</span> in the same way as for the vectors <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>. To do so we have to restructure each matrix into a (tall) vector. This is done by taking each column of the matrix <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{N\times M}\)</span> (starting with the left most column) and stacking them vertically on top of one another such that <span class="math inline">\(\mbox{Vec}(\mathbf{X}) = \mathbf{\vec{X}}\in\mathbb{R}^{NM}\)</span>. We call <span class="math inline">\(\mbox{Vec}(\quad)\)</span> the vectorisation operator. Here is an example, <span class="math display">\[
 \mbox{Vec}\left(\left[\begin{array}{c c c}
 A &amp; B &amp; C \\ D &amp; E &amp; F \\ H &amp; I &amp; J\end{array}\right]\right) = \left(\begin{array}{c } A \\ D \\H \\B \\E\\I\\C\\F\\J \end{array}\right).
 \]</span> Utilising the vectorisation operator, the covariance matrix of <span class="math inline">\(\mathbf{X}\)</span> from <span class="math inline">\(N\)</span> measurements is given by, <span id="eq-covMateq3"><span class="math display">\[
 \boldsymbol{\Sigma}_{\mathbf{X}} = \frac{1}{N-1}\left[\left(\mathbf{\hat{X}} - \mathbf{\mu}_{\vec{\mathbf{X}}}\mathbf{1}^{\rm T}\right)\left(\mathbf{\hat{X}} - {\mathbf{\mu}}_{\vec{\mathbf{X}}}\mathbf{1}^{\rm T}\right)^{\rm T}\right]
-\qquad(10)\]</span></span> where the measurement matrix <span class="math inline">\(\mathbf{\hat{X}}\)</span> is built from the vectorisation of each measured matrix, <span id="eq-covMeasMat"><span class="math display">\[
+\tag{10}\]</span></span> where the measurement matrix <span class="math inline">\(\mathbf{\hat{X}}\)</span> is built from the vectorisation of each measured matrix, <span id="eq-covMeasMat"><span class="math display">\[
     \mathbf{\hat{X}} = \left[\begin{array}{cccc}
          \vec{\mathbf{X}}^{(1)} &amp; \vec{\mathbf{X}}^{(2)} &amp;\cdots &amp;\vec{\mathbf{X}}^{(N)}
     \end{array}\right]
-\qquad(11)\]</span></span> and <span class="math inline">\(\mathbf{\mu}_{\vec{\mathbf{X}}}\)</span> is the vectorisation of the matrix mean.</p>
+\tag{11}\]</span></span> and <span class="math inline">\(\mathbf{\mu}_{\vec{\mathbf{X}}}\)</span> is the vectorisation of the matrix mean.</p>
 <p>For the covariance between two matrices, say <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> we have similarly, <span id="eq-covMateq4"><span class="math display">\[
 \boldsymbol{\Sigma}_{\mathbf{XY}} = \frac{1}{N-1}\left[\left(\mathbf{\hat{X}} - \mathbf{\mu}_{\vec{\mathbf{X}}}\mathbf{1}^{\rm T}\right)\left(\mathbf{\hat{Y}} - {\mathbf{\mu}}_{\vec{\mathbf{Y}}}\mathbf{1}^{\rm T}\right)^{\rm T}\right]
-\qquad(12)\]</span></span></p>
+\tag{12}\]</span></span></p>
 <p>We will use the above formulae for vector and matrix covariance matrices later to characterise the uncertainty in measured operational velocities and FRFs.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -581,13 +584,13 @@ y_j = G_j(x_1,x_2,\cdots,x_M)= G_j(\mathbf{x}),
 \]</span> where <span class="math inline">\(\mathbf{x}=\left(x_1,\,x_2,\,\cdots,\,x_M\right)\)</span> is a vector of input variables.</p>
 <p>We follow the same steps as before. Suppose that we repeatedly measure each element of the input variable vector <span class="math inline">\(\mathbf{x}\)</span>. Due to experimental error the result is perturbed by <span class="math inline">\(\Delta\mathbf{x}\)</span>. This small change in the value of <span class="math inline">\(\mathbf{x}\)</span> will lead to a small change in the value of the output variables <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span>. Assuming that the input error <span class="math inline">\(\Delta\mathbf{x}\)</span> remains small, the change in output <span class="math inline">\(\Delta y_i\)</span> and <span class="math inline">\(\Delta y_j\)</span> may be approximated by a first order Taylor series expansion, <span id="eq-lawEP1"><span class="math display">\[
 \Delta y_{i} \approx \frac{\partial G_i(\mathbf{x})}{\partial x_1}\Delta x_{1} + \frac{\partial G_i(\mathbf{x})}{\partial x_2} \Delta x_{2} + \cdots+\frac{\partial G_i(\mathbf{x})}{\partial x_M}\Delta x_{M}
-\qquad(13)\]</span></span> <span id="eq-lawEP2"><span class="math display">\[
+\tag{13}\]</span></span> <span id="eq-lawEP2"><span class="math display">\[
 \Delta y_{j} \approx \frac{\partial G_j(\mathbf{x})}{\partial x_1}\Delta x_{1} + \frac{\partial G_j(\mathbf{x})}{\partial x_2} \Delta x_{2} + \cdots+\frac{\partial G_j(\mathbf{x})}{\partial x_M}\Delta x_{M}
-\qquad(14)\]</span></span> where <span class="math inline">\(\frac{\partial G_j(\mathbf{x})}{\partial x_M}\)</span> is the partial derivative of the propagation function <span class="math inline">\(G_j(\square)\)</span> with respect to the <span class="math inline">\(M\)</span>th input variable. Using subscript <span class="math inline">\({\square}_n\)</span> to denote the <span class="math inline">\(n\)</span>th measurement, Equation <a href="#eq-lawEP1" class="quarto-xref">Equation&nbsp;13</a> and <a href="#eq-lawEP2" class="quarto-xref">Equation&nbsp;14</a> may be written more conveniently using summation notation, <span id="eq-lawEP3"><span class="math display">\[
+\tag{14}\]</span></span> where <span class="math inline">\(\frac{\partial G_j(\mathbf{x})}{\partial x_M}\)</span> is the partial derivative of the propagation function <span class="math inline">\(G_j(\square)\)</span> with respect to the <span class="math inline">\(M\)</span>th input variable. Using subscript <span class="math inline">\({\square}_n\)</span> to denote the <span class="math inline">\(n\)</span>th measurement, Equation <a href="#eq-lawEP1" class="quarto-xref">Equation&nbsp;13</a> and <a href="#eq-lawEP2" class="quarto-xref">Equation&nbsp;14</a> may be written more conveniently using summation notation, <span id="eq-lawEP3"><span class="math display">\[
 \Delta y_{i_n} \approx \sum_m^M \frac{\partial G_i(\mathbf{x})}{\partial x_m}\Delta x_{m_n}
-\qquad(15)\]</span></span> <span id="eq-lawEP4"><span class="math display">\[
+\tag{15}\]</span></span> <span id="eq-lawEP4"><span class="math display">\[
 \Delta y_{j_n} \approx  \sum_m^M \frac{\partial G_j(\mathbf{x})}{\partial x_m}\Delta x_{m_n}.
-\qquad(16)\]</span></span></p>
+\tag{16}\]</span></span></p>
 <p>Now that we have two output variables, <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span>, we are also interested in determining the covariance between them. To do so, we begin by multiplying together <a href="#eq-lawEP3" class="quarto-xref">Equation&nbsp;15</a> and <a href="#eq-lawEP4" class="quarto-xref">Equation&nbsp;16</a>, <span class="math display">\[
 \Delta y_{i_n}\Delta y_{j_n} \approx \left(\sum_m^M \frac{\partial G_i(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right)\left( \sum_m^M \frac{\partial G_j(\mathbf{x})}{\partial x_m}\Delta x_{m_n}\right).
 \]</span> Summing over <span class="math inline">\(N\)</span> measurements and dividing both sides by <span class="math inline">\(N-1\)</span> yields, <span class="math display">\[
@@ -601,14 +604,14 @@ y_j = G_j(x_1,x_2,\cdots,x_M)= G_j(\mathbf{x}),
 \begin{align}
 \frac{1}{N-1}\sum_n^N\Delta y_{i_n}\Delta y_{j_n} \approx \sum_m^M  \frac{\partial G_i(\mathbf{x})}{\partial x_m} \frac{\partial G_j(\mathbf{x})}{\partial x_m} \frac{1}{N-1}\sum_n^N\Delta x_{m_n}\Delta x_{m_n} +\\ \sum_{m\neq l}\frac{\partial G_i(\mathbf{x})}{\partial x_l} \frac{\partial G_j(\mathbf{x})}{\partial x_m}\frac{1}{N-1}\sum_n^N\Delta x_{l_n}\Delta x_{m_n}
 \end{align}
-\qquad(17)\]</span></span> Recalling the definitions of variance and covariance from <a href="#eq-var2" class="quarto-xref">Equation&nbsp;6</a> and <a href="#eq-cov" class="quarto-xref">Equation&nbsp;7</a>, <a href="#eq-LeP5" class="quarto-xref">Equation&nbsp;17</a> can be rewritten as, <span id="eq-LeP6"><span class="math display">\[
+\tag{17}\]</span></span> Recalling the definitions of variance and covariance from <a href="#eq-var2" class="quarto-xref">Equation&nbsp;6</a> and <a href="#eq-cov" class="quarto-xref">Equation&nbsp;7</a>, <a href="#eq-LeP5" class="quarto-xref">Equation&nbsp;17</a> can be rewritten as, <span id="eq-LeP6"><span class="math display">\[
 \sigma_{y_{i}y_j} \approx \sum_m^M  \frac{\partial G_i(\mathbf{x})}{\partial x_m} \frac{\partial G_j(\mathbf{x})}{\partial x_m}\sigma_{x_m}^2 + \sum_{m\neq l}\frac{\partial G_i(\mathbf{x})}{\partial x_l} \frac{\partial G_j(\mathbf{x})}{\partial x_m}\sigma_{x_lx_m}^2
-\qquad(18)\]</span></span> where <span class="math inline">\(\sigma_{y_{i}y_j}\)</span> is the covariance between the output variables <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span>, <span class="math inline">\(\sigma_{x_m}^2\)</span> is the variance of the input variable <span class="math inline">\(x_m\)</span>, and <span class="math inline">\(\sigma_{x_lx_m}^2\)</span> is the covariance between the input variables <span class="math inline">\(x_l\)</span> and <span class="math inline">\(x_m\)</span>. For the case that <span class="math inline">\(i=j\)</span> <a href="#eq-LeP6" class="quarto-xref">Equation&nbsp;18</a> reduces to, <span id="eq-LeP7"><span class="math display">\[
+\tag{18}\]</span></span> where <span class="math inline">\(\sigma_{y_{i}y_j}\)</span> is the covariance between the output variables <span class="math inline">\(y_i\)</span> and <span class="math inline">\(y_j\)</span>, <span class="math inline">\(\sigma_{x_m}^2\)</span> is the variance of the input variable <span class="math inline">\(x_m\)</span>, and <span class="math inline">\(\sigma_{x_lx_m}^2\)</span> is the covariance between the input variables <span class="math inline">\(x_l\)</span> and <span class="math inline">\(x_m\)</span>. For the case that <span class="math inline">\(i=j\)</span> <a href="#eq-LeP6" class="quarto-xref">Equation&nbsp;18</a> reduces to, <span id="eq-LeP7"><span class="math display">\[
 \sigma_{y_{i}}^2 \approx \sum_m^M  \left(\frac{\partial G_i(\mathbf{x})}{\partial x_m} \right)^2\sigma_{x_m}^2 + \sum_{m\neq l}\frac{\partial G_i(\mathbf{x})}{\partial x_l} \frac{\partial G_i(\mathbf{x})}{\partial x_m}\sigma_{x_lx_m}
-\qquad(19)\]</span></span> where <span class="math inline">\(\sigma_{y_{i}}^2\)</span> is the variance of the output variable <span class="math inline">\(y_i\)</span>.</p>
+\tag{19}\]</span></span> where <span class="math inline">\(\sigma_{y_{i}}^2\)</span> is the variance of the output variable <span class="math inline">\(y_i\)</span>.</p>
 <p>The first summation in <a href="#eq-LeP6" class="quarto-xref">Equation&nbsp;18</a> and <a href="#eq-LeP7" class="quarto-xref">Equation&nbsp;19</a> describes the propagation of input variance onto the output uncertainty. The second summation describes the influence of input covariance (i.e.&nbsp;correlations between the input variables) on the output uncertainty. Often when dealing with uncertainty propagation the simplifying assumption of uncorrelated input variables is made, that is <span class="math inline">\(\sigma_{x_lx_{m\neq l}}=0\)</span>. The output variance then reduces to, <span id="eq-LeP8"><span class="math display">\[
 \sigma_{y_{i}}^2 \approx \sum_m^M  \left(\frac{\partial G_i(\mathbf{x})}{\partial x_m} \right)^2\sigma_{x_m}^2.
-\qquad(20)\]</span></span></p>
+\tag{20}\]</span></span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -634,17 +637,17 @@ Note
 \mathbf{J}_j= \left[\begin{array}{c c c c}\frac{\partial G_j(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_j(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_j(\mathbf{x})}{\partial x_M} \end{array}\right]
 \]</span> are the Jacobian matrices of the functions <span class="math inline">\(y_i = G_i(\mathbf{x})\)</span> and <span class="math inline">\(y_j = G_j(\mathbf{x})\)</span>, respectively, and <span class="math inline">\(\boldsymbol{\Sigma}_{\mathbf{x}}\)</span> is the covariance matrix of the input vector <span class="math inline">\(\mathbf{x}\)</span>, <span id="eq-MatLeP3"><span class="math display">\[
 \boldsymbol{\Sigma}_{\mathbf{x}} = \left[\begin{array}{c c c c} \sigma_{x_1}^2 &amp; \sigma_{x_{1}x_{2}}^2 &amp; \cdots &amp; \sigma_{x_{1}x_{M}}^2 \\\sigma_{x_{2}x_{1}}^2 &amp; \sigma_{x_2}^2 &amp; \cdots &amp; \sigma_{x_{2}x_{M}}^2 \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \sigma_{x_{M}x_{1}}^2 &amp; \sigma_{x_{M}x_{2}}^2 &amp; \cdots &amp; \sigma_{x_M}^2\end{array}\right].
-\qquad(21)\]</span></span></p>
+\tag{21}\]</span></span></p>
 <p>Now that we have a concise expression for <span class="math inline">\(\sigma_{y_{i}y_j}\)</span>, we can go one step further by combing the Jacobian matrices for multiple output variables, <span id="eq-Jacob1"><span class="math display">\[
 \mathbf{J} = \left[\begin{array}{c c c c}\frac{\partial G_1(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_1(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_1(\mathbf{x})}{\partial x_M} \\[0.25cm]
 \frac{\partial G_2(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_2(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_2(\mathbf{x})}{\partial x_M} \\[0.25cm]
 \vdots &amp;\vdots &amp; \ddots &amp; \vdots\\[0.25cm]
 \frac{\partial G_L(\mathbf{x})}{\partial x_1} &amp; \frac{\partial G_L(\mathbf{x})}{\partial x_2} &amp; \cdots &amp; \frac{\partial G_L(\mathbf{x})}{\partial x_M}\end{array}\right]\quad.
-\qquad(22)\]</span></span> The uncertainty propagation, <span id="eq-MatLeP4"><span class="math display">\[
+\tag{22}\]</span></span> The uncertainty propagation, <span id="eq-MatLeP4"><span class="math display">\[
 \boldsymbol{\Sigma}_{\mathbf{y}} \approx \mathbf{J} \boldsymbol{\Sigma}_{\mathbf{x}}\mathbf{J}^{\rm T}
-\qquad(23)\]</span></span> then yields a covariance matrix for the output variable vector <span class="math inline">\(\mathbf{y} = \left(y_1,\,y_2,\,\cdots,\,y_L\right)\)</span>, <span id="eq-MatLeP2"><span class="math display">\[
+\tag{23}\]</span></span> then yields a covariance matrix for the output variable vector <span class="math inline">\(\mathbf{y} = \left(y_1,\,y_2,\,\cdots,\,y_L\right)\)</span>, <span id="eq-MatLeP2"><span class="math display">\[
 \boldsymbol{\Sigma}_{\mathbf{y}} = \left[\begin{array}{c c c c} \sigma_{y_1}^2 &amp; \sigma_{y_{1}y_{2}}^2 &amp; \cdots &amp; \sigma_{y_{1}y_{L}}^2 \\\sigma_{y_{2}y_{1}}^2 &amp; \sigma_{y_2}^2 &amp; \cdots &amp; \sigma_{y_{2}y_{L}}^2 \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \sigma_{y_{L}y_{1}}^2 &amp; \sigma_{y_{L}y_{2}}^2 &amp; \cdots &amp; \sigma_{y_L}^2\end{array}\right].
-\qquad(24)\]</span></span></p>
+\tag{24}\]</span></span></p>
 <p><a href="#eq-MatLeP3" class="quarto-xref">Equation&nbsp;21</a> - <a href="#eq-MatLeP2" class="quarto-xref">Equation&nbsp;24</a> describe, generally, the linear propagation of uncertainty. It is important that the Jacobians are evaluated at the true value of <span class="math inline">\(\mathbf{x}\)</span>, which we approximate by its mean value <span class="math inline">\(\mathbf{\mu_x}\)</span>. These equations will form the basis of the VAVP uncertainty propagation described below.</p>
 </section>
 </section>
@@ -691,10 +694,10 @@ M_v(H) = \left(\begin{array}{c}
 \frac{\partial \mathbf{G}_2(\mathbf{x})}{\partial{x_1}} &amp; \frac{\partial \mathbf{G}_2(\mathbf{x})}{\partial {x_2}} &amp; \cdots &amp; \frac{\partial \mathbf{G}_2(\mathbf{x})}{\partial {x_M}} \\[0.25cm]
 \vdots &amp;\vdots &amp; \ddots &amp; \vdots\\[0.25cm]
 \frac{\partial \mathbf{G}_L(\mathbf{x})}{\partial {x_1}} &amp; \frac{\partial \mathbf{G}_L(\mathbf{x})}{\partial {x_2}} &amp; \cdots &amp; \frac{\partial \mathbf{G}_L(\mathbf{x})}{\partial {x_M}}\end{array}\right]
-\qquad(25)\]</span></span> where we have simply replaced each partial derivative in <a href="#eq-Jacob1" class="quarto-xref">Equation&nbsp;22</a>, with a <span class="math inline">\(2\times2\)</span> matrix containing the partial derivatives of the real and imaginary parts of the output, with respect to the real and imaginary parts of the input, <span id="eq-bivJacob2"><span class="math display">\[
+\tag{25}\]</span></span> where we have simply replaced each partial derivative in <a href="#eq-Jacob1" class="quarto-xref">Equation&nbsp;22</a>, with a <span class="math inline">\(2\times2\)</span> matrix containing the partial derivatives of the real and imaginary parts of the output, with respect to the real and imaginary parts of the input, <span id="eq-bivJacob2"><span class="math display">\[
 \frac{\partial {G_i}(\mathbf{x})}{\partial {x_j}}\rightarrow \frac{\partial \mathbf{G}_i(\mathbf{x})}{\partial {x_j}} = \left[\begin{array}{c c }\frac{\partial \mathrm{Re}(G_i(\mathbf{x}))}{\partial \mathrm{Re}(x_j)} &amp; \frac{\partial \mathrm{Re}(G_i(\mathbf{x}))}{\partial \mathrm{Im}(x_j)}  \\[0.25cm]
 \frac{\partial \mathrm{Im}(G_i(\mathbf{x}))}{\partial \mathrm{Re}(x_j)} &amp; \frac{\partial \mathrm{Im}(G_i(\mathbf{x}))}{\partial \mathrm{Im}(x_j)}  \end{array}\right].
-\qquad(26)\]</span></span></p>
+\tag{26}\]</span></span></p>
 <p>The bivariate covariance and Jacobian matrices described above are used in place of their univariate counter parts in <a href="#eq-MatLeP4" class="quarto-xref">Equation&nbsp;23</a> to propagate complex uncertainty. The resulting output uncertainty, characterised by the covariance matrix <span class="math inline">\(\boldsymbol{\Sigma_\mathbf{y}}\)</span>, is also bivariate, with its elements describing the variance and covariance between the real and imaginary parts of its elements.</p>
 <p>The theory underlying VAVP construction has been described in detail over the previous pages. In short, there are three equations that govern majority of VAVP excersises. In the following sections we will briefly reintroduce these key equations, before summaring their LPU-based uncertainty propagation.</p>
 </section>
@@ -702,7 +705,7 @@ M_v(H) = \left(\begin{array}{c}
 <h4 class="anchored" data-anchor-id="inverse-blocked-force-identification">Inverse (blocked) force identification</h4>
 <p>The key equation for the inverse identification of blocked forces takes the form, <span id="eq-invForce"><span class="math display">\[
     \mathbf{\bar{f}} = \mathbf{Y}_C^+\mathbf{v}
-\qquad(27)\]</span></span> where <span class="math inline">\(\mathbf{Y}_C\in\mathbb{C}^{N_r\times N_f}\)</span> is a complex <span class="math inline">\(N_r\times N_f\)</span> matrix of Frequency Response Functions (FRFs) that relate the measured operational responses <span class="math inline">\(\mathbf{v}\in\mathbb{C}^{N_r}\)</span> to the sought after blocked forces <span class="math inline">\(\mathbf{\bar{f}}\in\mathbb{C}^{N_f}\)</span> and <span class="math inline">\(\square^+\)</span> denotes a generalized matrix (pseudo-)inverse.</p>
+\tag{27}\]</span></span> where <span class="math inline">\(\mathbf{Y}_C\in\mathbb{C}^{N_r\times N_f}\)</span> is a complex <span class="math inline">\(N_r\times N_f\)</span> matrix of Frequency Response Functions (FRFs) that relate the measured operational responses <span class="math inline">\(\mathbf{v}\in\mathbb{C}^{N_r}\)</span> to the sought after blocked forces <span class="math inline">\(\mathbf{\bar{f}}\in\mathbb{C}^{N_f}\)</span> and <span class="math inline">\(\square^+\)</span> denotes a generalized matrix (pseudo-)inverse.</p>
 <p>Given the above, the input and output (bivariate) covariance required by the LPU are given by, <span class="math display">\[
     % \mu_{\mathbf{x}} = \left(\begin{array}{c}
     %   M(\mu_{\mathbf{\vec{Y}}}) \\
@@ -738,7 +741,7 @@ M_v(H) = \left(\begin{array}{c}
 <p>The dual formulation of substructuring is govered by the following equation, <span id="eq-dual"><span class="math display">\[
             \mathbf{H}_C = \mathbf{Y} - \mathbf{Y}\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{
             \rm T} + \mathbf{Z}_J^{-1}\right)^{-1} \mathbf{B}\mathbf{Y}
-\qquad(28)\]</span></span> where <span class="math inline">\(\mathbf{H}_C\in\mathbb{C}^{N_C\times N_C}\)</span> is the FRF matrix of the coupled assembly (note that we have used <span class="math inline">\(\mathbf{H}_C\)</span> rather than <span class="math inline">\(\mathbf{Y}_C\)</span> to avoid confusion with the FRF matrix used in <a href="#eq-invForce" class="quarto-xref">Equation&nbsp;27</a>), <span class="math inline">\(\mathbf{Y}\in\mathbb{C}^{(N_S+N_R)\times(N_S+N_R)}\)</span> is a block diagonal matrix containing the uncoupled FRF matrices of the source <span class="math inline">\(S\)</span> and receiver <span class="math inline">\(R\)</span> components, <span class="math inline">\(\mathbf{\Gamma}\in\mathbb{C}^{N_c\times N_c}\)</span> is a matrix of joint flexibilities that describes the dynamics of the connecting DoFs, and <span class="math inline">\(\mathbf{B}\in\mathbb{Z}^{N_c\times(N_S+N_R)}\)</span> is a signed Boolean matrix that controls between which DoFs equilibrium is enforced.</p>
+\tag{28}\]</span></span> where <span class="math inline">\(\mathbf{H}_C\in\mathbb{C}^{N_C\times N_C}\)</span> is the FRF matrix of the coupled assembly (note that we have used <span class="math inline">\(\mathbf{H}_C\)</span> rather than <span class="math inline">\(\mathbf{Y}_C\)</span> to avoid confusion with the FRF matrix used in <a href="#eq-invForce" class="quarto-xref">Equation&nbsp;27</a>), <span class="math inline">\(\mathbf{Y}\in\mathbb{C}^{(N_S+N_R)\times(N_S+N_R)}\)</span> is a block diagonal matrix containing the uncoupled FRF matrices of the source <span class="math inline">\(S\)</span> and receiver <span class="math inline">\(R\)</span> components, <span class="math inline">\(\mathbf{\Gamma}\in\mathbb{C}^{N_c\times N_c}\)</span> is a matrix of joint flexibilities that describes the dynamics of the connecting DoFs, and <span class="math inline">\(\mathbf{B}\in\mathbb{Z}^{N_c\times(N_S+N_R)}\)</span> is a signed Boolean matrix that controls between which DoFs equilibrium is enforced.</p>
 <p>The input and output covariance are given by, <span class="math display">\[
 \Sigma_\mathbf{x} =  \left[\begin{array}{ll} \Sigma_\mathbf{[{Y}]} &amp;    \mathbf{0} \\
 \mathbf{0}&amp; \Sigma_{{\mathbf{Z}}_j}
@@ -747,14 +750,14 @@ M_v(H) = \left(\begin{array}{c}
         \mathbf{J} =  \left[ \begin{array}{c c}
         \mathbf{J}_{[\mathbf{Y}]} &amp; \mathbf{J}_{\mathbf{Z}_j}
     \end{array}\right]
-\qquad(29)\]</span></span> <span class="math display">\[
+\tag{29}\]</span></span> <span class="math display">\[
 \begin{align}
     \mathbf{J}_{[\mathbf{Y}]}= \mathcal{M}\,\Bigg(\mathbf{I} - \left[\left(\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{\rm T}\right)^{-1} \mathbf{B}\mathbf{Y}\right)^{\rm T}\otimes \mathbf{I} \right] &amp;+ \left[ \left(\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{\rm T}\right)^{-1} \mathbf{B}\mathbf{Y}\right)^{\rm T}  \otimes \mathbf{Y}\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{\rm T}\right)^{-1}\mathbf{B} \right] \cdots \\ &amp;-
     \left[ \mathbf{I}   \otimes \mathbf{Y}\mathbf{B}^{\rm T}\left(\mathbf{B} \mathbf{Y} \mathbf{B}^{\rm T}\right)^{-1}\mathbf{B} \right],\, \mathbf{0}\Bigg) \nonumber
 \end{align}
 \]</span> <span id="eq-ssJ2"><span class="math display">\[
     \mathbf{J}_{\mathbf{Z}_j} = \mathcal{M}\,\Bigg(\left[\left(\left(\mathbf{B}\mathbf{Y}\mathbf{B}^{\rm T} + \mathbf{\Gamma}\right)^{-1}\mathbf{B}\mathbf{Y}\right)^{\rm T} \otimes \mathbf{Y}\mathbf{B}^{\rm T} \left(\mathbf{B}\mathbf{Y}\mathbf{B}^{\rm T} + \mathbf{\Gamma}\right)^{-1}\right]\bigg[-\mathbf{\Gamma}^{\rm T}\otimes \mathbf{\Gamma}\bigg],\, \mathbf{0}\Bigg)
-\qquad(30)\]</span></span></p>
+\tag{30}\]</span></span></p>
 <p>Substituting <span class="math inline">\(\mathbf{J}\)</span> and <span class="math inline">\(\Sigma_\mathbf{x}\)</span>, as defined above, into <a href="#eq-MatLeP4" class="quarto-xref">Equation&nbsp;23</a> provides a linear esitmate of the coupled FRF covariance matrix <span class="math inline">\(\Sigma_\mathbf{H}\)</span> based on the uncertainty of each individual component, and that of the joint dynamics. Note that if the joint dynamics are not considered uncertain, then we can simply set <span class="math inline">\(\Sigma_{{\mathbf{Z}}_J}=\mathbf{0}\)</span>.</p>
 <p>A similar set of equations are available for the primal formulation of the substructuring equations, though are omitted here for berevity.</p>
 </section>
@@ -762,7 +765,7 @@ M_v(H) = \left(\begin{array}{c}
 <h4 class="anchored" data-anchor-id="forward-response-prediction">Forward response prediction</h4>
 <p>Once the blocked force and coupled assembly FRF are known, an operational response prediction can be made using, <span id="eq-forwardPred"><span class="math display">\[
     \mathbf{p} = \mathbf{H}_C\mathbf{\bar{f}}
-\qquad(31)\]</span></span> where <span class="math inline">\(\mathbf{H}_C\in\mathbb{C}^{N_p\times N_f}\)</span> is a matrix of (forward) FRFs that relate the acquired force <span class="math inline">\(\mathbf{\bar{f}}\in\mathbb{C}^{N_f}\)</span> to the target response variables <span class="math inline">\(\mathbf{p}\in\mathbb{C}^{N_p}\)</span>. We have used the notation <span class="math inline">\(\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{H}_C\)</span> for generality and to avoid confusion with <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{Y}_C\)</span> used in <a href="#eq-invForce" class="quarto-xref">Equation&nbsp;27</a>, though in general the response could be structural and/or acoustic.</p>
+\tag{31}\]</span></span> where <span class="math inline">\(\mathbf{H}_C\in\mathbb{C}^{N_p\times N_f}\)</span> is a matrix of (forward) FRFs that relate the acquired force <span class="math inline">\(\mathbf{\bar{f}}\in\mathbb{C}^{N_f}\)</span> to the target response variables <span class="math inline">\(\mathbf{p}\in\mathbb{C}^{N_p}\)</span>. We have used the notation <span class="math inline">\(\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{H}_C\)</span> for generality and to avoid confusion with <span class="math inline">\(\mathbf{v}\)</span> and <span class="math inline">\(\mathbf{Y}_C\)</span> used in <a href="#eq-invForce" class="quarto-xref">Equation&nbsp;27</a>, though in general the response could be structural and/or acoustic.</p>
 <p>The input and output covariance are given by, <span class="math display">\[
     \Sigma_\mathbf{x} = \left[\begin{array}{ll} \Sigma_\mathbf{H} &amp;     \mathbf{0}\\
             \mathbf{0}&amp; \Sigma_\mathbf{f}
@@ -861,13 +864,14 @@ M_v(H) = \left(\begin{array}{c}
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

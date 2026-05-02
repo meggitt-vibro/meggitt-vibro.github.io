@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Substructuring: primal, dual, rigid and resilient – Joshua Meggitt</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-4621e6c092758692ba23953146af9eda.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -106,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -119,7 +122,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -227,6 +230,12 @@ window.Quarto = {
  <span class="menu-text">Synthesising Impulse Response Functions</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/monteCarloUncert/monteCarloUncertProp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Propagating uncertainty using Monte-Carlo simulation</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -283,10 +292,10 @@ Figure&nbsp;1: Numerical mass-spring assembly used for substructuring example. C
 <h2 class="anchored" data-anchor-id="define-component-matrices">Define component matrices</h2>
 <p>The first thing we need to do is build the mass and stiffness matrices that represent components <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. Whilst we are doing this, we will also build the mass and stiffness matrices for the rigidly coupled assembly (see <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;3</a>). We will use these later to provide some comparisons for substructured results. The mass and stiffness matrices of component <span class="math inline">\(A\)</span> are printed below as an example.</p>
 <p>Once we have built the mass and stiffness matrices, we quickly compute the natural frequencies for each system; this is just to give us an idea over what frequency range we should compute our FRFs; 1-100 Hz looks to cover everything.</p>
-<div id="483c06f8" class="cell" data-execution_count="1">
+<div id="51ad75f9" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(linewidth<span class="op">=</span><span class="dv">100</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
@@ -339,7 +348,7 @@ Figure&nbsp;1: Numerical mass-spring assembly used for substructuring example. C
 <span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span>
 <span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="ch">\n</span><span class="st">Natural frequencies of assembly C (Hz):'</span>)</span>
 <span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> natF <span class="kw">in</span> np.sort(np.sqrt(np.real(sp.linalg.eigvals(K_C, M_C)))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi)):</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    sys.stdout.write(<span class="st">'</span><span class="sc">{:10.1f}</span><span class="st">'</span>.<span class="bu">format</span>(natF))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    sys.stdout.write(<span class="st">'</span><span class="sc">{:10.1f}</span><span class="st">'</span>.<span class="bu">format</span>(natF))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mass matrix of component A (kg):
@@ -379,7 +388,7 @@ Natural frequencies of assembly C (Hz):
 <div id="cell-fig-compFRFs" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">1000</span>) <span class="co"># Generate frequency array</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">1000</span>) <span class="co"># Generate frequency array</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f <span class="co"># Convert to radians</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute FRF matrices over frequency range (have used einsum( ) to show an alternative loop-free approach)</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>Y_A <span class="op">=</span> np.linalg.inv(K_A <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M_A))</span>
@@ -394,7 +403,7 @@ Natural frequencies of assembly C (Hz):
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-compfrfs" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -455,7 +464,7 @@ Figure&nbsp;3: DoF numbering for rigidly coupled system.
 <div id="cell-fig-compPrimalDual" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>],<span class="dv">11</span>,<span class="dv">11</span>), dtype<span class="op">=</span><span class="st">'complex'</span>) <span class="co"># Allocate space</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>],<span class="dv">11</span>,<span class="dv">11</span>), dtype<span class="op">=</span><span class="st">'complex'</span>) <span class="co"># Allocate space</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Build block diagonal (uncoupled) FRF matrix</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    Y[fi,:,:] <span class="op">=</span> sp.linalg.block_diag(Y_A[fi,:,:],Y_B[fi,:,:])</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Boolean equilibrium matrix:</span></span>
@@ -497,7 +506,7 @@ Figure&nbsp;3: DoF numbering for rigidly coupled system.
 <span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
 <span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
 <span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>The Boolean coupling matrix L.T:
@@ -570,7 +579,7 @@ Figure&nbsp;4: Primal and dual substructured FRFs <span class="math inline">\(Y_
 <div id="cell-fig-primalDualRes" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ηj <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># Loss factor of coupling element</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ηj <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># Loss factor of coupling element</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>kj <span class="op">=</span> <span class="dv">10000</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>ηj) <span class="co"># Stiffness of coupling element</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Redefine mass and stiffness matrices for resiliently coupled assembly</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>M_C_res <span class="op">=</span> sp.linalg.block_diag(M_A,M_B)</span>
@@ -630,7 +639,7 @@ Figure&nbsp;4: Primal and dual substructured FRFs <span class="math inline">\(Y_
 <span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
 <span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
 <span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>The Boolean coupling matrix L.T:
@@ -725,13 +734,14 @@ Figure&nbsp;5: Primal and dual substructured FRFs <span class="math inline">\(Y_
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

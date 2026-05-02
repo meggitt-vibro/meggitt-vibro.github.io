@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Single degree of freedom oscillator – Joshua Meggitt</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-4621e6c092758692ba23953146af9eda.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -106,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -119,7 +122,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -793,12 +796,12 @@ R(\omega) = \frac{1}{k + i\omega c - \omega^2 m} =  \frac{1}{\underbrace{(k - \o
 \tag{19}\]</span></span> We see that the magnitude increases as <span class="math inline">\(\left(1 - \frac{\omega^2}{\omega_n^2}\right)\)</span> goes to zero, and its maximum is limited by <span class="math inline">\(\zeta 2 k \frac{\omega}{\omega_n}\)</span>.</p>
 <p>Shown in <a href="#fig-receptanceLin" class="quarto-xref">Figure&nbsp;9</a> are the receptance frequency response curves obtained for different levels of damping. The peak value of the magnitude is marked and takes a value <span class="math inline">\(\omega_{peak} = \omega_n\sqrt{1-2\zeta^2}\)</span>. Note that this peak value is always less than the undamped natural frequency <span class="math inline">\(\omega_n\)</span>. It is obtained by taking the derivative of <a href="#eq-receptMag" class="quarto-xref">Equation&nbsp;19</a>, setting this to zero, and solving for <span class="math inline">\(\omega\)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Want to see where $\omega_{peak} = \omega_n\sqrt{1-2\zeta^2}$ came from?">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Want to see where <span class="math inline">\(\omega_{peak} = \omega_n\sqrt{1-2\zeta^2}\)</span> came from?
+<span class="screen-reader-only">Tip</span>Want to see where <span class="math inline">\(\omega_{peak} = \omega_n\sqrt{1-2\zeta^2}\)</span> came from?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -897,12 +900,12 @@ Figure&nbsp;10: Phase response of a damped mass-spring system.
 </figure>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-What happens at <span class="math inline">\(\omega_n\)</span> if there is no damping…?
+<span class="screen-reader-only">Tip</span>What happens at <span class="math inline">\(\omega_n\)</span> if there is no damping…?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1029,7 +1032,7 @@ x(t) =  \frac{1}{2}F_0  R(0) + \mbox{Real}\left[\sum_{n=1}^\infty R(n\omega_0)  
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Impulse response without the integrals..?
+<span class="screen-reader-only">Tip</span>Impulse response without the integrals..?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1255,12 +1258,12 @@ Q = \frac{m \omega_n}{c} = \frac{m \omega_n}{\zeta 2m\omega_n} = \frac{1}{2 \zet
 \frac{\omega_n}{\Delta \omega} = \frac{1}{2 \zeta}
 \tag{29}\]</span></span> From <a href="#eq-QfactorZeta" class="quarto-xref">Equation&nbsp;29</a> we can easily obtain <span class="math inline">\(\zeta\)</span> given a measurement of <span class="math inline">\(\omega_n\)</span> and <span class="math inline">\(\Delta \omega\)</span>. Note however, that in the above derivation we used the <em>undamped natural frequnecy</em> <span class="math inline">\(\omega_n\)</span>, even though our system is damped… For lightly damped systems <span class="math inline">\(\omega_n \approx \omega_d\)</span> and <a href="#eq-QfactorZeta" class="quarto-xref">Equation&nbsp;29</a> holds. For highly damped systems it does not.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Whats up with the other <span class="math inline">\(Q\)</span> factor definition?
+<span class="screen-reader-only">Tip</span>Whats up with the other <span class="math inline">\(Q\)</span> factor definition?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -1327,7 +1330,7 @@ T_f = \frac{1 + i\omega \frac{c}{k}}{1- \omega^2 \frac{m}{k}  + i\omega \frac{c}
 <div id="cell-fig-forcetran" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># System properties</span></span>
@@ -1352,7 +1355,7 @@ T_f = \frac{1 + i\omega \frac{c}{k}}{1- \omega^2 \frac{m}{k}  + i\omega \frac{c}
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'$10 log_</span><span class="sc">{10}</span><span class="st">(|T_f|^2)$'</span>)</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-forcetran" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1421,7 +1424,7 @@ Figure&nbsp;23: Sealed cabient loudspeaker.
 <div id="cell-fig-sealedcabinet" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># System properties</span></span>
@@ -1461,7 +1464,7 @@ Figure&nbsp;23: Sealed cabient loudspeaker.
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'$20 log_</span><span class="sc">{10}</span><span class="st">(|p|/p_</span><span class="sc">{ref}</span><span class="st">)$'</span>)</span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-sealedcabinet" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1533,13 +1536,14 @@ Figure&nbsp;24: Frequency response of infinite baffle (blue) and sealed cabinet 
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,6 +12,9 @@
 
 <title>A mixed admittance/transfer matrix substructuring approach – Joshua Meggitt</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -96,10 +99,10 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-4621e6c092758692ba23953146af9eda.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -129,7 +132,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -142,7 +145,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -300,6 +303,7 @@ window.Quarto = {
   <div class="abstract">
     <div class="block-title">Abstract</div>
     <p>Substructuring is an important step in the analysis of complex built-up structures. It is the process by which individual components are mathematically assembled to build a model of a coupled system. In the frequency domain, admittance or FRF-based substructuring has become the preferred approach, especially when considering experimental components for which FRFs are the most convenient representation. However, FRFs are not the only way to represent a component in the frequency domain. Often, particularly for layered systems, the so-called <em>transfer matrix</em> (TM) representation becomes more convenient; component coupling is achieved by simply multiplying together their respective TMs. In the present paper we develop a hybrid substructuring scheme that allows the coupling of FRF-based components using a TM representation of the interconnecting junction. Such an approach might be beneficial for structures with complex layered connections (well suited to TM-based coupling), and has the potential to provide additional insight into structural transmission through multiple interconnected elements.</p>
+    <p><em>Note: An extended version of this work <a href="http://bibli-cloud15.segi.ulg.ac.be/2684-6500/index.php?id=314">is available here.</a></em></p>
   </div>
 </div>
 
@@ -404,7 +408,7 @@ window.Quarto = {
 \end{align}
 \tag{7}\]</span></span> This is especially useful for complex layered structures, where each layer is simply represented by its own transfer matrix. In addition to providing convenient structural coupling, the transfer matrix <span class="math inline">\(\mathbf{T}\)</span> can be used to derive and inspect the free wave characteristics of a component (or collection thereof), as done by the WFE method .</p>
 <div id="nte-addTM" class="callout callout-style-default callout-note callout-titled" title="Relation between admittance and transfer matrix">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -668,10 +672,10 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
 </div>
 </figure>
 </div>
-<div id="754c813f" class="cell" data-execution_count="1">
+<div id="25f7ad3e" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code: Set up some function definitions</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %% Load packages</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %% Load packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.linalg <span class="im">import</span> block_diag</span>
@@ -872,13 +876,13 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
 <span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>: <span class="co"># If G defined (resilient)</span></span>
 <span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>                Yc <span class="op">=</span>  Y<span class="op">-</span>Y<span class="op">@</span>BL.T<span class="op">@</span>np.linalg.pinv(BL<span class="op">@</span>Y<span class="op">@</span>BL.T<span class="op">+</span>G)<span class="op">@</span>BL<span class="op">@</span>Y</span>
 <span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Yc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Yc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="e0e906fb" class="cell" data-execution_count="2">
+<div id="e5fd167a" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code: Compute substructure admittance matrices</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %% Compute FRFs</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %% Compute FRFs</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.logspace(np.log10(<span class="dv">1</span>), np.log10(<span class="dv">500</span>), <span class="dv">500</span>)  <span class="co"># Frequency array</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Admittance of A and B (retaining only the end DoFs)</span></span>
@@ -897,7 +901,7 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>YJ2__ <span class="op">=</span> beamFE([<span class="fl">0.02</span>, <span class="fl">0.03</span>, <span class="fl">0.001</span>], [<span class="dv">1000</span>, <span class="fl">2e7</span>, <span class="fl">0.5</span>], f, numE<span class="op">=</span><span class="dv">5</span>,</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                Method<span class="op">=</span><span class="st">'Direct'</span>, pos<span class="op">=</span><span class="st">''</span>, BC<span class="op">=</span>[<span class="st">'f'</span>, <span class="st">'f'</span>])[<span class="dv">0</span>]</span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>YJ2_ <span class="op">=</span> np.delete(YJ2__, <span class="bu">slice</span>(<span class="dv">2</span>, <span class="dv">10</span>), <span class="dv">0</span>)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>YJ2 <span class="op">=</span> np.delete(YJ2_, <span class="bu">slice</span>(<span class="dv">2</span>, <span class="dv">10</span>), <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>YJ2 <span class="op">=</span> np.delete(YJ2_, <span class="bu">slice</span>(<span class="dv">2</span>, <span class="dv">10</span>), <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>A conventional dual substructuring formulation of this problem would require the admittance matrix of each component to be added to the block diagonal matrix <span class="math inline">\(\mathbf{Y}\)</span>, and an appropriate Boolean matrix <span class="math inline">\(\mathbf{B}\)</span> defined that correctly co-locates all coupling DoFs (including <span class="math inline">\(c_1\)</span> and <span class="math inline">\(c_2\)</span>, but also any internal DoFs within the junction itself). A reconfiguration of the junction, for example adding or remove a component, would thus require we redefining both <span class="math inline">\(\mathbf{Y}\)</span> and <span class="math inline">\(\mathbf{B}\)</span>.</p>
@@ -932,10 +936,10 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
         &amp; \mathbf{Y}_B
     \end{array}\right] \quad \mbox{with} \quad \mathbf{T}_{J11} = \mathbf{T}_{J1} \mathbf{T}_{J1} \quad \mbox{or} \quad \mathbf{T}_{J121} = \mathbf{T}_{J1}\mathbf{T}_{J2}\mathbf{T}_{J1}.
 \]</span></p>
-<div id="87953a94" class="cell" data-execution_count="3">
+<div id="74150748" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code: Perform substructuring</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-allocate arrays</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pre-allocate arrays</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>TJ1_plot <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>], <span class="dv">4</span>, <span class="dv">4</span>), dtype<span class="op">=</span><span class="st">'complex'</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>TJ11_plot <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>], <span class="dv">4</span>, <span class="dv">4</span>), dtype<span class="op">=</span><span class="st">'complex'</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>TJ121_plot <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>], <span class="dv">4</span>, <span class="dv">4</span>), dtype<span class="op">=</span><span class="st">'complex'</span>)</span>
@@ -1023,14 +1027,14 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
 <span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    YA11B[:, :, fi] <span class="op">=</span> subStruct(freq<span class="op">=</span>f[fi], BL<span class="op">=</span>B11, Type<span class="op">=</span><span class="st">'Dual'</span>, Y<span class="op">=</span>Y)</span>
 <span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Dual formulation for A-J1-J2-J1-B assembly</span></span>
 <span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>    Y <span class="op">=</span> block_diag(YA_[:, :, fi], YJ1[:, :, fi], YJ2[:, :, fi], YJ1[:, :, fi], YB_[:, :, fi])</span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    YA121B[:, :, fi] <span class="op">=</span> subStruct(freq<span class="op">=</span>f[fi], BL<span class="op">=</span>B121, Type<span class="op">=</span><span class="st">'Dual'</span>, Y<span class="op">=</span>Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    YA121B[:, :, fi] <span class="op">=</span> subStruct(freq<span class="op">=</span>f[fi], BL<span class="op">=</span>B121, Type<span class="op">=</span><span class="st">'Dual'</span>, Y<span class="op">=</span>Y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Based on the material properties and beam geometries given in <a href="#tbl-NumSim" class="quarto-xref">Table&nbsp;1</a>, <a href="#fig-numsimt" class="quarto-xref">Figure&nbsp;3</a> shows the individual elements (magnitudes only) of the transfer matrices for: the single junction element <em>J1</em> (blue), the two element junction <em>J11</em> (orange), and the three element junction <em>J121</em>. Shown in <a href="#fig-numsimyc" class="quarto-xref">Figure&nbsp;4</a> are the coupled admittances between the translational DoFs at the ends of components <em>A</em> and <em>B</em> for the two and three element junctions, computed using standard dual formulation and the hybrid admittance-transfer matrix based approach. As expected, the results are in exact agreement.</p>
 <div id="cell-fig-numsimt" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code: Plot transfer matrices</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">4</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">4</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>,<span class="dv">0</span>].loglog(f, np.<span class="bu">abs</span>(TJ1_plot[:, <span class="dv">0</span>, <span class="dv">0</span>]),label<span class="op">=</span><span class="st">'$T_</span><span class="sc">{J1}</span><span class="st">$'</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>,<span class="dv">0</span>].loglog(f, np.<span class="bu">abs</span>(TJ11_plot[:, <span class="dv">0</span>, <span class="dv">0</span>]),label<span class="op">=</span><span class="st">'$T_</span><span class="sc">{J1}</span><span class="st">T_</span><span class="sc">{J1}</span><span class="st">$'</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>,<span class="dv">0</span>].loglog(f, np.<span class="bu">abs</span>(TJ121_plot[:, <span class="dv">0</span>, <span class="dv">0</span>]),label<span class="op">=</span><span class="st">'$T_</span><span class="sc">{J1}</span><span class="st">T_</span><span class="sc">{J2}</span><span class="st">T_</span><span class="sc">{J1}</span><span class="st">$'</span>)</span>
@@ -1124,7 +1128,7 @@ Table&nbsp;1: Material properties (Young’s modulus <span class="math inline">\
 <span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>,<span class="dv">3</span>].set_xlim([<span class="dv">1</span>,<span class="dv">500</span>])</span>
 <span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>,<span class="dv">3</span>].set_ylabel(<span class="st">'$T_{g,φφ}$ / $(-)$'</span>)</span>
 <span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">3</span>,<span class="dv">3</span>].set_xlabel(<span class="st">'Frequency / Hz'</span>)</span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-numsimt" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1142,7 +1146,7 @@ Figure&nbsp;3: Transfer matrix for coupled beam junctions: <span class="math inl
 <div id="cell-fig-numsimyc" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code: Plot coupled admittance</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ax.loglog(f, np.<span class="bu">abs</span>(YA11B[<span class="dv">0</span>, <span class="op">-</span><span class="dv">2</span>, :]), label<span class="op">=</span><span class="st">'Dual A-J1-J1-B'</span>, color<span class="op">=</span><span class="st">'black'</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ax.loglog(f, np.<span class="bu">abs</span>(YC11[<span class="dv">0</span>, <span class="op">-</span><span class="dv">2</span>, :]), <span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Hybrid A-J1-J1-B'</span>, color<span class="op">=</span><span class="st">'tab:orange'</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ax.loglog(f, np.<span class="bu">abs</span>(YC121[<span class="dv">0</span>, <span class="op">-</span><span class="dv">2</span>, :]), color<span class="op">=</span><span class="st">'gray'</span>,label<span class="op">=</span><span class="st">'Dual A-J1-J2-J1-B'</span>)</span>
@@ -1151,7 +1155,7 @@ Figure&nbsp;3: Transfer matrix for coupled beam junctions: <span class="math inl
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Mobility / $mN^{-1}s^{-1}$"</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>ax.legend(ncol<span class="op">=</span><span class="dv">2</span>, loc<span class="op">=</span><span class="st">'lower left'</span>)</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlim([<span class="dv">1</span>,<span class="dv">500</span>])</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-numsimyc" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1260,7 +1264,7 @@ Figure&nbsp;4: Coupled mobility of <em>A-J1-J1-B</em> (orange) and <em>A-J1-J2-J
     considering experimental components for which FRFs are the most
     convenient representation. However, FRFs are not the only way to
     represent a component in the frequency domain. Often, particularly
-    for layered systems, the so-called *transfer matrix* (TM)
+    for layered systems, the so-called transfer matrix (TM)
     representation becomes more convenient; component coupling is
     achieved by simply multiplying together their respective TMs. In the
     present paper we develop a hybrid substructuring scheme that allows
@@ -1323,13 +1327,14 @@ Figure&nbsp;4: Coupled mobility of <em>A-J1-J1-B</em> (orange) and <em>A-J1-J2-J
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

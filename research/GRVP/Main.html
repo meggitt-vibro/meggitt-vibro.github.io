@@ -2,15 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-01-11">
+<meta name="dcterms.date" content="2026-04-23">
 <meta name="keywords" content="Blocked force, Virtual point transformation, Interface dynamics, Inverse problem">
 
-<title>Improved force identification using a global–residual interface representation – Joshua Meggitt</title>
+<title>Sparse identification of blocked forces using a global-residual interface representation – Joshua Meggitt</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -94,10 +97,10 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-4621e6c092758692ba23953146af9eda.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -127,7 +130,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -140,7 +143,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -278,7 +281,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Improved force identification using a global–residual interface representation</h1>
+<h1 class="title">Sparse identification of blocked forces using a global-residual interface representation</h1>
 </div>
 
 
@@ -326,7 +329,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 11, 2026</p>
+      <p class="date">April 23, 2026</p>
     </div>
   </div>
   
@@ -337,6 +340,7 @@ window.Quarto = {
   <div class="abstract">
     <div class="block-title">Abstract</div>
     <p>Choosing an appropriate interface representation is a crucial step when identifying forces by inverse methods. A preferred interface representation should be interpretable, but also well conditioned and able to recover forces with low error. Currently, the most widely adopted representation is that of the Virtual Point (VP), a local projection of measured degrees of freedom (DoFs) onto a set of co-located rigid-body modes. Though easily interpretable, poor conditioning/large errors are often obtained at low frequencies when the source dynamics are dominated by global rigid body motions; a result of over-parametrising the interface model. In this paper we explore a reformulation of the VP representation by separating the global and residual components of the interface dynamics; global rigid body dynamics are filtered out of the local interface motions and projected onto their own <em>global</em> VP, the remaining <em>residual</em> interface motions are projected onto a set of local VPs. The result is an interpretable interface representation that provides a clear separation of the local and global source dynamics. Its application is demonstrated on a heavy weight stamping press under rigid and resilient boundary conditions.</p>
+    <p><em>Note: An extended version of this work <a href="https://doi.org/10.1016/j.ymssp.2026.114242">is available here.</a></em></p>
   </div>
 </div>
 
@@ -754,10 +758,10 @@ Figure&nbsp;15: 1/3rd octave band error plots for on-board validation. The I-VP 
     i_{max} = \underset{i}{\mbox{argmin}} ||\overbrace{\mathbf{v} - \mathbf{Y}_{\Gamma_{k-1}^i} \mathbf{Y}_{\Gamma_{k-1}^i}^+ \mathbf{v}}^{\mathbf{r}_k}||_2^2 \quad \mbox{with} \quad  \Gamma_{k-1}^i = \Gamma_{k-1} \cup i
 \]</span> where <span class="math inline">\(\mathbf{Y}_{\Gamma_{k-1}^i}\)</span> is defined as the matrix containing the columns of <span class="math inline">\(\mathbf{Y}\)</span> corresponding to the non-zero indices in <span class="math inline">\(\Gamma_{k-1}^i\)</span>. Effectively, we add the index that minimises the error on the current response reconstruction, i.e.&nbsp;the residual <span class="math inline">\(\mathbf{r}_k\)</span>.</p>
 <p>In contrast to an exhaustive BSS, orthogonal least squares reduces the total number of evaluations from <span class="math inline">\(2^n\)</span> to <span class="math inline">\(n+(n-1)+\cdots+2+1=\frac{n(n+1)}{2}\)</span>. In each step of the algorithm a candidate solution is produced that contains an increasing number of DoFs. Once all iterations have been completed, the final step is to perform a model selection, i.e.&nbsp;pick from the set of candidate solutions based on an appropriate error metric. <em>Our implementation of this algorithm is given in the code block below.</em></p>
-<div id="ca8828f5" class="cell" data-execution_count="1">
+<div id="b77eff5b" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code: Sequential forward selection function used for BSS approximation</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forwardSelection(start_dofs, select_dofs, Y_ind, Y_val, u_ind, u_val):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forwardSelection(start_dofs, select_dofs, Y_ind, Y_val, u_ind, u_val):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Forward selection algorithm (same as Orthogonal Least Squares, OLS) - iteratively add one DoF at a time to the solution - added DoF is the one that gives the smallest error</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
@@ -819,7 +823,7 @@ Figure&nbsp;15: 1/3rd octave band error plots for on-board validation. The I-VP 
 <span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        min_model_error <span class="op">=</span> np.argmin(error_all[fi,:]) <span class="co"># Find the model with the lowest error (model selection)</span></span>
 <span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        blkF_final[fi, Γ.astype(<span class="bu">int</span>), :] <span class="op">=</span> blkF_all[fi, min_model_error, Γ.astype(<span class="bu">int</span>)] <span class="co"># Select the corresponding blocked force</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> blkF_final, error_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> blkF_final, error_all</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>With the purpose of subset selection being to identify sparse solutions, if two candidate models produce the same error, the one with fewer non-zero elements is typically chosen. To this end, it is common practice to use for model selection an error metric that takes into account the complexity of the solution (i.e.&nbsp;the number of non-zero elements), see for example in <span class="citation" data-cites="bofinger2025x"><a href="#ref-bofinger2025x" role="doc-biblioref">[13]</a></span>. In our brief investigation here, we omit this step and use the standard mean-squared-error to perform model selection.</p>
@@ -973,7 +977,37 @@ Figure&nbsp;20: Extended frequency range: 1/3rd octave errors below 50 Hz for I�
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@article{m_hoseyni2026,
+  author = {M Hoseyni, Seyed and Ahmadi, Ehsan and Farrell, Oliver and
+    WR Meggitt, Joshua},
+  title = {Sparse Identification of Blocked Forces Using a
+    Global-Residual Interface Representation},
+  journal = {Journal of Mechanical Systems and Signal Processing},
+  volume = {253},
+  date = {2026-04-23},
+  doi = {https://doi.org/10.1016/j.ymssp.2026.114242},
+  langid = {en},
+  abstract = {Choosing an appropriate interface representation is a
+    crucial step when identifying forces by inverse methods. A preferred
+    interface representation should be interpretable, but also well
+    conditioned and able to recover forces with low error. Currently,
+    the most widely adopted representation is that of the Virtual Point
+    (VP), a local projection of measured degrees of freedom (DoFs) onto
+    a set of co-located rigid-body modes. Though easily interpretable,
+    poor conditioning/large errors are often obtained at low frequencies
+    when the source dynamics are dominated by global rigid body motions;
+    a result of over-parametrising the interface model. In this paper we
+    explore a reformulation of the VP representation by separating the
+    global and residual components of the interface dynamics; global
+    rigid body dynamics are filtered out of the local interface motions
+    and projected onto their own *global* VP, the remaining *residual*
+    interface motions are projected onto a set of local VPs. The result
+    is an interpretable interface representation that provides a clear
+    separation of the local and global source dynamics. Its application
+    is demonstrated on a heavy weight stamping press under rigid and
+    resilient boundary conditions.}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1025,13 +1059,14 @@ Figure&nbsp;20: Extended frequency range: 1/3rd octave errors below 50 Hz for I�
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

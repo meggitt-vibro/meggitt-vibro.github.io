@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Uncertainty propagation using Monte Carlo simulation: a substructuring example – Joshua Meggitt</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../tutorials/synthIRF/synthIRF.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4621e6c092758692ba23953146af9eda.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Joshua Meggitt</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../introductions/summary.html"> 
+<span class="menu-text">A quick introduction to:</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../book/book.html"> 
+<span class="menu-text">Book</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../tutorials/summary.html" aria-current="page"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research/summary.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../tutorials/monteCarloUncert/monteCarloUncertProp.html">Propagating uncertainty using Monte-Carlo simulation</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><strong>Summary of tutorials</strong></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/substructuring/substructuring_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Substructuring (mass-spring example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/blockedForce/blockedForce_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">In situ blocked force (mass-spring example)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/synthFRF/synthFRF_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Synthesising Frequency Response Functions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/synthIRF/synthIRF.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Synthesising Impulse Response Functions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/monteCarloUncert/monteCarloUncertProp.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Propagating uncertainty using Monte-Carlo simulation</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#monte-carlo-simulation" id="toc-monte-carlo-simulation" class="nav-link active" data-scroll-target="#monte-carlo-simulation">Monte Carlo simulation</a></li>
+  <li><a href="#define-component-matrices" id="toc-define-component-matrices" class="nav-link" data-scroll-target="#define-component-matrices">Define component matrices</a></li>
+  <li><a href="#define-uncertainty-joint-parameters" id="toc-define-uncertainty-joint-parameters" class="nav-link" data-scroll-target="#define-uncertainty-joint-parameters">Define uncertainty joint parameters</a></li>
+  <li><a href="#run-monte-carlo-simulation" id="toc-run-monte-carlo-simulation" class="nav-link" data-scroll-target="#run-monte-carlo-simulation">Run Monte Carlo simulation</a>
+  <ul class="collapse">
+  <li><a href="#examine-specific-frequencies" id="toc-examine-specific-frequencies" class="nav-link" data-scroll-target="#examine-specific-frequencies">Examine specific frequencies</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Uncertainty propagation using Monte Carlo simulation: a substructuring example</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this tutorial we will consider the propagation of uncertainty using a Monte-Carlo (MC) simulation approach. We will apply this method to the problem of <em>uncertain joint dynamics</em> in substructuring using the same numerical mass-spring system as in previous tutorials; depicted in <a href="#fig-massSpring" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<p>The system is comprised of two components; <span class="math inline">\(A\)</span> in green, and <span class="math inline">\(B\)</span> in blue. These components are characterised by their free-interface FRFs <span class="math inline">\(\mathbf{Y}_A\in\mathbb{C}^{5\times 5}\)</span> and <span class="math inline">\(\mathbf{Y}_B\in\mathbb{C}^{6\times 6}\)</span>, respectively. <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are coupled at three DoFs by a joint with uncertainty stiffness and damping parameters. The aim is to find the uncertainty in the coupled assembly FRFs <span class="math inline">\(\mathbf{Y}_C\in\mathbb{C}^{11\times 11}\)</span>, given the uncertainty in the joint parameters.</p>
+<div id="fig-massSpring" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-massSpring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="massSpring.png" class="img-fluid figure-img" width="800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-massSpring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Numerical mass-spring assembly used for substructuring example. Component <span class="math inline">\(A\)</span> in green and <span class="math inline">\(B\)</span> in blue.
+</figcaption>
+</figure>
+</div>
+<p>As a reminder, the dual substructuring relation is given by, <span id="eq-dual"><span class="math display">\[
+\mathbf{Y}_C =   \mathbf{Y} -\mathbf{Y}\mathbf{B}^{\rm T}\left(\mathbf{B}\mathbf{Y}\mathbf{B}^{\rm T} + \boldsymbol{\Gamma}\right)^{-1}\mathbf{B}\mathbf{Y}.  
+\tag{1}\]</span></span> where <span class="math inline">\(\mathbf{Y}\)</span> is a block diagonal matrix of uncoupled (free-interface) component FRF matrices, <span class="math inline">\(\mathbf{B}\)</span> is a <span class="math inline">\(signed\)</span> Boolean matrix that enforces continuity between connected DoFs, and <span class="math inline">\(\boldsymbol{\Gamma}\)</span> is matrix describing the interface flexibility. In the case of rigid coupling, <span class="math inline">\(\boldsymbol{\Gamma}=\mathbf{0}\)</span>. In the case of resilient coupling, <span class="math inline">\(\boldsymbol{\Gamma}\)</span> is the inverse of the joint impedance, <span class="math display">\[
+\boldsymbol{\Gamma} = \left[\begin{array}{ccc}Z_1 &amp; &amp;\\ &amp; Z_2 &amp; \\ &amp; &amp; Z_3\end{array}\right]^{-1} \qquad \text{with}\qquad Z_j = k_j + i c_j
+\]</span></p>
+<p>In this tutorial we will assume that the joint parameters <span class="math inline">\(k_j\)</span> and <span class="math inline">\(c_j\)</span> are uncertain (normally distribute with known mean and covariance), and we will use a Monte-Carlo simulation to propagate this uncertainty through the dual substructuring relation to find the uncertainty in the coupled assembly FRF <span class="math inline">\(\mathbf{Y}_C\)</span>.</p>
+<section id="monte-carlo-simulation" class="level2">
+<h2 class="anchored" data-anchor-id="monte-carlo-simulation">Monte Carlo simulation</h2>
+<p>Using a Monte-Carlo approach, we estimate the probability density function (PDF) of function’s output <span class="math inline">\(\mathbf{y} = G(\mathbf{x})\)</span> by randomly sampling the distribution of the input <span class="math inline">\(\mathbf{x}\)</span>. Failing an analytical solution for the PDF of the output, which is rarely available for problems of realistic complexity, Monte-Carlo simulation is the most robust approach for the propagation of uncertainty; it is frequently used to provide <em>ground truth</em> estimates for the evaluation of alternative methods. By evaluating the function <span class="math inline">\(G(\square)\)</span> directly, we implicitly capture the effects of non-linearity and their influence on the output distribution. The main limitation of a MC simulation is simply the computation effort required, which can be great for high dimensional problems or expensive models.</p>
+<p>A typical Monte-Carlo procedure is as follows:</p>
+<ol type="1">
+<li>A random sample <span class="math inline">\(\mathbf{x}_i\)</span> is drawn from the input distribution, for example the multi-dimensional Normal with mean <span class="math inline">\(\mu_\mathbf{x}\)</span> and covariance <span class="math inline">\(\Sigma_{\mathbf{x}}\)</span>, <span class="math display">\[
+\mathbf{x}_i\sim \mathcal{N}(\mu_\mathbf{x},\Sigma_\mathbf{x})
+\]</span></li>
+<li>The drawn sample is used to evaluate the function <span class="math inline">\(G(\square)\)</span> (e.g.&nbsp;our substructuring function), resulting in the output sample <span class="math inline">\(\mathbf{y}_i\)</span>. <span class="math display">\[
+\mathbf{y}_i = G(\mathbf{x}_i)
+\]</span> Note that <span class="math inline">\(G(\square)\)</span> may have other deterministic inputs, for example the free-interface FRFs in our substructuring problem. Being deterministic, these inputs are not sampled and are omitted in the above for brevity.</li>
+<li>Steps 1 and 2 are repeated until <span class="math inline">\(N_{MC}\)</span> output samples are obtained. Collectively, these samples approximate the PDF of the output <span class="math inline">\(\mathbf{y}\)</span>. They can be used to infer any statistics of interest, for example the mean and covariance, <span class="math display">\[
+\mu_\mathbf{y} = \frac{1}{N_{MC}}\sum_{i=1}^{N_{MC}} \mathbf{y}_i\qquad \qquad
+\Sigma_\mathbf{y} = \frac{1}{N_{MC}-1}\sum_{i=1}^{N_{MC}} (\mathbf{y}_i - \mu_\mathbf{y})(\mathbf{y}_i - \mu_\mathbf{y})^{\rm T}
+\]</span></li>
+</ol>
+<p>To avoid unnecessary function evaluations, stopping criteria can be incorporated into the above by using a recursive calculation of, for example, the mean/or covariance.</p>
+</section>
+<section id="define-component-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="define-component-matrices">Define component matrices</h2>
+<p>To set the problem up we are going to use the same component matrices as from the previous substructuring tutorial.</p>
+<div id="b1d4ef4a" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Define component matrices</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">0</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(linewidth<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> multivariate_normal</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Ellipse</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.transforms <span class="im">as</span> transforms</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define component masses and build matrices</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>m1, m2, m3, m4, m5 <span class="op">=</span> <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="fl">0.5</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>m6, m7, m8, m9, m10, m11 <span class="op">=</span> <span class="fl">0.5</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>,<span class="fl">0.5</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>M_A <span class="op">=</span> np.diag(np.array([m1,m2,m3,m4,m5])) <span class="co"># Comp A</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>M_B <span class="op">=</span> np.diag(np.array([m6,m7,m8,m9,m10,m11])) <span class="co"># Comp B</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Define component stiffnesses and build matrices (complex stiffness -&gt; structural damping)</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>η <span class="op">=</span> <span class="fl">0.05</span> <span class="co"># Structural loss factor</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>k1, k2, k3, k4, k5 <span class="op">=</span> <span class="fl">1e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η), <span class="fl">1.5e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η), <span class="fl">0.7e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η), <span class="fl">1e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η), <span class="fl">0.5e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>k6, k7, k8, k9, k10, k11 <span class="op">=</span> <span class="fl">0.5e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η), <span class="fl">2e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η), <span class="fl">1e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η), <span class="fl">0.2e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η), <span class="fl">1e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η),<span class="fl">0.5e5</span><span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>K_A <span class="op">=</span> np.array([[k1<span class="op">+</span>k2<span class="op">+</span>k5, <span class="op">-</span>k2,        <span class="dv">0</span>,   <span class="dv">0</span>, <span class="op">-</span>k5],</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                [<span class="op">-</span>k2,       k2<span class="op">+</span>k3<span class="op">+</span>k4, <span class="op">-</span>k3, <span class="op">-</span>k4, <span class="dv">0</span>],</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,        <span class="op">-</span>k3,        k3,  <span class="dv">0</span>,  <span class="dv">0</span>],</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                [<span class="dv">0</span>,        <span class="op">-</span>k4,        <span class="dv">0</span>,   k4, <span class="dv">0</span>],</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                [<span class="op">-</span>k5,       <span class="dv">0</span>,         <span class="dv">0</span>,   <span class="dv">0</span>,  k5]])</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>K_B <span class="op">=</span>  np.array([[k6,  <span class="dv">0</span>,   <span class="dv">0</span>,  <span class="op">-</span>k6,     <span class="dv">0</span>,          <span class="dv">0</span>],</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">0</span>,   k7,  <span class="dv">0</span>,   <span class="dv">0</span>,     <span class="op">-</span>k7,         <span class="dv">0</span>],</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">0</span>,   <span class="dv">0</span>,   k8,  <span class="dv">0</span>,     <span class="op">-</span>k8,         <span class="dv">0</span>],</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                 [<span class="op">-</span>k6, <span class="dv">0</span>,   <span class="dv">0</span>,   k6<span class="op">+</span>k9,  <span class="dv">0</span>,         <span class="op">-</span>k9],</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">0</span>,  <span class="op">-</span>k7, <span class="op">-</span>k8,  <span class="dv">0</span>,      k7<span class="op">+</span>k8<span class="op">+</span>k10, <span class="op">-</span>k10],</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>                 [<span class="dv">0</span>,   <span class="dv">0</span>,   <span class="dv">0</span>,  <span class="op">-</span>k9,    <span class="op">-</span>k10,        k9<span class="op">+</span>k10<span class="op">+</span>k11]])</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>Nf <span class="op">=</span> <span class="dv">200</span> <span class="co"># Number of frequency points</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">100</span>, Nf) <span class="co"># Generate frequency array</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f <span class="co"># Convert to radians</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>Y_A <span class="op">=</span> np.linalg.inv(K_A <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M_A))</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>Y_B <span class="op">=</span> np.linalg.inv(K_B <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M_B))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Next we define a few useful functions for plotting the results of the Monte-Carlo simulation.</p>
+<div id="427e8bc9" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Some useful plotting functions</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> scatter_hist(x, y, ax, ax_histx, ax_histy, nBins):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># no labels</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ax_histx.tick_params(axis<span class="op">=</span><span class="st">"x"</span>, labelbottom<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    ax_histy.tick_params(axis<span class="op">=</span><span class="st">"y"</span>, labelleft<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># the scatter plot:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    ax.scatter(x, y, marker<span class="op">=</span><span class="st">'.'</span>,color<span class="op">=</span><span class="st">'gray'</span>,alpha<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ax.scatter(x, y,s = 0.05, marker='.')</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># now determine nice limits by hand:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    binwidth <span class="op">=</span> (np.<span class="bu">max</span>(x)<span class="op">-</span>np.<span class="bu">min</span>(x))<span class="op">/</span>nBins</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    xymax <span class="op">=</span> <span class="bu">max</span>(np.<span class="bu">abs</span>(x))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    lim <span class="op">=</span> (<span class="bu">int</span>(xymax<span class="op">/</span>binwidth) <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> binwidth</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    bins <span class="op">=</span> np.arange(<span class="op">-</span>lim, lim <span class="op">+</span> binwidth, binwidth)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    ax_histx.hist(x, bins<span class="op">=</span>bins,color<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    binwidth <span class="op">=</span> (np.<span class="bu">max</span>(y)<span class="op">-</span>np.<span class="bu">min</span>(y))<span class="op">/</span>nBins</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    xymax <span class="op">=</span> np.<span class="bu">max</span>(np.<span class="bu">abs</span>(y))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    lim <span class="op">=</span> (<span class="bu">int</span>(xymax<span class="op">/</span>binwidth) <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> binwidth</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    bins <span class="op">=</span> np.arange(<span class="op">-</span>lim, lim <span class="op">+</span> binwidth, binwidth)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    ax_histy.hist(y, bins<span class="op">=</span>bins, orientation<span class="op">=</span><span class="st">'horizontal'</span>,color<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> confidence_ellipse(μ, Σ, ax, n_std<span class="op">=</span><span class="fl">3.0</span>, facecolor<span class="op">=</span><span class="st">'none'</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">    Create a plot of the covariance confidence ellipse of *x* and *y*.</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">    μ : array-like, shape (2, )</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">        Input means.</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co">    Σ : array-like, shape (2,2)</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co">        Input covariance.</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">    ax : matplotlib.axes.Axes</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">        The Axes object to draw the ellipse into.</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">    n_std : float</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co">        The number of standard deviations to determine the ellipse's radiuses.</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">    **kwargs</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co">        Forwarded to `~matplotlib.patches.Ellipse`</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">    matplotlib.patches.Ellipse</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    cov <span class="op">=</span> Σ</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    pearson <span class="op">=</span> cov[<span class="dv">0</span>, <span class="dv">1</span>]<span class="op">/</span>np.sqrt(cov[<span class="dv">0</span>, <span class="dv">0</span>] <span class="op">*</span> cov[<span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Using a special case to obtain the eigenvalues of this</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># two-dimensional dataset.</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    ell_radius_x <span class="op">=</span> np.sqrt(<span class="dv">1</span> <span class="op">+</span> pearson)</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    ell_radius_y <span class="op">=</span> np.sqrt(<span class="dv">1</span> <span class="op">-</span> pearson)</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    ellipse <span class="op">=</span> Ellipse((<span class="dv">0</span>, <span class="dv">0</span>), width<span class="op">=</span>ell_radius_x <span class="op">*</span> <span class="dv">2</span>, height<span class="op">=</span>ell_radius_y <span class="op">*</span> <span class="dv">2</span>,</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>                      facecolor<span class="op">=</span><span class="st">'none'</span>, <span class="op">**</span>kwargs)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculating the standard deviation of x from</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># the squareroot of the variance and multiplying</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># with the given number of standard deviations.</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    scale_x <span class="op">=</span> np.sqrt(cov[<span class="dv">0</span>, <span class="dv">0</span>]) <span class="op">*</span> n_std</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    mean_x <span class="op">=</span> μ[<span class="dv">0</span>]</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># calculating the standard deviation of y ...</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    scale_y <span class="op">=</span> np.sqrt(cov[<span class="dv">1</span>, <span class="dv">1</span>]) <span class="op">*</span> n_std</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    mean_y <span class="op">=</span> μ[<span class="dv">1</span>]</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    transf <span class="op">=</span> transforms.Affine2D() <span class="op">\</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>        .rotate_deg(<span class="dv">45</span>) <span class="op">\</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>        .scale(scale_x, scale_y) <span class="op">\</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>        .translate(mean_x, mean_y)</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    ellipse.set_transform(transf <span class="op">+</span> ax.transData)</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    el <span class="op">=</span> ax.add_patch(ellipse)</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>    el.set_facecolor(<span class="st">'none'</span>)</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> el</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="define-uncertainty-joint-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="define-uncertainty-joint-parameters">Define uncertainty joint parameters</h2>
+<p>In this example we will assume that the stiffness and damping parameters of the three joints are normally distributed with a mean vector is given by, <span class="math display">\[
+    \mu_\mathbf{x} = \left(\begin{array}{cccccc}
+        \mu_{k_1} &amp;     \mu_{c_1} &amp;     \mu_{k_2} &amp;     \mu_{c_2} &amp;     \mu_{k_3} &amp;     \mu_{c_3}
+    \end{array}\right)^{\rm T} =  \left(\begin{array}{cccccc}
+        1e3 &amp; 1 &amp; 2e3 &amp; 2 &amp; 3e3 &amp; 3
+        \end{array}\right)^{\rm T}
+\]</span> and a covariance matrix <span class="math inline">\(\Sigma_\mathbf{x}\)</span> expressed in terms of a correlation matrix and the stiffness/damping standard deviations as so, <span class="math display">\[
+    \Sigma_\mathbf{x} = \left[\begin{array}{cccccc}
+        \sigma_{k_1} &amp; &amp; &amp; &amp; &amp;\\
+        &amp;\sigma_{c_1} &amp; &amp; &amp; &amp; \\
+        &amp; &amp; \sigma_{k_2} &amp; &amp; &amp; \\
+        &amp; &amp; &amp; \sigma_{c_2} &amp; &amp; \\
+        &amp; &amp; &amp; &amp; \sigma_{k_3} &amp; \\
+        &amp; &amp; &amp; &amp; &amp; \sigma_{c_3}
+        \end{array}\right]  \left[\begin{array}{cccccc}
+        1&amp; 0.5&amp; &amp; &amp; &amp;\\
+        0.5&amp;1&amp; &amp; &amp; &amp; \\
+        &amp; &amp; 1 &amp;-0.9 &amp; &amp; \\
+        &amp; &amp; -0.9&amp; 1 &amp; &amp; \\
+        &amp; &amp; &amp; &amp; 1 &amp; 0 \\
+        &amp; &amp; &amp; &amp; 0 &amp; 1
+        \end{array}\right] \left[\begin{array}{cccccc}
+        \sigma_{k_1} &amp; &amp; &amp; &amp; &amp;\\
+        &amp;\sigma_{c_1} &amp; &amp; &amp; &amp; \\
+        &amp; &amp; \sigma_{k_2} &amp; &amp; &amp; \\
+        &amp; &amp; &amp; \sigma_{c_2} &amp; &amp; \\
+        &amp; &amp; &amp; &amp; \sigma_{k_3} &amp; \\
+        &amp; &amp; &amp; &amp; &amp; \sigma_{c_3}
+        \end{array}\right].
+\]</span> In the examples presented, we set <span class="math inline">\(\sigma_{k_1}=\sigma_{k_2}=\sigma_{k_3}= \sigma_{k} = 2e2\)</span> and <span class="math inline">\(\sigma_{c_1}=\sigma_{c_2}=\sigma_{c_3}=\sigma_{c} = 2\times 10^{-1}\)</span>.</p>
+<p>Note that we have defined the covariance matrix <span class="math inline">\(\Sigma_\mathbf{x}\)</span> such that the stiffness and damping parameters of each joint are correlated, and that the stiffness parameters of different joints are uncorrelated. This is just an example, and the correlation structure can be defined as desired to reflect the problem at hand.</p>
+<div id="cell-fig-jointparamdist" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Define uncertain joint parameters and plot distribution</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>r2C_ <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="ot">1j</span>])</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>r2C <span class="op">=</span> sp.linalg.block_diag(r2C_, r2C_, r2C_) <span class="co"># Mapping from real to complex vector</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define mean</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>kj1, kj2, kj3 <span class="op">=</span> <span class="dv">1</span><span class="op">*</span><span class="fl">1e3</span>, <span class="dv">2</span><span class="op">*</span><span class="fl">1e3</span>, <span class="dv">3</span><span class="op">*</span><span class="fl">1e3</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>cj1, cj2, cj3 <span class="op">=</span> <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>μD <span class="op">=</span> np.array([kj1, cj1, kj2, cj2, kj3, cj3])</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>σ <span class="op">=</span> np.array([<span class="fl">3e2</span>, <span class="fl">2e-1</span>, <span class="fl">3e2</span>, <span class="fl">2e-1</span>, <span class="fl">3e2</span>, <span class="fl">2e-1</span>])</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>R <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="fl">0.5</span>,   <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>              [<span class="fl">0.5</span>, <span class="dv">1</span>,   <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="op">-</span><span class="fl">0.9</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">0</span>, <span class="dv">0</span>, <span class="op">-</span><span class="fl">0.9</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,  <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>],</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,  <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>]])</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>ΣD <span class="op">=</span> np.diag(σ)<span class="op">@</span> R <span class="op">@</span> np.diag(σ)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot distribution of uncertain parameters</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>rv1 <span class="op">=</span> multivariate_normal(μD[<span class="dv">0</span>:<span class="dv">2</span>], ΣD[<span class="dv">0</span>:<span class="dv">2</span>,<span class="dv">0</span>:<span class="dv">2</span>])</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>rv2 <span class="op">=</span> multivariate_normal(μD[<span class="dv">2</span>:<span class="dv">4</span>], ΣD[<span class="dv">2</span>:<span class="dv">4</span>,<span class="dv">2</span>:<span class="dv">4</span>])</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>rv3 <span class="op">=</span> multivariate_normal(μD[<span class="dv">4</span>:<span class="dv">6</span>], ΣD[<span class="dv">4</span>:<span class="dv">6</span>,<span class="dv">4</span>:<span class="dv">6</span>])</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(kj1<span class="op">*</span><span class="fl">0.01</span>, kj1<span class="op">*</span><span class="dv">2</span>, <span class="dv">500</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(cj1<span class="op">*</span><span class="fl">0.5</span>, cj1<span class="op">*</span><span class="fl">1.5</span>, <span class="dv">500</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> np.meshgrid(x,y)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> np.empty(X.shape <span class="op">+</span> (<span class="dv">2</span>,))</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>pos[:, :, <span class="dv">0</span>] <span class="op">=</span> X</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>pos[:, :, <span class="dv">1</span>] <span class="op">=</span> Y</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>pd1 <span class="op">=</span> rv1.pdf(pos)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>pd2 <span class="op">=</span> rv2.pdf(pos<span class="op">*</span><span class="dv">2</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>pd3 <span class="op">=</span> rv3.pdf(pos<span class="op">*</span><span class="dv">3</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].contour(X, Y, pd1<span class="op">/</span>np.<span class="bu">max</span>(pd1), levels<span class="op">=</span>np.linspace(<span class="fl">0.0005</span>,<span class="dv">1</span>,<span class="dv">10</span>), cmap<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Stiffness (m/N)'</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Damping (m/Ns)'</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Joint 1'</span>)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].contour(X<span class="op">*</span><span class="dv">2</span>, Y<span class="op">*</span><span class="dv">2</span>, pd2<span class="op">/</span>np.<span class="bu">max</span>(pd2), levels<span class="op">=</span>np.linspace(<span class="fl">0.0005</span>,<span class="dv">1</span>,<span class="dv">10</span>), cmap<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Stiffness (m/N)'</span>)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Damping (m/Ns)'</span>)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="st">'Joint 2'</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].contour(X<span class="op">*</span><span class="dv">3</span>, Y<span class="op">*</span><span class="dv">3</span>, pd3<span class="op">/</span>np.<span class="bu">max</span>(pd3), levels<span class="op">=</span>np.linspace(<span class="fl">0.0005</span>,<span class="dv">1</span>,<span class="dv">10</span>), cmap<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlabel(<span class="st">'Stiffness (m/N)'</span>)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_ylabel(<span class="st">'Damping (m/Ns)'</span>)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_title(<span class="st">'Joint 3'</span>)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-jointparamdist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-jointparamdist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monteCarloUncertProp_files/figure-html/fig-jointparamdist-output-1.png" width="854" height="374" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-jointparamdist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Contour plot of the probability density function of the uncertain joint parameters.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="run-monte-carlo-simulation" class="level2">
+<h2 class="anchored" data-anchor-id="run-monte-carlo-simulation">Run Monte Carlo simulation</h2>
+<p>We are now ready to run out MC simulation. First we build the block diagonal matrix of uncoupled component FRFs, and then we compute the coupled FRF using the mean joint parameters. It will be interesting to compare the mean of the MC simulation to the substructured result of mean joint parameters.</p>
+<p>In <a href="#fig-jointparamc" class="quarto-xref">Figure&nbsp;3</a> we plot the MC samples of the joint parameters as used in the simulation. As expected, we see that they follow the set distributions in <a href="#fig-jointparamdist" class="quarto-xref">Figure&nbsp;2</a>.</p>
+<div id="cell-fig-jointparamc" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Define uncertain joint parameters and plot distribution</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>],<span class="dv">11</span>,<span class="dv">11</span>), dtype<span class="op">=</span><span class="st">'complex'</span>) <span class="co"># Allocate space</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Build block diagonal (uncoupled) FRF matrix</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    Y[fi,:,:] <span class="op">=</span> sp.linalg.block_diag(Y_A[fi,:,:],Y_B[fi,:,:])</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Boolean continuity matrix:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> np.array([[<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>],</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>],</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>]])</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>Y_C_dual_μ <span class="op">=</span> np.zeros_like(Y)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Compute coupled FRF using mean joint parameters</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    Y_C_dual_μ[fi,:,:] <span class="op">=</span> Y[fi,:,:] <span class="op">-</span> Y[fi,:,:]<span class="op">@</span>B.T<span class="op">@</span>np.linalg.inv(B<span class="op">@</span>Y[fi,:,:]<span class="op">@</span>B.T <span class="op">+</span> np.diag(<span class="dv">1</span><span class="op">/</span>(r2C<span class="op">@</span>μD)))<span class="op">@</span>B<span class="op">@</span>Y[fi,:,:]</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>N_MC <span class="op">=</span> <span class="dv">10000</span> <span class="co"># Number of MC simulations</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>Dj_i <span class="op">=</span> []</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>Y_C_dual_mc <span class="op">=</span> []</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>Y_C_dual <span class="op">=</span> np.zeros_like(Y)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> mc <span class="kw">in</span> <span class="bu">range</span>(N_MC):</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    Dj_i.append(np.random.multivariate_normal(μD, ΣD, <span class="dv">1</span>))</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(Nf):</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        Y_C_dual[fi,:,:] <span class="op">=</span> Y[fi,:,:] <span class="op">-</span> Y[fi,:,:]<span class="op">@</span>B.T<span class="op">@</span>np.linalg.inv(B<span class="op">@</span>Y[fi,:,:]<span class="op">@</span>B.T <span class="op">+</span> np.diag(np.squeeze(<span class="dv">1</span><span class="op">/</span>(r2C<span class="op">@</span>np.asarray(Dj_i[mc]).T))))<span class="op">@</span>B<span class="op">@</span>Y[fi,:,:]</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    Y_C_dual_mc.append(Y_C_dual[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>].copy())</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].scatter(np.asarray(Dj_i)[:,<span class="dv">0</span>,<span class="dv">0</span>], np.asarray(Dj_i)[:,<span class="dv">0</span>,<span class="dv">1</span>], s<span class="op">=</span><span class="dv">5</span>, marker<span class="op">=</span><span class="st">'.'</span>,color<span class="op">=</span><span class="st">'blue'</span>,label<span class="op">=</span><span class="st">'MC'</span>,alpha<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Stiffness (m/N)'</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Damping (m/Ns)'</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Joint 1'</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlim(kj1<span class="op">*</span><span class="fl">0.01</span>, kj1<span class="op">*</span><span class="dv">2</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylim(cj1<span class="op">*</span><span class="fl">0.5</span>, cj1<span class="op">*</span><span class="fl">1.5</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].scatter(np.asarray(Dj_i)[:,<span class="dv">0</span>,<span class="dv">2</span>], np.asarray(Dj_i)[:,<span class="dv">0</span>,<span class="dv">3</span>], s<span class="op">=</span><span class="dv">5</span>, marker<span class="op">=</span><span class="st">'.'</span>,color<span class="op">=</span><span class="st">'blue'</span>,alpha<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Stiffness (m/N)'</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Damping (m/Ns)'</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="st">'Joint 2'</span>)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlim(kj2<span class="op">*</span><span class="fl">0.01</span>, kj2<span class="op">*</span><span class="dv">2</span>)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylim(cj2<span class="op">*</span><span class="fl">0.5</span>, cj2<span class="op">*</span><span class="fl">1.5</span>)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].scatter(np.asarray(Dj_i)[:,<span class="dv">0</span>,<span class="dv">4</span>], np.asarray(Dj_i)[:,<span class="dv">0</span>,<span class="dv">5</span>], s<span class="op">=</span><span class="dv">5</span>, marker<span class="op">=</span><span class="st">'.'</span>,color<span class="op">=</span><span class="st">'blue'</span>,alpha<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlabel(<span class="st">'Stiffness (m/N)'</span>)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_ylabel(<span class="st">'Damping (m/Ns)'</span>)</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_title(<span class="st">'Joint 3'</span>)</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlim(kj3<span class="op">*</span><span class="fl">0.01</span>, kj3<span class="op">*</span><span class="dv">2</span>)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_ylim(cj3<span class="op">*</span><span class="fl">0.5</span>, cj3<span class="op">*</span><span class="fl">1.5</span>)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-jointparamc" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-jointparamc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monteCarloUncertProp_files/figure-html/fig-jointparamc-output-1.png" width="854" height="374" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-jointparamc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: MC samples for the joint parameters.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In <a href="#fig-frfci" class="quarto-xref">Figure&nbsp;4</a> we plot the MC results for the magnitude of the coupled FRF between DoF 1 and 11. The shaded area indicates the max/min range of MC samples, the dashed orange line is the substructured result made using the mean joint parameters, the dashed black line is the mean of the MC samples and the solid black lines indicate the 95% confidence interval (CI) of the MC samples. Two vertical red lines are also plot; these mark a pair of frequencies that we will examine in more detail shortly.</p>
+<div id="cell-fig-frfci" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Estimate the MC 95% confidence interval of the coupled FRF and plot</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>f1 <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(f<span class="op">-</span><span class="dv">84</span>)) <span class="co"># Frequency index of interest</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>f2 <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(f<span class="op">-</span><span class="dv">47</span>)) <span class="co"># Frequency index of interest</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract MC results:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.<span class="bu">abs</span>(np.asarray(Y_C_dual_mc))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> np.real(np.asarray(Y_C_dual_mc))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> np.imag(np.asarray(Y_C_dual_mc))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">## Estimation of CI for MC samples</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>α <span class="op">=</span> <span class="fl">0.05</span> <span class="co"># Condifence level</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>CI_MC_f_ <span class="op">=</span> np.zeros((<span class="dv">2</span>,Nf)) <span class="co"># Allocate space for confidence intervals</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>CI_MC_f <span class="op">=</span> np.zeros((<span class="dv">2</span>,Nf)) <span class="co"># Allocate space for confidence intervals</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(Nf):</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.sort(y[:, fi]) <span class="co"># Get magnitude</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> (np.arange(<span class="dv">1</span>, N_MC<span class="op">+</span><span class="dv">1</span>)) <span class="op">/</span> <span class="bu">float</span>(N_MC)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    idx1 <span class="op">=</span> (np.<span class="bu">abs</span>(F <span class="op">-</span> α<span class="op">/</span><span class="dv">2</span>)).argmin() <span class="co"># Index for -CI</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    idx2 <span class="op">=</span> (np.<span class="bu">abs</span>(F <span class="op">-</span> (<span class="dv">1</span><span class="op">-</span>α<span class="op">/</span><span class="dv">2</span>))).argmin() <span class="co"># Index for +CI</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    CI_MC_f[:,fi] <span class="op">=</span> np.asarray([X[idx1], X[idx2]]) <span class="co"># Group +/-CI</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># lower = np.percentile(y[:, fi], 100*α/2,method="weibull")</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># upper = np.percentile(y[:, fi], 100*(1-α/2),method="weibull")</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># CI_MC_f_[:, fi] = [lower, upper]</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="fl">6.4</span>, <span class="fl">4.8</span>))</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>axs.fill_between(f, np.<span class="bu">max</span>(np.<span class="bu">abs</span>(np.asarray(Y_C_dual_mc)),axis<span class="op">=</span><span class="dv">0</span>), np.<span class="bu">min</span>(np.<span class="bu">abs</span>(np.asarray(Y_C_dual_mc)),axis<span class="op">=</span><span class="dv">0</span>), color<span class="op">=</span><span class="st">'lightgray'</span>, label<span class="op">=</span><span class="st">'MC range'</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>axs.semilogy(f, CI_MC_f[<span class="dv">0</span>,:], color<span class="op">=</span><span class="st">'black'</span>,linestyle<span class="op">=</span><span class="st">'solid'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>axs.semilogy(f, CI_MC_f[<span class="dv">1</span>,:], label<span class="op">=</span><span class="st">'95% CI'</span>,color<span class="op">=</span><span class="st">'black'</span>,linestyle<span class="op">=</span><span class="st">'solid'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>axs.semilogy(f, np.mean(np.<span class="bu">abs</span>(np.asarray(Y_C_dual_mc)),axis<span class="op">=</span><span class="dv">0</span>), label<span class="op">=</span><span class="st">'MC mean'</span>,color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>axs.semilogy(f, np.<span class="bu">abs</span>(np.asarray(Y_C_dual_μ[:,<span class="dv">0</span>,<span class="op">-</span><span class="dv">1</span>])), label<span class="op">=</span><span class="st">'SS of mean'</span>,color<span class="op">=</span><span class="st">'orange'</span>,linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>axs.vlines(f[f1], <span class="fl">1e-9</span>, <span class="fl">1e-7</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'dotted'</span>, label<span class="op">=</span><span class="st">'f1'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>axs.vlines(f[f2], <span class="fl">1e-8</span>, <span class="fl">1e-6</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>, label<span class="op">=</span><span class="st">'f2'</span>, linewidth<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>axs.set_xlim(<span class="dv">0</span>,<span class="dv">100</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>axs.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>axs.set_ylabel(<span class="st">'Admittance magnitude (m/N)'</span>)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>axs.legend(loc<span class="op">=</span><span class="st">'upper center'</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">0.5</span>, <span class="fl">1.1</span>),</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>          fancybox<span class="op">=</span><span class="va">True</span>, ncol<span class="op">=</span><span class="dv">6</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-frfci" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-frfci-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monteCarloUncertProp_files/figure-html/fig-frfci-output-1.png" width="663" height="443" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-frfci-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Contour plot of the probability density function of the uncertain joint parameters.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>To etimate the 95% confidence interval (CI) of the MC samples (magnitude), we sort the samples at each frequency and find the values at the 2.5 and 97.5 percentiles; these values are then used as the lower and upper bounds of the CI, respectively. This approach is non-parametric and makes no assumptions on the distribution of the MC samples.</p>
+<div id="cell-fig-frfmagci" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Empirical cummulative density plot of the coupled FRF magnitude at an arbitary</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="fl">6.4</span>, <span class="fl">4.8</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>plt.plot(X,F)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>axs.vlines(CI_MC_f[:,<span class="op">-</span><span class="dv">1</span>],<span class="dv">0</span>,<span class="dv">1</span>, color<span class="op">=</span><span class="st">'black'</span>,linestyle<span class="op">=</span><span class="st">'solid'</span>, linewidth<span class="op">=</span><span class="dv">1</span>,label<span class="op">=</span><span class="st">'95% CI_sorted'</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Admittance magnitude (m/N)"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Cumulative probability"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-frfmagci" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-frfmagci-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monteCarloUncertProp_files/figure-html/fig-frfmagci-output-1.png" width="544" height="415" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-frfmagci-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Empirical cumulative density plot of the coupled FRF magnitude at an arbitrary frequency with 95% CI interval marked.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="examine-specific-frequencies" class="level3">
+<h3 class="anchored" data-anchor-id="examine-specific-frequencies">Examine specific frequencies</h3>
+<p>Lets look in a bit more detail at whats going on at the two frequencies illustrated in <a href="#fig-frfci" class="quarto-xref">Figure&nbsp;4</a>.</p>
+<p>In <a href="#fig-mcrealimaghist" class="quarto-xref">Figure&nbsp;6</a> we plot the real and imaginary parts of the MC samples at these frequencies as a bivariate histogram, with the mean and confidence ellipses indicated. Note that the mean plot in black shows the mean of the MC samples, which the marker in orange is the substructured result using the mean of the joint distribution.</p>
+<p>An imiediate observation is that whilst the distirbution of the samples at 84 Hz is relatively Normal, the distribution at 47 Hz is highly non-normal. This is due to the non-linearity of the substructuring function, which has a greater influence on the output distribution at 47 Hz than at 84 Hz. This highlights one of the key advantages of a MC simulation; by evaluating the function directly we capture the effects of non-linearity on the output distribution, which can be significant in many problems of interest.</p>
+<p>A second point of interest is that the mean of the MC samples is not exactly the same as the substructured result using the mean of the joint distribution, particularly at 47 Hz. This is again due to the non-linearity of the substructuring function, specifically a phenomenon known as <em>non-linear bias</em>.</p>
+<p>To unserstand the cause of this bias, recall that a non-linear function <span class="math inline">\(G(\mathbf{x}_0+\boldsymbol{\Delta})\)</span>, whose input is perturbed by vector <span class="math inline">\(\boldsymbol{\Delta}\)</span>, can be expressed as a Taylor series about <span class="math inline">\(\mathbf{x}_0\)</span> in the following form, <span class="math display">\[
+\begin{align}
+    \mathbf{y} &amp;= G(\mathbf{x}_0 + \boldsymbol{\Delta})\\
+    &amp;= G(\mathbf{x}_0) + \mathbf{D}_{\Delta } G + \frac{ \mathbf{D}^2_{\Delta } G}{2!}
++ \frac{ \mathbf{D}^3_{\Delta } G}{3!} + \frac{ \mathbf{D}^4_{\Delta } G}{4!} \cdots
+\end{align}
+\]</span> where <span class="math inline">\(\mathbf{D}^i_{\Delta} G\)</span> denotes the total differential of <span class="math inline">\(G(\mathbf{x})\)</span> when perturbed around <span class="math inline">\(\mathbf{x}_0\)</span> by <span class="math inline">\(\boldsymbol{\Delta}\)</span>. The <span class="math inline">\(i\)</span>th term in the above Taylor series is given by, <span class="math display">\[
+     \frac{ \mathbf{D}^i_{\Delta} G}{i!} = \frac{1}{i!} \left(\sum_{j=1}^N {\Delta_j}  \frac{\partial }{\partial x_j} \right)^i G(\mathbf{x}_0)\Bigg |_{\mathbf{x}=\mathbf{x}_0}
+\]</span> with <span class="math inline">\({\Delta_j}\)</span> denoting the <span class="math inline">\(j\)</span>th element of the perturbation vector <span class="math inline">\(\boldsymbol{\Delta}\)</span>.</p>
+<p>If we assume that the perturbation <span class="math inline">\(\boldsymbol{\Delta}\)</span> is zero mean, and take the expectation of the Taylor series expansion, we have, <span class="math display">\[
+    \mathbf{y} \approx G(\mathbf{x}_0) + \mathbf{D}_{\Delta } G(\mathbf{x}_0) + \frac{\mathbf{D}^2_{\Delta }G(\mathbf{x}_0)}{2} +\cdots \quad \longrightarrow \quad \mu_\mathbf{y} = G(\mu_\mathbf{x}) + \frac{\mathbf{D}^2_{\Delta }G(\mu_{\mathbf{x}})}{2} +  G(\mu_\mathbf{x}) + \frac{\mathbf{D}^4_{\Delta }G(\mu_{\mathbf{x}})}{4!} \cdots
+\]</span> since odd powers of <span class="math inline">\(\boldsymbol{\Delta}\)</span> have a zero expectation and even powers of <span class="math inline">\(\boldsymbol{\Delta}\)</span> have a non‑zero expectation.</p>
+<p>Clearly, by making a prediction using only the mean value (i.e.&nbsp;the first term in the Taylor series), we are omitting the higher order terms; this leaves us with a bias error whenever the underlying equation is non-linear, as in <a href="#fig-mcrealimaghist" class="quarto-xref">Figure&nbsp;6</a> b).</p>
+<div id="cell-fig-mcrealimaghist" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">###### Frequency 1 ########</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>μY_real <span class="op">=</span> np.mean(y0[:,f1])</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>μY_imag <span class="op">=</span> np.mean(y1[:,f1])</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>ΣY <span class="op">=</span> np.cov(np.stack((y0[:,f1], y1[:,f1])))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.gridspec <span class="im">as</span> gridspec</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate plot</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fig = plt.figure(figsize=(5, 5))</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>outer <span class="op">=</span> gridspec.GridSpec(<span class="dv">1</span>, <span class="dv">2</span>, wspace<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>gs1 <span class="op">=</span> gridspec.GridSpecFromSubplotSpec(<span class="dv">2</span>, <span class="dv">2</span>, width_ratios<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">1</span>), height_ratios<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">4</span>), subplot_spec<span class="op">=</span>outer[<span class="dv">0</span>], wspace<span class="op">=</span><span class="fl">0.1</span>, hspace<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(gs1[<span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>ax_histx <span class="op">=</span> fig.add_subplot(gs1[<span class="dv">0</span>, <span class="dv">0</span>], sharex<span class="op">=</span>ax)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>ax_histy <span class="op">=</span> fig.add_subplot(gs1[<span class="dv">1</span>, <span class="dv">1</span>], sharey<span class="op">=</span>ax)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>ax_histy.set_xticks([])</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>ax_histx.set_yticks([])</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>scatter_hist(y0[:,f1], y1[:,f1], ax, ax_histx, ax_histy, <span class="dv">50</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>ax.scatter(np.real(Y_C_dual_μ[f1, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]), np.imag(Y_C_dual_μ[f1, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]), s<span class="op">=</span><span class="dv">100</span>,marker<span class="op">=</span><span class="st">'x'</span>,color<span class="op">=</span><span class="st">'orange'</span>,label<span class="op">=</span><span class="st">'SS of mean'</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>ax.scatter(μY_real, μY_imag, s<span class="op">=</span><span class="dv">100</span>, marker<span class="op">=</span><span class="st">'x'</span>,color<span class="op">=</span><span class="st">'black'</span>,label<span class="op">=</span><span class="st">'MC mean'</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Real part (m/N)'</span>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Imaginary part (m/N)'</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>Δx <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>Δy <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(np.<span class="bu">min</span>(y0[:,f1])<span class="op">-</span>Δx<span class="op">*</span>np.<span class="bu">abs</span>(np.<span class="bu">max</span>(y0[:,f1])<span class="op">-</span>np.<span class="bu">min</span>(y0[:,f1])), np.<span class="bu">max</span>(y0[:,f1])<span class="op">+</span>Δx<span class="op">*</span>np.<span class="bu">abs</span>(np.<span class="bu">max</span>(y0[:,f1])<span class="op">-</span>np.<span class="bu">min</span>(y0[:,f1])))</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(np.<span class="bu">min</span>(y1[:,f1])<span class="op">-</span>Δy<span class="op">*</span>np.<span class="bu">abs</span>(np.<span class="bu">max</span>(y1[:,f1])<span class="op">-</span>np.<span class="bu">min</span>(y1[:,f1])), np.<span class="bu">max</span>(y1[:,f1])<span class="op">+</span>Δy<span class="op">*</span>np.<span class="bu">abs</span>(np.<span class="bu">max</span>(y1[:,f1])<span class="op">-</span>np.<span class="bu">min</span>(y1[:,f1])))</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>ax.ticklabel_format(axis<span class="op">=</span><span class="st">'both'</span>,style<span class="op">=</span><span class="st">'scientific'</span>,scilimits<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> ax.yaxis.get_offset_text()</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>t.set_x(<span class="op">-</span><span class="fl">0.2</span>)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>ell1 <span class="op">=</span> confidence_ellipse([μY_real, μY_imag], ΣY, ax, n_std<span class="op">=</span><span class="fl">3.0</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">'solid'</span>,label<span class="op">=</span><span class="st">'95% CE'</span>)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">###### Frequency 2 ########</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>μY_real <span class="op">=</span> np.mean(y0[:,f2])</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>μY_imag <span class="op">=</span> np.mean(y1[:,f2])</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>ΣY <span class="op">=</span> np.cov(np.stack((y0[:,f2], y1[:,f2])))</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate plot</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>gs2 <span class="op">=</span> gridspec.GridSpecFromSubplotSpec(<span class="dv">2</span>, <span class="dv">2</span>, width_ratios<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">1</span>), height_ratios<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">4</span>), subplot_spec<span class="op">=</span>outer[<span class="dv">1</span>], wspace<span class="op">=</span><span class="fl">0.1</span>, hspace<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(gs2[<span class="dv">1</span>, <span class="dv">0</span>])</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>ax_histx <span class="op">=</span> fig.add_subplot(gs2[<span class="dv">0</span>, <span class="dv">0</span>], sharex<span class="op">=</span>ax)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>ax_histy <span class="op">=</span> fig.add_subplot(gs2[<span class="dv">1</span>, <span class="dv">1</span>], sharey<span class="op">=</span>ax)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>ax_histy.set_xticks([])</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>ax_histx.set_yticks([])</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>scatter_hist(y0[:,f2], y1[:,f2], ax, ax_histx, ax_histy, <span class="dv">50</span>)</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>ax.scatter(np.real(Y_C_dual_μ[f2, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]), np.imag(Y_C_dual_μ[f2, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]), s<span class="op">=</span><span class="dv">100</span>,marker<span class="op">=</span><span class="st">'x'</span>,color<span class="op">=</span><span class="st">'orange'</span>,label<span class="op">=</span><span class="st">'SS of mean'</span>)</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>ax.scatter(μY_real, μY_imag, s<span class="op">=</span><span class="dv">100</span>, marker<span class="op">=</span><span class="st">'x'</span>,color<span class="op">=</span><span class="st">'black'</span>,label<span class="op">=</span><span class="st">'MC mean'</span>)</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Real part (m/N)'</span>)</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Imaginary part (m/N)'</span>)</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>Δx <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>Δy <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(np.<span class="bu">min</span>(y0[:,f2])<span class="op">-</span>Δx<span class="op">*</span>np.<span class="bu">abs</span>(np.<span class="bu">max</span>(y0[:,f2])<span class="op">-</span>np.<span class="bu">min</span>(y0[:,f2])), np.<span class="bu">max</span>(y0[:,f2])<span class="op">+</span>Δx<span class="op">*</span>np.<span class="bu">abs</span>(np.<span class="bu">max</span>(y0[:,f2])<span class="op">-</span>np.<span class="bu">min</span>(y0[:,f2])))</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(np.<span class="bu">min</span>(y1[:,f2])<span class="op">-</span>Δy<span class="op">*</span>np.<span class="bu">abs</span>(np.<span class="bu">max</span>(y1[:,f2])<span class="op">-</span>np.<span class="bu">min</span>(y1[:,f2])), np.<span class="bu">max</span>(y1[:,f2])<span class="op">+</span>Δy<span class="op">*</span>np.<span class="bu">abs</span>(np.<span class="bu">max</span>(y1[:,f2])<span class="op">-</span>np.<span class="bu">min</span>(y1[:,f2])))</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>ax.ticklabel_format(axis<span class="op">=</span><span class="st">'both'</span>,style<span class="op">=</span><span class="st">'scientific'</span>,scilimits<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">0</span>))</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> ax.yaxis.get_offset_text()</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>t.set_x(<span class="op">-</span><span class="fl">0.2</span>)</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>ell1 <span class="op">=</span> confidence_ellipse([μY_real, μY_imag], ΣY, ax, n_std<span class="op">=</span><span class="fl">3.0</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, linestyle<span class="op">=</span><span class="st">'solid'</span>,label<span class="op">=</span><span class="st">'95% CE'</span>)</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>handles, labels <span class="op">=</span> ax.get_legend_handles_labels()</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>fig.legend(handles, labels, loc<span class="op">=</span><span class="st">'upper center'</span>,ncol<span class="op">=</span><span class="dv">3</span>,fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-mcrealimaghist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mcrealimaghist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monteCarloUncertProp_files/figure-html/fig-mcrealimaghist-output-1.png" width="733" height="396" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mcrealimaghist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Bivariate histogram of real/imaginary parts of MC samples at frequencies f1 (left) and f2 (right), with mean and confidence ellipses indicated.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Lastly, in <a href="#fig-mcmaghist" class="quarto-xref">Figure&nbsp;7</a> we plot the histogram of the <em>magnitude</em> of the MC samples at these frequencies. We also mark the correponding 95% CI, mean and mode.</p>
+<p>It is worth noting that, since the magnitude is strictly positive, its distribution does not support negative values and is therefore non-normal, and often highly skewed. An important consequence of this is that the mean and mode of the distribution can be quite different. Typically, we do not think about the mode, but in some cases it can be a more meaningful statistic to report than the mean; it represents the most likely value in the distibution. In <a href="#fig-mcmaghist" class="quarto-xref">Figure&nbsp;7</a> we see a slight skew at 47 Hz, though perhaps not enough to justify the use of the mode.</p>
+<div id="cell-fig-mcmaghist" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create histogram and capture counts + bin edges</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>counts, bin_edges <span class="op">=</span> np.histogram(y[:, f1], bins<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>max_bin_index <span class="op">=</span> np.argmax(counts)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>mode_from_hist <span class="op">=</span> (bin_edges[max_bin_index] <span class="op">+</span> bin_edges[max_bin_index <span class="op">+</span> <span class="dv">1</span>])<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> np.mean(y[:, f1])</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>α <span class="op">=</span> <span class="fl">0.01</span> <span class="co"># Condifence level</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.sort(y[:, f1]) <span class="co"># Get magnitude</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, N_MC)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>idx1 <span class="op">=</span> (np.<span class="bu">abs</span>(F <span class="op">-</span> α<span class="op">/</span><span class="dv">2</span>)).argmin() <span class="co"># Index for -CI</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>idx2 <span class="op">=</span> (np.<span class="bu">abs</span>(F <span class="op">-</span> (<span class="dv">1</span><span class="op">-</span>α<span class="op">/</span><span class="dv">2</span>))).argmin() <span class="co"># Index for +CI</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>CI_MC <span class="op">=</span> np.asarray([X[idx1], X[idx2]]) <span class="co"># Group +/-CI</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>outer <span class="op">=</span> gridspec.GridSpec(<span class="dv">1</span>, <span class="dv">2</span>, wspace<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>axs <span class="op">=</span> fig.add_subplot(outer[<span class="dv">0</span>])</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>axs.hist(y[:, f1], bins<span class="op">=</span><span class="dv">100</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'skyblue'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, density<span class="op">=</span><span class="va">False</span>, label<span class="op">=</span><span class="st">'MC histogram'</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>axs.vlines(CI_MC, <span class="dv">0</span>, counts[max_bin_index], color<span class="op">=</span><span class="st">'black'</span>,linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"99% CI"</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>axs.vlines(mean, <span class="dv">0</span>, counts[max_bin_index],color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"Mean"</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>axs.vlines(mode_from_hist, <span class="dv">0</span>, counts[max_bin_index], color<span class="op">=</span><span class="st">'green'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="st">"Mode (from histogram)"</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>axs.set_xlabel(<span class="st">"Admittance magnitude (m/N)"</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>axs.set_ylabel(<span class="st">"Frequency/Count"</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Create histogram and capture counts + bin edges</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>counts, bin_edges <span class="op">=</span> np.histogram(y[:, f2], bins<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>max_bin_index <span class="op">=</span> np.argmax(counts)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>mode_from_hist <span class="op">=</span> (bin_edges[max_bin_index] <span class="op">+</span> bin_edges[max_bin_index <span class="op">+</span> <span class="dv">1</span>])<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> np.mean(y[:, f2])</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>α <span class="op">=</span> <span class="fl">0.01</span> <span class="co"># Condifence level</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.sort(y[:, f2]) <span class="co"># Get magnitude</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> np.array(<span class="bu">range</span>(N_MC))<span class="op">/</span><span class="bu">float</span>(N_MC)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>idx1 <span class="op">=</span> (np.<span class="bu">abs</span>(F <span class="op">-</span> α<span class="op">/</span><span class="dv">2</span>)).argmin() <span class="co"># Index for -CI</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>idx2 <span class="op">=</span> (np.<span class="bu">abs</span>(F <span class="op">-</span> (<span class="dv">1</span><span class="op">-</span>α<span class="op">/</span><span class="dv">2</span>))).argmin() <span class="co"># Index for +CI</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>CI_MC <span class="op">=</span> np.asarray([X[idx1], X[idx2]]) <span class="co"># Group +/-CI</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>axs <span class="op">=</span> fig.add_subplot(outer[<span class="dv">1</span>])</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>axs.hist(y[:, f2], bins<span class="op">=</span><span class="dv">100</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'skyblue'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, density<span class="op">=</span><span class="va">False</span>, label<span class="op">=</span><span class="st">'MC histogram'</span>)</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>axs.vlines(CI_MC, <span class="dv">0</span>, counts[max_bin_index], color<span class="op">=</span><span class="st">'black'</span>,linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"99% CI"</span>)</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>axs.vlines(mean, <span class="dv">0</span>, counts[max_bin_index],color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"Mean"</span>)</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>axs.vlines(mode_from_hist, <span class="dv">0</span>, counts[max_bin_index], color<span class="op">=</span><span class="st">'green'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="st">"Mode (from histogram)"</span>)</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>axs.set_xlabel(<span class="st">"Admittance magnitude (m/N)"</span>)</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>axs.set_ylabel(<span class="st">"Frequency/Count"</span>)</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>handles, labels <span class="op">=</span> axs.get_legend_handles_labels()</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>fig.legend(handles, labels, loc<span class="op">=</span><span class="st">'upper center'</span>,fancybox<span class="op">=</span><span class="va">True</span>, ncol<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-mcmaghist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mcmaghist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monteCarloUncertProp_files/figure-html/fig-mcmaghist-output-1.png" width="742" height="395" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mcmaghist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Histogram of MC samples at frequencies f1 (left) and f2 (right), with mean, mode and confidence intervals indicated.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In <a href="#fig-mcmaghistskew" class="quarto-xref">Figure&nbsp;8</a> we plot the histogram of the MC samples at a frequency that displays strong skewness. In this case, the mean and mode are quite different. Which statistic is more meaningful to report in this case depends on the context and the specific question being asked.</p>
+<div id="cell-fig-mcmaghistskew" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># f3 = np.argmin(np.abs(f-42.5)) # Frequency index of interest</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>f3 <span class="op">=</span> np.argmin(np.<span class="bu">abs</span>(f<span class="op">-</span><span class="dv">78</span>)) <span class="co"># Frequency index of interest</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create histogram and capture counts + bin edges</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>counts, bin_edges <span class="op">=</span> np.histogram(y[:, f3], bins<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>max_bin_index <span class="op">=</span> np.argmax(counts)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>mode_from_hist <span class="op">=</span> (bin_edges[max_bin_index] <span class="op">+</span> bin_edges[max_bin_index <span class="op">+</span> <span class="dv">1</span>])<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>mean <span class="op">=</span> np.mean(y[:, f3])</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>α <span class="op">=</span> <span class="fl">0.01</span> <span class="co"># Condifence level</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.sort(y[:, f3]) <span class="co"># Get magnitude</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> np.array(<span class="bu">range</span>(N_MC))<span class="op">/</span><span class="bu">float</span>(N_MC)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>idx1 <span class="op">=</span> (np.<span class="bu">abs</span>(F <span class="op">-</span> α<span class="op">/</span><span class="dv">2</span>)).argmin() <span class="co"># Index for -CI</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>idx2 <span class="op">=</span> (np.<span class="bu">abs</span>(F <span class="op">-</span> (<span class="dv">1</span><span class="op">-</span>α<span class="op">/</span><span class="dv">2</span>))).argmin() <span class="co"># Index for +CI</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>CI_MC <span class="op">=</span> np.asarray([X[idx1], X[idx2]]) <span class="co"># Group +/-CI</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot histogram</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">4</span>))</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>axs.hist(y[:, f3], bins<span class="op">=</span><span class="dv">100</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'skyblue'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, density<span class="op">=</span><span class="va">False</span>, label<span class="op">=</span><span class="st">'MC histogram'</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>axs.vlines(CI_MC, <span class="dv">0</span>, counts[max_bin_index], color<span class="op">=</span><span class="st">'black'</span>,linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"99% CI"</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>axs.vlines(mean, <span class="dv">0</span>, counts[max_bin_index],color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"Mean"</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>axs.vlines(mode_from_hist, <span class="dv">0</span>, counts[max_bin_index], color<span class="op">=</span><span class="st">'green'</span>, linestyle<span class="op">=</span><span class="st">'dashed'</span>, linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="st">"Mode (from histogram)"</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>axs.set_xlabel(<span class="st">"Admittance magnitude (m/N)"</span>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>axs.set_ylabel(<span class="st">"Frequency/Count"</span>)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>axs.legend(loc<span class="op">=</span><span class="st">'upper center'</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">0.5</span>, <span class="fl">1.1</span>),</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>          fancybox<span class="op">=</span><span class="va">True</span>, ncol<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="fig-mcmaghistskew" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mcmaghistskew-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="monteCarloUncertProp_files/figure-html/fig-mcmaghistskew-output-1.png" width="589" height="378" class="figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mcmaghistskew-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Histogram of MC samples at frequency of 78 Hz displaying strong skewness, with mean, mode and confidence intervals indicated.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In this tutorial we have seen how to run a simple MC simulation to propagate uncertainty through a substructuring problem. We have also seen how to estimate the confidence interval of the MC samples, and how to visualise the distribution of the samples at specific frequencies of interest.</p>
+<p>The key advantage of a MC simulation is that it captures the effects of non-linearity on the output distribution, which can be significant in many problems of interest. However, this comes at the cost of increased computational expense, and the need to run a large number of simulations to obtain accurate estimates of the output distribution. Alternative methods are available (such as linearisation, see <a href="../../introductions/VAVPs/uncertainty/uncertainty.html">Uncertainty in VAVPs</a>), though they come at the cost of accuracy, espeically for mid-high levels of uncertainty.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../tutorials/synthIRF/synthIRF.html" class="pagination-link" aria-label="Synthesising Impulse Response Functions">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Synthesising Impulse Response Functions</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

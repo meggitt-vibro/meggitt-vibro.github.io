@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Synthesising FRFs from mass, stiffness and damping – Joshua Meggitt</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -59,7 +62,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -93,10 +95,10 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-d145306b90a0f32853e08f30f9908352.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-4621e6c092758692ba23953146af9eda.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -126,7 +128,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -139,7 +141,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -245,6 +247,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../../tutorials/synthIRF/synthIRF.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Synthesising Impulse Response Functions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../tutorials/monteCarloUncert/monteCarloUncertProp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Propagating uncertainty using Monte-Carlo simulation</span></a>
   </div>
 </li>
     </ul>
@@ -410,10 +418,10 @@ Figure&nbsp;1: Numerical mass-spring assembly used for FRF synthesis example.
 </figure>
 </div>
 <p>We begin by defining the mass and stiffness matrices <span class="math inline">\(\mathbf{M}\)</span> and <span class="math inline">\(\mathbf{K}\)</span> for the system in <a href="#fig-massSpring_coupled" class="quarto-xref">Figure&nbsp;1</a>.</p>
-<div id="f1061b5b" class="cell" data-execution_count="1">
+<div id="405c4118" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>np.set_printoptions(linewidth<span class="op">=</span><span class="dv">250</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
@@ -446,7 +454,7 @@ Figure&nbsp;1: Numerical mass-spring assembly used for FRF synthesis example.
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Mass matrix of assembly (kg):</span><span class="ch">\n</span><span class="st">'</span> <span class="op">+</span> <span class="bu">str</span>(M_C))</span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Stiffness matrix of assembly (m/N):</span><span class="ch">\n</span><span class="st">'</span> <span class="op">+</span> <span class="bu">str</span>(K_C))</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">''</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mass matrix of assembly (kg):
@@ -486,7 +494,7 @@ Stiffness matrix of assembly (m/N):
 <div id="cell-fig-checkdiag1" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportional damping</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportional damping</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>C_C_prop <span class="op">=</span> <span class="fl">0.0001</span><span class="op">*</span>K_C <span class="op">+</span> <span class="dv">1</span><span class="op">*</span>M_C <span class="co"># Proportional damping matrix</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Damping matrix (proportional αK+βM) of assembly (m/Ns):</span><span class="ch">\n</span><span class="st">'</span> <span class="op">+</span> <span class="bu">str</span>(C_C_prop))</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -502,7 +510,7 @@ Stiffness matrix of assembly (m/N):
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Stiffness matrix'</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].matshow(np.log(np.<span class="bu">abs</span>(ΦCΦ)))</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlabel(<span class="st">'Prop. damping matrix'</span>)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Damping matrix (proportional αK+βM) of assembly (m/Ns):
@@ -532,7 +540,7 @@ Figure&nbsp;2: Plots of modal mass, stiffness and prop. damping matrices. Off-di
 <div id="cell-fig-propdampfrf" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution cont.:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution cont.:</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Y_C_modal_prop <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>], <span class="dv">8</span>, <span class="dv">8</span>), dtype<span class="op">=</span><span class="bu">complex</span>) <span class="co"># Allocate space</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Loop over frequency and compute FRF using modal summation</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    Y_C_modal_prop[fi, :, :] <span class="op">=</span> Φ <span class="op">@</span> np.linalg.inv((np.diag(λ) <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span><span class="op">*</span>np.eye(M_C.shape[<span class="dv">0</span>]) <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span>ω[fi]<span class="op">*</span>ΦCΦ)) <span class="op">@</span> Φ.T</span>
@@ -549,7 +557,7 @@ Figure&nbsp;2: Plots of modal mass, stiffness and prop. damping matrices. Off-di
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-propdampfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -568,7 +576,7 @@ Figure&nbsp;3: Displacement FRF obtained by modal summation with proportional da
 <div id="cell-fig-propdampmodeshapes" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise mode shapes</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise mode shapes</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sort_index <span class="op">=</span> np.argsort(λ) <span class="co"># Get ordered index</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>λ_sort <span class="op">=</span> λ[sort_index] <span class="co"># Sort natural freqs</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>Φ_sort <span class="op">=</span> Φ[:,sort_index] <span class="co"># Sort mode shapes</span></span>
@@ -580,7 +588,7 @@ Figure&nbsp;3: Displacement FRF obtained by modal summation with proportional da
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Mode frequency'</span>)</span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>plt.yticks(<span class="bu">range</span>(<span class="dv">8</span>),np.<span class="bu">round</span>(np.sqrt(np.real(λ_sort))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi),<span class="dv">2</span>))</span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>plt.ylim([<span class="op">-</span><span class="fl">0.5</span>, <span class="dv">8</span>])</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-propdampmodeshapes" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -602,7 +610,7 @@ Figure&nbsp;4: Mode shape visualisation for mass spring system in <a href="#fig-
 <div id="cell-fig-checkdiag2" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Non-proportional damping</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Non-proportional damping</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>c1, c2, c3, c4, c5 <span class="op">=</span> <span class="dv">2</span>, <span class="fl">3.1</span>, <span class="fl">1.7</span>, <span class="fl">0.5</span>, <span class="fl">1.5</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>c6, c7, c8, c9, c10, c11 <span class="op">=</span> <span class="fl">3.5</span>, <span class="fl">5.2</span>, <span class="dv">2</span>, <span class="fl">2.2</span>, <span class="dv">2</span>, <span class="fl">1.5</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>C_C <span class="op">=</span> np.array([[c1<span class="op">+</span>c2<span class="op">+</span>c5, <span class="op">-</span>c2,        <span class="dv">0</span>,     <span class="dv">0</span>,    <span class="op">-</span>c5,     <span class="dv">0</span>,     <span class="dv">0</span>,          <span class="dv">0</span>],</span>
@@ -625,7 +633,7 @@ Figure&nbsp;4: Mode shape visualisation for mass spring system in <a href="#fig-
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Stiffness matrix'</span>)</span>
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].matshow(np.log(np.<span class="bu">abs</span>(ΦCΦ)))</span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">2</span>].set_xlabel(<span class="st">'Prop. damping matrix'</span>)</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-checkdiag2" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -644,7 +652,7 @@ Figure&nbsp;5: Plots of modal mass, stiffness and non-prop. damping matrices. Of
 <div id="cell-fig-nonpropdampfrf" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution cont.:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution cont.:</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Y_C_modal_nonprop <span class="op">=</span> np.zeros_like(Y_C_modal_prop) <span class="co"># Allocate space</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Loop over frequency and compute FRF using modal summation</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    Y_C_modal_nonprop[fi, :, :] <span class="op">=</span> Φ <span class="op">@</span> np.diag(<span class="dv">1</span><span class="op">/</span>(λ <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span>ω[fi]<span class="op">*</span>np.diag(ΦCΦ))) <span class="op">@</span> Φ.T</span>
@@ -663,7 +671,7 @@ Figure&nbsp;5: Plots of modal mass, stiffness and non-prop. damping matrices. Of
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>plt.show() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-nonpropdampfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -686,7 +694,7 @@ Figure&nbsp;6: Displacement FRF obtained by modal summation with non-proportiona
 <div id="cell-fig-structdampfrf" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Structural damping</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Structural damping</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>K_Cη<span class="op">=</span> K_C<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η) <span class="co"># Complex stiffness matrix including structural damping</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modal solution using real stiffness (i.e. undamped):</span></span>
@@ -710,7 +718,7 @@ Figure&nbsp;6: Displacement FRF obtained by modal summation with non-proportiona
 <span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
 <span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Admittance (m/N)'</span>)</span>
 <span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-structdampfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -760,7 +768,7 @@ k_e = \frac{EI}{L^3}\left[\begin{array}{cccc}
 <div id="cell-fig-beammk" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> beamMK(dim, matProp, numE<span class="op">=</span><span class="dv">100</span>):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> beamMK(dim, matProp, numE<span class="op">=</span><span class="dv">100</span>):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This function takes as input the dimensions and materials properties of the beam, </span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># and outputs the global mass and stiffness matrices. </span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -809,7 +817,7 @@ k_e = \frac{EI}{L^3}\left[\begin{array}{cccc}
 <span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Mass matrix'</span>)</span>
 <span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].matshow(np.log(np.<span class="bu">abs</span>(K)))</span>
 <span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Stiffness matrix'</span>)</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-beammk" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -829,10 +837,10 @@ Figure&nbsp;9: Structure of the global mass and stiffness matrices for a beam. B
 <section id="frf-functions" class="level3">
 <h3 class="anchored" data-anchor-id="frf-functions">FRF functions</h3>
 <p>Now that we have a means of building its mass and stiffness matrices, we are able to compute the beams FRF matrix. In the code below we define two FRF functions; one using the direct matrix inversion method, and the other a modal summation.</p>
-<div id="e65e58ba" class="cell" data-execution_count="9">
+<div id="b726002a" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> directFRF(M,K,C,f):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> directFRF(M,K,C,f):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This function computes the FRF matrix directly by matrix inversion over the frequency range of f.</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    ω <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.pi<span class="op">*</span>f <span class="co"># Radian frequency</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.linalg.inv(K <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>, ω, C) <span class="op">-</span> np.einsum(<span class="st">'i,jk-&gt;ijk'</span>,ω<span class="op">**</span><span class="dv">2</span>, M))</span>
@@ -849,7 +857,7 @@ Figure&nbsp;9: Structure of the global mass and stiffness matrices for a beam. B
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    Y <span class="op">=</span> np.zeros((f.shape[<span class="dv">0</span>],M.shape[<span class="dv">0</span>],M.shape[<span class="dv">0</span>]),dtype<span class="op">=</span><span class="bu">complex</span>) <span class="co"># Allocate space</span></span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fi <span class="kw">in</span> <span class="bu">range</span>(f.shape[<span class="dv">0</span>]): <span class="co"># Loop over frequency and compute FRF using modal summation</span></span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        Y[fi, :, :] <span class="op">=</span> Φ[:,<span class="dv">0</span>:nm] <span class="op">@</span> np.diag(<span class="dv">1</span><span class="op">/</span>(λ[<span class="dv">0</span>:nm] <span class="op">-</span> ω[fi]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="ot">1j</span><span class="op">*</span>ω[fi]<span class="op">*</span>np.diag(ΦCΦ[<span class="dv">0</span>:nm,<span class="dv">0</span>:nm]))) <span class="op">@</span> Φ[:,<span class="dv">0</span>:nm].T</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Y, λ, Φ </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Y, λ, Φ </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -859,7 +867,7 @@ Figure&nbsp;9: Structure of the global mass and stiffness matrices for a beam. B
 <div id="cell-fig-modalcount" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> <span class="fl">0.00001</span><span class="op">*</span>K <span class="op">+</span> <span class="dv">1</span><span class="op">*</span>M <span class="co"># Proportional damping matrix</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> <span class="fl">0.00001</span><span class="op">*</span>K <span class="op">+</span> <span class="dv">1</span><span class="op">*</span>M <span class="co"># Proportional damping matrix</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> np.linspace(<span class="dv">1</span>,<span class="dv">1000</span>,<span class="dv">1000</span>) <span class="co"># Frequency vector</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>Y_direct <span class="op">=</span> directFRF(M,K,C,f) <span class="co"># FRF by direct method</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>Y_modal, λ, Φ <span class="op">=</span> modalFRF(M,K,C,f) <span class="co"># FRF by modal summation</span></span>
@@ -871,7 +879,7 @@ Figure&nbsp;9: Structure of the global mass and stiffness matrices for a beam. B
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>axs.semilogy(<span class="bu">range</span>(<span class="dv">0</span>,λ.shape[<span class="dv">0</span>]), np.sqrt(np.real(λ))<span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>np.pi),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>axs.set_xlabel(<span class="st">'Mode number'</span>)</span>
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>axs.set_ylabel(<span class="st">'Modal frequency (Hz)'</span>)</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of DoFs: 100
@@ -894,7 +902,7 @@ Figure&nbsp;10: Relation betwee the modal number and corresponding frequency for
 <div id="cell-fig-propfrf" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_direct[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'Direct'</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].semilogy(f, np.<span class="bu">abs</span>(Y_modal[:,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>]),label<span class="op">=</span><span class="st">'Modal'</span>,linestyle<span class="op">=</span><span class="st">'dashed'</span>)</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'Frequency (Hz)'</span>)</span>
@@ -905,7 +913,7 @@ Figure&nbsp;10: Relation betwee the modal number and corresponding frequency for
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Admittance (1/Nm)'</span>)</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].legend()</span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-propfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -928,7 +936,7 @@ Figure&nbsp;11: Translational (left) and rotational (right) point FRFs at the en
 <div id="cell-fig-structfrf" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>η <span class="op">=</span> <span class="fl">0.02</span> <span class="co"># Structural loss factor</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>η <span class="op">=</span> <span class="fl">0.02</span> <span class="co"># Structural loss factor</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> np.zeros_like(K) <span class="co"># Proportional damping matrix</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Kη <span class="op">=</span> K<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span><span class="ot">1j</span><span class="op">*</span>η) <span class="co"># Complex stiffness matrix</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>Y_direct <span class="op">=</span> directFRF(M,Kη,C,f) <span class="co"># FRF by direct method</span></span>
@@ -945,7 +953,7 @@ Figure&nbsp;11: Translational (left) and rotational (right) point FRFs at the en
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Admittance (1/Nm)'</span>)</span>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].legend()</span>
 <span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-structfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -969,7 +977,7 @@ Figure&nbsp;12: Translational (left) and rotational (right) point FRFs at the en
 <div id="cell-fig-truncfrf" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Y_modal_7 <span class="op">=</span> modalFRF(M,Kη,C,f,<span class="dv">7</span>)[<span class="dv">0</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Y_modal_7 <span class="op">=</span> modalFRF(M,Kη,C,f,<span class="dv">7</span>)[<span class="dv">0</span>]</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>Y_modal_14 <span class="op">=</span> modalFRF(M,Kη,C,f,<span class="dv">14</span>)[<span class="dv">0</span>]</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>Y_modal_28 <span class="op">=</span> modalFRF(M,Kη,C,f,<span class="dv">28</span>)[<span class="dv">0</span>]</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -988,7 +996,7 @@ Figure&nbsp;12: Translational (left) and rotational (right) point FRFs at the en
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Admittance (1/Nm)'</span>)</span>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].legend()</span>
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-truncfrf" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1010,7 +1018,7 @@ Figure&nbsp;13: Effect of modal truncation (7, 14 and 28 modes) on the estimatio
 <div id="cell-fig-truncfrf2" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>errorY <span class="op">=</span> []</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>errorY <span class="op">=</span> []</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>errorY_z <span class="op">=</span> []</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>errorY_α <span class="op">=</span> []</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>errorZ <span class="op">=</span> []</span>
@@ -1051,7 +1059,7 @@ Figure&nbsp;13: Effect of modal truncation (7, 14 and 28 modes) on the estimatio
 <span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'Max f_N in modal summation (Hz)'</span>)</span>
 <span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a><span class="co"># axs[1].legend()</span></span>
 <span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-truncfrf2" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1074,7 +1082,7 @@ Figure&nbsp;14: Effect of modal truncation (7, 14 and 28 modes) on the estimatio
 <div id="cell-fig-beammodes" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">49</span><span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>), <span class="dv">1</span><span class="op">+</span>Φ[<span class="dv">0</span>:<span class="op">-</span><span class="dv">2</span>:<span class="dv">2</span>,<span class="dv">0</span>]<span class="op">*</span><span class="fl">0.5</span> ,label<span class="op">=</span><span class="st">'1'</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">49</span><span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>), <span class="dv">2</span><span class="op">+</span>Φ[<span class="dv">0</span>:<span class="op">-</span><span class="dv">2</span>:<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">*</span><span class="fl">0.5</span> ,label<span class="op">=</span><span class="st">'2'</span>)</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax.plot(<span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">49</span><span class="op">*</span><span class="dv">2</span>,<span class="dv">2</span>), <span class="dv">3</span><span class="op">+</span>Φ[<span class="dv">0</span>:<span class="op">-</span><span class="dv">2</span>:<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">*</span><span class="fl">0.5</span> ,label<span class="op">=</span><span class="st">'3'</span>)</span>
@@ -1083,7 +1091,7 @@ Figure&nbsp;14: Effect of modal truncation (7, 14 and 28 modes) on the estimatio
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ax.grid(True)</span></span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'DoF number'</span>)</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Mode number'</span>)</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-beammodes" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1111,7 +1119,7 @@ Figure&nbsp;15: Illustration of the first 5 modes for the clamped FE beam.
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-petyt2010introduction" class="csl-entry" role="listitem">
 Petyt, Maurice. 2010. <em>Introduction to Finite Element Vibration Analysis</em>. Cambridge university press.
 </div>
@@ -1167,13 +1175,14 @@ Petyt, Maurice. 2010. <em>Introduction to Finite Element Vibration Analysis</em>
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
